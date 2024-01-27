@@ -1,0 +1,25 @@
+.timeline-container {
+    width: 100%;
+    margin: 32px auto;
+    background-color: #fff;
+    padding-bottom: 12px;
+}
+
+.legend {
+    margin-top: 32px;
+    
+}
+
+.legend span {
+    margin: 24px;
+}
+
+.charts {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.chart-container .row {
+    margin-top: 18px;
+}

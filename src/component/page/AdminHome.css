@@ -1,0 +1,14 @@
+.admin-home {
+    padding: 22px;
+}
+.expect {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px
+}
+
+.map {
+    height: 400px;
+    
+}
