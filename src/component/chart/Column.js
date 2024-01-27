@@ -8,6 +8,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 export class Column extends Component {
   render() {
     const options = {
+        exportEnabled: true,
         height: 280,
         // width: 380,
         title: {

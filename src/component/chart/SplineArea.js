@@ -7,6 +7,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 export default class SplineArea extends Component {
   render() {
     const options = {
+        exportEnabled: true,
         height: 280,
         // width: 380,
         animationEnabled: true,

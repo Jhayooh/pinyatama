@@ -4,6 +4,7 @@ import Doughnut from '../chart/Doughnut'
 import SplineArea from '../chart/SplineArea'
 import { gastosSaPinya as g } from '../FarmsConstant';
 import { farms, events } from "../FarmsConstant";
+import Pie from '../chart/Pie';
 import Header from '../Header';
 import './AdminHome.css'
 
@@ -35,7 +36,7 @@ export default function AdminHome() {
               <Legend legends={legends} />
           </div>
           <div className='expect'>
-              <Doughnut title={g.title} label1={g.labelOne} label2={g.labelTwo} data={g.data} /><SplineArea />
+            <Pie /> <SplineArea />
           </div>
           <div className='map'>
               <span>Hello map</span>

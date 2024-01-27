@@ -11,6 +11,7 @@ function FarmsSchedule({ farms, events }) {
       <Timeline
         groups={farms}
         items={events}
+        lineHeight={48}
         defaultTimeStart={moment().add(-9, 'month')}
         defaultTimeEnd={moment().add(9, 'month')}
 
