@@ -10,6 +10,7 @@ export default class Doughnut extends Component {
     render() {
 		const options = {
 			height: 280,
+			exportEnabled: true,
 			animationEnabled: true,
 			title: {
 				text: this.props.title,
