@@ -91,7 +91,6 @@
 
 .screenshot, .contact {
     width: 100%;
-    height: 360px;
     background-color: #115C18;
     padding: 22px;
 }
@@ -141,5 +140,5 @@
 }
 
 .screenshot {
-    height: 600px;
+    margin-bottom: 24px;
 }
