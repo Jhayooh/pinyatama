@@ -1,7 +1,39 @@
-import logo from './logo.svg';
+
 import './App.css';
+import Dashboard from './component/page/Dashboard';
+import AdminHome from './component/page/AdminHome'
+import FarmTabs from './component/page/FarmTabs';
+import LoginNew from './component/LoginNew'
+import AddInfo from './component/AddInfo';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
 
 function App() {
+  const router = createBrowserRouter([
+    {
+      path:"/",
+      element: <Dashboard />
+    },
+    {
+      path: "/farmname",
+      element: <FarmTabs />
+    },
+    {
+      path: "/admin",
+      element: <AdminHome />
+    },
+    {
+      path: '/login',
+      element: <LoginNew />
+    },
+    {
+      path: '/add',
+      element: <AddInfo />
+    }
+  
+  ])
   return (
     <div className="App">
       <header className="App-header">
