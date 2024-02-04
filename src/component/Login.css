@@ -1,0 +1,84 @@
+form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  
+  }
+  
+  container {
+    text-align: center;
+  }
+  
+  label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  button {
+    background-color: #E3E55A;
+    color: black;
+    font-family: Righteous;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-style: bold;
+    
+  }
+  .floating-form {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 20px;
+    background-color: #247027;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .floating-form.logged-in {
+    width: 200px; /* Adjust as needed */
+    height: 100px; /* Adjust as needed */
+  }
+  
+  .form-container {
+    text-align: center;
+  }
+  
+  form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  form input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  h1{
+    color: white;
+    font-family: Righteous ;
+    margin: auto;
+  }
+  h5{
+    color: #E3E55A;
+    font-family: Righteous;
+    margin: auto;
+    padding-bottom: 10px;
+  }
+  label{
+    font-family: Righteous;
+  }
+  
