@@ -25,7 +25,7 @@ function NavDashboard({ navItems }) {
     <nav className="navbar fixed-top navbar-expand-lg" style={{ background: 'rgba(17, 92, 24, 0.5)' }}>
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
-          Logo
+        <img src={require('./image_src/logo.png')}/>
         </a>
         <button
           className="navbar-toggler"
