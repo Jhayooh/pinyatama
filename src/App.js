@@ -2,6 +2,7 @@ import './App.css';
 import Dashboard from './component/page/Dashboard';
 import AdminHome from './component/page/AdminHome'
 import FarmTabs from './component/page/FarmTabs';
+import GeoLoc from './component/page/GeoLoc';
 import {
   createBrowserRouter,
   RouterProvider,
@@ -20,6 +21,11 @@ function App() {
     {
       path: "/admin",
       element: <AdminHome />
+    },
+
+    {
+      path: "/Geo",
+      element: <GeoLoc />
     }
   ])
   return (
