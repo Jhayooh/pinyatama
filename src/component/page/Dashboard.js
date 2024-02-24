@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
-import './Dashboard.css'
-import NavDashboard from '../NavDashboard'
-import Carousel from 'react-bootstrap/Carousel'
+import React, { useRef, useState } from 'react';
+import Carousel from 'react-bootstrap/Carousel';
 import ImageGal from "../ImageGal";
+import NavDashboard from '../NavDashboard';
+import './Dashboard.css';
 
 function Dashboard() {
   const navArray = ["Tungkol", "Screenshots", "Ahensiya", "Kontak"]
@@ -11,20 +11,19 @@ function Dashboard() {
   return (
     <div className='dashboard'>
       <NavDashboard navItems={navArray} />
-      <img src={require("../image_src/PineappleBackground.png")} alt='pineapple' className='pineapple-image' />
-      
-      <h1 className='dash-title' style={{ fontFamily: 'Arial'}}>QUEEN PINEAPPLE</h1>
-      <h1 className='dash-title-two' style={{ fontFamily: 'Arial'}}>FARM</h1>
+    
+      <img src={require("../image_src/bg.jpg")} alt='pineapple' className='pineapple-image' style={{width:'700' ,height:'50'}}/>
       <About />
       <ScreenShots />
       <AgencySec />
       <ContactSec />
     </div>
   )
-}
+} {/* <h1 className='dash-title' style={{ fontFamily: 'Arial Black, sans-serif'}}>QUEEN PINEAPPLE</h1>
+      <h1 className='dash-title-two' style={{ fontFamily: 'Arial Black, sans-serif'}}>FARM</h1> */}
 
 function Information({ cName}) {
-  return <span className={cName} style={{ fontFamily: 'SemiBold', fontSize: '28px', fontWeight: 'bold' }}>
+  return <span className={cName} style={{ fontFamily: 'Helvetica, sans-serif ', fontSize: '25px', fontWeight: 'bold'}}>
   
     Kilala bilang "Queen Pineapple," masigla ang pag-usbong ng Formosa sa Bicol. 
     Dahil dito, naging isa ang Camarines Norte sa mga pangunahing tagapagluwas ng pinya sa Pilipinas. 
@@ -37,7 +36,7 @@ function Images({ imagesList }) {
     <Carousel>
       {imagesList.map(image => (
         <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple'/>
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{width:'600px', height: '408px'}}/>
         </Carousel.Item>
       ))}
     </Carousel>
@@ -45,10 +44,10 @@ function Images({ imagesList }) {
 }
 
 const imagesList = [
-  "pinya1.png",
-  "pinya2.png",
-  "pinya3.png",
-  "pinya4.png",
+  "p1.jpg",
+  "p2.jpg",
+  "p3.jpg",
+  "p5.jpg",
 ]
 
 
@@ -78,7 +77,7 @@ function About() {
               className="btn btn-outline-warning"
               type="button"
               onClick={openModal}
-              style={{ width: 'auto' }}
+              style={{ width: 'auto' ,marginLeft: 60 ,fontFamily: 'Helvetica, sans-serif '}}
             >
             Karagdagang impormasyon
           </button>
@@ -96,8 +95,8 @@ function About() {
                 method='post'
                 style={{ width: '50%', backgroundColor: '#FC982B' }}
               >
-                <img src={require('../image_src/pinya1.png' )}/>
-                <p>
+                <img src={require('../image_src/p5.jpg' )}/>
+                <p style={{fontFamily:'Comic Sans MS, sans-serif',}}>
                   Ang Queen Pineapple ay kilala bilang ang pinakamatamis na pinya sa buong mundo. Ang prutas ay may
                   kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
                   nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
