@@ -16,7 +16,7 @@
 .charts {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    width: 50%;
 }
 
 .chart-container .row {

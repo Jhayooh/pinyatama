@@ -5,10 +5,26 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
-    gap: 32px
-}
+    gap: 32px;
+  }
+  
+ 
+  
 
 .map {
-    height: 400px;
+    height: 302px;
+    width: 100%;
     
+}
+.head{
+    width: 100%;
+}
+
+.pie{
+    border: '1px solid black'
+}
+
+.farm-schedule{
+    width: 100%;
+
 }

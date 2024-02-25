@@ -15996,7 +15996,7 @@ const polygonCoordsBAS = [
           }
           zoom={ZOOM_LEVEL}
           style={{
-            height: '100%',
+            height: '300px',
             width: '100%',
             position: 'absolute',
           }}
