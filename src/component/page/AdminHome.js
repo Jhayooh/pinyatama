@@ -1,6 +1,4 @@
 import React from 'react';
-
-
 import FarmsSchedule from '../FarmsSchedule';
 import Doughnut from '../chart/Doughnut';
 import SplineArea from '../chart/SplineArea';
@@ -21,8 +19,8 @@ const legends = [
 function Legend({ legends }) {
   return (
     <div className='legend'>
-      {legends.map(legend => (
-        <span>{legend}</span>
+      {legends.map((legend, index) => (
+        <span key={index}>{legend}</span>
       ))}
     </div>
   );
@@ -34,23 +32,24 @@ function AdminHome() {
       <div className='head'>
         <Header />
       </div>
-      <div className='admin-home' style={{ backgroundColor: 'white', display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '10px' }}>
+      <div className='admin-home'>
+        <div className='farm-schedule' style={{ gridColumn: 'span 2' }}>
+          <FarmsSchedule farms={farms} events={events} />
+          <Legend legends={legends} />
+        </div>
+        <div className='expect'>
+          <Pie />
+        </div>
         
-          <div className='farm-schedule' style={{ border: '1px solid black', gridColumn: 'span 2' }}>
-            <FarmsSchedule farms={farms} events={events} />
-            <Legend legends={legends} />
-          </div>
-          <div className='expect' style={{ border: '1px solid black' }}>
-            <Pie />
-          </div>
-          <div className='map' style={{ border: '1px solid black' }}>
-            <GeoLoc />
-          </div>
-          <div className='spline-area' style={{ border: '1px solid black' }}>
-            <SplineArea />
-          </div>
+        <div className='spline-area'>
+          <SplineArea />
+        </div>
+
         
       </div>
+      <div className='map'>
+          <GeoLoc />
+        </div>
     </>
   );
 }
