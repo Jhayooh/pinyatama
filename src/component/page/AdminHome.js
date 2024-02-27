@@ -8,6 +8,7 @@ import Pie from '../chart/Pie';
 import Header from '../Header';
 import './AdminHome.css'
 
+
 const legends = [
   "Pagtatanim",
   "Lumalaki",
@@ -27,6 +28,7 @@ function Legend({ legends }) {
 }
 
 export default function AdminHome() {
+
   return (
     <>
     <Header />
