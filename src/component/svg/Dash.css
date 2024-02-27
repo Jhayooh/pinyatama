@@ -1,0 +1,20 @@
+.curved-div{
+    background: #42cf7d;
+    color: #fff;
+    text-align: center;
+
+    
+}
+.curved-div2{
+    background: #fff;
+    color: #fff;
+    text-align: center;
+
+}
+.curved-div h1{
+    font-size: 12;
+    font-family:  'Arial Black, sans-serif';
+}
+.curved-div-shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }

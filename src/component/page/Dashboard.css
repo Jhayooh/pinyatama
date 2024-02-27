@@ -1,11 +1,23 @@
 .dashboard{
-    padding: 22px;
+    padding: 0px;
+   
 }
+
 .navbar {
     background: transparent;
     padding: 18px 32px;
     color: #fff;
+    width: 100%;
+  transition: top 0.3s;
+  z-index: 1000;
 }
+.navbar.hidden {
+    top: -50px;
+  }
+  
+  .navbar.visible {
+    top: 0;
+  }
 
 .navbar.active {
     background-color: 115C1870;
@@ -18,6 +30,7 @@
 .nav-item {
     padding: 4px;
     margin: 0 8px;
+    font-family: 'Georgia, serif';
 }
 
 .nav-link {
@@ -186,4 +199,9 @@
     font-size: 1.6rem;
     font-weight: 600px;
     margin-top: 32px;
+}
+
+image {
+    width: 300px;
+    height: 300;
 }

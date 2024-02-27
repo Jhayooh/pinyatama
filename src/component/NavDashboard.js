@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { HashLink } from 'react-router-hash-link';
 import './Login.css';
@@ -22,7 +22,7 @@ function NavDashboard({ navItems }) {
   };
 
   return (
-    <nav className="navbar fixed-top navbar-expand-lg" style={{ background: 'rgba(17, 92, 24, 0.5)' }}>
+    <nav className="navbar fixed-top navbar-expand-lg" style={{ background: 'rgba(17, 92, 24, 0.5)' ,fontFamily: 'Arial'}}>
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
         <img src={require('./image_src/logo.png')}/>

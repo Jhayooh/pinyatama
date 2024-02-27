@@ -1,12 +1,13 @@
-import './App.css';
-import Dashboard from './component/page/Dashboard';
-import AdminHome from './component/page/AdminHome'
-import FarmTabs from './component/page/FarmTabs';
-import GeoLoc from './component/page/GeoLoc';
 import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import './App.css';
+import AdminHome from './component/page/AdminHome';
+import Dashboard from './component/page/Dashboard';
+import FarmTabs from './component/page/FarmTabs';
+import GeoLoc from './component/page/GeoLoc';
+import Dash from './component/svg/Dash';
 
 function App() {
   const router = createBrowserRouter([
@@ -26,6 +27,10 @@ function App() {
     {
       path: "/Geo",
       element: <GeoLoc />
+    },
+    {
+      path:'/Dash',
+      element:<Dash />
     }
   ])
   return (
