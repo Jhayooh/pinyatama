@@ -95,16 +95,16 @@ function FarmsSchedule({ events, farms }) {
         onItemClick={() => alert(1)}
         itemRenderer={itemRender}
         items={events}
-        lineHeight={75}
+        lineHeight={50}
         sidebarContent="QP Farms"
         defaultTimeStart={moment().add(-3, 'month')}
-        defaultTimeEnd={moment().add(8, 'month')}
+        defaultTimeEnd={moment().add(4, 'month')}
         maxZoom={1.5 * 365.24 * 86400 * 1000}
         minZoom={1.24 * 86400 * 1000 * 7 * 3}
         // fullUpdate
         itemTouchSendsClick={false}
         // stackItems
-        itemHeightRatio={0.75}
+        itemHeightRatio={0.60}
         showCursorLine
         canMove={false}
       >

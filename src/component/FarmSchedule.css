@@ -2,9 +2,9 @@
 @import './item.css';
 
 .timeline-container {
-    width: 100%;
     margin: 32px auto;
-    background-color: #fff;
+    width: '100%';
+    background-color: 'red';
 }
 
 .legend {
@@ -30,6 +30,10 @@ body {
     font-family: 'Work Sans', sans-serif !important;
     font-size: 18px !important;
     background: #FAFAFA !important;
+}
+
+.react-calendar-timeline {
+    width: 1130px;
 }
 
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
