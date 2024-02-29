@@ -10,6 +10,7 @@ import GeoLoc from './component/page/GeoLoc';
 import Dash from './component/svg/Dash';
 import Heatmap from './component/page/Heatmap';
 import ProductPrices from './component/ProductPrices'
+import SideNav from "./component/page/SideNav";
 
 function App() {
   const router = createBrowserRouter([
@@ -23,7 +24,7 @@ function App() {
     },
     {
       path: "/admin",
-      element: <AdminHome />
+      element: <SideNav />
     },
 
     {
