@@ -1,13 +1,14 @@
-import React from 'react'
-import './Header.css'
+import React from 'react';
+import './Header.css';
+import icon from './image_src/icon.png';
 
 function Header() {
   return (
     <div className='header'>
-        <img src={require('./image_src/icon.png')} alt='icon' />
-        <h1 className='title'>QUEEN PINEAPPLE FARMING</h1>
+      <img className='header-icon' src={icon} alt='icon' />
+      <h1 className='title'>QUEEN PINEAPPLE FARMING</h1>
     </div>
-  )
+  );
 }
 
-export default Header
+export default Header;

@@ -8,6 +8,7 @@ import Dashboard from './component/page/Dashboard';
 import FarmTabs from './component/page/FarmTabs';
 import GeoLoc from './component/page/GeoLoc';
 import Dash from './component/svg/Dash';
+import Heatmap from './component/page/Heatmap';
 import ProductPrices from './component/ProductPrices'
 
 function App() {
@@ -33,6 +34,10 @@ function App() {
     {
       path: "/table",
       element: <ProductPrices />
+    },
+    {
+      path: "/Heat",
+      element: <Heatmap />
     },
     {
       path:'/Dash',
