@@ -8,6 +8,7 @@ import Header from '../Header';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
 
+
 const legends = [
   "Pagtatanim",
   "Lumalaki",
@@ -26,7 +27,7 @@ function Legend({ legends }) {
   );
 }
 
-function AdminHome() {
+export default function AdminHome() {
   return (
     <>
       <div className='head'>

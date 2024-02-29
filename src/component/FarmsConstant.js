@@ -22,6 +22,7 @@ export const events = [
       id: 1,
       group: 1,
       title: 'namumulaklak',
+      className: 'namumulaklak',
       start_time: moment().add(-11, 'month'),
       end_time: moment().add(6, 'month')
     },
@@ -29,6 +30,7 @@ export const events = [
         id: 2,
         group: 1,
         title: 'pagtatanim',
+        className: 'pagtatanim',
         start_time: moment().add(-12, 'month'),
         end_time: moment().add(-11, 'month')
     },
@@ -36,6 +38,7 @@ export const events = [
       id: 3,
       group: 2,
       title: 'nagbubunga',
+      className: 'nagbubunga',
       start_time: moment().add(-9, 'month'),
       end_time: moment().add(9, 'month')
     },
@@ -43,6 +46,7 @@ export const events = [
         id: 4,
         group: 3,
         title: 'pagtatanim',
+        className: 'pagtatanim',
         start_time: moment().add(-7, 'month'),
         end_time: moment().add(11, 'month')
       },

@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+@import './item.css';
+
 .timeline-container {
     width: 100%;
     margin: 32px auto;
@@ -21,4 +24,49 @@
 
 .chart-container .row {
     margin-top: 18px;
+}
+
+body {
+    font-family: 'Work Sans', sans-serif !important;
+    font-size: 18px !important;
+    background: #FAFAFA !important;
+}
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+    border-bottom: none !important;
+}
+
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even {
+    background-color: #ffffff !important;
+}
+
+.react-calendar-timeline .rct-header .rct-label {
+    border-bottom: none !important;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl.rct-vl-first {
+    border-color: #ccc !important;
+}
+
+.react-calendar-timeline .rct-vertical-lines .rct-vl {
+    border-left: 1px solid #eeeeee87 !important;
+}
+
+.react-calendar-timeline .rct-header .rct-label-group {
+    font-family: 'Work Sans', sans-serif !important;
+    background: #eee !important;
+    color: #000 !important;
+    font-size: 1rem !important;
+}
+
+.react-calendar-timeline .rct-header-root {
+    background: #fff !important;
+}
+
+
+.react-calendar-timeline .rct-dateHeader {
+    border: none !important;
+    background: #eeeeee87 !important;
+    color: #000 !important;
+    font-weight: bold;
 }
