@@ -9,7 +9,7 @@ import './AdminHome.css';
 import GeoLoc from './GeoLoc';
 import { Box } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
+import Grid from '@mui/material/Unstable_Grid2';
 
 const legends = [
   "Pagtatanim",
@@ -31,20 +31,35 @@ function Legend({ legends }) {
 
 export default function AdminHome() {
   return (
-    <>
-      <h1 style={{ color: '#000' }}>Dashboard</h1>
-      <Divider sx={{ borderBottomWidth: 3 }} />
-      
-      {/* <div className='farm-schedule' >
+    <Grid container spacing={2}>
+      <Grid lg={12} >
+
+        <h1 style={{ color: '#000' }}>Dashboard</h1>
+        <Divider sx={{ borderBottomWidth: 3 }} />
+      </Grid>
+      <Grid lg={12}>
         <FarmsSchedule farms={farms} events={events} />
-        <Legend legends={legends} />
-      </div>
-      <div className='expect'>
-        <Pie /> <SplineArea />
-      </div>
-      <div className='map'>
-        <span>Hello map</span>
-      </div> */}
-    </>
+      </Grid>
+      <Grid lg={6}>
+        <Pie />
+      </Grid>
+      <Grid lg={6}>
+        <SplineArea />
+      </Grid>
+
+    </Grid>
+    // <>
+
+    //   <div className='farm-schedule' >
+    //     <FarmsSchedule farms={farms} events={events} />
+    //     <Legend legends={legends} />
+    //   </div>
+    //   <div className='expect'>
+    //     <Pie /> <SplineArea />
+    //   </div>
+    //   <div className='map'>
+    //     <span>Hello map</span>
+    //   </div>
+    // </>
   );
 }

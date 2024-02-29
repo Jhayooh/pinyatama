@@ -32,9 +32,9 @@ body {
     background: #FAFAFA !important;
 }
 
-.react-calendar-timeline {
+/* .react-calendar-timeline {
     width: 1130px;
-}
+} */
 
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
     border-bottom: none !important;
