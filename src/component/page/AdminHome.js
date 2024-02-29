@@ -7,6 +7,9 @@ import Pie from '../chart/Pie';
 import Header from '../Header';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
+import { Box } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import Grid2 from '@mui/material/Unstable_Grid2/Grid2';
 
 const legends = [
   "Pagtatanim",
@@ -26,32 +29,22 @@ function Legend({ legends }) {
   );
 }
 
-function AdminHome() {
+export default function AdminHome() {
   return (
     <>
-      <div className='head'>
-        <Header />
+      <h1 style={{ color: '#000' }}>Dashboard</h1>
+      <Divider sx={{ borderBottomWidth: 3 }} />
+      
+      {/* <div className='farm-schedule' >
+        <FarmsSchedule farms={farms} events={events} />
+        <Legend legends={legends} />
       </div>
-      <div className='admin-home'>
-        <div className='farm-schedule' style={{ gridColumn: 'span 2' }}>
-          <FarmsSchedule farms={farms} events={events} />
-          <Legend legends={legends} />
-        </div>
-        <div className='expect'>
-          <Pie />
-        </div>
-        
-        <div className='spline-area'>
-          <SplineArea />
-        </div>
-
-        
+      <div className='expect'>
+        <Pie /> <SplineArea />
       </div>
       <div className='map'>
-          <GeoLoc />
-        </div>
+        <span>Hello map</span>
+      </div> */}
     </>
   );
 }
-
-export default AdminHome;
