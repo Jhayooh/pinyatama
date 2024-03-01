@@ -13,7 +13,7 @@ class SplineArea extends Component {
             }],
             options: {
                 chart: {
-                    height: 350,
+                    // height: 500,
                     type: 'line',
                     zoom: {
                         enabled: false
@@ -26,7 +26,7 @@ class SplineArea extends Component {
                     curve: 'straight'
                 },
                 title: {
-                    text: 'Product Trends by Month',
+                    text: 'Expected Harvest',
                     align: 'left'
                 },
                 grid: {
@@ -47,7 +47,7 @@ class SplineArea extends Component {
     render() {
 
         return (
-            <Chart options={this.state.options} series={this.state.series} type="line" width="100%" />
+            <Chart options={this.state.options} series={this.state.series} type="line" width="100%" height='360' />
         );
     }
 }
