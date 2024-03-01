@@ -31,20 +31,42 @@ function Legend({ legends }) {
 
 export default function AdminHome() {
   return (
-    <Grid container spacing={2}>
-      <Grid lg={12} >
-
+    <Grid container spacing={4}>
+      <Grid lg={12} sx={{mb: 3}} >
         <h1 style={{ color: '#000' }}>Dashboard</h1>
         <Divider sx={{ borderBottomWidth: 3 }} />
       </Grid>
-      <Grid lg={12} sx={{mt: 2, mb: 3}}>
-        <FarmsSchedule farms={farms} events={events} />
+      <Grid lg={3}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+        </Box>
       </Grid>
-      <Grid lg={6}>
-        <Pie />
+      <Grid lg={3}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+        </Box>
       </Grid>
-      <Grid lg={6}>
-        <SplineArea />
+      <Grid lg={3}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+        </Box>
+      </Grid>
+      <Grid lg={3}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+        </Box>
+      </Grid>
+      <Grid lg={12} >
+        <Box sx={{ boxShadow: 1, p: 3, borderRadius: 3, backgroundColor: '#fff' }} >
+          <h3>Timeline</h3>
+          <FarmsSchedule farms={farms} events={events} />
+        </Box>
+      </Grid>
+      <Grid lg={4}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Pie />
+        </Box>
+      </Grid>
+      <Grid lg={8}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <SplineArea />
+        </Box>
       </Grid>
 
     </Grid>

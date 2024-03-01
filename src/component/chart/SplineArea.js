@@ -1,41 +1,55 @@
-import React, { Component } from 'react'
-import CanvasJSReact from '@canvasjs/react-charts';
+import React, { Component } from 'react';
+import Chart from 'react-apexcharts'
 
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+class SplineArea extends Component {
+    constructor(props) {
+        super(props);
 
-export default class SplineArea extends Component {
-  render() {
-    const options = {
-        exportEnabled: true,
-        height: 280,
-        // width: 380,
-        animationEnabled: true,
-        title: {
-            text: "Ani ng Pinya",
-            margin: 32,
-        },
-        axisX:{
-            valueFormatString:"####"
-         },
-        data: [{
-            tooltip: "hidden",
-            type: "splineArea",
-            xValueFormatString: "Total Harvest: ####",
-            dataPoints: [
-                { x: 2004, y: 5000 },
-                { x: 2012, y: 49243 },
-                { x: 2018, y: 16876 },
-            ]
-        }]
+        this.state = {
+
+            series: [{
+                name: "Desktops",
+                data: [10, 41, 35, 51, 49, 62, 69, 91, 148]
+            }],
+            options: {
+                chart: {
+                    height: 350,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                title: {
+                    text: 'Product Trends by Month',
+                    align: 'left'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                xaxis: {
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'],
+                }
+            },
+
+
+        };
     }
-    return (
-    <>
-        <CanvasJSChart options = {options}
-            /* onRef={ref => this.chart = ref} */
-        />
-        {/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-    </>
-    );  
+
+    render() {
+
+        return (
+            <Chart options={this.state.options} series={this.state.series} type="line" width="100%" />
+        );
+    }
 }
-}
+
+export default SplineArea;

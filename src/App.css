@@ -1,3 +1,7 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+* {
+  font-family: 'Work Sans', sans-serif !important;
+}
 .App {
     /* padding: 22px; */
     background-color: #115C18;
