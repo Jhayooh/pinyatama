@@ -19,36 +19,76 @@ export const farms = [
 // SCHEDULE OF FARMS
 export const events = [
     {
-      id: 1,
-      group: 1,
-      title: 'namumulaklak',
-      className: 'namumulaklak',
+      id: 1, //document id
+      group: 1, // uid
+      title: 'Vegetation',
+      className: 'vegetation',
       start_time: moment().add(-11, 'month'),
-      end_time: moment().add(6, 'month')
+      end_time: moment().add(-1, 'month')
     },
     {
         id: 2,
         group: 1,
-        title: 'pagtatanim',
-        className: 'pagtatanim',
-        start_time: moment().add(-12, 'month'),
-        end_time: moment().add(-11, 'month')
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(-1, 'month'),
+        end_time: moment().add(1, 'month')
+    },
+    {
+        id: 5,
+        group: 1,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(1, 'month'),
+        end_time: moment().add(6, 'month')
     },
     {
       id: 3,
       group: 2,
-      title: 'nagbubunga',
-      className: 'nagbubunga',
-      start_time: moment().add(-9, 'month'),
-      end_time: moment().add(9, 'month')
+      title: 'Vegetation',
+      className: 'vegetation',
+      start_time: moment().add(-28, 'month'),
+      end_time: moment().add(-18, 'month')
     },
     {
         id: 4,
+        group: 2,
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(-18, 'month'),
+        end_time: moment().add(-16, 'month')
+      },
+      {
+        id: 6,
+        group: 2,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(-16, 'month'),
+        end_time: moment().add(-11, 'month')
+      },
+    {
+        id: 7,
         group: 3,
-        title: 'pagtatanim',
-        className: 'pagtatanim',
-        start_time: moment().add(-7, 'month'),
-        end_time: moment().add(11, 'month')
+        title: 'Vegetation',
+        className: 'vegetation',
+        start_time: moment().add(1, 'month'),
+        end_time: moment().add(10, 'month')
+      },
+      {
+        id: 8,
+        group: 3,
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(10, 'month'),
+        end_time: moment().add(12, 'month')
+      },
+      {
+        id: 9,
+        group: 3,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(12, 'month'),
+        end_time: moment().add(18, 'month')
       },
   ]
 
