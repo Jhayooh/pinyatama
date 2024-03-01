@@ -7,7 +7,10 @@ import Pie from '../chart/Pie';
 import Header from '../Header';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
-import { Box } from '@mui/material';
+import {
+  Box,
+  Button
+} from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 
@@ -29,14 +32,18 @@ function Legend({ legends }) {
   );
 }
 
-export default function AdminHome() {
+export default function AdminHome({setSelected}) {
   return (
-    <Grid container spacing={4}>
-      <Grid lg={12} sx={{mb: 3}} >
+    <Grid container spacing={4} alignItems='stretch'>
+      <Grid lg={12} sx={{ mb: 3 }} >
         <h1 style={{ color: '#000' }}>Dashboard</h1>
         <Divider sx={{ borderBottomWidth: 3 }} />
       </Grid>
-      <Grid lg={3}>
+      <Grid lg={3} >
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+        </Box>
+      </Grid>
+      <Grid lg={3} >
         <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
         </Box>
       </Grid>
@@ -44,28 +51,33 @@ export default function AdminHome() {
         <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
         </Box>
       </Grid>
-      <Grid lg={3}>
+      <Grid lg={3} >
         <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
         </Box>
       </Grid>
-      <Grid lg={3}>
-        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
-        </Box>
-      </Grid>
-      <Grid lg={12} >
-        <Box sx={{ boxShadow: 1, p: 3, borderRadius: 3, backgroundColor: '#fff' }} >
-          <h3>Timeline</h3>
+      <Grid lg={12}>
+        <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff' }} >
+
+          <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
+            <h4>Timeline</h4>
+            <Button variant="outlined" sx={{width: 180}} onClick={()=>setSelected('timeline')}>view all</Button>
+          </section>
           <FarmsSchedule farms={farms} events={events} />
         </Box>
       </Grid>
-      <Grid lg={4}>
-        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+      <Grid lg={4} >
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }} >
           <Pie />
         </Box>
       </Grid>
-      <Grid lg={8}>
-        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+      <Grid lg={8} >
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }} >
           <SplineArea />
+        </Box>
+      </Grid>
+      <Grid lg={12}>
+        <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <GeoLoc />
         </Box>
       </Grid>
 
