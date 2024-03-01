@@ -46,7 +46,7 @@ export default function SideNav() {
           <h5>This is the icon!</h5>
           <Divider />
           <List>
-            <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={{ backgroundColor: '#fff', borderTopLeftRadius: 24, borderBottomLeftRadius: 24 }}>
+            <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   <InboxIcon />
@@ -54,12 +54,20 @@ export default function SideNav() {
                 <ListItemText primary='Dashboard' />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('particular')}>
+            <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   <InboxIcon />
                 </ListItemIcon>
-                <ListItemText primary='Particulars' sx={{ color: '#fff' }} />
+                <ListItemText primary='Timeline' />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: '35px' }}>
+                  <InboxIcon />
+                </ListItemIcon>
+                <ListItemText primary='Particulars' />
               </ListItemButton>
             </ListItem>
           </List>
@@ -84,12 +92,24 @@ export default function SideNav() {
           </List>
         </Box>
       </Drawer>
-      <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden'}}>
-        <div style={{ backgroundColor: '#fff', padding: 24, borderRadius: 16, height: '100%', overflow: 'auto'}}>
+      <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
+        <div style={{ backgroundColor: '#fff', padding: 24, borderRadius: 16, height: '100%', overflow: 'auto' }}>
           {selected === 'dashboard' && <AdminHome />}
           {selected === 'particular' && <ProductPrices />}
         </div>
       </Box>
     </Box>
   );
+}
+
+const styles = {
+  isSelected: {
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 24,
+    borderBottomLeftRadius: 24,
+    color: '#000'
+  },
+  notSelected: {
+    color: '#fff'
+  }
 }
