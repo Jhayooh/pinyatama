@@ -2,12 +2,19 @@
 import React, { useState, useRef } from 'react';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
-import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import './GeoLoc.css';
 
+import 'leaflet.heat';
+import 'leaflet.heat/dist/leaflet-heat.js';
+
 // Custom icon
+
+const Heatmap = () => {
+  const mapRef = useRef(null);
+}
 const customIcon = new L.Icon({
   iconUrl: require('./marker.png'),
   iconSize: [32, 32],
