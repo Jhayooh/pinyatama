@@ -37,7 +37,7 @@ export default function AdminHome() {
         <h1 style={{ color: '#000' }}>Dashboard</h1>
         <Divider sx={{ borderBottomWidth: 3 }} />
       </Grid>
-      <Grid lg={12}>
+      <Grid lg={12} sx={{mt: 2, mb: 3}}>
         <FarmsSchedule farms={farms} events={events} />
       </Grid>
       <Grid lg={6}>
