@@ -93,7 +93,7 @@ export default function SideNav() {
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-        <div style={{ backgroundColor: '#fff', padding: 24, borderRadius: 16, height: '100%', overflow: 'auto' }}>
+        <div style={{ backgroundColor: '#f9fafb', padding: 24, borderRadius: 16, height: '100%', overflow: 'auto' }}>
           {selected === 'dashboard' && <AdminHome />}
           {selected === 'particular' && <ProductPrices />}
         </div>
