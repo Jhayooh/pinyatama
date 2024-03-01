@@ -8,6 +8,7 @@ import { db } from '../firebase/Config'
 import './ripple.css'
 
 function FarmsSchedule({ events, farms }) {
+
   const keys = {
     groupIdKey: 'id',
     groupTitleKey: 'title',
@@ -88,7 +89,6 @@ function FarmsSchedule({ events, farms }) {
   }
 
   return (
-    <div className='timeline-container'>
       <Timeline
         keys={keys}
         groups={farms}
@@ -96,9 +96,9 @@ function FarmsSchedule({ events, farms }) {
         itemRenderer={itemRender}
         items={events}
         lineHeight={50}
-        sidebarContent="QP Farms"
-        defaultTimeStart={moment().add(-3, 'month')}
-        defaultTimeEnd={moment().add(4, 'month')}
+        sidebarContent={<div>QP Farms</div>}
+        defaultTimeStart={moment().add(-2, 'month')}
+        defaultTimeEnd={moment().add(9, 'month')}
         maxZoom={1.5 * 365.24 * 86400 * 1000}
         minZoom={1.24 * 86400 * 1000 * 7 * 3}
         // fullUpdate
@@ -110,27 +110,11 @@ function FarmsSchedule({ events, farms }) {
       >
         <TimelineMarkers>
           <TodayMarker>
-            {({ styles, date }) => <div style={{ ...styles, width: '0.5rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
+            {({ styles, date }) => <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
             }
           </TodayMarker>
         </TimelineMarkers>
       </Timeline>
-      {/* <Timeline
-        groups={farms}
-        items={events}
-        lineHeight={48}
-        defaultTimeStart={moment().add(-9, 'month')}
-        defaultTimeEnd={moment().add(9, 'month')}
-        // timeSteps={{
-        //   second: 0,
-        //   minute: 0,
-        //   hour: 1,
-        //   day: 1,
-        //   month: 1,
-        //   year: 1
-        // }}
-      /> */}
-    </div>
   )
 }
 

@@ -1,9 +1,7 @@
-@import url('https://fonts.googleapis.com/css?family=Work+Sans');
 @import './item.css';
 
-.timeline-container {
+/* .timeline-container {
     margin: 32px auto;
-    width: '100%';
     background-color: 'red';
 }
 
@@ -24,17 +22,16 @@
 
 .chart-container .row {
     margin-top: 18px;
-}
+} */
 
 body {
-    font-family: 'Work Sans', sans-serif !important;
-    font-size: 18px !important;
+    font-size: 14px !important;
     background: #FAFAFA !important;
 }
 
-.react-calendar-timeline {
+/* .react-calendar-timeline {
     width: 1130px;
-}
+} */
 
 .react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
     border-bottom: none !important;
@@ -60,7 +57,7 @@ body {
     font-family: 'Work Sans', sans-serif !important;
     background: #eee !important;
     color: #000 !important;
-    font-size: 1rem !important;
+    font-size: .5rem !important;
 }
 
 .react-calendar-timeline .rct-header-root {
@@ -71,6 +68,5 @@ body {
 .react-calendar-timeline .rct-dateHeader {
     border: none !important;
     background: #eeeeee87 !important;
-    color: #000 !important;
-    font-weight: bold;
+    color: #151515 !important;
 }
