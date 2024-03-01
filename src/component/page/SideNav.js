@@ -21,7 +21,7 @@ const drawerWidth = 160;
 const bgColor = '#247027'
 
 export default function SideNav() {
-  const [selected, setSelected] = useState('particular')
+  const [selected, setSelected] = useState('dashboard')
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
