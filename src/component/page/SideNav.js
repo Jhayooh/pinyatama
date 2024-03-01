@@ -21,7 +21,7 @@ const drawerWidth = 160;
 const bgColor = '#247027'
 
 export default function SideNav() {
-  const [selected, setSelected] = useState('dashboard')
+  const [selected, setSelected] = useState('particular')
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
@@ -93,10 +93,8 @@ export default function SideNav() {
         </Box>
       </Drawer>
       <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-        <div style={{ backgroundColor: '#f9fafb', padding: 24, borderRadius: 16, height: '100%', overflow: 'auto' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
-          {/* {selected === 'particular' && <ProductPrices />} */}
-        </div>
+          {selected === 'particular' && <ProductPrices />}
       </Box>
     </Box>
   );
