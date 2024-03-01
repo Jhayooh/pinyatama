@@ -1,5 +1,4 @@
 import React from "react";
-import { FiArrowRight } from "react-icons/fi";
 import Login from '../Login';
 import DOA from "../image_src/DOA_logo.png";
 import OPAG from "../image_src/OPAG_logo.png";
@@ -29,8 +28,8 @@ function Home() {
             Ang Queen ang pinakamatamis na uri ng pinya sa Pilipinas
           </p>
 
-          <button className="secondary-button">
-            More Info <FiArrowRight />{" "}</button>
+          <button className="secondary-button"style={{backgroundColor:'#22b14c'}}>
+            More Info {" "}</button>
 
 
         </div>
@@ -54,7 +53,7 @@ function About() {
         <img src={AboutImage} style={{ borderRadius: '100px' }} />
       </div>
       <div className="about-section-text-container">
-        <p className="primary-subheading">About</p>
+        <p className="primary-subheading" style={{color:'#22b14c'}}>About</p>
         <h1 className="primary-heading">
           Kilala bilang "Queen Pineapple"
         </h1>
@@ -72,7 +71,7 @@ function Screenshots() {
     <div>
       <>
        <div className="work-section-top" style={{marginTop:100}}>
-        <p className="primary-subheading">Web Dashboard Screenshots</p>
+        <p className="primary-subheading" style={{color:'#22b14c'}}>Web Dashboard Screenshots</p>
         <h1 className="primary-heading">Check it Out</h1>
       </div>
         <ImageGal />
@@ -98,9 +97,13 @@ function Agencies() {
     },
   ];
   return (
+    <div className="home-banner-container">
+        <div className="home-bannerImage-container">
+          <img src={BannerBackground} alt="" />
+        </div>
     <div className="work-section-wrapper" id="Agencies">
       <div className="work-section-top">
-        <p className="primary-subheading">Concern Agencies</p>
+        <p className="primary-subheading" style={{color:'#22b14c'}}>Concern Agencies</p>
         <h1 className="primary-heading">Check it Out</h1>
 
       </div>
@@ -108,7 +111,7 @@ function Agencies() {
         {workInfoData.map((data) => (
           <div className="work-section-info"
             key={data.title}
-            style={{ border: '1px solid #000', padding: '10px' }}>
+            style={{ border: '1px solid #22b14c', padding: '10px' }}>
             <div className="info-boxes-img-container">
               <img src={data.image} alt="" />
             </div>
@@ -116,6 +119,7 @@ function Agencies() {
           </div>
         ))}
       </div>
+    </div>
     </div>
   )
 };

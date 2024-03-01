@@ -1,18 +1,16 @@
-import React from 'react';
-import FarmsSchedule from '../FarmsSchedule';
-import Doughnut from '../chart/Doughnut';
-import SplineArea from '../chart/SplineArea';
-import { farms, events } from '../FarmsConstant';
-import Pie from '../chart/Pie';
-import Header from '../Header';
-import './AdminHome.css';
-import GeoLoc from './GeoLoc';
 import {
   Box,
   Button
 } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
+import React from 'react';
+import { events, farms } from '../FarmsConstant';
+import FarmsSchedule from '../FarmsSchedule';
+import Pie from '../chart/Pie';
+import SplineArea from '../chart/SplineArea';
+import './AdminHome.css';
+import GeoLoc from './GeoLoc';
 
 const legends = [
   "Pagtatanim",
@@ -38,7 +36,7 @@ export default function AdminHome({ setSelected }) {
       <Grid container spacing={4} alignItems='stretch'>
         <Grid lg={12} sx={{ mb: 3 }} >
           <h1 style={{ color: '#000' }}>Dashboard</h1>
-          <Divider sx={{ borderBottomWidth: 3 }} />
+          <Divider sx={{ borderBottomWidth: 3 ,backgroundColor:'#22b14c'}} />
         </Grid>
         <Grid lg={3} >
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
