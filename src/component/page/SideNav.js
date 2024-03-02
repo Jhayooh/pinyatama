@@ -11,6 +11,7 @@ import Toolbar from '@mui/material/Toolbar';
 import React, { useState } from 'react';
 import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
+import AdminHome from './AdminHome';
 
 const drawerWidth = 160;
 const bgColor = '#22b14c'
@@ -34,7 +35,7 @@ export default function SideNav() {
           [`& .MuiDrawer-paper`]: { width: drawerWidth, backgroundColor: bgColor, border: 'none' },
         }}
       >
-        <Toolbar />
+        {/* <Toolbar /> */}
         <Box sx={{
           pl: 1
         }}>

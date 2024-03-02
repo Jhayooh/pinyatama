@@ -8,7 +8,7 @@ import BannerBackground from "../image_src/home-banner-background.png";
 import HomeImage from "../image_src/p1.jpg";
 import AboutImage from "../image_src/p2.jpg";
 import ImageGal from "./ImageGal";
-
+import './Home.css';
 
 function Home() {
   const navArray = ["Home", "About", "Screenshots", "Agencies"]
