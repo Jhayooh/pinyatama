@@ -56,6 +56,7 @@ const Login = () => {
                         className="primary-button"
                         type="button"
                         onClick={openLoginModal}
+                        style={{color:'#22b14c'}}
                     >Login</button>
                 </div>
             </nav>
