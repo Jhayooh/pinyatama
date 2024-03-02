@@ -1,38 +1,19 @@
-import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
+import React, { useState } from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Button, IconButton, TextField, Modal, FormControl, InputLabel, Input } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { Box, Button, Container, IconButton, TextField } from '@mui/material';
 
 const columns = [
-  { id: 'name', label: 'Name', minWidth: 170 },
-  { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+  { id: 'id', label: 'ID', minWidth: 170 },
+  { id: 'name', label: 'Name', minWidth: 100 },
   {
-    id: 'population',
-    label: 'Population',
+    id: 'price',
+    label: 'Price',
     minWidth: 170,
     align: 'right',
     format: (value) => value.toLocaleString('en-US'),
   },
-  {
-    id: 'size',
-    label: 'Size\u00a0(km\u00b2)',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'density',
-    label: 'Density',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toFixed(2),
-  },
+
   {
     id: 'actions',
     label: 'Action',
@@ -41,34 +22,31 @@ const columns = [
   }
 ];
 
-function createData(name, code, population, size) {
-  const density = population / size;
-  return { name, code, population, size, density };
+function createData(id, name, price) {
+ 
+  return { id, name, price};
 }
 
-const rows = [
-  createData('India', 'IN', 1324171354, 3287263),
-  createData('China', 'CN', 1403500365, 9596961),
-  createData('Italy', 'IT', 60483973, 301340),
-  createData('United States', 'US', 327167434, 9833520),
-  createData('Canada', 'CA', 37602103, 9984670),
-  createData('Australia', 'AU', 25475400, 7692024),
-  createData('Germany', 'DE', 83019200, 357578),
-  createData('Ireland', 'IE', 4857000, 70273),
-  createData('Mexico', 'MX', 126577691, 1972550),
-  createData('Japan', 'JP', 126317000, 377973),
-  createData('France', 'FR', 67022000, 640679),
-  createData('United Kingdom', 'GB', 67545757, 242495),
-  createData('Russia', 'RU', 146793744, 17098246),
-  createData('Nigeria', 'NG', 200962417, 923768),
-  createData('Brazil', 'BR', 210147125, 8515767),
+const initialRows = [
+  createData('001', 'Seeds', 0.50 ),
+
 ];
 
 export default function StickyHeadTable() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [open, setOpen] = useState(false);
+  const [formData, setFormData] = useState({ name: '', code: '', population: '', size: '' });
+  const [rows, setRows] = React.useState(initialRows);
 
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -78,8 +56,24 @@ export default function StickyHeadTable() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
+  };
+  
+
+  const handleFormChange = (event) => {
+    const { id, value } = event.target;
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = () => {
+    const newRow = createData(formData.name, formData.code, parseFloat(formData.population), parseFloat(formData.size));
+    setRows([...initialRows, newRow]);
+    handleClose();
   };
 
   const filteredRows = rows.filter((row) =>
@@ -96,7 +90,7 @@ export default function StickyHeadTable() {
           onChange={handleSearchChange}
           sx={{ maxWidth: 400 }}
         />
-        <Button variant="contained" color="primary" sx={{maxWidth: 210}}>
+        <Button variant="contained" color="primary" sx={{maxWidth: 210}}  onClick={handleOpen}>
           Add Data
         </Button>
       </Box>
@@ -150,6 +144,49 @@ export default function StickyHeadTable() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <FormControl>
+            <div>
+              <InputLabel htmlFor="name">ID</InputLabel>
+              <Input id="name" aria-describedby="name-helper-text" value={formData.name} onChange={handleFormChange} />
+            </div>
+            <br></br>
+          </FormControl>
+          <FormControl>
+            <div>
+              <InputLabel htmlFor="code">Name</InputLabel>
+              <Input id="code" aria-describedby="code-helper-text" value={formData.code} onChange={handleFormChange} />
+            </div>
+            <br></br>
+          </FormControl>
+          <FormControl>
+            <div>
+              <InputLabel htmlFor="population">Price</InputLabel>
+              <Input id="population" aria-describedby="population-helper-text" value={formData.population} onChange={handleFormChange} />
+            </div>
+            <br></br>
+          </FormControl>
+          
+          <Button onClick={handleSubmit}>Submit</Button>
+        </Box>
+      </Modal>
     </>
   );
 }
