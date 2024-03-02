@@ -13,8 +13,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import FarmsSchedule from './FarmsSchedule';
 import { farms, events } from './FarmsConstant';
 
-
-
 export default function Timeline() {
     
     return (
