@@ -1,10 +1,10 @@
 // App.js
-import React, { useState, useRef } from 'react';
-import SlidingPane from 'react-sliding-pane';
-import 'react-sliding-pane/dist/react-sliding-pane.css';
-import { MapContainer, TileLayer, Marker, Popup, Polygon, Tooltip, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import React, { useRef, useState } from 'react';
+import { MapContainer, Marker, Polygon, TileLayer, Tooltip } from 'react-leaflet';
+import SlidingPane from 'react-sliding-pane';
+import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './GeoLoc.css';
 
 import 'leaflet.heat';
@@ -15987,7 +15987,7 @@ const polygonCoordsBAS = [
           setState({ isPaneOpen: false, selectedMarker: null });
         }}
         from="left"
-        width="300px"
+        width="100hv"
       >
         <div>
           <p>Information about the pineapple </p>
@@ -16003,7 +16003,7 @@ const polygonCoordsBAS = [
           }
           zoom={ZOOM_LEVEL}
           style={{
-            height: '500px',
+            height: '100vh',
             width: '100%',
             position: 'absolute',
           }}
