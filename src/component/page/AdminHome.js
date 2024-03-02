@@ -54,14 +54,15 @@ export default function AdminHome({ setSelected }) {
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={12}>
-          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff' }} >
-
+        <Grid lg={12} sx={{}}>
+          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden' }} >
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
               <Button variant="outlined" sx={{ width: 180 }} onClick={() => setSelected('timeline')}>view all</Button>
             </section>
-            <FarmsSchedule farms={farms} events={events} />
+            <Box sx={{ maxHeight: 400, overflowY: 'auto'}}>
+              <FarmsSchedule farms={farms} events={events} />
+            </Box>
           </Box>
         </Grid>
         <Grid lg={4} >

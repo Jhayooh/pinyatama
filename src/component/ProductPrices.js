@@ -91,12 +91,10 @@ export default function ProductPrices() {
     ],
     [],
   );
-
   const table = useMaterialReactTable({
     columns,
     data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
   });
-
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -104,8 +102,8 @@ export default function ProductPrices() {
           <h1 style={{ color: '#000' }}>Particulars</h1>
           <Divider sx={{ borderBottomWidth: 3 }} />
         </Grid>
-        <Grid lg={12}>
-          <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1}} >
+        <Grid lg={12} sx={{}}>
+          <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
             <PricesBuilder />
           </Box>
         </Grid>
