@@ -13,13 +13,33 @@ export const farms = [
     {
         id: 3,
         title: 'Lester QP Farm'
+    },
+    {
+        id: 4,
+        title: 'Mercado QP Farm'
+    },
+    {
+        id: 5,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 6,
+        title: 'Lester QP Farm'
+    },
+    {
+        id: 7,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 8,
+        title: 'Lester QP Farm'
     }
 ]
 
 // SCHEDULE OF FARMS
 export const events = [
     {
-      id: 1, //document id
+      id: 1, // document id
       group: 1, // uid
       title: 'Vegetation',
       className: 'vegetation',
@@ -90,6 +110,46 @@ export const events = [
         start_time: moment().add(12, 'month'),
         end_time: moment().add(18, 'month')
       },
+      {
+        id: 11, // document id
+        group: 4, // uid
+        title: 'Vegetation',
+        className: 'vegetation',
+        start_time: moment().add(-11, 'month'),
+        end_time: moment().add(-1, 'month')
+      },
+      {
+          id: 12,
+          group: 5,
+          title: 'Flowering',
+          className: 'flowering',
+          start_time: moment().add(-1, 'month'),
+          end_time: moment().add(1, 'month')
+      },
+      {
+          id: 10,
+          group: 6,
+          title: 'Fruiting',
+          className: 'fruiting',
+          start_time: moment().add(1, 'month'),
+          end_time: moment().add(6, 'month')
+      },
+      {
+        id: 14,
+        group: 7,
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(-1, 'month'),
+        end_time: moment().add(1, 'month')
+    },
+    {
+        id: 13,
+        group: 8,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(1, 'month'),
+        end_time: moment().add(6, 'month')
+    },
   ]
 
 // TOTAL NG GASTOS

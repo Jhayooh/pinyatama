@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
 import React, { useState } from 'react';
 import ProductPrices from '../ProductPrices';
-import AdminHome from './AdminHome';
+import Timeline from '../Timeline';
 
 const drawerWidth = 160;
 const bgColor = '#22b14c'
@@ -90,6 +90,7 @@ export default function SideNav() {
       <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
           {selected === 'particular' && <ProductPrices />}
+          {selected === 'timeline' && <Timeline />}
       </Box>
     </Box>
   );
