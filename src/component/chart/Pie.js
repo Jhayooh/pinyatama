@@ -8,19 +8,35 @@ class Donut extends Component {
 
     this.state = {
       options: {
-        labels: ['A', 'B', 'C', 'D', 'E']
+        labels: ['Daet', 'Talisay', 'Basud', 'San Vicente', 'Jose Panganiban', 'Labo', 'Capalonga'],
+        title: {
+          text: 'Expected QP Production',
+          align: 'left'
       },
-      series: [44, 55, 41, 17, 15]
+        legend: {
+          position: 'bottom',
+        },
+        chart: {
+          // height: 500
+        },
+        plotOptions: {
+          pie: {
+            customScale: 1,
 
+          }
+        },
+        dataLabels: {
+          padding: 12
+        }
+      },
+      series: [44, 50, 28, 17, 10, 5, 18]
     }
   }
 
   render() {
 
     return (
-      <div className="donut">
-        <Chart options={this.state.options} series={this.state.series} type="pie" width="100%" />
-      </div>
+        <Chart options={this.state.options} series={this.state.series} type="pie" width="100%" height='360' />
     );
   }
 }

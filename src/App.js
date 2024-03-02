@@ -3,20 +3,18 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.css';
-import AdminHome from './component/page/AdminHome';
-import Dashboard from './component/page/Dashboard';
 import FarmTabs from './component/page/FarmTabs';
 import GeoLoc from './component/page/GeoLoc';
-import Dash from './component/svg/Dash';
 import Heatmap from './component/page/Heatmap';
-import ProductPrices from './component/ProductPrices'
+import Home from "./component/page/Home";
 import SideNav from "./component/page/SideNav";
-
+import ProductPrices from './component/ProductPrices';
+import Dash from './component/svg/Dash';
 function App() {
   const router = createBrowserRouter([
     {
       path:"/",
-      element: <Dashboard />
+      element: <Home />
     },
     {
       path: "/farmname",
