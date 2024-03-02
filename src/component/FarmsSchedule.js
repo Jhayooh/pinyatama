@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import Timeline, { TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import Timeline, { CursorMarker, CustomMarker, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import './FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../firebase/Config'
 import './ripple.css'
+import Textfield from './Timeline'
 
 function FarmsSchedule({ events, farms }) {
 
@@ -89,32 +90,39 @@ function FarmsSchedule({ events, farms }) {
   }
 
   return (
-      <Timeline
-        keys={keys}
-        groups={farms}
-        onItemClick={() => alert(1)}
-        itemRenderer={itemRender}
-        items={events}
-        lineHeight={50}
-        sidebarContent={<div>QP Farms</div>}
-        defaultTimeStart={moment().add(-2, 'month')}
-        defaultTimeEnd={moment().add(9, 'month')}
-        maxZoom={1.5 * 365.24 * 86400 * 1000}
-        minZoom={1.24 * 86400 * 1000 * 7 * 3}
-        // fullUpdate
-        itemTouchSendsClick={false}
-        // stackItems
-        itemHeightRatio={0.60}
-        showCursorLine
-        canMove={false}
-      >
-        <TimelineMarkers>
-          <TodayMarker>
-            {({ styles, date }) => <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
-            }
-          </TodayMarker>
-        </TimelineMarkers>
-      </Timeline>
+    <Timeline
+    search={Textfield}
+      keys={keys}
+      groups={farms}
+      onItemClick={() => alert(1)}
+      itemRenderer={itemRender}
+      items={events}
+      lineHeight={50}
+      sidebarContent={<div>QP Farms</div>}
+      defaultTimeStart={moment().add(-2, 'month')}
+      defaultTimeEnd={moment().add(9, 'month')}
+      maxZoom={1.5 * 365.24 * 86400 * 1000}
+      minZoom={1.24 * 86400 * 1000 * 7 * 3}
+      // fullUpdate
+      itemTouchSendsClick={false}
+      // stackItems
+      itemHeightRatio={0.60}
+      showCursorLine
+      canMove={false}
+    >
+      <TimelineMarkers>
+        <CursorMarker>
+          {({ styles, date }) =>
+            // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+            <div style={styles} />
+          }
+        </CursorMarker>
+        <TodayMarker>
+          {({ styles, date }) => <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
+          }
+        </TodayMarker>
+      </TimelineMarkers>
+    </Timeline>
   )
 }
 
