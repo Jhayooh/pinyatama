@@ -6,37 +6,52 @@ import {
     Paper,
     IconButton,
     InputBase,
-    TextField
+    TextField,
+    OutlinedInput,
+    InputAdornment,
+    InputLabel,
+    Input
 } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Unstable_Grid2';
 import FarmsSchedule from './FarmsSchedule';
 import { farms, events } from './FarmsConstant';
-
 export default function Timeline() {
 
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
-            <Grid container spacing={4} alignItems='stretch'>
-                <Grid lg={12} >
-                    <h1 style={{ color: '#000' }}>Timeline</h1>
-                    <Divider sx={{ borderBottomWidth: 3 }} />
-                </Grid>
-                <Grid lg={12} sx={{ width: 1, height: '100%' }}>
-                    <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden' }} >
-                        <Box sx={{ marginBottom: 2, display: 'flex', width: 1, justifyContent: 'flex-end' }}>
-                            <TextField
-                                label="Search"
-                                variant="outlined"
-                                sx={{ width: 420 }}
+            <Box sx={{ height: '100%' }}>
+                <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', height: '100%' }} >
+                    <Box sx={{ marginBottom: 1.5, display: 'flex', width: 1, justifyContent: 'flex-end', height: 'auto' }}>
+                        <Box
+                            component='form'
+                            sx={{
+                                p: '2px 4px',
+                                display: 'flex',
+                                alignItems: 'center',
+                                width: 400,
+                                borderRadius: 2.5,
+                                border: '2px solid #dcdcdc',
+                                // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
+                                //             0 2px 2px 0 rgba(0, 0, 0, 0.14),
+                                //             0 3px 1px -2px rgba(0, 0, 0, 0.12)`
+                            }}
+                        >
+                            <IconButton sx={{ p: '7px' }} aria-label="menu">
+                                <SearchIcon />
+                            </IconButton>
+                            <InputBase
+                                sx={{ ml: 1, flex: 1 }}
+                                placeholder="Search for farms"
+                                inputProps={{ 'aria-label': 'search farms' }}
                             />
                         </Box>
-                        <Box sx={{ overflowY: 'auto', height: '100%' }}>
-                            <FarmsSchedule farms={farms} events={events} />
-                        </Box>
                     </Box>
-                </Grid>
-            </Grid>
+                    <Box sx={{ overflowY: 'auto', maxHeight: '100%' }}>
+                        <FarmsSchedule farms={farms} events={events} />
+                    </Box>
+                </Box>
+            </Box>
         </Box>
     )
 }

@@ -1,11 +1,14 @@
 .vegetation {
-    background-color: #00FFC3 !important;
+    background-color: #46bfff !important;
 }
 
 .flowering {
-    background-color: #FFC300 !important;
+    background-color: #ffbb54 !important;
 }
 
 .fruiting {
-    background-color: #C300FF !important;
+    background-color: #717eee !important;
+}
+.activity {
+    background-color: #ff7784 !important;
 }
