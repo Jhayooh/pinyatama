@@ -114,13 +114,16 @@ function FarmsSchedule({ events, farms }) {
         <CursorMarker >
           {({ styles, date }) =>
             // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-            <div style={{ ...styles, backgroundColor: 'limegreen', color: '#fff', position: 'relative' }} >
+            <div style={{ ...styles, backgroundColor: 'limegreen' }} >
               <Paper elevation={3} className='date-hover' sx={{
+                position: 'absolute',
+                left: '-40',
                 width: 80,
                 p: 1,
                 alignItems: 'center',
-                justifyContent: 'start',
+                justifyContent: 'center',
                 background: 'deeppink',
+                color: '#fff'
                 }}>
                 {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
               </Paper>

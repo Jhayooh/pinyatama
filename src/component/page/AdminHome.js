@@ -36,7 +36,7 @@ export default function AdminHome({ setSelected }) {
       <Grid container spacing={4} alignItems='stretch'>
         <Grid lg={12} sx={{ mb: 3 }} >
           <h1 style={{ color: '#000' }}>Dashboard</h1>
-          <Divider sx={{ borderBottomWidth: 3 ,backgroundColor:'#22b14c'}} />
+          <Divider sx={{ borderBottomWidth: 3, backgroundColor: '#22b14c' }} />
         </Grid>
         <Grid lg={3} >
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
@@ -58,9 +58,13 @@ export default function AdminHome({ setSelected }) {
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden' }} >
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
-              <Button variant="outlined" sx={{ width: 180 }} onClick={() => setSelected('timeline')}>view all</Button>
+              <button className='btn-view-all'
+                onClick={() => setSelected('timeline')}
+              >
+                view all
+              </button>
             </section>
-            <Box sx={{ maxHeight: 320, overflowY: 'auto'}}>
+            <Box sx={{ maxHeight: 320, overflowY: 'auto' }}>
               <FarmsSchedule farms={farms} events={events} />
             </Box>
           </Box>
