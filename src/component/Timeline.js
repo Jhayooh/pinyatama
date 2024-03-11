@@ -15,11 +15,8 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import Grid from '@mui/material/Unstable_Grid2';
 import FarmsSchedule from './FarmsSchedule';
-import { events } from './FarmsConstant';
 
-export default function Timeline({ farms }) {
-
-
+export default function Timeline({ farms, events }) {
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
             <Box sx={{ height: '100%' }}>

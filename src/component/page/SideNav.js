@@ -116,8 +116,7 @@ export default function SideNav() {
           </List>
           <Divider />
           <List >
-          <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
-
+            <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   {/* <InboxIcon /> */}
@@ -149,8 +148,9 @@ export default function SideNav() {
           {selected === 'particular' && <ProductPrices />}
 
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-          {selected === 'Access' && <Access/>}
-      </Box>
+          {selected === 'Access' && <Access />}
+        </Box>
+      }
     </Box>
   );
 }
