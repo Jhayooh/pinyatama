@@ -11,6 +11,7 @@ import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
+import { useNavigate } from 'react-router-dom';
 
 const legends = [
   "Pagtatanim",
@@ -30,8 +31,15 @@ function Legend({ legends }) {
   );
 }
 
+
+
+
 export default function AdminHome({ setSelected }) {
-  
+  const navigate = useNavigate();
+  // Redirect to the admin page
+  const redirectToAdmin = () => {
+    navigate('/geo'); // Replace '/admin' with your actual admin route
+  };
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -81,11 +89,12 @@ export default function AdminHome({ setSelected }) {
           </Box>
         </Grid>
         <Grid lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
             <GeoLoc />
           </Box>
         </Grid>
       </Grid>
     </Box >
+
   );
 }

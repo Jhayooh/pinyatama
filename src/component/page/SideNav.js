@@ -26,6 +26,7 @@ import particularspngSelected from '../image_src/particularsSelected.png'
 
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { CircularProgress } from '@mui/material';
+import Access from './Access'
 
 const drawerWidth = 160;
 const bgColor = '#22b14c'
@@ -115,7 +116,8 @@ export default function SideNav() {
           </List>
           <Divider />
           <List >
-            <ListItem disablePadding onClick={() => setSelected('dashboard')} >
+          <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
+
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   {/* <InboxIcon /> */}
@@ -145,9 +147,10 @@ export default function SideNav() {
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
           {selected === 'particular' && <ProductPrices />}
+
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-        </Box>
-      }
+          {selected === 'Access' && <Access/>}
+      </Box>
     </Box>
   );
 }
