@@ -7,13 +7,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Toolbar from '@mui/material/Toolbar';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
-import { farms, events } from '../FarmsConstant';
+// import { farms, events } from '../FarmsConstant';
 import { db, auth } from '../../firebase/Config';
-import { collection } from 'firebase/firestore';
+import { collection, getDocs } from 'firebase/firestore';
 
 // icons
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -33,9 +33,33 @@ const bgColor = '#22b14c'
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
 
-  const farmsRef = collection(db, 'farms')
+  const farmsRef = collection(db, '/farms')
   const [farms, loading, error] = useCollectionData(farmsRef)
-  loading && console.log("Farms log: ", farms);
+  const [events, setEvents] = useState([])
+
+  useEffect(() => {
+    if (!farms) return; // Ensure farms data is loaded
+
+    const fetchEvents = async () => {
+      const eventsPromises = farms.map(async (farm) => {
+        const eventsRef = collection(db, `farms/${farm.id}/events`); // Assuming farm.id is the ID of each farm
+        const eventsSnapshot = await getDocs(eventsRef);
+        const eventsData = eventsSnapshot.docs.map((doc) => ({
+          ...doc.data(),
+          start_time: doc.data().start_time.toMillis(),
+          end_time: doc.data().end_time.toMillis()
+        }));
+        return eventsData;
+      });
+      const allEvents = await Promise.all(eventsPromises);
+      setEvents(allEvents.flat());
+    };
+
+    fetchEvents();
+  }, [farms]);
+
+  console.log("farms: ", farms)
+  console.log("events: ", events)
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
@@ -57,33 +81,33 @@ export default function SideNav() {
         <Box sx={{
           pl: 1
         }}>
-          <Box sx={{p: 2.4}}>
-            <img src={logo} alt='pinyatamap logo'/>
+          <Box sx={{ p: 2.4 }}>
+            <img src={logo} alt='pinyatamap logo' />
           </Box>
           <Divider />
           <List>
             <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
-                <ListItemIcon sx={{minWidth: 24, mr: 1.1}}>
-                    <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{width: 24}} />
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Dashboard' />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
-                <ListItemIcon sx={{minWidth: 24, mr: 1.1}}>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
                   {/* <InboxIcon /> */}
-                  <img src={timelinepng} alt='timeline' style={{width: 24}} />
+                  <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Timeline' />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
-                <ListItemIcon sx={{minWidth: 24, mr: 1.1}}>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
                   {/* <InboxIcon /> */}
-                  <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{width: 24}} />
+                  <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Particulars' />
               </ListItemButton>
@@ -121,7 +145,7 @@ export default function SideNav() {
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
           {selected === 'particular' && <ProductPrices />}
-          {selected === 'timeline' && <Timeline farms={farms} />}
+          {selected === 'timeline' && <Timeline farms={farms} events={events} />}
         </Box>
       }
     </Box>

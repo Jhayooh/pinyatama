@@ -31,26 +31,27 @@ function Legend({ legends }) {
 }
 
 export default function AdminHome({ setSelected }) {
+  
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
-        <Grid lg={12} sx={{ mb: 3 }} >
+        <Grid lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }} >
           <h1 style={{ color: '#000' }}>Dashboard</h1>
           <Divider sx={{ borderBottomWidth: 3, backgroundColor: '#22b14c' }} />
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3}>
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>

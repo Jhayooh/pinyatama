@@ -9,7 +9,7 @@ import './ripple.css'
 import Textfield from './Timeline'
 import { Paper } from '@mui/material'
 
-function FarmsSchedule({ events, farms }) {
+function FarmsSchedule({ farms, events }) {
 
   const keys = {
     groupIdKey: 'id',
@@ -114,7 +114,7 @@ function FarmsSchedule({ events, farms }) {
         <CursorMarker >
           {({ styles, date }) =>
             // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-            <div style={{ ...styles, backgroundColor: 'limegreen' }} >
+            <div style={{ ...styles, backgroundColor: '#22b14c' }} >
               <Paper elevation={3} className='date-hover' sx={{
                 position: 'absolute',
                 left: '-40',
@@ -122,7 +122,7 @@ function FarmsSchedule({ events, farms }) {
                 p: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                background: 'deeppink',
+                background: '#ffb550',
                 color: '#fff'
                 }}>
                 {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
