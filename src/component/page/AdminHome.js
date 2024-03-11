@@ -12,6 +12,7 @@ import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
 import { useNavigate } from 'react-router-dom';
+import Heatmap from './Heatmap';
 
 const legends = [
   "Pagtatanim",
@@ -91,6 +92,11 @@ export default function AdminHome({ setSelected }) {
         <Grid lg={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
             <GeoLoc />
+          </Box>
+        </Grid>
+        <Grid lg={16}>
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+            <Heatmap />
           </Box>
         </Grid>
       </Grid>

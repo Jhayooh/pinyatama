@@ -151,6 +151,7 @@ export default function SideNav() {
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'Access' && <Access/>}
       </Box>
+    }
     </Box>
   );
 }

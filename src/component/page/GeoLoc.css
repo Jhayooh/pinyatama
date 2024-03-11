@@ -24,4 +24,13 @@
     margin-left: 300px; /* Adjust the width based on your sliding pane width */
   }
   
-  
+  .oval-button {
+    width: 100px; /* Adjust width as needed */
+    height: 50px; /* Adjust height as needed */
+    border-radius: 25px; /* Half of the height to create an oval shape */
+    background-color: #007bff; /* Button color */
+    color: white; /* Text color */
+    font-size: 16px;
+    border: none; /* Remove button border */
+    cursor: pointer;
+}
