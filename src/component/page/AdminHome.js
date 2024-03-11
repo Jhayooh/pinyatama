@@ -69,7 +69,7 @@ export default function AdminHome({ setSelected }) {
               <h4>Timeline</h4>
               <Button variant="outlined" sx={{ width: 180 }} onClick={() => setSelected('timeline')}>view all</Button>
             </section>
-            <Box sx={{ maxHeight: 400, overflowY: 'auto'}}>
+            <Box sx={{ maxHeight: 220, overflowY: 'auto'}}>
               <FarmsSchedule farms={farms} events={events} />
             </Box>
           </Box>

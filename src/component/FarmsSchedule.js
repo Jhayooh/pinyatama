@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Timeline, { CursorMarker, CustomMarker, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import Timeline, { CursorMarker, CustomMarker, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import './FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
@@ -91,7 +91,6 @@ function FarmsSchedule({ events, farms }) {
 
   return (
     <Timeline
-    search={Textfield}
       keys={keys}
       groups={farms}
       onItemClick={() => alert(1)}
@@ -118,10 +117,18 @@ function FarmsSchedule({ events, farms }) {
           }
         </CursorMarker>
         <TodayMarker>
-          {({ styles, date }) => <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
+          {({ styles, date }) =>
+            <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
           }
         </TodayMarker>
       </TimelineMarkers>
+      <TimelineHeaders>
+        <SidebarHeader>
+          {({ getRootProps }) => {
+            return <div {...getRootProps()}>QP Farm</div>
+          }}
+        </SidebarHeader>
+      </TimelineHeaders>
     </Timeline>
   )
 }
