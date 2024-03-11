@@ -29,11 +29,20 @@ body {
     background: #FAFAFA !important;
 }
 
+.timeline-header,
+.date-hover {
+    position: sticky;
+    top: 0;
+    z-index: 2000;
+    border: none !important;
+}
+
 /* .react-calendar-timeline {
     width: 1130px;
 } */
 
-.react-calendar-timeline .rct-horizontal-lines .rct-hl-even, .react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-even,
+.react-calendar-timeline .rct-horizontal-lines .rct-hl-odd {
     border-bottom: none !important;
 }
 
@@ -50,7 +59,7 @@ body {
 }
 
 .react-calendar-timeline .rct-vertical-lines .rct-vl {
-    border-left: 1px solid #eeeeee87 !important;
+    border-left: 1px solid #dcdcdc90 !important;
 }
 
 .react-calendar-timeline .rct-header .rct-label-group {
@@ -62,11 +71,16 @@ body {
 
 .react-calendar-timeline .rct-header-root {
     background: #fff !important;
+    border: none !important;
 }
 
-
 .react-calendar-timeline .rct-dateHeader {
+    background: #fff !important;
     border: none !important;
-    background: #eeeeee87 !important;
+    /* background: #22b14d18 !important; */
     color: #151515 !important;
+}
+
+.react-calendar-timeline .rct-calendar-header {
+    border: none !important;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Timeline, { CursorMarker, CustomMarker, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
+import Timeline, { CursorMarker, CustomMarker, DateHeader, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import './FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
@@ -7,8 +7,9 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../firebase/Config'
 import './ripple.css'
 import Textfield from './Timeline'
+import { Paper } from '@mui/material'
 
-function FarmsSchedule({ events, farms }) {
+function FarmsSchedule({ farms, events }) {
 
   const keys = {
     groupIdKey: 'id',
@@ -54,10 +55,10 @@ function FarmsSchedule({ events, farms }) {
         {...getItemProps({
           style: {
             backgroundColor,
-            color: item.color,
+            color: '#fff',
             borderColor,
             border: itemContext.selected ? 'dashed 1px rgba(0,0,0,0.3)' : 'none',
-            borderRadius: 4,
+            borderRadius: 16,
             boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
                        0 3px 1px -2px rgba(0, 0, 0, 0.12)`
@@ -93,7 +94,7 @@ function FarmsSchedule({ events, farms }) {
     <Timeline
       keys={keys}
       groups={farms}
-      onItemClick={() => alert(1)}
+      onItemClick={(item) => console.log(item)}
       itemRenderer={itemRender}
       items={events}
       lineHeight={50}
@@ -105,15 +106,28 @@ function FarmsSchedule({ events, farms }) {
       // fullUpdate
       itemTouchSendsClick={false}
       // stackItems
-      itemHeightRatio={0.60}
+      itemHeightRatio={0.75}
       showCursorLine
       canMove={false}
     >
       <TimelineMarkers>
-        <CursorMarker>
+        <CursorMarker >
           {({ styles, date }) =>
             // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-            <div style={styles} />
+            <div style={{ ...styles, backgroundColor: '#22b14c' }} >
+              <Paper elevation={3} className='date-hover' sx={{
+                position: 'absolute',
+                left: '-40',
+                width: 80,
+                p: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: '#ffb550',
+                color: '#fff'
+                }}>
+                {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
+              </Paper>
+            </div>
           }
         </CursorMarker>
         <TodayMarker>
@@ -122,14 +136,16 @@ function FarmsSchedule({ events, farms }) {
           }
         </TodayMarker>
       </TimelineMarkers>
-      <TimelineHeaders>
-        <SidebarHeader>
+      <TimelineHeaders className='timeline-header'>
+        <SidebarHeader >
           {({ getRootProps }) => {
-            return <div {...getRootProps()}>QP Farm</div>
+            return <h3 {...getRootProps()}>QP Farm</h3>
           }}
         </SidebarHeader>
+        <DateHeader sticky unit="primaryHeader" />
+        <DateHeader sticky/>
       </TimelineHeaders>
-    </Timeline>
+    </Timeline >
   )
 }
 
