@@ -77,10 +77,10 @@ export const events = [
     {
         id: 1, // document id
         group: 1, // uid
-        title: 'Vegetation',
-        className: 'vegetation',
-        start_time: moment().add(-11, 'month'),
-        end_time: moment().add(-1, 'month')
+        title: 'Vegetative',
+        className: 'vegetative',
+        start_time: 1698336000026,
+        end_time: 1711641600571
     },
     {
         id: 2,
