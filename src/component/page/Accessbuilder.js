@@ -4,16 +4,15 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 const columns = [
-  { id: 'id', label: 'id', minWidth: 170 },
-  { id: 'name', label: 'name', minWidth: 100 },
+  { id: 'id', label: 'Id', minWidth: 170 },
+  { id: 'name', label: 'Email', minWidth: 100 },
   {
     id: 'price',
-    label: 'price',
+    label: 'Status',
     minWidth: 170,
     align: 'right',
     format: (value) => value.toLocaleString('en-US'),
   },
-
   {
     id: 'actions',
     label: 'Action',
@@ -30,7 +29,7 @@ function createData(name, price) {
 }
 
 const initialRows = [
-  createData('Seeds', 0.50 ),
+  createData('glendelmadera21@gmail.com', "Pending" ),
 ];
 
 export default function StickyHeadTable() {
@@ -76,16 +75,18 @@ export default function StickyHeadTable() {
     setSearchQuery(event.target.value);
   };
   
-  const handleEdit = () => {
+  const handleEdit = (action) => {
     const updatedRows = rows.map((row) => {
       if (row.id === editId) {
-        return { ...row, ...formData };
+        return { ...row, ...formData, price: action };
       }
       return row;
     });
     setRows(updatedRows);
     setOpenEdit(false);
   };
+  
+  
   
   const handleDelete = (id) => {
     setRows(prevRows => prevRows.filter(row => row.id !== id));
@@ -119,9 +120,7 @@ export default function StickyHeadTable() {
           onChange={handleSearchChange}
           sx={{ maxWidth: 400 }}
         />
-        <Button variant="contained" color="primary" sx={{maxWidth: 210}}  onClick={handleOpenAdd}>
-          Add Data
-        </Button>
+        
       </Box>
       <TableContainer sx={{ maxHeight: 490 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -200,7 +199,7 @@ export default function StickyHeadTable() {
           </FormControl>
           <FormControl>
             <div>
-              <InputLabel htmlFor="price">Price</InputLabel>
+              <InputLabel htmlFor="status">Status</InputLabel>
               <Input id="price" aria-describedby="population-helper-text" value={formData.price} onChange={handleFormChange} />
             </div>
             <br></br>
@@ -226,21 +225,10 @@ export default function StickyHeadTable() {
             p: 4,
           }}
         >
-          <FormControl>
-            <div>
-              <InputLabel htmlFor="name">Name</InputLabel>
-              <Input id="name" aria-describedby="code-helper-text" value={formData.name} onChange={handleFormChange} />
-            </div>
-            <br></br>
-          </FormControl>
-          <FormControl>
-            <div>
-              <InputLabel htmlFor="price">Price</InputLabel>
-              <Input id="price" aria-describedby="population-helper-text" value={formData.price} onChange={handleFormChange} />
-            </div>
-            <br></br>
-          </FormControl>
-          <Button onClick={handleEdit}>Edit</Button>
+          
+          <Button onClick={() => handleEdit('Active')}>Accept</Button>
+          <Button onClick={() => handleEdit('Denied')}>Deny</Button>
+
         </Box>
       </Modal>
     </>

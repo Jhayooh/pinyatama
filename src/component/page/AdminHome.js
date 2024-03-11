@@ -11,6 +11,7 @@ import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
+import { useNavigate } from 'react-router-dom';
 
 const legends = [
   "Pagtatanim",
@@ -30,27 +31,35 @@ function Legend({ legends }) {
   );
 }
 
+
+
+
 export default function AdminHome({ setSelected }) {
+  const navigate = useNavigate();
+  // Redirect to the admin page
+  const redirectToAdmin = () => {
+    navigate('/geo'); // Replace '/admin' with your actual admin route
+  };
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
-        <Grid lg={12} sx={{ mb: 3 }} >
+        <Grid lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }} >
           <h1 style={{ color: '#000' }}>Dashboard</h1>
-          <Divider sx={{ borderBottomWidth: 3 ,backgroundColor:'#22b14c'}} />
+          <Divider sx={{ borderBottomWidth: 3, backgroundColor: '#22b14c' }} />
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3}>
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
-        <Grid lg={3} >
+        <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
           </Box>
         </Grid>
@@ -58,9 +67,13 @@ export default function AdminHome({ setSelected }) {
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden' }} >
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
-              <Button variant="outlined" sx={{ width: 180 }} onClick={() => setSelected('timeline')}>view all</Button>
+              <button className='btn-view-all'
+                onClick={() => setSelected('timeline')}
+              >
+                view all
+              </button>
             </section>
-            <Box sx={{ maxHeight: 400, overflowY: 'auto'}}>
+            <Box sx={{ maxHeight: 320, overflowY: 'auto' }}>
               <FarmsSchedule farms={farms} events={events} />
             </Box>
           </Box>
@@ -76,11 +89,12 @@ export default function AdminHome({ setSelected }) {
           </Box>
         </Grid>
         <Grid lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
             <GeoLoc />
           </Box>
         </Grid>
       </Grid>
     </Box >
+
   );
 }

@@ -12,3 +12,13 @@
 .farm-schedule {
     width: 100%
 }
+
+.btn-view-all {
+    background-color: #ffb550a3;
+    border: none;
+    padding: 8px 10px;
+    width: 120px;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 6px;
+}

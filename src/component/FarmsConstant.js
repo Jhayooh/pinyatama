@@ -33,18 +33,54 @@ export const farms = [
     {
         id: 8,
         title: 'Lester QP Farm'
+    },
+    {
+        id: 9,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 10,
+        title: 'Lester QP Farm'
+    },
+    {
+        id: 11,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 12,
+        title: 'Lester QP Farm'
+    },
+    {
+        id: 13,
+        title: 'Lester QP Farm'
+    },
+    {
+        id: 14,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 15,
+        title: 'Lester QP Farm'
+    },
+    {
+        id: 16,
+        title: 'Acunin QP Farm'
+    },
+    {
+        id: 17,
+        title: 'Lester QP Farm'
     }
 ]
 
 // SCHEDULE OF FARMS
 export const events = [
     {
-      id: 1, // document id
-      group: 1, // uid
-      title: 'Vegetation',
-      className: 'vegetation',
-      start_time: moment().add(-11, 'month'),
-      end_time: moment().add(-1, 'month')
+        id: 1, // document id
+        group: 1, // uid
+        title: 'Vegetative',
+        className: 'vegetative',
+        start_time: 1698336000026,
+        end_time: 1711641600571
     },
     {
         id: 2,
@@ -63,12 +99,12 @@ export const events = [
         end_time: moment().add(6, 'month')
     },
     {
-      id: 3,
-      group: 2,
-      title: 'Vegetation',
-      className: 'vegetation',
-      start_time: moment().add(-28, 'month'),
-      end_time: moment().add(-18, 'month')
+        id: 3,
+        group: 2,
+        title: 'Vegetation',
+        className: 'vegetation',
+        start_time: moment().add(-28, 'month'),
+        end_time: moment().add(-18, 'month')
     },
     {
         id: 4,
@@ -77,15 +113,15 @@ export const events = [
         className: 'flowering',
         start_time: moment().add(-18, 'month'),
         end_time: moment().add(-16, 'month')
-      },
-      {
+    },
+    {
         id: 6,
         group: 2,
         title: 'Fruiting',
         className: 'fruiting',
         start_time: moment().add(-16, 'month'),
         end_time: moment().add(-11, 'month')
-      },
+    },
     {
         id: 7,
         group: 3,
@@ -93,48 +129,56 @@ export const events = [
         className: 'vegetation',
         start_time: moment().add(1, 'month'),
         end_time: moment().add(10, 'month')
-      },
-      {
+    },
+    {
+        id: 17, // document id
+        group: 3, // uid
+        title: '',
+        className: 'activity',
+        start_time: new Date('2024/07/11'),
+        end_time: new Date('2024/07/13')
+    },
+    {
         id: 8,
         group: 3,
         title: 'Flowering',
         className: 'flowering',
         start_time: moment().add(10, 'month'),
         end_time: moment().add(12, 'month')
-      },
-      {
+    },
+    {
         id: 9,
         group: 3,
         title: 'Fruiting',
         className: 'fruiting',
         start_time: moment().add(12, 'month'),
         end_time: moment().add(18, 'month')
-      },
-      {
+    },
+    {
         id: 11, // document id
         group: 4, // uid
         title: 'Vegetation',
         className: 'vegetation',
         start_time: moment().add(-11, 'month'),
         end_time: moment().add(-1, 'month')
-      },
-      {
-          id: 12,
-          group: 5,
-          title: 'Flowering',
-          className: 'flowering',
-          start_time: moment().add(-1, 'month'),
-          end_time: moment().add(1, 'month')
-      },
-      {
-          id: 10,
-          group: 6,
-          title: 'Fruiting',
-          className: 'fruiting',
-          start_time: moment().add(1, 'month'),
-          end_time: moment().add(6, 'month')
-      },
-      {
+    },
+    {
+        id: 12,
+        group: 5,
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(-1, 'month'),
+        end_time: moment().add(1, 'month')
+    },
+    {
+        id: 10,
+        group: 6,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(1, 'month'),
+        end_time: moment().add(6, 'month')
+    },
+    {
         id: 14,
         group: 7,
         title: 'Flowering',
@@ -150,7 +194,23 @@ export const events = [
         start_time: moment().add(1, 'month'),
         end_time: moment().add(6, 'month')
     },
-  ]
+    {
+        id: 15,
+        group: 9,
+        title: 'Flowering',
+        className: 'flowering',
+        start_time: moment().add(-1, 'month'),
+        end_time: moment().add(1, 'month')
+    },
+    {
+        id: 16,
+        group: 10,
+        title: 'Fruiting',
+        className: 'fruiting',
+        start_time: moment().add(1, 'month'),
+        end_time: moment().add(6, 'month')
+    },
+]
 
 // TOTAL NG GASTOS
 export const gastosSaPinya = {
@@ -159,10 +219,10 @@ export const gastosSaPinya = {
     labelTwo: "Kabuuan na Gastos",
     data: [
         {
-        name: "Materyales", y: 55
+            name: "Materyales", y: 55
         },
         {
-        name: "Paggawa", y: 45
+            name: "Paggawa", y: 45
         }
     ]
 }
@@ -174,7 +234,7 @@ export const bentaSaPinya = {
     labelTwo: "Kabuuan na kita",
     data: [
         {
-        name: "Pinya", y: 100
+            name: "Pinya", y: 100
         },
     ]
 }
