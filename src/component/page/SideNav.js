@@ -117,7 +117,6 @@ export default function SideNav() {
           <Divider />
           <List >
             <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
-
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                   {/* <InboxIcon /> */}
