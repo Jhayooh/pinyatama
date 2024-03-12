@@ -1,14 +1,26 @@
-import { useMemo } from 'react';
-import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
+import { useState } from 'react';
 import {
   Divider,
-  Box
+  Box,
+  Button,
+  TextField
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import PricesBuilder from './PricesBuilder';
+import {
+  GridRowModes,
+  DataGrid,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridRowEditStopReasons,
+} from '@mui/x-data-grid'
+
+// icons
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
 
 //nested data is ok, see accessorKeys in ColumnDef below
 const data = [
@@ -59,42 +71,100 @@ const data = [
   },
 ];
 
-export default function ProductPrices() {
-  //should be memoized or stable
-  const columns = useMemo(
-    () => [
-      {
-        accessorKey: 'name.firstName', //access nested data with dot notation
-        header: 'First Name',
-        size: 150,
+export default function ProductPrices({ particularData }) {
+  const [rowModesModel, setRowModesModel] = useState({});
+  const [rows, setRows] = useState(particularData)
+
+  const handleEditClick = (id) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleRowEditStop = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const [columns, setColumns] = useState([
+    {
+      field: 'parent',
+      headerName: 'Parent',
+      width: 120,
+    },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 240,
+    },
+    {
+      field: 'price',
+      headerName: 'Price',
+      minWidth: 80,
+      editable: true,
+      align: 'right',
+      format: (value) => value.toLocaleString('en-US'),
+    },
+    {
+      field: 'unit',
+      headerName: 'Unit',
+      width: 180,
+      align: 'center'
+    },
+    {
+      field: 'id',
+      headerName: 'ID',
+      width: 240,
+      color: 'red'
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label="Save"
+              sx={{
+                color: 'primary.main',
+              }}
+            // onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label="Cancel"
+              className="textPrimary"
+              // onClick={handleCancelClick(id)}
+              color="inherit"
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id)}
+            color="inherit"
+          />
+        ];
       },
-      {
-        accessorKey: 'name.lastName',
-        header: 'Last Name',
-        size: 150,
-      },
-      {
-        accessorKey: 'address', //normal accessorKey
-        header: 'Address',
-        size: 200,
-      },
-      {
-        accessorKey: 'city',
-        header: 'City',
-        size: 150,
-      },
-      {
-        accessorKey: 'state',
-        header: 'State',
-        size: 150,
-      },
-    ],
-    [],
-  );
-  const table = useMaterialReactTable({
-    columns,
-    data, //data must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
-  });
+    },
+
+    // {
+    //   field: 'actions',
+    //   headerName: 'Action',
+    //   minWidth: 160,
+    //   align: 'center',
+    // }
+  ])
+
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -104,7 +174,30 @@ export default function ProductPrices() {
         </Grid>
         <Grid lg={12} sx={{}}>
           <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
-            <PricesBuilder />
+            {/* <PricesBuilder particularData={particularData} /> */}
+            <Box sx={{ width: 1, display: 'flex', justifyContent: 'space-between', p: 2, height: 80 }}>
+              <TextField
+                label="Search"
+                variant="outlined"
+                // value={searchQuery}
+                // onChange={handleSearchChange}
+                sx={{ maxWidth: 400 }}
+              />
+              <Button variant="contained" color="primary" sx={{ maxWidth: 210 }} >
+                Add Data
+              </Button>
+            </Box>
+            <Box >
+              <DataGrid
+                rows={particularData}
+                columns={columns}
+                editMode='row'
+                rowModesModel={rowModesModel}
+                onRowEditStop={handleRowEditStop}
+                pageSizeOptions={[25, 50, 100]}
+                disableRowSelectionOnClick
+                sx={{ border: 'none', p: 2 }} />
+            </Box>
           </Box>
         </Grid>
       </Grid>
