@@ -152,9 +152,11 @@ export default function SideNav() {
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
+
           {selected === 'Access' && <Access />}
         </Box>
       }
+
     </Box>
   );
 }

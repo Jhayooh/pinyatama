@@ -6,15 +6,19 @@ import { MapContainer, Marker, Polygon, TileLayer, Tooltip } from 'react-leaflet
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './GeoLoc.css';
-
+import { useNavigate } from 'react-router-dom';
 import 'leaflet.heat';
 import 'leaflet.heat/dist/leaflet-heat.js';
+import { db, auth } from '../../firebase/Config';
+import { collection, getDocs } from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-// Custom icon
 
 const Heatmap = () => {
   const mapRef = useRef(null);
 }
+
+
 const customIcon = new L.Icon({
   iconUrl: require('./marker.png'),
   iconSize: [32, 32],
@@ -23,6 +27,8 @@ const customIcon = new L.Icon({
 });
 
 const App = () => {
+  const farmsRef = collection(db, '/farms')
+  const [farms, loading, error] = useCollectionData(farmsRef)
   const [state, setState] = useState({
     isPaneOpen: false,
     selectedMarker: null,
@@ -47,6 +53,13 @@ const App = () => {
 
   const handleMarkerClick = (marker) => {
     setState({ isPaneOpen: true, selectedMarker: marker });
+  };
+
+  // Custom icon
+  const navigate = useNavigate();
+  // Redirect to the admin page
+  const redirectToAdmin = () => {
+    navigate('/geo'); // Replace '/admin' with your actual admin route
   };
   const polygonSVE = [[14.114117286000067, 122.90079259200002],
   [14.105946471000038, 122.89749161600002],
@@ -15991,6 +16004,9 @@ const App = () => {
       >
         <div>
           <p>Information about the pineapple </p>
+          <button className="oval-button" onClick={redirectToAdmin}>
+            Go here
+        </button>
         </div>
         <br />
 
