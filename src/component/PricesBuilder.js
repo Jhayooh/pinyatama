@@ -2,49 +2,49 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Button, IconButton, TextField, Modal, FormControl, InputLabel, Input } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {DataGrid} from '@mui/x-data-grid'
 
-const columns = [
-  { id: 'id', label: 'id', minWidth: 170 },
-  { id: 'name', label: 'name', minWidth: 100 },
-  {
-    id: 'price',
-    label: 'price',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
+export default function PricesBuilder({ particularData }) {
 
-  {
-    id: 'actions',
-    label: 'Action',
-    minWidth: 160,
-    align: 'center',
-  }
-];
-
-let currentId = 0;
-
-function createData(name, price) {
-  currentId += 1;
-  return { id: currentId, name, price };
-}
-
-const initialRows = [
-  createData('Seeds', 0.50 ),
-];
-
-export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [formData, setFormData] = useState({ name: '', price: '' });
   const [editId, setEditId] = useState(null);
-  const [rows, setRows] = React.useState(initialRows);
+
+  const [rows, setRows] = useState(particularData)
+  const [columns, setColumns] = useState([
+    {
+      id: 'name',
+      label: 'name',
+      minWidth: 170,
+    },
+    {
+      id: 'id',
+      label: 'id',
+      minWidth: 120,
+      align: 'left',
+    },
+    {
+      id: 'price',
+      label: 'price',
+      minWidth: 170,
+      align: 'right',
+      format: (value) => value.toLocaleString('en-US'),
+    },
+
+    {
+      id: 'actions',
+      label: 'Action',
+      minWidth: 160,
+      align: 'center',
+    }
+  ])
 
   const handleOpenAdd = () => {
-    setFormData({ name: '', price: '' }); 
+    setFormData({ name: '', price: '' });
     setOpenAdd(true);
   };
 
@@ -75,7 +75,7 @@ export default function StickyHeadTable() {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-  
+
   const handleEdit = () => {
     const updatedRows = rows.map((row) => {
       if (row.id === editId) {
@@ -86,7 +86,7 @@ export default function StickyHeadTable() {
     setRows(updatedRows);
     setOpenEdit(false);
   };
-  
+
   const handleDelete = (id) => {
     setRows(prevRows => prevRows.filter(row => row.id !== id));
   };
@@ -100,9 +100,7 @@ export default function StickyHeadTable() {
   };
 
   const handleSubmit = () => {
-    const newRow = createData(formData.name, parseFloat(formData.price));
-    setRows([...rows, newRow]);
-    setOpenAdd(false);
+    
   };
 
   const filteredRows = rows.filter((row) =>
@@ -111,7 +109,7 @@ export default function StickyHeadTable() {
 
   return (
     <>
-      <Box sx={{  width: 1, display: 'flex', justifyContent: 'space-between', p: 2, height: 80}}>
+      <Box sx={{ width: 1, display: 'flex', justifyContent: 'space-between', p: 2, height: 80 }}>
         <TextField
           label="Search"
           variant="outlined"
@@ -119,7 +117,7 @@ export default function StickyHeadTable() {
           onChange={handleSearchChange}
           sx={{ maxWidth: 400 }}
         />
-        <Button variant="contained" color="primary" sx={{maxWidth: 210}}  onClick={handleOpenAdd}>
+        <Button variant="contained" color="primary" sx={{ maxWidth: 210 }} onClick={handleOpenAdd}>
           Add Data
         </Button>
       </Box>
