@@ -38,6 +38,9 @@ export default function SideNav() {
   const [farms, loading, error] = useCollectionData(farmsRef)
   const [events, setEvents] = useState([])
 
+  const particularsRef = collection(db, '/particulars')
+  const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
+
   useEffect(() => {
     if (!farms) return; // Ensure farms data is loaded
 
@@ -58,6 +61,8 @@ export default function SideNav() {
 
     fetchEvents();
   }, [farms]);
+
+  console.log("particulars: ", particularRow);
 
   console.log("farms: ", farms)
   console.log("events: ", events)
@@ -135,7 +140,7 @@ export default function SideNav() {
           </List>
         </Box>
       </Drawer>
-      {loading
+      {loading && particularLoading
         ?
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
@@ -145,8 +150,7 @@ export default function SideNav() {
         :
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
-          {selected === 'particular' && <ProductPrices />}
-
+          {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
 
           {selected === 'Access' && <Access />}
