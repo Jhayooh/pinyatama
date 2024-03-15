@@ -27,6 +27,7 @@ import particularspngSelected from '../image_src/particularsSelected.png'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { CircularProgress } from '@mui/material';
 import Access from './Access'
+import Geoloc from './GeoLoc'
 
 const drawerWidth = 160;
 const bgColor = '#22b14c'
@@ -116,6 +117,16 @@ export default function SideNav() {
           </List>
           <Divider />
           <List >
+
+          <ListItem disablePadding onClick={() => setSelected('Geo')} sx={selected === 'Geo' ? styles.isSelected : styles.notSelected}>
+
+            <ListItemButton>
+              <ListItemIcon sx={{ minWidth: '35px' }}>
+                {/* <InboxIcon /> */}
+              </ListItemIcon>
+              <ListItemText primary='Map' sx={{ color: '#fff' }} />
+            </ListItemButton>
+            </ListItem>
           <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
 
               <ListItemButton>
@@ -125,6 +136,7 @@ export default function SideNav() {
                 <ListItemText primary='Access Requests' sx={{ color: '#fff' }} />
               </ListItemButton>
             </ListItem>
+
             <ListItem disablePadding onClick={() => setSelected('particular')}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
@@ -150,6 +162,7 @@ export default function SideNav() {
 
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'Access' && <Access/>}
+          {selected === 'Geo' && <Geoloc/>}
       </Box>
     }
     </Box>

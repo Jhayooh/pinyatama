@@ -12,6 +12,10 @@ import 'leaflet.heat/dist/leaflet-heat.js';
 import { db, auth } from '../../firebase/Config';
 import { collection, getDocs } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+import {
+  Box,
+  Button
+} from '@mui/material';
 
 
 const Heatmap = () => {
@@ -16011,7 +16015,8 @@ const App = () => {
         <br />
 
       </SlidingPane>
-
+      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
       <div className={`map-container ${state.isPaneOpen ? 'map-container-open' : ''}`}>
         <MapContainer
           center={
@@ -16125,6 +16130,8 @@ const App = () => {
           </Tooltip></Polygon>
         </MapContainer>
       </div>
+      </Box>
+      </Box>
     </div>
   );
 };
