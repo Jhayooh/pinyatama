@@ -236,10 +236,6 @@ export default function ProductPrices({ particularData }) {
     <>
       <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
         <Grid container spacing={4} alignItems='stretch'>
-          <Grid lg={12} md={12} sm={12} xs={12} >
-            <h1 style={{ color: '#000' }}>Particulars</h1>
-            <Divider sx={{ borderBottomWidth: 3 }} />
-          </Grid>
           <Grid lg={12} md={12} sm={12} xs={12} sx={{}}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
               {/* <PricesBuilder particularData={particularData} /> */}
