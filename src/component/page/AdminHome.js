@@ -12,6 +12,10 @@ import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
 import { useNavigate } from 'react-router-dom';
+import Heatmap from './Heatmap';
+
+// icons
+import farmer from '../image_src/farmer.png'
 
 const legends = [
   "Pagtatanim",
@@ -45,22 +49,50 @@ export default function AdminHome({ setSelected }) {
       <Grid container spacing={4} alignItems='stretch'>
         <Grid lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }} >
           <h1 style={{ color: '#000' }}>Dashboard</h1>
-          <Divider sx={{ borderBottomWidth: 3, backgroundColor: '#22b14c' }} />
+          <Divider sx={{ borderBottomWidth: 2}} />
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #46bfff', borderRadius: 3, backgroundColor: '#46bfffc2', display: 'flex', flexDirection: 'row' }} >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h5 style={{ margin: 0 }}>Farms</h5>
+            </Box>
+            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+              <img src={farmer} />
+            </Box>
           </Box>
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #ffbb54', borderRadius: 3, backgroundColor: '#ffbb54c2', display: 'flex', flexDirection: 'row' }} >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h5 style={{ margin: 0 }}>Farms</h5>
+            </Box>
+            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+              <img src={farmer} />
+            </Box>
           </Box>
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #717eee', borderRadius: 3, backgroundColor: '#717eeec2', display: 'flex', flexDirection: 'row' }} >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h5 style={{ margin: 0 }}>Farms</h5>
+            </Box>
+            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+              <img src={farmer} />
+            </Box>
           </Box>
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #22b14c', borderRadius: 3, backgroundColor: '#22b14cc2', display: 'flex', flexDirection: 'row' }} >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h5 style={{ margin: 0 }}>Farms</h5>
+            </Box>
+            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+              <img src={farmer} />
+            </Box>
           </Box>
         </Grid>
         <Grid lg={12} sx={{}}>
@@ -91,6 +123,11 @@ export default function AdminHome({ setSelected }) {
         <Grid lg={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
             <GeoLoc />
+          </Box>
+        </Grid>
+        <Grid lg={16}>
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+            {/* <Heatmap /> */}
           </Box>
         </Grid>
       </Grid>
