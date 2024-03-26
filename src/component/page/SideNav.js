@@ -18,11 +18,10 @@ import {
   collection,
   getDocs,
   updateDoc,
-  addDoc
+  addDoc,
+  Timestamp
 } from 'firebase/firestore';
 import { signOut } from 'firebase/auth'
-
-
 
 // icons
 import DashboardIcon from '@mui/icons-material/Dashboard';
@@ -55,10 +54,53 @@ export default function SideNav() {
   const uploadPineapple = async () => {
     try {
       for (const fdetail of pineapple) {
-        const fRef = await addDoc(farmsRef, {...fdetail, title: fdetail.farmerName});
+        const fRef = await addDoc(farmsRef, { ...fdetail, title: fdetail.farmerName });
         await updateDoc(fRef, { id: fRef.id });
+        const eventsRef = collection(fRef, 'events')
+        console.log("startDate:", fdetail.start_date);
+
+        const vegetativeDate = new Date(Date.parse(fdetail.start_date));
+        console.log('Vegetative Date:', vegetativeDate); // Log the vegetative date
+        const floweringDate = new Date(vegetativeDate);
+        floweringDate.setMonth(vegetativeDate.getMonth() + 10);
+        console.log('Flowering Date:', floweringDate); // Log the flowering date
+        const fruitingDate = new Date(floweringDate);
+        fruitingDate.setMonth(floweringDate.getMonth() + 3);
+        console.log('Fruiting Date:', fruitingDate); // Log the fruiting date
+
+        const endDate = new Date(vegetativeDate);
+        endDate.setMonth(vegetativeDate.getMonth() + 15);
+        console.log('End Date:', endDate); // Log the end date
+
+        const eRef_vegetative = await addDoc(eventsRef, {
+          group: fRef.id,
+          title: "Vegetative",
+          className: "vegetative",
+          start_time: Timestamp.fromDate(vegetativeDate),
+          end_time: Timestamp.fromDate(floweringDate)
+        });
+        await updateDoc(eRef_vegetative, { id: eRef_vegetative.id })
+
+        const eRef_flowering = await addDoc(eventsRef, {
+          group: fRef.id,
+          title: "Flowering",
+          className: "flowering",
+          start_time: Timestamp.fromDate(floweringDate),
+          end_time: Timestamp.fromDate(fruitingDate)
+        })
+        await updateDoc(eRef_flowering, { id: eRef_flowering.id })
+
+        const eRef_fruiting = await addDoc(eventsRef, {
+          group: fRef.id,
+          title: "Fruiting",
+          className: "fruiting",
+          start_time: Timestamp.fromDate(fruitingDate),
+          end_time: Timestamp.fromDate(endDate)
+        })
+        await updateDoc(eRef_fruiting, { id: eRef_fruiting.id })
+
       }
-      console.log("Pineapple uploaded successfully");
+      alert('SUCCESSFUL ANG PAGUPLOAD PADI')
     } catch (error) {
       console.error("Error uploading pineapple: ", error);
     }
@@ -73,7 +115,6 @@ export default function SideNav() {
         const eventsSnapshot = await getDocs(eventsRef);
         const eventsData = eventsSnapshot.docs.map((doc) => ({
           ...doc.data(),
-          title: doc.data().farmerName,
           start_time: doc.data().start_time.toMillis(),
           end_time: doc.data().end_time.toMillis()
         }));
@@ -160,7 +201,7 @@ export default function SideNav() {
             </ListItem> */}
         </List>
         <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' }}>
-          <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button>
+          {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
           <Button variant="contained" onClick={handleSignOut}>Log out baby</Button>
         </Box>
       </Drawer>
