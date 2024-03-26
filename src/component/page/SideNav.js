@@ -6,30 +6,28 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
 // import { farms, events } from '../FarmsConstant';
-import { db, auth } from '../../firebase/Config';
 import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/Config';
 
 // icons
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import dashboard from '../image_src/dashboard.png';
+import dashboardSelected from '../image_src/dashboardSelected.png';
+import particularspng from '../image_src/particulars.png';
+import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
-import dashboard from '../image_src/dashboard.png'
-import dashboardSelected from '../image_src/dashboardSelected.png'
-import timelinepng from '../image_src/timeline.png'
-import particularspng from '../image_src/particulars.png'
-import particularspngSelected from '../image_src/particularsSelected.png'
+import timelinepng from '../image_src/timeline.png';
 
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { CircularProgress } from '@mui/material';
-import Access from './Access'
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import Access from './Access';
 
 const drawerWidth = 160;
-const bgColor = '#22b14c'
+const bgColor = 'green'
 
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
