@@ -1,18 +1,18 @@
 import React, { useRef, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-import ImageGal from "../ImageGal";
-import NavDashboard from '../NavDashboard';
+import ImageGal from "./ImageGal";
+// import NavDashboard from '../NavDashboard';
 import './Dashboard.css';
+import Login from '../Login';
 
 function Dashboard() {
   const navArray = ["Tungkol", "Screenshots", "Ahensiya", "Kontak"]
-  
-  
+
+
   return (
     <div className='dashboard'>
-      <NavDashboard navItems={navArray} />
-    
-      <img src={require("../image_src/bg.jpg")} alt='pineapple' className='pineapple-image' style={{width:'700' ,height:'50'}}/>
+      <Login navItems={navArray} />
+      <img src={require("../image_src/bg.jpg")} alt='pineapple' className='pineapple-image' style={{ width: '700', height: '50' }} />
       <About />
       <ScreenShots />
       <AgencySec />
@@ -22,21 +22,19 @@ function Dashboard() {
 } {/* <h1 className='dash-title' style={{ fontFamily: 'Arial Black, sans-serif'}}>QUEEN PINEAPPLE</h1>
       <h1 className='dash-title-two' style={{ fontFamily: 'Arial Black, sans-serif'}}>FARM</h1> */}
 
-function Information({ cName}) {
-  return <span className={cName} style={{ fontFamily: 'Helvetica, sans-serif ', fontSize: '25px', fontWeight: 'bold'}}>
-  
-    Kilala bilang "Queen Pineapple," masigla ang pag-usbong ng Formosa sa Bicol. 
-    Dahil dito, naging isa ang Camarines Norte sa mga pangunahing tagapagluwas ng pinya sa Pilipinas. 
-    Kinikilala rin ang Formosa bilang pinakamatamis na pinya sa Pilipinas, na may laman ng sukrosa na mas 
+function Information({ cName }) {
+  return <span className={cName} style={{ fontFamily: 'Helvetica, sans-serif ', fontSize: '25px', fontWeight: 'bold' }}>
+    Kilala bilang "Queen Pineapple," masigla ang pag-usbong ng Formosa sa Bicol.
+    Dahil dito, naging isa ang Camarines Norte sa mga pangunahing tagapagluwas ng pinya sa Pilipinas.
+    Kinikilala rin ang Formosa bilang pinakamatamis na pinya sa Pilipinas, na may laman ng sukrosa na mas
     mataas kaysa sa karaniwang itinatanim na mga uri ng pinya sa bansa.</span>
 }
-
 function Images({ imagesList }) {
   return (
     <Carousel>
       {imagesList.map(image => (
         <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{width:'600px', height: '408px'}}/>
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '600px', height: '408px' }} />
         </Carousel.Item>
       ))}
     </Carousel>
@@ -73,12 +71,12 @@ function About() {
       <div className='about-col-one'>
         <Information cName='about-text' />
         <div>
-        <button
-              className="btn btn-outline-warning"
-              type="button"
-              onClick={openModal}
-              style={{ width: 'auto' ,marginLeft: 60 ,fontFamily: 'Helvetica, sans-serif '}}
-            >
+          <button
+            className="btn btn-outline-warning"
+            type="button"
+            onClick={openModal}
+            style={{ width: 'auto', marginLeft: 60, fontFamily: 'Helvetica, sans-serif ' }}
+          >
             Karagdagang impormasyon
           </button>
 
@@ -95,8 +93,8 @@ function About() {
                 method='post'
                 style={{ width: '50%', backgroundColor: '#FC982B' }}
               >
-                <img src={require('../image_src/p5.jpg' )}/>
-                <p style={{fontFamily:'Comic Sans MS, sans-serif',}}>
+                <img src={require('../image_src/p5.jpg')} />
+                <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}>
                   Ang Queen Pineapple ay kilala bilang ang pinakamatamis na pinya sa buong mundo. Ang prutas ay may
                   kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
                   nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
@@ -115,12 +113,12 @@ function About() {
 
 
 function ScreenShots() {
-    return (
-      <div className='screenshot' id="Screenshots" style={{fontFamily:'Arial'}}>
-        <span>SCREENSHOTS</span>
-        <ImageGal />
-      </div>
-    )
+  return (
+    <div className='screenshot' id="Screenshots" style={{ fontFamily: 'Arial' }}>
+      <span>SCREENSHOTS</span>
+      <ImageGal />
+    </div>
+  )
 }
 
 const agencyList = [
@@ -140,10 +138,10 @@ const agencyList = [
 
 function Agencies({ agencyList }) {
   return (
-    <div className='agencies' id='Ahensiya' style={{fontFamily:'Arial'}}>
+    <div className='agencies' id='Ahensiya' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
         <div className='agency'>
-            <img src={require(`../image_src/${agency.logo}`)} alt={agency.name} className="logo-image"/>
+          <img src={require(`../image_src/${agency.logo}`)} alt={agency.name} className="logo-image" />
           <span>{agency.name}</span>
         </div>
       ))}
@@ -177,10 +175,10 @@ const contactList = [
 
 function Contacts({ contactList }) {
   return (
-    <div className='contacts' id='Kontak' style={{fontFamily:'Arial'}}>
+    <div className='contacts' id='Kontak' style={{ fontFamily: 'Arial' }}>
       {contactList.map(contact => (
         <div className='contact'>
-            <img src={require(`../image_src/${contact.logo}`)} alt={contact.name} className="logo-image"/>
+          <img src={require(`../image_src/${contact.logo}`)} alt={contact.name} className="logo-image" />
           <span>{contact.name}</span>
         </div>
       ))}

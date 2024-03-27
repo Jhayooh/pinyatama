@@ -102,7 +102,7 @@ export const events = [
         id: 3,
         group: 2,
         title: 'Vegetation',
-        className: 'vegetation',
+        className: 'vegetative',
         start_time: moment().add(-28, 'month'),
         end_time: moment().add(-18, 'month')
     },
@@ -126,7 +126,7 @@ export const events = [
         id: 7,
         group: 3,
         title: 'Vegetation',
-        className: 'vegetation',
+        className: 'vegetative',
         start_time: moment().add(1, 'month'),
         end_time: moment().add(10, 'month')
     },
@@ -158,7 +158,7 @@ export const events = [
         id: 11, // document id
         group: 4, // uid
         title: 'Vegetation',
-        className: 'vegetation',
+        className: 'vegetative',
         start_time: moment().add(-11, 'month'),
         end_time: moment().add(-1, 'month')
     },
