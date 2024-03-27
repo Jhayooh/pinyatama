@@ -6,8 +6,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
@@ -26,13 +25,12 @@ import {
 import { signOut } from 'firebase/auth'
 
 // icons
-import DashboardIcon from '@mui/icons-material/Dashboard';
+import dashboard from '../image_src/dashboard.png';
+import dashboardSelected from '../image_src/dashboardSelected.png';
+import particularspng from '../image_src/particulars.png';
+import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
-import dashboard from '../image_src/dashboard.png'
-import dashboardSelected from '../image_src/dashboardSelected.png'
-import timelinepng from '../image_src/timeline.png'
-import particularspng from '../image_src/particulars.png'
-import particularspngSelected from '../image_src/particularsSelected.png'
+import timelinepng from '../image_src/timeline.png';
 
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Button, CircularProgress } from '@mui/material';
@@ -41,8 +39,9 @@ import Geoloc from './GeoLoc'
 
 import pineapple from '../image_src/pineapple.json'
 
+
 const drawerWidth = 160;
-const bgColor = '#22b14c'
+const bgColor = 'green'
 
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
