@@ -19,7 +19,9 @@ import {
   getDocs,
   updateDoc,
   addDoc,
-  Timestamp
+  Timestamp,
+  query,
+  orderBy
 } from 'firebase/firestore';
 import { signOut } from 'firebase/auth'
 
@@ -45,7 +47,8 @@ export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
 
   const farmsRef = collection(db, '/farms')
-  const [farms, loading, error] = useCollectionData(farmsRef)
+  const farmsQuery = query(farmsRef, orderBy("farmerName"))
+  const [farms, loading, error] = useCollectionData(farmsQuery)
   const [events, setEvents] = useState([])
 
   const particularsRef = collection(db, '/particulars')
