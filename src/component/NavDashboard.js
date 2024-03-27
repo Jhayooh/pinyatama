@@ -22,10 +22,10 @@ function NavDashboard({ navItems }) {
   };
 
   return (
-    <nav className="navbar fixed-top navbar-expand-lg" style={{ background: 'rgba(17, 92, 24, 0.5)' ,fontFamily: 'Arial'}}>
+    <nav className="navbar  navbar-expand-lg " style={{ background: 'green' ,fontFamily: 'Arial'}}>
       <div className="container-fluid">
         <a className="navbar-brand" href="#">
-        <img src={require('./image_src/logo.png')}/>
+        <img src={require('./image_src/pinyatamap-logo.png')} style={{width:50, height: 50}}/>
         </a>
         <button
           className="navbar-toggler"
