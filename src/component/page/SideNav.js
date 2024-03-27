@@ -37,6 +37,7 @@ import particularspngSelected from '../image_src/particularsSelected.png'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Button, CircularProgress } from '@mui/material';
 import Access from './Access'
+import Geoloc from './GeoLoc'
 
 import pineapple from '../image_src/pineapple.json'
 
@@ -195,6 +196,7 @@ export default function SideNav() {
             </ListItemButton>
           </ListItem>
           {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
+
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
                    <InboxIcon />
@@ -220,11 +222,10 @@ export default function SideNav() {
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-
-          {selected === 'Access' && <Access />}
-        </Box>
-      }
-
+          {selected === 'Access' && <Access/>}
+          {selected === 'Geo' && <Geoloc/>}
+      </Box>
+    }
     </Box>
   );
 }
