@@ -63,7 +63,6 @@ export default function ProductPrices({ particularData }) {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
 
     const handleSaveChanges = async () => {
-      
       setSaving(true)
       try {
         const docRef = doc(db, 'particulars', selectedRow.id)

@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
+
+import ImageGal from "./ImageGal";
+// import NavDashboard from '../NavDashboard';
+import './Dashboard.css';
+import Login from '../Login';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
-import NavDashboard from '../NavDashboard';
 import Contact from "./Contact";
-import './Dashboard.css';
-import ImageGal from "./ImageGal";
 
 function Dashboard() {
   const navArray = ["Tungkol", "Screenshots", "Ahensiya", "Kontak"]
@@ -13,8 +15,9 @@ function Dashboard() {
 
   return (
     <div className='dashboard'>
-      <NavDashboard navItems={navArray} style={{ fontFamily: "Arial" }} />
-      <img src={require("../image_src/bg.jpg")} alt='pineapple' className='pineapple-image' style={{ flex: 1 }} />
+      <Login navItems={navArray} />
+      <img src={require("../image_src/bg.jpg")} alt='pineapple' className='pineapple-image' style={{ width: '700', height: '50' }} />
+
       <About />
       <ScreenShots />
       <AgencySec />
@@ -32,7 +35,6 @@ function Information({ cName }) {
     Kinikilala rin ang Formosa bilang pinakamatamis na pinya sa Pilipinas, na may laman ng sukrosa na mas
     mataas kaysa sa karaniwang itinatanim na mga uri ng pinya sa bansa.</span>
 }
-
 function Images({ imagesList }) {
   return (
     <Carousel>
@@ -79,7 +81,8 @@ function About() {
             className="btn btn-outline-warning"
             type="button"
             onClick={openModal}
-            style={{ width: 'auto', marginLeft: 60, fontFamily: 'Arial' }}
+            style={{ width: 'auto', marginLeft: 60, fontFamily: 'Helvetica, sans-serif ' }}
+
           >
             Karagdagang impormasyon
           </button>
@@ -97,6 +100,8 @@ function About() {
                 method='post'
                 style={{ width: '50%', backgroundColor: 'green' }}
               >
+                <img src={require('../image_src/p5.jpg')} />
+                <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}>
                 <Tabs
                   defaultActiveKey="info"
                   transition={false}
@@ -183,33 +188,33 @@ function AgencySec() {
   )
 }
 
-// const contactList = [
-//   {
-//     name: "Person One",
-//     logo: "profile.png"
-//   },
-//   {
-//     name: "Person Two",
-//     logo: "profile.png"
-//   },
-//   {
-//     name: "Person Three",
-//     logo: "profile.png"
-//   }
-// ]
+const contactList = [
+  {
+    name: "Person One",
+    logo: "profile.png"
+  },
+  {
+    name: "Person Two",
+    logo: "profile.png"
+  },
+  {
+    name: "Person Three",
+    logo: "profile.png"
+  }
+]
 
-// function Contacts({ props}) {
-//   return (
-//     <div className='contacts' id='Kontak' style={{fontFamily:'Arial'}}>
-//       {contactList.map(contact => (
-//         <div className='contact'>
-//             <img src={require(`../image_src/${contact.logo}`)} alt={contact.name} className="logo-image"/>
-//           <span>{contact.name}</span>
-//         </div>
-//       ))}
-//     </div>
-//   )
-// }
+function Contacts({ contactList }) {
+  return (
+    <div className='contacts' id='Kontak' style={{ fontFamily: 'Arial' }}>
+      {contactList.map(contact => (
+        <div className='contact'>
+          <img src={require(`../image_src/${contact.logo}`)} alt={contact.name} className="logo-image" />
+          <span>{contact.name}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
 function ContactSec() {
   return (
