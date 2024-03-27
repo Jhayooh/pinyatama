@@ -129,6 +129,7 @@ function About() {
                   kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
                   nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
                 </p> */}
+                </p>
               </form>
             </div>
           )}
