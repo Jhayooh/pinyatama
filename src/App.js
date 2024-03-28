@@ -3,6 +3,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.css';
+import Dashboard from "./component/page/Dashboard";
 import FarmTabs from './component/page/FarmTabs';
 import GeoLoc from './component/page/GeoLoc';
 import Heatmap from './component/page/Heatmap';

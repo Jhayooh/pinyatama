@@ -76,7 +76,7 @@ function Login({ navItems }) {
             <div>
                 <nav className="navbar " style={{ alignItems: 'center' }} >
                     <div className="nav-logo-container">
-                        <img src={Logo} alt="" />
+                        <img src={Logo} alt="" width={50} height={50} />
                     </div>
                     <div style={{ marginLeft: 'auto' }}>
                         <button
