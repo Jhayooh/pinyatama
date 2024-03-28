@@ -274,22 +274,22 @@ function Dashboard() {
 }
 const aboutList = [
   {
-    url: 'gov.jpg',
+    url: 'les.jpg',
     title: "Hon. Ricarte R. Padilla",
     text: "Governor"
   },
   {
-    url: "gov.jpg",
+    url: "jay.jpg",
     title: "Engr. Almirante A. Abad",
     text: "Provincial Agriculturist"
   },
   {
-    url: "pautu.jpg",
+    url: "nay.jpg",
     title: "Marilyn C. Pauto",
     text: "Supervising Agriculturist -CROPS Division"
   },
   {
-    url: "gov.jpg",
+    url: "glen.png",
     title: "Rowil B. Diaz",
     text: "Agriculturist II/ Provincial Pineapple Coordinator "
   }
