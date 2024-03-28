@@ -3,16 +3,16 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import './App.css';
+import Dashboard from "./component/page/Dashboard";
 import FarmTabs from './component/page/FarmTabs';
 import GeoLoc from './component/page/GeoLoc';
 import Heatmap from './component/page/Heatmap';
 import SideNav from "./component/page/SideNav";
 import ProductPrices from './component/ProductPrices';
-import Dashboard from './component/page/Dashboard'
 import Dash from './component/svg/Dash';
 import { auth } from "./firebase/Config";
 
-import { useAuthState } from 'react-firebase-hooks/auth'
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
 function App() {
