@@ -3,11 +3,11 @@ import Carousel from 'react-bootstrap/Carousel';
 
 import ImageGal from "./ImageGal";
 // import NavDashboard from '../NavDashboard';
-import './Dashboard.css';
-import Login from '../Login';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Login from '../Login';
 import Contact from "./Contact";
+import './Dashboard.css';
 
 function Dashboard() {
   const navArray = ["Tungkol", "Screenshots", "Ahensiya", "Kontak"]
@@ -101,7 +101,7 @@ function About() {
                 style={{ width: '50%', backgroundColor: 'green' }}
               >
                 <img src={require('../image_src/p5.jpg')} />
-                <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}>
+                <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}> </p>
                 <Tabs
                   defaultActiveKey="info"
                   transition={false}
