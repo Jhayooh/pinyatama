@@ -101,36 +101,36 @@ export const Contact = () => {
                     </div>
                     <div className="col-md-6">
                         <div className="contact-info">
-                            <h3>Contact Info</h3>
-                            <p>
-                                <span>
+                            <h3 style={{ color: 'orange' }}>Contact Info</h3>
+                            <p style={{ color: 'black' }}>
+                                <span style={{ color: 'white' }}>
                                     <LocationOnIcon /> Address: <br />
                                 </span>
                                 2nd Floor Provincial Capitol Annex Building <br />
                                 Brgy. III, Daet Camarines Norte
                             </p>
-                            <p>
-                                <span>
+                            <p style={{ color: 'black' }}>
+                                <span  style={{ color: 'white' }}>
                                     <PhoneIcon /> Telephone Number: <br />
-                                </span>{" "}
+                                </span>
                                 054 721-0291
                             </p>
-                            <p>
-                                <span>
+                            <p  style={{ color: 'black' }}>
+                                <span  style={{ color: 'white' }}>
                                     <EmailIcon /> Email Address:<br />
-                                </span>{" "}
+                                </span>
                                 opagcamnorte@yahoo.com <br /> opagcamsnorte@gmail.com
                             </p>
-                            <p>
-                                <span>
+                            <p  style={{ color: 'black' }}>
+                                <span  style={{ color: 'white' }}>
                                     <FacebookIcon /> Facebook:<br />
-                                </span>{" "}
+                                </span>
                                 OPAg Camarines Norte
                             </p>
-                            <p>
-                                <span>
+                            <p  style={{ color: 'black' }}>
+                                <span  style={{ color: 'white' }}>
                                     <LanguageIcon /> Website:<br />
-                                </span>{" "}
+                                </span>
                                 https://opagcamnorte.com
                             </p>
                         </div>
