@@ -41,7 +41,7 @@ import pineapple from '../image_src/pineapple.json'
 
 
 const drawerWidth = 160;
-const bgColor = 'green'
+const bgColor = '#22b14c'
 
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
@@ -156,7 +156,7 @@ export default function SideNav() {
         {/* <Toolbar /> */}
 
         <Box sx={{ p: 2.4 }}>
-          <img src={logo} alt='pinyatamap logo' />
+          <img src={logo} alt='pinyatamap logo' width='100%' />
         </Box>
         <Divider />
         <List>
