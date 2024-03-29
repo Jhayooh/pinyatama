@@ -12,17 +12,17 @@ import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
 // import { farms, events } from '../FarmsConstant';
 
-import { db, auth } from '../../firebase/Config';
+import { signOut } from 'firebase/auth';
 import {
+  Timestamp,
+  addDoc,
   collection,
   getDocs,
-  updateDoc,
-  addDoc,
-  Timestamp,
+  orderBy,
   query,
-  orderBy
+  updateDoc
 } from 'firebase/firestore';
-import { signOut } from 'firebase/auth'
+import { auth, db } from '../../firebase/Config';
 
 // icons
 import dashboard from '../image_src/dashboard.png';
@@ -32,16 +32,16 @@ import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
 
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { Button, CircularProgress } from '@mui/material';
-import Access from './Access'
-import Geoloc from './GeoLoc'
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import Access from './Access';
+import Geoloc from './GeoLoc';
 
-import pineapple from '../image_src/pineapple.json'
+import pineapple from '../image_src/pineapple.json';
 
 
 const drawerWidth = 160;
-const bgColor = 'green'
+const bgColor = '#22b14c'
 
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
@@ -156,7 +156,7 @@ export default function SideNav() {
         {/* <Toolbar /> */}
 
         <Box sx={{ p: 2.4 }}>
-          <img src={logo} alt='pinyatamap logo' />
+          <img src={logo} alt='pinyatamap logo' width='100%' />
         </Box>
         <Divider />
         <List>
@@ -204,9 +204,9 @@ export default function SideNav() {
               </ListItemButton>
             </ListItem> */}
         </List>
-        <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' }}>
+        <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column'}}>
           {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
-          <Button variant="contained" onClick={handleSignOut}>Log out baby</Button>
+          <Button variant="contained" onClick={handleSignOut}>Log out </Button>
         </Box>
       </Drawer>
       {loading && particularLoading

@@ -1,42 +1,14 @@
 .dashboard{
     padding: 0px;
-   
+   background-color: white;
 }
 
-.navbar {
-    background: transparent;
-    padding: 18px 32px;
-    color: #fff;
-    width: 100%;
-  transition: top 0.3s;
-  z-index: 1000;
-}
-.navbar.hidden {
-    top: -50px;
-  }
-  
-.navbar.visible {
-    top: 0;
-  }
 
-.navbar.active {
-    background-color:orange;
-}
-
-.navbar-nav {
-    align-items: center;
-}
-
-.nav-item {
-    padding: 4px;
-    margin: 0 8px;
-    font-family: 'Georgia, serif';
-}
 
 .nav-link {
     font-size: 1.8rem;
     font-weight: 700;
-    color: inherit;
+    color: white;
 }
 
 .d-flex .btn {
@@ -50,7 +22,7 @@
 .dash-title, .dash-title-two {
     position: absolute;
     font-weight: 600;
-    color: #fff;
+    color: white;
     left: 220px;
     top: 280px;
     font-size: 5em;
@@ -70,7 +42,7 @@
 }
 
 .about {
-    background-color: #fff;
+    background-color: white;
     width: 100%;
     height: auto;
     padding: 82px 32px;
@@ -110,16 +82,18 @@
 
 .agency-sec {
     width: 100%;
-    background-color: #fff;
+    background-color: white;
     padding: 22px;
 }
 
 .screenshot span, .contact span,
-.agency-sec span {
+.agency-sec span ,.about span{
     color: orange;
     font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 18px;
+    font-family: Arial, Helvetica, sans-serif;
+   
 }
 
 .agencies {
