@@ -41,7 +41,7 @@ export const Contact = () => {
     };
 
     return (
-        <div id="contact" style={{ fontFamily: 'Arial', color: 'white' }}>
+        <div id="contact" style={{ fontFamily: 'Arial', borderColor: 'green' }}>
             <div className="container" style={{ alignContent: 'center', alignItems: 'center' }}>
                 <div className="row">
                     <div className="col-md-6">
@@ -62,6 +62,7 @@ export const Contact = () => {
                                             placeholder="Name"
                                             required
                                             onChange={handleChange}
+                                            style={{borderColor:'green'}}
                                         />
                                         <p className="help-block text-danger"></p>
                                     </div>
@@ -76,6 +77,7 @@ export const Contact = () => {
                                             placeholder="Email"
                                             required
                                             onChange={handleChange}
+                                            style={{borderColor:'green'}}
                                         />
                                         <p className="help-block text-danger"></p>
                                     </div>
@@ -90,6 +92,7 @@ export const Contact = () => {
                                     placeholder="Message"
                                     required
                                     onChange={handleChange}
+                                    style={{borderColor:'green'}}
                                 ></textarea>
                                 <p className="help-block text-danger"></p>
                             </div>
@@ -103,32 +106,32 @@ export const Contact = () => {
                         <div className="contact-info">
                             <h3 style={{ color: 'orange' }}>Contact Info</h3>
                             <p style={{ color: 'black' }}>
-                                <span style={{ color: 'white' }}>
+                                <span style={{ color: 'green' }}>
                                     <LocationOnIcon /> Address: <br />
                                 </span>
                                 2nd Floor Provincial Capitol Annex Building <br />
                                 Brgy. III, Daet Camarines Norte
                             </p>
                             <p style={{ color: 'black' }}>
-                                <span  style={{ color: 'white' }}>
+                                <span  style={{ color: 'green' }}>
                                     <PhoneIcon /> Telephone Number: <br />
                                 </span>
                                 054 721-0291
                             </p>
                             <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'white' }}>
+                                <span  style={{ color: 'green' }}>
                                     <EmailIcon /> Email Address:<br />
                                 </span>
                                 opagcamnorte@yahoo.com <br /> opagcamsnorte@gmail.com
                             </p>
                             <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'white' }}>
+                                <span  style={{ color: 'green' }}>
                                     <FacebookIcon /> Facebook:<br />
                                 </span>
                                 OPAg Camarines Norte
                             </p>
                             <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'white' }}>
+                                <span  style={{ color: 'green' }}>
                                     <LanguageIcon /> Website:<br />
                                 </span>
                                 https://opagcamnorte.com
