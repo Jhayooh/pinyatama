@@ -2,48 +2,49 @@ import React, { useState } from 'react';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Box, Button, IconButton, TextField, Modal, FormControl, InputLabel, Input } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import {DataGrid} from '@mui/x-data-grid'
 
-const columns = [
-  { id: 'id', label: 'Id', minWidth: 170 },
-  { id: 'name', label: 'Email', minWidth: 100 },
-  {
-    id: 'price',
-    label: 'Status',
-    minWidth: 170,
-    align: 'right',
-    format: (value) => value.toLocaleString('en-US'),
-  },
-  {
-    id: 'actions',
-    label: 'Action',
-    minWidth: 160,
-    align: 'center',
-  }
-];
+export default function Access({ particularData }) {
 
-let currentId = 0;
-
-function createData(name, price) {
-  currentId += 1;
-  return { id: currentId, name, price };
-}
-
-const initialRows = [
-  createData('glendelmadera21@gmail.com', "Pending" ),
-];
-
-export default function StickyHeadTable() {
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [searchQuery, setSearchQuery] = React.useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [searchQuery, setSearchQuery] = useState('');
   const [openAdd, setOpenAdd] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
   const [formData, setFormData] = useState({ name: '', price: '' });
   const [editId, setEditId] = useState(null);
-  const [rows, setRows] = React.useState(initialRows);
+
+  const [rows, setRows] = useState(particularData)
+  const [columns, setColumns] = useState([
+    {
+      id: 'name',
+      label: 'name',
+      minWidth: 170,
+    },
+    {
+      id: 'id',
+      label: 'id',
+      minWidth: 120,
+      align: 'left',
+    },
+    {
+      id: 'price',
+      label: 'price',
+      minWidth: 170,
+      align: 'right',
+      format: (value) => value.toLocaleString('en-US'),
+    },
+
+    {
+      id: 'actions',
+      label: 'Action',
+      minWidth: 160,
+      align: 'center',
+    }
+  ])
 
   const handleOpenAdd = () => {
-    setFormData({ name: '', price: '' }); 
+    setFormData({ name: '', price: '' });
     setOpenAdd(true);
   };
 
@@ -74,20 +75,18 @@ export default function StickyHeadTable() {
   const handleSearchChange = (event) => {
     setSearchQuery(event.target.value);
   };
-  
-  const handleEdit = (action) => {
+
+  const handleEdit = () => {
     const updatedRows = rows.map((row) => {
       if (row.id === editId) {
-        return { ...row, ...formData, price: action };
+        return { ...row, ...formData };
       }
       return row;
     });
     setRows(updatedRows);
     setOpenEdit(false);
   };
-  
-  
-  
+
   const handleDelete = (id) => {
     setRows(prevRows => prevRows.filter(row => row.id !== id));
   };
@@ -101,9 +100,7 @@ export default function StickyHeadTable() {
   };
 
   const handleSubmit = () => {
-    const newRow = createData(formData.name, parseFloat(formData.price));
-    setRows([...rows, newRow]);
-    setOpenAdd(false);
+    
   };
 
   const filteredRows = rows.filter((row) =>
@@ -112,7 +109,7 @@ export default function StickyHeadTable() {
 
   return (
     <>
-      <Box sx={{  width: 1, display: 'flex', justifyContent: 'space-between', p: 2, height: 80}}>
+      <Box sx={{ width: 1, display: 'flex', justifyContent: 'space-between', p: 2, height: 80 }}>
         <TextField
           label="Search"
           variant="outlined"
@@ -120,7 +117,9 @@ export default function StickyHeadTable() {
           onChange={handleSearchChange}
           sx={{ maxWidth: 400 }}
         />
-        
+        <Button variant="contained" color="primary" sx={{ maxWidth: 210 }} onClick={handleOpenAdd}>
+          Add Data
+        </Button>
       </Box>
       <TableContainer sx={{ maxHeight: 490 }}>
         <Table stickyHeader aria-label="sticky table">
@@ -199,7 +198,7 @@ export default function StickyHeadTable() {
           </FormControl>
           <FormControl>
             <div>
-              <InputLabel htmlFor="status">Status</InputLabel>
+              <InputLabel htmlFor="price">Price</InputLabel>
               <Input id="price" aria-describedby="population-helper-text" value={formData.price} onChange={handleFormChange} />
             </div>
             <br></br>
@@ -225,10 +224,21 @@ export default function StickyHeadTable() {
             p: 4,
           }}
         >
-          
-          <Button onClick={() => handleEdit('Active')}>Accept</Button>
-          <Button onClick={() => handleEdit('Denied')}>Deny</Button>
-
+          <FormControl>
+            <div>
+              <InputLabel htmlFor="name">Name</InputLabel>
+              <Input id="name" aria-describedby="code-helper-text" value={formData.name} onChange={handleFormChange} />
+            </div>
+            <br></br>
+          </FormControl>
+          <FormControl>
+            <div>
+              <InputLabel htmlFor="price">Price</InputLabel>
+              <Input id="price" aria-describedby="population-helper-text" value={formData.price} onChange={handleFormChange} />
+            </div>
+            <br></br>
+          </FormControl>
+          <Button onClick={handleEdit}>Edit</Button>
         </Box>
       </Modal>
     </>

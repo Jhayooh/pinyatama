@@ -1,7 +1,7 @@
 // App.js
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { MapContainer, Marker, Polygon, TileLayer, Tooltip } from 'react-leaflet';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
@@ -17,6 +17,7 @@ import {
   Button
 } from '@mui/material';
 
+const Geocollection = collection(db, "farms")
 
 const Heatmap = () => {
   const mapRef = useRef(null);
@@ -15991,6 +15992,39 @@ const App = () => {
 
 
   ];
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getDocs(Geocollection);
+        const filteredData = data.docs.map(doc => {
+          const { Location, title } = doc.data(); // Assuming 'Location' is an array of GeoPoints and 'title' is the marker name
+          return { title, Location }; // Return an object with 'title' and 'Location'
+        });
+  
+        const markers = filteredData.flatMap(({ title, Location }) => {
+          if (Location && Array.isArray(Location)) {
+            return Location.map(geoPoint => ({
+              title,
+              position: [geoPoint.latitude, geoPoint.longitude]
+            }));
+          }
+          if (Location) {
+            return [{
+              title,
+              position: [Location.latitude, Location.longitude]
+            }];
+          }
+          return [];
+        });
+  
+        setMarkers(markers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getData();
+  }, []);
 
   return (
     <div>
