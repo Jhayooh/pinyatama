@@ -1,5 +1,5 @@
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import { Link, Modal } from '@mui/material';
+import { Modal } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
@@ -11,11 +11,10 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import React, { useState, useRef } from 'react';
-import Logo from '../component/image_src/QP FARMING.svg';
-import AdminHome from './page/AdminHome';
-import { auth } from '../firebase/Config';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import React, { useRef, useState } from 'react';
+import Logo from '../component/image_src/pinyatamap-logo.png';
+import { auth } from '../firebase/Config';
 
 function Login({ navItems }) {
     const [loginModalDisplay, setLoginModalDisplay] = useState(false);
@@ -77,7 +76,7 @@ function Login({ navItems }) {
             <div>
                 <nav className="navbar " style={{ alignItems: 'center' }} >
                     <div className="nav-logo-container">
-                        <img src={Logo} alt="" />
+                        <img src={Logo} alt="" width={50} height={50} />
                     </div>
                     <div style={{ marginLeft: 'auto' }}>
                         <button

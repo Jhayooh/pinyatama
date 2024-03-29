@@ -1,6 +1,6 @@
 import React from 'react';
 import './Header.css';
-import icon from './image_src/icon.png';
+import icon from './image_src/pinyatamap-logo.png';
 
 function Header() {
   return (
