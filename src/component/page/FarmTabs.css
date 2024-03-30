@@ -1,5 +1,6 @@
 .farm-tab {
     padding: 22px;
+    background-color: green;
 }
 .farm-tab-container {
     width: 100%;
@@ -9,5 +10,6 @@
 
 .mb-3 {
     margin-top: 32px;
+    color: green;
 }
 
