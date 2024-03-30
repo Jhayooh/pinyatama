@@ -125,7 +125,7 @@ export default function AdminHome({ setSelected, farms, events }) {
         </Grid>
         <Grid lg={16}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
-            {/* <Heatmap /> */}
+            <Heatmap />
           </Box>
         </Grid>
       </Grid>

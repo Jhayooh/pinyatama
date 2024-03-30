@@ -7,7 +7,6 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -20,7 +19,7 @@ import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
 
-const pages = ['OPAG', 'About', 'Gallery', 'Agencies', 'Contacts'];
+// const pages = ['OPAG', 'About', 'Gallery', 'Agencies', 'Contacts'];
 
 function Dashboard() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -94,10 +93,21 @@ function Dashboard() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, []);
+  const scrollToRef = (ref) => {
+    window.scrollTo({
+      top: ref.current.offsetTop,
+      behavior: 'smooth', // Smooth scrolling behavior
+    });
+  };
+  const opagRef = useRef(null);
+  const aboutRef = useRef(null);
+  const galleryRef = useRef(null);
+  const agenciesRef = useRef(null);
+  const contactsRef = useRef(null);
   return (
     <>
       <div >
-        <pages />
+      
         <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
           <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
@@ -134,7 +144,37 @@ function Dashboard() {
                     QUEEN PINEAPPLE FARMING
                   </Typography>
 
-                  <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Button
+                      onClick={() => scrollToRef(opagRef)}
+                      sx={{ my: 2, color: 'green', display: 'block' }}
+                    >
+                      OPAG
+                    </Button>
+                    <Button
+                      onClick={() => scrollToRef(aboutRef)}
+                      sx={{ my: 2, color: 'green', display: 'block' }}
+                    >
+                      About
+                    </Button>
+                    <Button
+                      onClick={() => scrollToRef(galleryRef)}
+                      sx={{ my: 2, color: 'green', display: 'block' }}
+                    >
+                      Gallery
+                    </Button>
+                    <Button
+                      onClick={() => scrollToRef(agenciesRef)}
+                      sx={{ my: 2, color: 'green', display: 'block' }}
+                    >
+                      Agencies
+                    </Button>
+                    <Button
+                      onClick={() => scrollToRef(contactsRef)}
+                      sx={{ my: 2, color: 'green', display: 'block' }}
+                    >
+                      Contacts
+                    </Button>
                     <IconButton
                       size="large"
                       aria-label="account of current user"
@@ -163,20 +203,19 @@ function Dashboard() {
                         display: { xs: 'block', md: 'none' },
                       }}
                     >
-                      {pages.map((page) => (
-                        <>
+
+                      {/* {pages.map((page) => (
                         <MenuItem key={page} onClick={handleCloseNavMenu}>
                           {/* <Typography textAlign="center" > */}
                             <Link href={`#${page}`}>{page}</Link>
                           {/* </Typography> */}
                         </MenuItem>
-                        </>
-                      ))}
+                      ))} */}
                     </Menu>
                   </Box>
 
                   <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {pages.map((page) => (
+                    {/* {pages.map((page) => (
                       <Button
                         key={page}
                         onClick={handleCloseNavMenu}
@@ -184,7 +223,7 @@ function Dashboard() {
                       >
                         {page}
                       </Button>
-                    ))}
+                    ))} */}
                   </Box>
 
                   <Box sx={{ flexGrow: 0 }}>
@@ -267,11 +306,21 @@ function Dashboard() {
             </Modal>
           </div>
         </div>
-        <Opag />
-        <About />
-        <ScreenShots />
-        <AgencySec />
-        <ContactSec />
+        <div ref={opagRef}>
+          <Opag />
+        </div>
+        <div ref={aboutRef}>
+          <About />
+        </div>
+        <div ref={galleryRef}>
+          <ScreenShots />
+        </div>
+        <div ref={agenciesRef}>
+          <AgencySec />
+        </div>
+        <div ref={contactsRef}>
+          <ContactSec />
+        </div>
       </div>
     </>
   )
@@ -302,8 +351,8 @@ const Opag = () => {
   return (
     <div id="OPAG" className="text-center" style={{ backgroundColor: 'white' }}>
       <div className="container" >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px', marginBottom: '5px' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginTop: '18px', backgroundColor: 'white' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
             OFFICE OF THE PROVINCIAL AGRICULTURIST
           </Typography>
         </div>
@@ -331,11 +380,11 @@ const Opag = () => {
   )
 }
 const Information = ({ cName }) => (
-  <div style={{ fontFamily: 'Helvetica, sans-serif', fontSize: '25px', fontWeight: 'bold' }}>
-    Kilala bilang "Queen Pineapple," masigla ang pag-usbong ng Formosa sa Bicol.
-    Dahil dito, naging isa ang Camarines Norte sa mga pangunahing tagapagluwas ng pinya sa Pilipinas.
-    Kinikilala rin ang Formosa bilang pinakamatamis na pinya sa Pilipinas, na may laman ng sukrosa na mas
-    mataas kaysa sa karaniwang itinatanim na mga uri ng pinya sa bansa.
+  <div style={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', fontWeight: 'bold', justifyContent: 'center' }}>
+    Ang queen ang pinakamatamis na uri ng pinya sa Pilipinas. Ito ay may matinik na dahon kung ikukumpara sa ibang uri ng pinya. Ang  bunga ang tumitimbang ng halos isang kilo.
+    Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
+    at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
+    ng Queen kaysa sa Hawaiian.
   </div>
 );
 const pineList = [
@@ -360,15 +409,6 @@ const pineList = [
     width: '25%',
   },
 ];
-const ImageSrc = styled('span')({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  backgroundSize: 'cover',
-  backgroundPosition: 'center 40%',
-});
 
 const Image = styled('span')(({ theme }) => ({
   position: 'absolute',
@@ -380,27 +420,6 @@ const Image = styled('span')(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   color: theme.palette.common.white,
-}));
-
-const ImageBackdrop = styled('span')(({ theme }) => ({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  backgroundColor: theme.palette.common.black,
-  opacity: 0.4,
-  transition: theme.transitions.create('opacity'),
-}));
-
-const ImageMarked = styled('span')(({ theme }) => ({
-  height: 3,
-  width: 18,
-  backgroundColor: theme.palette.common.white,
-  position: 'absolute',
-  bottom: -2,
-  left: 'calc(50% - 9px)',
-  transition: theme.transitions.create('opacity'),
 }));
 const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
@@ -479,12 +498,12 @@ const About = () => {
         <div className='about' id='Tungkol'>
           <div className='about-col-one' style={{ marginBottom: '5px' }}>
             <Information cName='about-text' />
-            <div>
+            {/* <div>
               <button
                 className="btn btn-outline-warning"
                 type="button"
                 onClick={openModal}
-                style={{ width: 'auto', fontFamily: 'Helvetica, sans-serif' }}
+                style={{  fontFamily: 'Helvetica, sans-serif' ,fontSize:'12'}}
               >
                 Karagdagang impormasyon
               </button>
@@ -524,18 +543,18 @@ const About = () => {
                       <Tab eventKey="contact" title="Contact" style={{ color: 'white' }}>
                         Tab content for Contact
                       </Tab>
-                    </Tabs>
-                    {/* <img src={require('../image_src/p5.jpg' )}/>
-                <p style={{fontFamily:'Arial',}}>
+                    </Tabs> */}
+            {/* <img src={require('../image_src/p5.jpg' )}/> */}
+            {/* <p style={{fontFamily:'Arial',}}>
                   Ang Queen Pineapple ay kilala bilang ang pinakamatamis na pinya sa buong mundo. Ang prutas ay may
                   kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
                   nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
-                </p> */}
+                </p>  */}
 
-                  </form>
+            {/* </form>
                 </div>
               )}
-            </div>
+            </div>*/}
           </div>
           <div className='about-col-two'>
             <Images imagesList={imagesList} />

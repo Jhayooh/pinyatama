@@ -36,6 +36,7 @@ import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 
+
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 
@@ -121,6 +122,7 @@ export default function Access({ usersRow }) {
   function getRowId(row) {
     return row?.uid
   }
+
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
@@ -205,4 +207,3 @@ export default function Access({ usersRow }) {
     </>
   )
 };
-
