@@ -127,7 +127,6 @@ export default function Access({ usersRow }) {
         <Grid container spacing={4} alignItems='stretch'>
           <Grid lg={12} md={12} sm={12} xs={12} sx={{}}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
-              {/* <PricesBuilder particularData={particularData} /> */}
               <Box sx={{ marginBottom: 1.5, display: 'flex', width: 1, justifyContent: 'flex-end', height: 'auto', gap: 2, pt: 2, pr: 2 }}>
                 <Box
                   component='form'
