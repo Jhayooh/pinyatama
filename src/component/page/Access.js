@@ -84,6 +84,7 @@ export default function Access({ particularData }) {
       }));
     };
 
+    const [rows, setRows] = useState(particularData || []);
 
     return (
       <Modal
@@ -272,20 +273,7 @@ export default function Access({ particularData }) {
                 </button>
               </Box>
               <Box >
-                <DataGrid
-                  rows={particularData}
-                  columns={columns}
-                  initialState={{
-                    sorting: {
-                      sortModel: [{ field: 'name', sort: 'asc' }],
-                    },
-                  }}
-                  editMode='row'
-                  rowModesModel={rowModesModel}
-                  onRowEditStop={handleRowEditStop}
-                  pageSizeOptions={[25, 50, 100]}
-                  disableRowSelectionOnClick
-                  sx={{ border: 'none', p: 2 }} />
+                
               </Box>
             </Box>
           </Grid>
