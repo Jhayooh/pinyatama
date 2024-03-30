@@ -10,7 +10,6 @@ import {
   CircularProgress
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import PricesBuilder from './PricesBuilder';
 import {
   GridRowModes,
   DataGrid,

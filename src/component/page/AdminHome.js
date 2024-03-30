@@ -5,7 +5,7 @@ import {
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import React from 'react';
-import { events, farms } from '../FarmsConstant';
+// import { events, farms } from '../FarmsConstant';
 import FarmsSchedule from '../FarmsSchedule';
 import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
@@ -38,7 +38,7 @@ function Legend({ legends }) {
 
 
 
-export default function AdminHome({ setSelected }) {
+export default function AdminHome({ setSelected, farms, events }) {
   const navigate = useNavigate();
   // Redirect to the admin page
   const redirectToAdmin = () => {
@@ -96,7 +96,7 @@ export default function AdminHome({ setSelected }) {
           </Box>
         </Grid>
         <Grid lg={12} sx={{}}>
-          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden' }} >
+          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }} >
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
               <button className='btn-view-all'
@@ -105,9 +105,7 @@ export default function AdminHome({ setSelected }) {
                 view all
               </button>
             </section>
-            <Box sx={{ maxHeight: 320, overflowY: 'auto' }}>
-              <FarmsSchedule farms={farms} events={events} />
-            </Box>
+              <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
         <Grid lg={4} >
