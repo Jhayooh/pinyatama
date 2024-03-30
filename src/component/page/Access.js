@@ -70,6 +70,7 @@ export default function Access({ usersRow }) {
       console.error('Error updating document:', error);
     }
 
+
     handleClose()
   }
 
@@ -161,6 +162,7 @@ export default function Access({ usersRow }) {
                 </button>
               </Box>
               <Box >
+
                 <DataGrid
                   getRowId={getRowId}
                   rows={usersRow}
