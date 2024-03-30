@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import 'leaflet.heat';
 import 'leaflet.heat/dist/leaflet-heat.js';
 import { db, auth } from '../../firebase/Config';
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, endBefore, getDocs } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import {
   Box,
@@ -24,12 +24,16 @@ const Heatmap = () => {
 }
 
 
+
+
 const customIcon = new L.Icon({
   iconUrl: require('./marker.png'),
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
 });
+
+
 
 const App = () => {
   const farmsRef = collection(db, '/farms')
@@ -40,9 +44,13 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([
-    { id: 1, position: { lat: 14.10051, lng: 122.96002 } },
-    // Add other markers as needed
+    { Name: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
+  
+  
   ]);
+
+
+  
 
   const [userLocation, setUserLocation] = useState(null);
   const mapRef = useRef(null); // Reference to the map instance
@@ -58,6 +66,7 @@ const App = () => {
 
   const handleMarkerClick = (marker) => {
     setState({ isPaneOpen: true, selectedMarker: marker });
+    setSelectedMarker(marker);
   };
 
   // Custom icon
@@ -66,6 +75,10 @@ const App = () => {
   const redirectToAdmin = () => {
     navigate('/geo'); // Replace '/admin' with your actual admin route
   };
+
+  const [selectedMarker, setSelectedMarker] = useState(null);
+
+
   const polygonSVE = [[14.114117286000067, 122.90079259200002],
   [14.105946471000038, 122.89749161600002],
   [14.103500133000068, 122.89660706400002],
@@ -15998,20 +16011,23 @@ const App = () => {
       try {
         const data = await getDocs(Geocollection);
         const filteredData = data.docs.map(doc => {
-          const { Location, title } = doc.data(); // Assuming 'Location' is an array of GeoPoints and 'title' is the marker name
-          return { title, Location }; // Return an object with 'title' and 'Location'
+          
+          const { Location, Name, Info  } = doc.data() // Assuming 'Location' is an array of GeoPoints and 'title' is the   marker name
+          return { Name, Info, Location }; // Return an object with 'title' and 'Location'
         });
   
-        const markers = filteredData.flatMap(({ title, Location }) => {
+        const markers = filteredData.flatMap(({ Name, Info, Location }) => {
           if (Location && Array.isArray(Location)) {
             return Location.map(geoPoint => ({
-              title,
+              Name,
+              Info,
               position: [geoPoint.latitude, geoPoint.longitude]
             }));
           }
           if (Location) {
             return [{
-              title,
+              Name,
+              Info,
               position: [Location.latitude, Location.longitude]
             }];
           }
@@ -16019,6 +16035,8 @@ const App = () => {
         });
   
         setMarkers(markers);
+       
+      
       } catch (err) {
         console.error(err);
       }
@@ -16028,53 +16046,53 @@ const App = () => {
 
   return (
     <div>
+    {markers.map((Name) => (
       <SlidingPane
+        key={Name.id}
         className="some-custom-class"
         overlayClassName="some-custom-overlay-class"
-        isOpen={state.isPaneOpen}
-        title="PineApple Farm"
+        isOpen={selectedMarker !== null && selectedMarker.Name === Name.Name}
+        title={Name.Name}
         subtitle="Daet, Camarines Norte"
-        onRequestClose={() => {
-          setState({ isPaneOpen: false, selectedMarker: null });
-        }}
+        onRequestClose={() => setSelectedMarker(null)}
         from="left"
         width="100hv"
       >
         <div>
-          <p>Information about the pineapple </p>
+          <p>{Name.Info} </p>
           <button className="oval-button" onClick={redirectToAdmin}>
             Go here
-        </button>
+          </button>
         </div>
         <br />
-
       </SlidingPane>
-      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
-      <div className={`map-container ${state.isPaneOpen ? 'map-container-open' : ''}`}>
-        <MapContainer
-          center={
-            markers.length > 0 ? markers[markers.length - 1].position : { lng: 0, lat: 0 }
-          }
-          zoom={ZOOM_LEVEL}
-          style={{
-            height: '100vh',
-            width: '100%',
-            position: 'absolute',
-          }}
-          ref={mapRef}
-          onClick={handleMapClick}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+    ))}
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin}>
+        <div className={`map-container ${selectedMarker ? 'map-container-open' : ''}`}>
+          <MapContainer
+            center={
+              markers.length > 0 ? markers[markers.length - 1].position : { lng: 0, lat: 0 }
+            }
+            zoom={ZOOM_LEVEL}
+            style={{
+              height: '100vh',
+              width: '100%',
+              position: 'absolute',
+            }}
+            ref={mapRef}
+            onClick={handleMapClick}
+          >
+            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-          {/* Markers */}
-          {markers.map((marker) => (
-            <Marker
-              key={marker.id}
-              position={marker.position}
-              icon={customIcon}
-              eventHandlers={{
-                click: () => handleMarkerClick(marker),
+            {/* Markers */}
+            {markers.map((marker) => (
+              <Marker
+                key={marker.id}
+                position={marker.position}
+                icon={customIcon}
+                eventHandlers={{
+                  click: () => handleMarkerClick(marker),
               }}
             />
           ))}
