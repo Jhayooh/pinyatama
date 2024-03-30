@@ -203,14 +203,6 @@ function Dashboard() {
                         display: { xs: 'block', md: 'none' },
                       }}
                     >
-
-                      {/* {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                          {/* <Typography textAlign="center" > */}
-                            <Link href={`#${page}`}>{page}</Link>
-                          {/* </Typography> */}
-                        </MenuItem>
-                      ))} */}
                     </Menu>
                   </Box>
 
