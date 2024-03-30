@@ -1,5 +1,9 @@
 import { useState } from 'react';
 import {
+  MaterialReactTable,
+  useMaterialReactTable,
+} from 'material-react-table';
+import {
   Divider,
   Box,
   Button,
@@ -10,8 +14,11 @@ import {
   CircularProgress
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import Accessbuilder from './Accessbuilder';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import {
   GridRowModes,
   DataGrid,
@@ -19,10 +26,6 @@ import {
   GridActionsCellItem,
   GridRowEditStopReasons,
 } from '@mui/x-data-grid'
-
-// firebase
-import { db } from '../firebase/Config';
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
@@ -33,205 +36,92 @@ import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 
-export default function Access({ particularData }) {
+
+import { doc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../../firebase/Config';
+
+export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
-  const [rows, setRows] = useState(particularData)
+  const [confirm, setConfirm] = useState(false)
+  const [clicked, setClicked] = useState({})
 
-  const [saving, setSaving] = useState(false)
+  const handleClose = () => {
+    setConfirm(!confirm)
+  }
+  const registerAccount = () => {
+    const userDocRef = doc(db, 'users', clicked.uid);
+    try {
+      auth
+        .createUser(
+          clicked
+        )
+        .then(async (userRecord) => {
+          // See the UserRecord reference doc for the contents of userRecord.
+          console.log('Successfully created new user:', userRecord.uid);
+          await updateDoc(userDocRef, { isRegistered: true });
+        })
+        .catch((error) => {
+          console.log('Error creating new user:', error);
+        });
 
-  // State variables for modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedRow, setSelectedRow] = useState({});
-  console.log("rows: ", selectedRow)
+      // Update the document with the provided data
 
-  const handleEditClick = (id, row) => () => {
-    setSelectedRow(row);
-    setIsModalOpen(true);
-  };
-
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
+    } catch (error) {
+      console.error('Error updating document:', error);
     }
-  };
 
-  const handleModalClose = () => {
-    setIsModalOpen(false);
-  };
-
-  // Modal component for editing row
-  const EditRowModal = () => {
-    const [editedRowData, setEditedRowData] = useState(selectedRow);
-
-    const handleSaveChanges = async () => {
-      
-      setSaving(true)
-      try {
-        const docRef = doc(db, 'particulars', selectedRow.id)
-        await updateDoc(docRef, editedRowData)
-      } catch (error) {
-        console.error("error updating document", error);
-      }
-      setIsModalOpen(false)
-      setSaving(false)
-    };
-
-    const handleInputChange = (event) => {
-      const { name, value } = event.target;
-      setEditedRowData(prevData => ({
-        ...prevData,
-        [name]: value
-      }));
-    };
-
-
-    return (
-      <Modal
-        open={isModalOpen}
-        onClose={handleModalClose}
-        aria-labelledby="edit-row-modal"
-      >
-        <Box sx={{
-          position: 'absolute',
-          top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
-          bgcolor: 'background.paper',
-          borderRadius: '5px',
-          boxShadow: 24,
-          p: 4,
-          width: 380
-        }}>
-          {saving
-            ?
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress color="success" />
-            </Box>
-            :
-            <>
-              <h2 id="edit-row-modal">Edit Row</h2>
-              <TextField
-                label="ID"
-                name="id"
-                value={editedRowData.id}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Name"
-                name="name"
-                value={editedRowData.name}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Price"
-                name="price"
-                type='number'
-                value={editedRowData.price}
-                onChange={handleInputChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Unit"
-                name="unit"
-                value={editedRowData.unit}
-                onChange={handleInputChange}
-                disabled
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                <button className='btn-view-all'
-                  onClick={handleSaveChanges}
-                >
-                  Save
-                </button>
-                <button className='btn-view-all'
-                  onClick={handleModalClose}
-                >
-                  Cancel
-                </button>
-              </Box>
-            </>
-          }
-        </Box>
-      </Modal>
-    );
-  };
+    handleClose()
+  }
 
   const [columns, setColumns] = useState([
     {
-      field: 'parent',
-      headerName: 'Label',
-      flex: 1,
-    },
-    {
-      field: 'name',
-      headerName: 'Name',
-      flex: 2,
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      flex: 1,
-      type: 'number',
-      editable: true,
-      align: 'right',
-      format: (value) => value.toLocaleString('en-US'),
-    },
-    {
-      field: 'unit',
-      headerName: 'Unit',
-      flex: 1,
-    },
-    {
-      field: 'id',
+      field: 'uid',
       headerName: 'ID',
-      flex: 1.5,
+      flex: 1,
     },
     {
-      field: 'particular',
-      headerName: 'Particular',
+      field: 'displayName',
+      headerName: 'Name',
       flex: 1,
+    },
+    {
+      field: 'email',
+      headerName: 'Email',
+      flex: 1,
+    },
+    {
+      field: 'address',
+      headerName: 'Address',
+      description: 'This column has a value getter and is not sortable.',
+      sortable: false,
+      flex: 1,
+      valueGetter: (value) => {
+        return `${value.row.brgy || ''}, ${value.row.mun || ''}`
+      },
     },
     {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      flex: 1,
+      flex: 1.5,
       cellClassName: 'actions',
+      editable: false,
       getActions: ({ id, row }) => {
+
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id, row)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            className="textPrimary"
-            onClick={() => (null)}
-            color="inherit"
-          />
+          <Button variant="contained" color="success" onClick={() => {
+            setConfirm(true)
+            setClicked(row)
+          }}>Accept</Button>,
+          <Button variant="contained" color="error">Delete</Button>
         ];
       },
     },
-
-    // {
-    //   field: 'actions',
-    //   headerName: 'Action',
-    //   minWidth: 160,
-    //   align: 'center',
-    // }
   ])
+
+  function getRowId(row) {
+    return row?.uid
+  }
 
   return (
     <>
@@ -239,7 +129,6 @@ export default function Access({ particularData }) {
         <Grid container spacing={4} alignItems='stretch'>
           <Grid lg={12} md={12} sm={12} xs={12} sx={{}}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
-              {/* <PricesBuilder particularData={particularData} /> */}
               <Box sx={{ marginBottom: 1.5, display: 'flex', width: 1, justifyContent: 'flex-end', height: 'auto', gap: 2, pt: 2, pr: 2 }}>
                 <Box
                   component='form'
@@ -260,7 +149,7 @@ export default function Access({ particularData }) {
                   </IconButton>
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search for farms"
+                    placeholder="Search Account"
                     inputProps={{ 'aria-label': 'search farms' }}
                   />
                 </Box>
@@ -273,7 +162,8 @@ export default function Access({ particularData }) {
               </Box>
               <Box >
                 <DataGrid
-                  rows={particularData}
+                  getRowId={getRowId}
+                  rows={usersRow}
                   columns={columns}
                   initialState={{
                     sorting: {
@@ -282,7 +172,7 @@ export default function Access({ particularData }) {
                   }}
                   editMode='row'
                   rowModesModel={rowModesModel}
-                  onRowEditStop={handleRowEditStop}
+                  // onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
                   sx={{ border: 'none', p: 2 }} />
@@ -290,8 +180,30 @@ export default function Access({ particularData }) {
             </Box>
           </Grid>
         </Grid>
-        <EditRowModal />
+        {/* <EditRowModal /> */}
       </Box>
+      <Dialog
+        open={confirm}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {clicked.displayName}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button variant='contained' onClick={registerAccount} autoFocus>
+            Accept
+          </Button>
+          <Button onClick={handleClose}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
     </>
   )
 };

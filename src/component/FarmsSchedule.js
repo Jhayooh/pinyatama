@@ -9,8 +9,46 @@ import './ripple.css'
 import Textfield from './Timeline'
 import { Box, Paper, Slide } from '@mui/material'
 
-function FarmsSchedule({ farms, events }) {
+function SideDetails({ farms, eventClicked }) {
+  const farmClicked = getObject(farms, "id", eventClicked.group)
+  console.log("this is the farm", farmClicked);
+  console.log('This is the event', eventClicked);
 
+  var options = { 
+    month: 'long', // Full month name
+    day: 'numeric', // Day of the month
+    year: 'numeric' // Full year
+};
+
+const startDate = new Date(eventClicked.start_time)
+const endDate = new Date(eventClicked.end_time)
+const formattedStart = startDate.toLocaleDateString('en-US', options);
+const formattedEnd = endDate.toLocaleDateString('en-US', options);
+
+console.log("startDate:", startDate);
+console.log("endDate:", endDate);
+
+  return (
+    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)' }}>
+      {/* lagay closing */}
+      <h2>{farmClicked.farmerName}</h2>
+      <h5>Phase:{eventClicked.title}</h5>
+      <p>start date: {formattedStart}</p>
+      <p>end date: {formattedEnd}</p>
+      <p></p>
+      <h5>Activities: </h5>
+      <p>No Activities</p>
+    </Box>
+  )
+}
+
+function getObject(list, key, value) {
+  return list.find((obj) => {
+    return obj[key] === value;
+  })
+}
+
+function FarmsSchedule({ farms, events }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
@@ -46,9 +84,9 @@ function FarmsSchedule({ farms, events }) {
                        0 2px 2px 0 rgba(0, 0, 0, 0.14),
                        0 3px 1px -2px rgba(0, 0, 0, 0.12)`
           },
-          onMouseDown: () => {
-            setClicked(item)
-          }
+          // onMouseDown: () => {
+          //   setClicked(item)
+          // }
         })}
       >
         {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
@@ -74,15 +112,15 @@ function FarmsSchedule({ farms, events }) {
   }
   console.log(farms)
 
-  const sideDetails = (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)'}}>
-      {/* lagay closing */}
-      <h2>phase details</h2>
-      <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>no activity</p>
-      </div>
-    </Box>
-  )
+  // const sideDetails = (
+  //   <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)'}}>
+  //     {/* lagay closing */}
+  //     <h2>phase details</h2>
+  //     <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+  //       <p>no activity</p>
+  //     </div>
+  //   </Box>
+  // )
 
   return (
     <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .85)' }} ref={containerRef}>
@@ -90,10 +128,11 @@ function FarmsSchedule({ farms, events }) {
         <Timeline
           keys={keys}
           groups={farms}
+          onItemSelect={(item)=>(setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
           itemRenderer={itemRender}
           items={events}
-          lineHeight={45}
+          lineHeight={35}
           sidebarContent={<div>QP Farms</div>}
           defaultTimeStart={moment().add(-2, 'month')}
           defaultTimeEnd={moment().add(9, 'month')}
@@ -144,9 +183,7 @@ function FarmsSchedule({ farms, events }) {
         </Timeline >
       </Box >
       {Object.keys(clicked).length !== 0 &&
-        <Slide in={Object.keys(clicked).length !== 0} direction='left' container={containerRef.current} >
-          {sideDetails}
-        </Slide>
+        <SideDetails farms={farms} eventClicked={clicked} />
       }
     </Box>
   )

@@ -1,5 +1,5 @@
 import MenuIcon from '@mui/icons-material/Menu';
-import { Modal } from '@mui/material';
+import { Link, Modal, Tab, Tabs } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -203,9 +203,12 @@ function Dashboard() {
                         display: { xs: 'block', md: 'none' },
                       }}
                     >
+
                       {/* {pages.map((page) => (
                         <MenuItem key={page} onClick={handleCloseNavMenu}>
-                          <Typography textAlign="center">{page}</Typography>
+                          {/* <Typography textAlign="center" > */}
+                            <Link href={`#${page}`}>{page}</Link>
+                          {/* </Typography> */}
                         </MenuItem>
                       ))} */}
                     </Menu>
@@ -346,7 +349,7 @@ const aboutList = [
 ]
 const Opag = () => {
   return (
-    <div id="Opag" className="text-center" style={{ backgroundColor: 'white' }}>
+    <div id="OPAG" className="text-center" style={{ backgroundColor: 'white' }}>
       <div className="container" >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
@@ -456,7 +459,7 @@ const About = () => {
   return (
     <>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px', marginBottom: '5px' }}>
+        <div id='About' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px', marginBottom: '5px' }}>
           <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginTop: '18px', backgroundColor: 'white' }}>
             ABOUT PINEAPPLES
           </Typography>
@@ -608,7 +611,7 @@ const agencyList = [
 
 function Agencies({ agencyList }) {
   return (
-    <div className='agencies' id='Ahensiya' style={{ fontFamily: 'Arial' }}>
+    <div className='agencies' id='Agencies' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
         <div className='agency'>
           <img src={require(`../image_src/${agency.logo}`)} alt={agency.name} className="logo-image" />
