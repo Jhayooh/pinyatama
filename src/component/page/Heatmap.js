@@ -5,6 +5,8 @@ import 'leaflet/dist/leaflet.css';
 import 'leaflet.heat';
 import 'leaflet.heat/dist/leaflet-heat.js';
 import { storage } from '../../firebase/Config';
+import { db } from '../../firebase/Config'
+import { getDocs, collection } from 'firebase/firestore';
 
 import markerIcon from './marker.png'; // Import the custom icon image
 
@@ -15,29 +17,19 @@ const customIcon = new L.Icon({
   popupAnchor: [0, -32],
 });
 
+
+const Geocollection = collection(db, "farms")
+
+
+
 const Heatmap = () => {
   const [markers, setMarkers] = useState([
-    { id: 1, position: { lat: 14.10051, lng: 122.96002 }, info: "Marker 1 info", imageUrl: "gs://pinyatama-64d69.appspot.com/Farms/VwluEFdRHb2KG35mKbNR/w.png" },
-    // Add other markers as needed
+    { title: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
+  
+  
   ]);
   const mapRef = useRef(null);
   const [imgUrls, setImgUrls] = useState({});
-
-  useEffect(() => {
-    const fetchImages = async () => {
-      const urls = await Promise.all(markers.map(async (marker) => {
-        const url = await fetchImage(marker.imageUrl);
-        return { id: marker.id, url };
-      }));
-      const imageUrls = urls.reduce((acc, curr) => {
-        acc[curr.id] = curr.url;
-        return acc;
-      }, {});
-      setImgUrls(imageUrls);
-    };
-
-    fetchImages();
-  }, [markers]);
 
   const fetchImage = async (imageUrl) => {
     try {
@@ -49,6 +41,43 @@ const Heatmap = () => {
     }
   };
 
+  const [Location, setlocationList] = useState([]);
+
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getDocs(Geocollection);
+        const filteredData = data.docs.map(doc => {
+          const { geopoint, title } = doc.data(); // Assuming 'Location' is an array of GeoPoints and 'title' is the marker name
+          return { geopoint, title  }; // Return an object with 'title' and 'Location'
+        });
+  
+        const markers = filteredData.flatMap(({ geopoint, title  }) => {
+          if (geopoint && Array.isArray(geopoint)) {
+            return geopoint.map(geoPoint => ({
+              title,
+              position: [geoPoint.latitude, geoPoint.longitude]
+            }));
+          }
+          if (geopoint) {
+            return [{
+              title,
+              position: [geopoint.latitude, geopoint.longitude]
+            }];
+          }
+          return [];
+        });
+  
+        setMarkers(markers);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    getData();
+  }, []);
+  
+
   return (
     <MapContainer
       center={[14.10051, 122.96002]}
@@ -56,15 +85,16 @@ const Heatmap = () => {
       style={{ height: '100vh', width: '100%' }}
       whenCreated={(map) => (mapRef.current = map)}
     >
-      {markers.map((marker) => (
+      {markers.map((marker, index) => (
         <Marker
-          key={marker.id}
+          key={index}
           position={marker.position}
           icon={customIcon}
         >
           <Popup>
             <div>
-              <p>{marker.info}</p>
+              <p>{marker.title}</p>
+              {/* Assuming you want to display the title as the marker info */}
               <img src={imgUrls} alt="Marker Image" style={{ maxWidth: '100%' }} />
             </div>
           </Popup>
@@ -78,16 +108,20 @@ const Heatmap = () => {
   );
 };
 
-const HeatLayerExample = () => {
+const HeatLayerExample = ({ markers }) => {
   const map = useMap();
 
   useEffect(() => {
-    const data = [
-      [14.10051, 122.94002, 20],
-    ];
+    if (!markers || markers.length === 0) return;
+
+    const data = markers.map(marker => [
+      marker.position[0],
+      marker.position[1],
+      marker.intensity // Assuming intensity is the property in your marker object
+    ]);
 
     L.heatLayer(data, { radius: 80 }).addTo(map); // Increase the radius value to make the points bigger
-  }, [map]);
+  }, [map, markers]);
 
   return null;
 };
