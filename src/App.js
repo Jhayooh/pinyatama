@@ -13,8 +13,6 @@ import Dash from './component/svg/Dash';
 import { auth } from "./firebase/Config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 
-import MapPolygon from "./component/MapPolygon";
-
 function App() {
   const [user] = useAuthState(auth)
   console.log(user);
@@ -45,10 +43,6 @@ function App() {
     {
       path: '/Dash',
       element: <Dash />
-    },
-    {
-      path: 'map',
-      element: <MapPolygon />
     }
   ])
   return (
