@@ -44,7 +44,7 @@ const App = () => {
   });
 
   const [markers, setMarkers] = useState([
-    { Name: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
+    { title: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
   
   
   ]);
@@ -16025,23 +16025,21 @@ const polygonCoordsBAS = [
         const data = await getDocs(Geocollection);
         const filteredData = data.docs.map(doc => {
           
-          const { Location, Name, Info  } = doc.data() // Assuming 'Location' is an array of GeoPoints and 'title' is the   marker name
-          return { Name, Info, Location }; // Return an object with 'title' and 'Location'
+          const {geopoint, title  } = doc.data() // Assuming 'Location' is an array of GeoPoints and 'title' is the   marker name
+          return { geopoint, title }; // Return an object with 'title' and 'Location'
         });
   
-        const markers = filteredData.flatMap(({ Name, Info, Location }) => {
-          if (Location && Array.isArray(Location)) {
-            return Location.map(geoPoint => ({
-              Name,
-              Info,
+        const markers = filteredData.flatMap(({ geopoint, title }) => {
+          if (geopoint && Array.isArray(geopoint)) {
+            return geopoint.map(geoPoint => ({
+              title,
               position: [geoPoint.latitude, geoPoint.longitude]
             }));
           }
-          if (Location) {
+          if (geopoint) {
             return [{
-              Name,
-              Info,
-              position: [Location.latitude, Location.longitude]
+              title,
+              position: [geopoint.latitude, geopoint.longitude]
             }];
           }
           return [];
@@ -16064,8 +16062,8 @@ const polygonCoordsBAS = [
         key={Name.id}
         className="some-custom-class"
         overlayClassName="some-custom-overlay-class"
-        isOpen={selectedMarker !== null && selectedMarker.Name === Name.Name}
-        title={Name.Name}
+        isOpen={selectedMarker !== null && selectedMarker.title === Name.title}
+        title={Name.title}
         subtitle="Daet, Camarines Norte"
         onRequestClose={() => setSelectedMarker(null)}
         from="left"

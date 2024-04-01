@@ -24,8 +24,7 @@ const Geocollection = collection(db, "farms")
 
 const Heatmap = () => {
   const [markers, setMarkers] = useState([
-    { title: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
-  
+    { title: 'Farm', Info: 'Test', position: [0, 0 ], state: 'budding' },
   
   ]);
   const mapRef = useRef(null);
@@ -103,12 +102,12 @@ const Heatmap = () => {
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <HeatLayerExample />
+      <HeatLayerExample markers={markers} />
     </MapContainer>
   );
 };
 
-const HeatLayerExample = ({ markers }) => {
+const HeatLayerExample = ({ markers  }) => {
   const map = useMap();
 
   useEffect(() => {
@@ -117,7 +116,7 @@ const HeatLayerExample = ({ markers }) => {
     const data = markers.map(marker => [
       marker.position[0],
       marker.position[1],
-      marker.intensity // Assuming intensity is the property in your marker object
+      1 // Fixed intensity value for all markers
     ]);
 
     L.heatLayer(data, { radius: 80 }).addTo(map); // Increase the radius value to make the points bigger
@@ -125,5 +124,6 @@ const HeatLayerExample = ({ markers }) => {
 
   return null;
 };
+
 
 export default Heatmap;
