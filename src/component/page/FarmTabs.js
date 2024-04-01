@@ -12,9 +12,10 @@ import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import { eventFarmOne, farmOne } from '../FarmsConstant';
 import FarmsSchedule from '../FarmsSchedule';
+import { useLocation } from 'react-router-dom';
 
 function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { children, value, index } = props;
 
     return (
         <div
@@ -22,7 +23,6 @@ function CustomTabPanel(props) {
             hidden={value !== index}
             id={`simple-tabpanel-${index}`}
             aria-labelledby={`simple-tab-${index}`}
-            {...other}
         >
             {value === index && (
                 <Box sx={{ p: 4 }}>
@@ -37,7 +37,6 @@ CustomTabPanel.propTypes = {
     children: PropTypes.node,
     index: PropTypes.number.isRequired,
     value: PropTypes.number.isRequired,
-    other: PropTypes.number.isRequired,
 };
 
 function a11yProps(index) {
@@ -49,6 +48,8 @@ function a11yProps(index) {
 
 function FarmTabs() {
     const [value, setValue] = React.useState(0);
+    const location = useLocation();
+    const title = location.state ? location.state.title : '';
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -90,7 +91,7 @@ function FarmTabs() {
                 </div>
 
                 <div >
-                    <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>Pangalan ng Bukid</h2>
+                    <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{title}</h2>
                     <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>Daet, Camarines Norte</span>
                     <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -158,9 +159,11 @@ function FarmTabs() {
                 </div>
             </div>
         </>
-    )
+    );
 }
-export default FarmTabs
+
+export default FarmTabs;
+
 
 
 // import { Tab, Tabs } from '@mui/material'

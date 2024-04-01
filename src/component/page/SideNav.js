@@ -11,7 +11,7 @@ import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
 // import { farms, events } from '../FarmsConstant';
-
+import Farms from './Farms';
 import { signOut } from 'firebase/auth';
 import {
   Timestamp,
@@ -38,6 +38,7 @@ import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Access from './Access';
 import Geoloc from './GeoLoc';
+
 
 import pineapple from '../image_src/pineapple.json';
 
@@ -206,6 +207,14 @@ export default function SideNav() {
               <ListItemText primary='Access Requests' sx={{ color: '#fff' }} />
             </ListItemButton>
           </ListItem>
+          <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
+            <ListItemButton>
+              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                {/* <InboxIcon /> */}
+              </ListItemIcon>
+              <ListItemText primary='Farms' sx={{ color: '#fff' }} />
+            </ListItemButton>
+          </ListItem>
           {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
 
               <ListItemButton>
@@ -235,6 +244,7 @@ export default function SideNav() {
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
+          {selected === 'Farms' && <Farms />}
         </Box>
       }
     </Box>
