@@ -599,7 +599,7 @@ const agencyList = [
 
 function Agencies({ agencyList }) {
   return (
-    <div className='agencies' id='Ahensiya' style={{ fontFamily: 'Arial' }}>
+    <div className='agencies' id='Agencies' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
         <div className='agency'>
           <img src={require(`../image_src/${agency.logo}`)} alt={agency.name} className="logo-image" />

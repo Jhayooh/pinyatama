@@ -34,3 +34,7 @@
     border: none; /* Remove button border */
     cursor: pointer;
 }
+
+.leaflet-interactive {
+  border: 100px;
+}

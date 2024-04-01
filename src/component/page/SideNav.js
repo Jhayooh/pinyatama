@@ -20,7 +20,8 @@ import {
   getDocs,
   orderBy,
   query,
-  updateDoc
+  updateDoc,
+  where
 } from 'firebase/firestore';
 import { auth, db } from '../../firebase/Config';
 
@@ -31,6 +32,7 @@ import particularspng from '../image_src/particulars.png';
 import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
+//
 
 import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -54,6 +56,20 @@ export default function SideNav() {
   const particularsRef = collection(db, '/particulars')
   const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
 
+  const usersRef = collection(db, '/users')
+  const usersQuery = query(usersRef, where("isRegistered", "==", false))
+  const [usersRow, usersLoading, usersError] = useCollectionData(usersQuery)
+  console.log("usersRow", usersRow);
+  console.log("error sa usersRow", usersError);
+
+  function parseDate(rawDate, day) {
+    const date = rawDate.split('-')
+    const year = date[0]
+    const month = date[1]
+    const newDate = day + "-" + month + "-" + year
+    return newDate
+  }
+
   const uploadPineapple = async () => {
     try {
       for (const fdetail of pineapple) {
@@ -63,17 +79,13 @@ export default function SideNav() {
         console.log("startDate:", fdetail.start_date);
 
         const vegetativeDate = new Date(Date.parse(fdetail.start_date));
-        console.log('Vegetative Date:', vegetativeDate); // Log the vegetative date
         const floweringDate = new Date(vegetativeDate);
         floweringDate.setMonth(vegetativeDate.getMonth() + 10);
-        console.log('Flowering Date:', floweringDate); // Log the flowering date
         const fruitingDate = new Date(floweringDate);
-        fruitingDate.setMonth(floweringDate.getMonth() + 3);
-        console.log('Fruiting Date:', fruitingDate); // Log the fruiting date
+        fruitingDate.setMonth(floweringDate.getMonth() + 2);
 
-        const endDate = new Date(vegetativeDate);
-        endDate.setMonth(vegetativeDate.getMonth() + 15);
-        console.log('End Date:', endDate); // Log the end date
+        const harvestDate = new Date(Date.parse(parseDate(fdetail.harvest_date, floweringDate.getDate())));
+        console.log('End Date:', harvestDate); // Log the end date
 
         const eRef_vegetative = await addDoc(eventsRef, {
           group: fRef.id,
@@ -98,7 +110,7 @@ export default function SideNav() {
           title: "Fruiting",
           className: "fruiting",
           start_time: Timestamp.fromDate(fruitingDate),
-          end_time: Timestamp.fromDate(endDate)
+          end_time: Timestamp.fromDate(harvestDate)
         })
         await updateDoc(eRef_fruiting, { id: eRef_fruiting.id })
 
@@ -186,7 +198,7 @@ export default function SideNav() {
               <ListItemText primary='Particulars' />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('Access')} sx={selected === 'Access' ? styles.isSelected : styles.notSelected}>
+          <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
             <ListItemButton>
               <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
                 {/* <InboxIcon /> */}
@@ -204,12 +216,12 @@ export default function SideNav() {
               </ListItemButton>
             </ListItem> */}
         </List>
-        <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column'}}>
+        <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' }}>
           {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
           <Button variant="contained" onClick={handleSignOut}>Log out </Button>
         </Box>
       </Drawer>
-      {loading && particularLoading
+      {loading && particularLoading && usersLoading
         ?
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
@@ -218,13 +230,13 @@ export default function SideNav() {
         </Box>
         :
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-          {selected === 'dashboard' && <AdminHome setSelected={setSelected} />}
+          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} />}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-          {selected === 'Access' && <Access/>}
-          {selected === 'Geo' && <Geoloc/>}
-      </Box>
-    }
+          {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
+          {selected === 'Geo' && <Geoloc />}
+        </Box>
+      }
     </Box>
   );
 }
