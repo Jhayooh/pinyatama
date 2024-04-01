@@ -1,12 +1,13 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { Modal } from '@mui/material';
+import { ImageList, Modal } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
+import Fade from '@mui/material/Fade';
 import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Popover from '@mui/material/Popover';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -19,26 +20,33 @@ import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
 
-// const pages = ['OPAG', 'About', 'Gallery', 'Agencies', 'Contacts'];
 
 function Dashboard() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false); 
+  const [anchorElNested, setAnchorElNested] = React.useState(null);
+  const openNested = Boolean(anchorElNested);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleClickNested = (event) => {
+    setAnchorElNested(event.currentTarget);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleCloseNested = () => {
+    setAnchorElNested(null);
   };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpen(false);
+  };
+
+
+
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [registerModalDisplay, setRegisterModalDisplay] = useState(false);
   const modalRef = useRef(null);
@@ -99,6 +107,12 @@ function Dashboard() {
       behavior: 'smooth', // Smooth scrolling behavior
     });
   };
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: smooth scrolling animation
+    });
+  };
   const opagRef = useRef(null);
   const aboutRef = useRef(null);
   const galleryRef = useRef(null);
@@ -107,7 +121,6 @@ function Dashboard() {
   return (
     <>
       <div >
-      
         <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
           <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
@@ -140,23 +153,69 @@ function Dashboard() {
                       color: 'green',
                       textDecoration: 'none',
                     }}
+                    style={{ marginLeft: '10px' }}
                   >
                     QUEEN PINEAPPLE FARMING
                   </Typography>
 
-                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    <Button
-                      onClick={() => scrollToRef(opagRef)}
+                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', lg: 'flex' } }}>
+                  <Button
+                      onClick={scrollToTop}
                       sx={{ my: 2, color: 'green', display: 'block' }}
                     >
-                      OPAG
+                      Home
                     </Button>
                     <Button
-                      onClick={() => scrollToRef(aboutRef)}
+                      id="fade-button"
+                      aria-controls={open ? 'fade-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      onClick={handleClick}
                       sx={{ my: 2, color: 'green', display: 'block' }}
                     >
                       About
                     </Button>
+                    <Menu
+                      id="fade-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      TransitionComponent={Fade}
+                    >
+                      <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
+                      <MenuItem onClick={handleClose}>Mga Uri ng pananim</MenuItem>
+                      <MenuItem onClick={handleClose}>Pagpili at paghahanda ng pantanim</MenuItem>
+
+                      {/* Nested Menu */}
+                      <MenuItem onClick={handleClickNested}>
+                        More Options
+                      </MenuItem>
+                    </Menu>
+                    <Menu
+                      id="nested-menu"
+                      anchorEl={anchorElNested}
+                      open={openNested}
+                      onClose={handleCloseNested}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+
+
+                    >
+                      <MenuItem onClick={handleCloseNested}>Paghahanda ng lupa</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagtatanim</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagsugpo ng damo</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagaabono</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagpapabulaklak</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Mga Peste</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Paraan ng pagpapalaki</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagaani ng bunga</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Pagaani ng dahon</MenuItem>
+                      <MenuItem onClick={handleCloseNested}>Paraan ng paghanda ng pinya</MenuItem>
+                    </Menu>
+
                     <Button
                       onClick={() => scrollToRef(galleryRef)}
                       sx={{ my: 2, color: 'green', display: 'block' }}
@@ -175,52 +234,6 @@ function Dashboard() {
                     >
                       Contacts
                     </Button>
-                    <IconButton
-                      size="large"
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
-                      onClick={handleOpenNavMenu}
-                      color="inherit"
-                    >
-                      <MenuIcon />
-                    </IconButton>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorElNav}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      open={Boolean(anchorElNav)}
-                      onClose={handleCloseNavMenu}
-                      sx={{
-                        display: { xs: 'block', md: 'none' },
-                      }}
-                    >
-                      {/* {pages.map((page) => (
-                        <MenuItem key={page} onClick={handleCloseNavMenu}>
-                          <Typography textAlign="center">{page}</Typography>
-                        </MenuItem>
-                      ))} */}
-                    </Menu>
-                  </Box>
-
-                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {/* {pages.map((page) => (
-                      <Button
-                        key={page}
-                        onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'green', display: 'block' }}
-                      >
-                        {page}
-                      </Button>
-                    ))} */}
                   </Box>
 
                   <Box sx={{ flexGrow: 0 }}>
@@ -347,17 +360,16 @@ const aboutList = [
 const Opag = () => {
   return (
     <div id="Opag" className="text-center" style={{ backgroundColor: 'white' }}>
-      <div className="container" >
+      <div >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
+          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginTop: 20 }}>
             OFFICE OF THE PROVINCIAL AGRICULTURIST
           </Typography>
         </div>
-        <div className="row">
+        <ImageList sx={{ width: '100%', }} cols={4} rowHeight={100}>
           {
             aboutList.map((about) => (
-              <div key={`${about.title}-${about.text}`} className="col-xs-6 col-md-3">
-                {" "}
+              <div key={`${about.title}-${about.text}`} >
                 <img
                   src={require(`../image_src/${about.url}`)}
                   style={{
@@ -371,39 +383,43 @@ const Opag = () => {
               </div>
             ))
           }
-        </div>
+        </ImageList>
       </div>
     </div>
   )
 }
 const Information = ({ cName }) => (
-  <div style={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', fontWeight: 'bold', justifyContent: 'center' }}>
+  <Box sx={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', fontWeight: 'bold', justifyContent: 'center' }}>
     Ang queen ang pinakamatamis na uri ng pinya sa Pilipinas. Ito ay may matinik na dahon kung ikukumpara sa ibang uri ng pinya. Ang  bunga ang tumitimbang ng halos isang kilo.
     Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
     at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
     ng Queen kaysa sa Hawaiian.
-  </div>
+  </Box>
 );
 const pineList = [
   {
     url: 'p1.jpg',
-    title: 'Extra Large',
+    title: 'Uri ng Pananim',
     width: '25%',
+    popoverText: 'Ang Korona isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Ang hapas o aerial suckers ay umuusbong naman sa itaas ng bahagi ng puno ng pinya. At ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa'
   },
   {
     url: 'p2.jpg',
     title: 'Large',
     width: '25%',
+    popoverText: 'This is large'
   },
   {
     url: 'p3.jpg',
     title: 'Medium',
     width: '25%',
+    popoverText: 'This is medium'
   },
   {
     url: 'p5.jpg',
     title: 'Butterball',
     width: '25%',
+    popoverText: 'This is but'
   },
 ];
 
@@ -436,130 +452,105 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
     '& .MuiTypography-root': {
       border: '4px solid currentColor',
     },
+    backgroundColor: 'transparent',
+    borderColor: 'green',
+    color: 'green',
+    '&:hover': {
+      backgroundColor: 'green',
+      borderColor: 'green',
+      color: 'white',
+    },
   },
 }));
 
 
 const About = () => {
-  const [modalDisplay, setModalDisplay] = useState(false);
-  const modalRef = useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [currentPopoverText, setCurrentPopoverText] = React.useState('');
 
-  const openModal = () => setModalDisplay(true);
-  const closeModal = () => setModalDisplay(false);
-
-  const handleOutsideClick = (event) => {
-    if (event.target === modalRef.current) {
-      closeModal();
-    }
+  const handlePopoverOpen = (event, popoverText) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentPopoverText(popoverText);
   };
 
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   return (
-    <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px', marginBottom: '5px' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginTop: '18px', backgroundColor: 'white' }}>
-            ABOUT PINEAPPLES
-          </Typography>
 
-        </div>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
-          {pineList.map((pine) => (
-            <ImageButton
-              focusRipple
-              key={pine.title}
-              style={{
-                width: pine.width,
-              }}
-            >
-              <img src={require(`../image_src/${pine.url}`)} alt={pine.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    <div style={{ backgroundColor: 'white' }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
+          ABOUT PINEAPPLES
+        </Typography>
+      </div>
+      <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
+        {pineList.map((pine) => (
+          <ImageButton
+            focusRipple
+            key={pine.title}
+            style={{
+              width: pine.width,
+            }}
+          >
+            <img src={require(`../image_src/${pine.url}`)} alt={pine.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 
-              <Image>
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  color="inherit"
-                  sx={{
-                    position: 'relative',
-                    p: 4,
-                    pt: 2,
-                    pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                  }}
-                >
-                  {pine.title}
-                </Typography>
-              </Image>
-            </ImageButton>
-          ))}
-        </Box>
-
-        <div className='about' id='Tungkol'>
-          <div className='about-col-one' style={{ marginBottom: '5px' }}>
-            <Information cName='about-text' />
-            {/* <div>
-              <button
-                className="btn btn-outline-warning"
-                type="button"
-                onClick={openModal}
-                style={{  fontFamily: 'Helvetica, sans-serif' ,fontSize:'12'}}
+            <Image>
+              <Typography
+                component="span"
+                variant="subtitle1"
+                color="inherit"
+                sx={{
+                  position: 'relative',
+                  p: 4,
+                  pt: 2,
+                  pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                }}
+                aria-owns={open ? 'mouse-over-popover' : undefined}
+                aria-haspopup="true"
+                onMouseEnter={(event) => handlePopoverOpen(event, pine.popoverText)}
+                onMouseLeave={handlePopoverClose}
               >
-                Karagdagang impormasyon
-              </button>
+                {pine.title}
+              </Typography>
+              <Popover
+                id="mouse-over-popover"
+                sx={{
+                  pointerEvents: 'none',
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+              >
+                <Typography sx={{ p: 1 }}>{currentPopoverText}</Typography>
+              </Popover>
+            </Image>
+          </ImageButton>
+        ))}
+      </div>
 
-              {modalDisplay && (
-                <div
-                  ref={modalRef}
-                  className='modal'
-                  onClick={handleOutsideClick}
-                  style={{ display: 'block' }}
-                >
-                  <form
-                    className='modal-content animate'
-                    action='/action_page.php'
-                    method='post'
-                    style={{ width: '50%', backgroundColor: 'green' }}
-                  >
-                    <img src={require('../image_src/p5.jpg')} />
-                    <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}> </p>
-                    <Tabs
-                      defaultActiveKey="info"
-                      transition={false}
-                      id="noanim-tab-example"
-                      className="mb-3"
-                    >
-                      <Tab eventKey="info" title="Klasipikasyon" style={{ color: 'white' }}>
-                        Ang Bureau of Agricyltural Fishery Products Standards ay nagpalabas sa sumusunod na Klasipikasyon
-                        base sa timbang ng pinyang queen kasama ang korona.<br />
-                        Extra large: mahigit 1,000g <br />
-                        Large: 850-1,000g  <br />
-                        Medium: 700-850g  <br />
-                        Small: 550-700  <br /> Butterball: below 550g
-                      </Tab>
-                      <Tab eventKey="profile" title="Uri" style={{ color: 'white' }}>
-                        Tab content for Profile
-                      </Tab>
-                      <Tab eventKey="contact" title="Contact" style={{ color: 'white' }}>
-                        Tab content for Contact
-                      </Tab>
-                    </Tabs> */}
-            {/* <img src={require('../image_src/p5.jpg' )}/> */}
-            {/* <p style={{fontFamily:'Arial',}}>
-                  Ang Queen Pineapple ay kilala bilang ang pinakamatamis na pinya sa buong mundo. Ang prutas ay may
-                  kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
-                  nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
-                </p>  */}
-
-            {/* </form>
-                </div>
-              )}
-            </div>*/}
-          </div>
-          <div className='about-col-two'>
-            <Images imagesList={imagesList} />
-          </div>
+      <div className='about' >
+        <div className='about-col-one' >
+          <Information cName='about-text' />
         </div>
-      </Box>
+        <div className='about-col-two'>
+          <Images imagesList={imagesList} />
+        </div>
+      </div>
 
-    </>
+    </div>
+
   );
 };
 
