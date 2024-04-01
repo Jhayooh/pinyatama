@@ -75,7 +75,7 @@ body {
 }
 
 .react-calendar-timeline .rct-dateHeader {
-    background: #fff !important;
+    background: #ccc !important;
     border: none !important;
     /* background: #22b14d18 !important; */
     color: #151515 !important;

@@ -23,7 +23,11 @@ const Geocollection = collection(db, "farms")
 
 
 const Heatmap = () => {
-  const [markers, setMarkers] = useState([]);
+  const [markers, setMarkers] = useState([
+    { title: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
+  
+  
+  ]);
   const mapRef = useRef(null);
   const [imgUrls, setImgUrls] = useState({});
 
@@ -45,21 +49,21 @@ const Heatmap = () => {
       try {
         const data = await getDocs(Geocollection);
         const filteredData = data.docs.map(doc => {
-          const { Location, title } = doc.data(); // Assuming 'Location' is an array of GeoPoints and 'title' is the marker name
-          return { title, Location }; // Return an object with 'title' and 'Location'
+          const { geopoint, title } = doc.data(); // Assuming 'Location' is an array of GeoPoints and 'title' is the marker name
+          return { geopoint, title  }; // Return an object with 'title' and 'Location'
         });
   
-        const markers = filteredData.flatMap(({ title, Location }) => {
-          if (Location && Array.isArray(Location)) {
-            return Location.map(geoPoint => ({
+        const markers = filteredData.flatMap(({ geopoint, title  }) => {
+          if (geopoint && Array.isArray(geopoint)) {
+            return geopoint.map(geoPoint => ({
               title,
               position: [geoPoint.latitude, geoPoint.longitude]
             }));
           }
-          if (Location) {
+          if (geopoint) {
             return [{
               title,
-              position: [Location.latitude, Location.longitude]
+              position: [geopoint.latitude, geopoint.longitude]
             }];
           }
           return [];
@@ -104,16 +108,20 @@ const Heatmap = () => {
   );
 };
 
-const HeatLayerExample = () => {
+const HeatLayerExample = ({ markers }) => {
   const map = useMap();
 
   useEffect(() => {
-    const data = [
-      [14.10051, 122.94002, 20],
-    ];
+    if (!markers || markers.length === 0) return;
+
+    const data = markers.map(marker => [
+      marker.position[0],
+      marker.position[1],
+      marker.intensity // Assuming intensity is the property in your marker object
+    ]);
 
     L.heatLayer(data, { radius: 80 }).addTo(map); // Increase the radius value to make the points bigger
-  }, [map]);
+  }, [map, markers]);
 
   return null;
 };
