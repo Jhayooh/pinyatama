@@ -1,21 +1,20 @@
 import {
-  Box,
-  Button
+  Box
 } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
 import React from 'react';
 // import { events, farms } from '../FarmsConstant';
+import { useNavigate } from 'react-router-dom';
 import FarmsSchedule from '../FarmsSchedule';
 import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
-import { useNavigate } from 'react-router-dom';
 import Heatmap from './Heatmap';
 
 // icons
-import farmer from '../image_src/farmer.png'
+import farmer from '../image_src/farmer.png';
 
 const legends = [
   "Pagtatanim",
@@ -54,7 +53,7 @@ export default function AdminHome({ setSelected, farms, events }) {
         <Grid lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #46bfff', borderRadius: 3, backgroundColor: '#46bfffc2', display: 'flex', flexDirection: 'row' }} >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
-              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
               <h5 style={{ margin: 0 }}>Farms</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
@@ -63,10 +62,10 @@ export default function AdminHome({ setSelected, farms, events }) {
           </Box>
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #ffbb54', borderRadius: 3, backgroundColor: '#ffbb54c2', display: 'flex', flexDirection: 'row' }} >
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #ffbb54', borderRadius: 3, backgroundColor: '#ffbb54c2', display: 'flex', flexDirection: 'row' }}  >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>12</h1>
-              <h5 style={{ margin: 0 }}>Farms</h5>
+              <h5 style={{ margin: 0 }}>Production</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} />
@@ -77,7 +76,7 @@ export default function AdminHome({ setSelected, farms, events }) {
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #717eee', borderRadius: 3, backgroundColor: '#717eeec2', display: 'flex', flexDirection: 'row' }} >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>12</h1>
-              <h5 style={{ margin: 0 }}>Farms</h5>
+              <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} />
@@ -88,7 +87,7 @@ export default function AdminHome({ setSelected, farms, events }) {
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #22b14c', borderRadius: 3, backgroundColor: '#22b14cc2', display: 'flex', flexDirection: 'row' }} >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>12</h1>
-              <h5 style={{ margin: 0 }}>Farms</h5>
+              <h5 style={{ margin: 0 }}>Accounts</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} />

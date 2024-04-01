@@ -1,16 +1,19 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link, Modal, Tab, Tabs } from '@mui/material';
+import { ImageList, Modal } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import ButtonBase from '@mui/material/ButtonBase';
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
 import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
+import Fade from '@mui/material/Fade';
+import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/material/styles';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
@@ -19,26 +22,33 @@ import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
 
-// const pages = ['OPAG', 'About', 'Gallery', 'Agencies', 'Contacts'];
 
 function Dashboard() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [anchorElNested, setAnchorElNested] = React.useState(null);
+  const openNested = Boolean(anchorElNested);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+  const handleClickNested = (event) => {
+    setAnchorElNested(event.currentTarget);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const handleCloseNested = () => {
+    setAnchorElNested(null);
   };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+    setOpen(false);
+  };
+
+
+
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [registerModalDisplay, setRegisterModalDisplay] = useState(false);
   const modalRef = useRef(null);
@@ -99,15 +109,35 @@ function Dashboard() {
       behavior: 'smooth', // Smooth scrolling behavior
     });
   };
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // Optional: smooth scrolling animation
+    });
+  };
   const opagRef = useRef(null);
   const aboutRef = useRef(null);
   const galleryRef = useRef(null);
   const agenciesRef = useRef(null);
   const contactsRef = useRef(null);
+  const uriRef = useRef(null);
+  const piliRef = useRef(null);
+  const lupaRef = useRef(null);
+  const tanimRef = useRef(null);
+  const damoRef = useRef(null);
+  const abonoRef = useRef(null);
+  const bulaklakRef = useRef(null);
+  const pesteRef = useRef(null);
+  const paraanRef = useRef(null);
+  const bungaRef = useRef(null);
+  const dahonRef = useRef(null);
+  const produktoRef = useRef(null);
+  const himagasRef = useRef(null);
+  const bentaRef = useRef(null);
+
   return (
     <>
       <div >
-      
         <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
           <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
           <div style={{ position: 'relative', zIndex: 1 }}>
@@ -140,23 +170,69 @@ function Dashboard() {
                       color: 'green',
                       textDecoration: 'none',
                     }}
+                    style={{ marginLeft: '10px' }}
                   >
                     QUEEN PINEAPPLE FARMING
                   </Typography>
 
-                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', lg: 'flex' } }}>
                     <Button
-                      onClick={() => scrollToRef(opagRef)}
+                      onClick={scrollToTop}
                       sx={{ my: 2, color: 'green', display: 'block' }}
                     >
-                      OPAG
+                      Home
                     </Button>
                     <Button
-                      onClick={() => scrollToRef(aboutRef)}
+                      id="fade-button"
+                      aria-controls={open ? 'fade-menu' : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={open ? 'true' : undefined}
+                      onClick={handleClick}
                       sx={{ my: 2, color: 'green', display: 'block' }}
                     >
                       About
                     </Button>
+                    <Menu
+                      id="fade-menu"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      TransitionComponent={Fade}
+                    >
+                      <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(uriRef)}>Mga Uri ng pananim</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(piliRef)}>Pagpili at paghahanda ng pantanim</MenuItem>
+
+                      {/* Nested Menu */}
+                      <MenuItem onClick={handleClickNested}>
+                        More Options
+                      </MenuItem>
+                    </Menu>
+                    <Menu
+                      id="nested-menu"
+                      anchorEl={anchorElNested}
+                      open={openNested}
+                      onClose={handleCloseNested}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'right',
+                      }}
+
+
+                    >
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paghahanda ng lupa</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagtatanim</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagsugpo ng damo</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaabono</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagpapabulaklak</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Mga Peste</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paraan ng pagpapalaki</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaani ng bunga</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaani ng dahon</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paraan ng paghanda ng pinya</MenuItem>
+                    </Menu>
+
                     <Button
                       onClick={() => scrollToRef(galleryRef)}
                       sx={{ my: 2, color: 'green', display: 'block' }}
@@ -175,47 +251,6 @@ function Dashboard() {
                     >
                       Contacts
                     </Button>
-                    <IconButton
-                      size="large"
-                      aria-label="account of current user"
-                      aria-controls="menu-appbar"
-                      aria-haspopup="true"
-                      onClick={handleOpenNavMenu}
-                      color="inherit"
-                    >
-                      <MenuIcon />
-                    </IconButton>
-                    <Menu
-                      id="menu-appbar"
-                      anchorEl={anchorElNav}
-                      anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'left',
-                      }}
-                      keepMounted
-                      transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'left',
-                      }}
-                      open={Boolean(anchorElNav)}
-                      onClose={handleCloseNavMenu}
-                      sx={{
-                        display: { xs: 'block', md: 'none' },
-                      }}
-                    >
-                    </Menu>
-                  </Box>
-
-                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-                    {/* {pages.map((page) => (
-                      <Button
-                        key={page}
-                        onClick={handleCloseNavMenu}
-                        sx={{ my: 2, color: 'green', display: 'block' }}
-                      >
-                        {page}
-                      </Button>
-                    ))} */}
                   </Box>
 
                   <Box sx={{ flexGrow: 0 }}>
@@ -304,6 +339,48 @@ function Dashboard() {
         <div ref={aboutRef}>
           <About />
         </div>
+        <div ref={uriRef}>
+          <Uri />
+        </div>
+        <div ref={piliRef}>
+          <Pili />
+        </div>
+        <div ref={lupaRef}>
+          <Lupa />
+        </div>
+        <div ref={tanimRef}>
+          <Tanim />
+        </div>
+        <div ref={damoRef}>
+          <Damo />
+        </div>
+        <div ref={abonoRef}>
+          <Abono />
+        </div>
+        <div ref={bulaklakRef}>
+          <Bulaklak />
+        </div>
+        <div ref={pesteRef}>
+          <Peste />
+        </div>
+        <div ref={paraanRef}>
+          <Paraan />
+        </div>
+        <div ref={bungaRef}>
+          <Bunga />
+        </div>
+        <div ref={dahonRef}>
+          <Dahon />
+        </div>
+        <div ref={produktoRef}>
+          <Produkto />
+        </div>
+        <div ref={himagasRef}>
+          <Himagas />
+        </div>
+        <div ref={bentaRef}>
+          <Benta />
+        </div>
         <div ref={galleryRef}>
           <ScreenShots />
         </div>
@@ -341,18 +418,17 @@ const aboutList = [
 ]
 const Opag = () => {
   return (
-    <div id="OPAG" className="text-center" style={{ backgroundColor: 'white' }}>
-      <div className="container" >
+    <div id="Opag" className="text-center" style={{ backgroundColor: 'white' }}>
+      <div >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
+          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginTop: 20 }}>
             OFFICE OF THE PROVINCIAL AGRICULTURIST
           </Typography>
         </div>
-        <div className="row">
+        <ImageList sx={{ width: '100%', }} cols={4} rowHeight={100}>
           {
             aboutList.map((about) => (
-              <div key={`${about.title}-${about.text}`} className="col-xs-6 col-md-3">
-                {" "}
+              <div key={`${about.title}-${about.text}`} >
                 <img
                   src={require(`../image_src/${about.url}`)}
                   style={{
@@ -366,198 +442,582 @@ const Opag = () => {
               </div>
             ))
           }
-        </div>
+        </ImageList>
       </div>
     </div>
   )
 }
 const Information = ({ cName }) => (
-  <div style={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', fontWeight: 'bold', justifyContent: 'center' }}>
+  <Box sx={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', justifyContent: 'center' }}>
     Ang queen ang pinakamatamis na uri ng pinya sa Pilipinas. Ito ay may matinik na dahon kung ikukumpara sa ibang uri ng pinya. Ang  bunga ang tumitimbang ng halos isang kilo.
     Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
     at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
     ng Queen kaysa sa Hawaiian.
-  </div>
+  </Box>
 );
-const pineList = [
-  {
-    url: 'p1.jpg',
-    title: 'Extra Large',
-    width: '25%',
-  },
-  {
-    url: 'p2.jpg',
-    title: 'Large',
-    width: '25%',
-  },
-  {
-    url: 'p3.jpg',
-    title: 'Medium',
-    width: '25%',
-  },
-  {
-    url: 'p5.jpg',
-    title: 'Butterball',
-    width: '25%',
-  },
-];
+// const pineList = [
+//   {
+//     url: 'p1.jpg',
+//     title: 'Uri ng Pananim',
+//     width: '25%',
+//     popoverText: 'Ang Korona isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Ang hapas o aerial suckers ay umuusbong naman sa itaas ng bahagi ng puno ng pinya. At ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa'
+//   },
+//   {
+//     url: 'p2.jpg',
+//     title: 'Large',
+//     width: '25%',
+//     popoverText: 'This is large'
+//   },
+//   {
+//     url: 'p3.jpg',
+//     title: 'Medium',
+//     width: '25%',
+//     popoverText: 'This is medium'
+//   },
+//   {
+//     url: 'p5.jpg',
+//     title: 'Butterball',
+//     width: '25%',
+//     popoverText: 'This is but'
+//   },
+// ];
 
-const Image = styled('span')(({ theme }) => ({
-  position: 'absolute',
-  left: 0,
-  right: 0,
-  top: 0,
-  bottom: 0,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  color: theme.palette.common.white,
-}));
-const ImageButton = styled(ButtonBase)(({ theme }) => ({
-  position: 'relative',
-  height: 200,
-  [theme.breakpoints.down('sm')]: {
-    width: '100% !important', // Overrides inline-style
-    height: 100,
-  },
-  '&:hover, &.Mui-focusVisible': {
-    zIndex: 1,
-    '& .MuiImageBackdrop-root': {
-      opacity: 0.15,
-    },
-    '& .MuiImageMarked-root': {
-      opacity: 0,
-    },
-    '& .MuiTypography-root': {
-      border: '4px solid currentColor',
-    },
-  },
-}));
+// const Image = styled('span')(({ theme }) => ({
+//   position: 'absolute',
+//   left: 0,
+//   right: 0,
+//   top: 0,
+//   bottom: 0,
+//   display: 'flex',
+//   alignItems: 'center',
+//   justifyContent: 'center',
+//   color: theme.palette.common.white,
+// }));
+// const ImageButton = styled(ButtonBase)(({ theme }) => ({
+//   position: 'relative',
+//   height: 200,
+//   [theme.breakpoints.down('sm')]: {
+//     width: '100% !important', // Overrides inline-style
+//     height: 100,
+//   },
+//   '&:hover, &.Mui-focusVisible': {
+//     zIndex: 1,
+//     '& .MuiImageBackdrop-root': {
+//       opacity: 0.15,
+//     },
+//     '& .MuiImageMarked-root': {
+//       opacity: 0,
+//     },
+//     '& .MuiTypography-root': {
+//       border: '4px solid currentColor',
+//     },
+//     backgroundColor: 'transparent',
+//     borderColor: 'green',
+//     color: 'green',
+//     '&:hover': {
+//       backgroundColor: 'green',
+//       borderColor: 'green',
+//       color: 'white',
+//     },
+//   },
+// }));
 
 
 const About = () => {
-  const [modalDisplay, setModalDisplay] = useState(false);
-  const modalRef = useRef(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [currentPopoverText, setCurrentPopoverText] = React.useState('');
 
-  const openModal = () => setModalDisplay(true);
-  const closeModal = () => setModalDisplay(false);
-
-  const handleOutsideClick = (event) => {
-    if (event.target === modalRef.current) {
-      closeModal();
-    }
+  const handlePopoverOpen = (event, popoverText) => {
+    setAnchorEl(event.currentTarget);
+    setCurrentPopoverText(popoverText);
   };
 
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
   return (
-    <>
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white' }}>
-        <div id='About' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '30px', marginBottom: '5px' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginTop: '18px', backgroundColor: 'white' }}>
-            ABOUT PINEAPPLES
-          </Typography>
 
-        </div>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', minWidth: 300, width: '100%' }}>
-          {pineList.map((pine) => (
-            <ImageButton
-              focusRipple
-              key={pine.title}
-              style={{
-                width: pine.width,
-              }}
-            >
-              <img src={require(`../image_src/${pine.url}`)} alt={pine.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+    <div style={{ backgroundColor: 'white' }}>
+      <div style={{ display: 'flex', marginLeft: 15 }}>
+        <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
+          KATANGIAN NG PINYANG QUEEN
+        </Typography>
+      </div>
+      {/* <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
+        {pineList.map((pine) => (
+          <ImageButton
+            focusRipple
+            key={pine.title}
+            style={{
+              width: pine.width,
+            }}
+          >
+            <img src={require(`../image_src/${pine.url}`)} alt={pine.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
 
-              <Image>
-                <Typography
-                  component="span"
-                  variant="subtitle1"
-                  color="inherit"
-                  sx={{
-                    position: 'relative',
-                    p: 4,
-                    pt: 2,
-                    pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                  }}
-                >
-                  {pine.title}
-                </Typography>
-              </Image>
-            </ImageButton>
-          ))}
-        </Box>
-
-        <div className='about' id='Tungkol'>
-          <div className='about-col-one' style={{ marginBottom: '5px' }}>
-            <Information cName='about-text' />
-            {/* <div>
-              <button
-                className="btn btn-outline-warning"
-                type="button"
-                onClick={openModal}
-                style={{  fontFamily: 'Helvetica, sans-serif' ,fontSize:'12'}}
+            <Image>
+              <Typography
+                component="span"
+                variant="subtitle1"
+                color="inherit"
+                sx={{
+                  position: 'relative',
+                  p: 4,
+                  pt: 2,
+                  pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
+                }}
+                aria-owns={open ? 'mouse-over-popover' : undefined}
+                aria-haspopup="true"
+                onMouseEnter={(event) => handlePopoverOpen(event, pine.popoverText)}
+                onMouseLeave={handlePopoverClose}
               >
-                Karagdagang impormasyon
-              </button>
+                {pine.title}
+              </Typography>
+              <Popover
+                id="mouse-over-popover"
+                sx={{
+                  pointerEvents: 'none',
+                }}
+                open={open}
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: 'bottom',
+                  horizontal: 'left',
+                }}
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'left',
+                }}
+                onClose={handlePopoverClose}
+                disableRestoreFocus
+              >
+                <Typography sx={{ p: 1 }}>{currentPopoverText}</Typography>
+              </Popover>
+            </Image>
+          </ImageButton>
+        ))}
+      </div> */}
 
-              {modalDisplay && (
-                <div
-                  ref={modalRef}
-                  className='modal'
-                  onClick={handleOutsideClick}
-                  style={{ display: 'block' }}
-                >
-                  <form
-                    className='modal-content animate'
-                    action='/action_page.php'
-                    method='post'
-                    style={{ width: '50%', backgroundColor: 'green' }}
-                  >
-                    <img src={require('../image_src/p5.jpg')} />
-                    <p style={{ fontFamily: 'Comic Sans MS, sans-serif', }}> </p>
-                    <Tabs
-                      defaultActiveKey="info"
-                      transition={false}
-                      id="noanim-tab-example"
-                      className="mb-3"
-                    >
-                      <Tab eventKey="info" title="Klasipikasyon" style={{ color: 'white' }}>
-                        Ang Bureau of Agricyltural Fishery Products Standards ay nagpalabas sa sumusunod na Klasipikasyon
-                        base sa timbang ng pinyang queen kasama ang korona.<br />
-                        Extra large: mahigit 1,000g <br />
-                        Large: 850-1,000g  <br />
-                        Medium: 700-850g  <br />
-                        Small: 550-700  <br /> Butterball: below 550g
-                      </Tab>
-                      <Tab eventKey="profile" title="Uri" style={{ color: 'white' }}>
-                        Tab content for Profile
-                      </Tab>
-                      <Tab eventKey="contact" title="Contact" style={{ color: 'white' }}>
-                        Tab content for Contact
-                      </Tab>
-                    </Tabs> */}
-            {/* <img src={require('../image_src/p5.jpg' )}/> */}
-            {/* <p style={{fontFamily:'Arial',}}>
-                  Ang Queen Pineapple ay kilala bilang ang pinakamatamis na pinya sa buong mundo. Ang prutas ay may
-                  kakaibang mabangong tamis at krispi, at medyo mas maliit kaysa sa iba pang uri ng pinya dahil ito'y
-                  nagbibigay lamang ng timbang na mga 450 gramo hanggang 950 gramo.
-                </p>  */}
-
-            {/* </form>
-                </div>
-              )}
-            </div>*/}
-          </div>
-          <div className='about-col-two'>
-            <Images imagesList={imagesList} />
-          </div>
+      <div className='about' >
+        <div className='about-col-one' >
+          <Information cName='about-text' />
         </div>
-      </Box>
+        <div className='about-col-two'>
+          <Images imagesList={imagesList} />
+        </div>
+      </div>
 
-    </>
+    </div>
+
   );
 };
 
+const Uri = () => {
+  return (
+    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
+      MGA URI NG PANANIM
+
+      <Grid container spacing={2} style={{ marginBottom: 15 }}>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="a" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1, fontSize: 2 }}>
+                <Typography component="h6" variant="h6">
+                  Korona
+                </Typography>
+                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                  isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Karaniwan, ang bawat bunga ay may isa lamang korona.
+                  Halos pare-pareho ang gulang nito at ang punong bahagi ay mas malaki at doon lumalabas ang usbong na may maraming ugat.
+                  Karaniqang kasama ang korona ng bunga kung ibenta kaya bihira itong gamitin bilang pananim.
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/crown.jpg')}
+                alt="Korona Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="b" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Hapas o Aerial Suckers
+                </Typography>
+                <Typography variant="subtitle1" paragraph xs={{ fontSize: 25 }}>
+                  Ang hapas o aerial suckers ay umuusbong naman sa taas na bahagi ng puno ng pinya.
+                  Maari itong kunin  bilang pantanim mga 3 hanggang 5 buwan matapos anihin ang bunga ng pinya.
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/arial.jpg')}
+                alt="Aerial Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="c" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Suhi o Ground Suckers
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  Ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa. Makukuha ito bilang pantanim kasabay ng hapas.
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+      </Grid>
+    </Typography>
+  );
+}
+const Pili = () => {
+  return (
+    <Grid sx={{ marginBottom: 3}} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Lupa = () => {
+  return (
+    <Grid sx={{ marginBottom: 3}}  item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGHAHANDA NG LUPA
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Sundin ang mga sumusunod: 
+              <li>Linisi ang lugar na tataniman. Tabasin ang mga malalagong damo o kaya'y gumamit ng gamot na pamatay damo.</li>
+              <li>Alisin ang mga halamang hindi kailangan. Bunutin ang mga ugat at tuod</li>
+              <li> Araruhin ang lugar na malinis na at makalipas ang 7 hanggang 10 araw araruhin ulit</li>
+             Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal.
+             Maari din gumawa ng kama-kama para doon itanim ang pinya.
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  )
+}
+const Tanim = () => {
+  return (
+    <Grid sx={{ marginBottom: 3}} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGTATANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              itanim ang pinya sa umpisa ng tag-ulan. Doon sa mga lugar na may regular na distribution ng ulan maaring itanim ang pinya ano mang oras
+              basta nakahanda ang pantanim. Sundin ang mga sumusunod:
+              <li>Kung ang pinyang queen ay itatanim bilang sali-tanim sa niyugan, mabuting planuhin ang mga daanan sa paglabas ng mga inang niyog.</li>
+              <li> Hakutin ang pantanim sa lupang tataniman. Tantiyahin ang tamang bilang ng pantanim na hahakutin.</li>
+              <li>Pagsama-samahin ang mga pantanim na makakasinlaki.</li>
+              <li>Sa pagtatanim maaring sundin ang tinatawag na 'single row' o isag linya na may agwat na 70-100 sentimetro ang bawat linya at 30 sentimetro ang pagitan ng bawat puno.</li>
+              <li>Maari din sundin ang tinatawag na 'double row' o dalawahang linya na may agwat na 80-100 sentimetro ang pagitan ng dalawang linya at 50 sentimetro sa loob ng dalawang linya</li>
+              <li> Iwasan na malagyan ng lupa ang ubod ng pantanim. Ito ay maaring pagsimulan ng sakit at pagkabulok.</li>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Damo = () => {
+  return (
+    <Grid sx={{marginBottom:10}}item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGSUGPO NG DAMO
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+            <p>May dalawang paraan ng pagsugpo ng damo sa taniman ng pinya - ang paggamit ng kemikal at ang paggamaso pagpunot ng damo, Bagamat epektibo ang bawat isa mas mabuting pagsamahin ang dalawang paraan upang mas lalong epektibong masugpo ang damo.</p>
+            <p> Narito ang ilang mga hakbang: </p>
+            <li>Araruhin at suyurin ang lupang tataniman. Higit na kapaki-pakinabang kung ang bawat pag-aararo at pag-suyud ay ginagwa makalipasang 7 hanggang 10 araw.</li>
+            <li>Maari din mag-spray ng 'Power' sa lupang tataniman makalipas ang 7-10 araw matapos ang pag-bubungkal.</li>
+            <li>Ang ib pang damo ay maaring puksain ng 'pre-emergence' na pamatay damo tulad ng Karmex at Diuron. Ang mga ito ay mas mabisa at matipid kung gagamitin bilang pambomba sa damo 7 hanggang 10 araw pagkatanim. Maliban dito, pinapatay nito ang mga Damosa mga murang ugat at usbong ng mga ito.</li>
+            <p>Subalit, hindi ito maaring gamitin kung masyado nang malago ang mga damo. Kapag ito ay ibinomba ng hindi tama sa panahon maaring magdulot ito ng paninilaw ng dahon at tuluyang pagkalanta ng tanim. 
+              Maliban na lamang kung ang gamot ay direktang i-spray sa damo. Kung sakaling ganito ang paggamit maghalo ng 'sticker' katulad ng hoestick o sabon sa solusyon. </p>
+            <p>Kung ang tanim ay malago na ang mga damong tumutubo tulad ng agingay ay maaring sugpuin ng Onecide., isang uri ng pamatay damo na maaring ibomba ano man oras pagkatanim. Ang kogon naman ay maaring puksain ng 'round-up o power' bago itanim ang pinya.</p>
+            <p>Ang paggamit ng gamot ay suplemento lamang sa karaniwang paraan na pagalis ng damo.</p>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Abono = () => {
+  return (
+    <Grid item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Bulaklak = () => {
+  return (
+    <Grid  item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Peste= () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Paraan= () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Bunga = () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Dahon = () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Produkto = () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Himagas = () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
+const Benta = () => {
+  return (
+    <Grid sx={{ marginBottom: 15 }} item >
+      <CardActionArea component="a" href="#">
+        <Card sx={{ display: 'flex' }}>
+          <CardContent sx={{ flex: 1 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+              PAGPILI AT PAGHAHANDA NG PANTANIM
+            </Typography>
+            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+            </Typography>
+          </CardContent>
+          <CardMedia
+            component="img"
+            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+            src={require('../image_src/crown.jpg')}
+            alt="Korona Image"
+          />
+        </Card>
+      </CardActionArea>
+    </Grid>
+  );
+}
 function Images({ imagesList }) {
   return (
     <Carousel>
