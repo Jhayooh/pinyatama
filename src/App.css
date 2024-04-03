@@ -1,5 +1,12 @@
-@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+/* @import url('https://fonts.googleapis.com/css?family=Work+Sans');
 * {
   font-family: 'Work Sans', sans-serif !important;
-}
+} */
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
+
+body, html {
+    font-family: 'Roboto', sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}

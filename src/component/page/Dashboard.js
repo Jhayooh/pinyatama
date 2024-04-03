@@ -11,6 +11,13 @@ import Fade from '@mui/material/Fade';
 import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
@@ -122,7 +129,6 @@ function Dashboard() {
   const contactsRef = useRef(null);
   const uriRef = useRef(null);
   const piliRef = useRef(null);
-  const lupaRef = useRef(null);
   const tanimRef = useRef(null);
   const damoRef = useRef(null);
   const abonoRef = useRef(null);
@@ -221,16 +227,15 @@ function Dashboard() {
 
 
                     >
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paghahanda ng lupa</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagtatanim</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagsugpo ng damo</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaabono</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagpapabulaklak</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Mga Peste</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paraan ng pagpapalaki</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaani ng bunga</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Pagaani ng dahon</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(lupaRef)}>Paraan ng paghanda ng pinya</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(tanimRef)}>Pagtatanim</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(damoRef)}>Pagsugpo ng damo</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(pesteRef)}>Mga Peste</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng pagpapalaki</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(bungaRef)}>Pagaani ng bunga</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(dahonRef)}>Pagaani ng dahon</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng paghanda ng pinya</MenuItem>
                     </Menu>
 
                     <Button
@@ -278,6 +283,8 @@ function Dashboard() {
               aria-labelledby="modal-modal-title"
               aria-describedby="modal-modal-description"
             >
+              {/* <Container component='main' maxWidth='xs'>
+                <CssBaseline /> */}
               <Box sx={{
                 position: 'fixed',
                 top: '50%',
@@ -289,6 +296,9 @@ function Dashboard() {
                 borderRadius: '10px',
                 boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
               }}>
+                {/* <Box sx={{width:25, height:25, justifyContent:'center', alignItems:'center'}}>
+                    <img src={require('../image_src/pinyatamap-logo.png')}/>
+                  </Box> */}
                 <h1 style={{ color: 'orange' }}>MALIGAYANG PAGDATING!</h1>
                 <h5 style={{ alignItems: 'center' }}>Mag-login sa iyong account</h5>
                 <TextField
@@ -330,6 +340,7 @@ function Dashboard() {
                 </Button>
 
               </Box>
+              {/* </Container> */}
             </Modal>
           </div>
         </div>
@@ -344,9 +355,6 @@ function Dashboard() {
         </div>
         <div ref={piliRef}>
           <Pili />
-        </div>
-        <div ref={lupaRef}>
-          <Lupa />
         </div>
         <div ref={tanimRef}>
           <Tanim />
@@ -418,14 +426,14 @@ const aboutList = [
 ]
 const Opag = () => {
   return (
-    <div id="Opag" className="text-center" style={{ backgroundColor: 'white' }}>
+    <div className="text-center" style={{ backgroundColor: 'white' }}>
       <div >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginTop: 20 }}>
             OFFICE OF THE PROVINCIAL AGRICULTURIST
           </Typography>
         </div>
-        <ImageList sx={{ width: '100%', }} cols={4} rowHeight={100}>
+        <ImageList sx={{ width: '100%', }} cols={4} >
           {
             aboutList.map((about) => (
               <div key={`${about.title}-${about.text}`} >
@@ -540,7 +548,7 @@ const About = () => {
   return (
 
     <div style={{ backgroundColor: 'white' }}>
-      <div style={{ display: 'flex', marginLeft: 15 }}>
+      <div style={{ flexDirection: 'row', marginLeft: 15 }}>
         <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
           KATANGIAN NG PINYANG QUEEN
         </Typography>
@@ -688,60 +696,59 @@ const Uri = () => {
 }
 const Pili = () => {
   return (
-    <Grid sx={{ marginBottom: 3}} item >
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
-            </Typography>
-            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
-            alt="Korona Image"
-          />
-        </Card>
-      </CardActionArea>
+    <Grid container spacing={2} style={{ marginBottom: 15 }}>
+      <Grid item xs={12} md={6} lg={6}>
+        <CardActionArea component="a" href="#">
+          <Card sx={{ display: 'flex' }}>
+            <CardContent sx={{ flex: 1, fontSize: 2 }}>
+              <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+                PAGPILI AT PAGHAHANDA NG PANTANIM
+              </Typography>
+              <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. Iwasan na gamitin ang sirang ubod na korona. Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit
+              </Typography>
+            </CardContent>
+            <CardMedia
+              component="img"
+              sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+              src={require('../image_src/crown.jpg')}
+              alt="Korona Image"
+            />
+          </Card>
+        </CardActionArea>
+      </Grid>
+      <Grid item xs={12} md={6} lg={6}>
+        <CardActionArea component="b" href="#">
+          <Card sx={{ display: 'flex' }}>
+            <CardContent sx={{ flex: 1 }}>
+              <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+                PAGHAHANDA NG LUPA
+              </Typography>
+              <Typography variant="subtitle1" paragraph xs={{ fontSize: 25 }}>
+                Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Sundin ang mga sumusunod:
+                <li>Linisin ang lugar na tataniman. Tabasin ang mga malalagong damo o kaya'y gumamit ng gamot na pamatay damo.</li>
+                <li>Alisin ang mga halamang hindi kailangan. Bunutin ang mga ugat at tuod</li>
+                <li> Araruhin ang lugar na malinis na at makalipas ang 7 hanggang 10 araw araruhin ulit</li>
+                Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal.
+                Maari din gumawa ng kama-kama para doon itanim ang pinya.
+              </Typography>
+            </CardContent>
+            <CardMedia
+              component="img"
+              sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+              src={require('../image_src/arial.jpg')}
+              alt="Aerial Image"
+            />
+          </Card>
+        </CardActionArea>
+      </Grid>
     </Grid>
   );
 }
-const Lupa = () => {
-  return (
-    <Grid sx={{ marginBottom: 3}}  item >
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGHAHANDA NG LUPA
-            </Typography>
-            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Sundin ang mga sumusunod: 
-              <li>Linisi ang lugar na tataniman. Tabasin ang mga malalagong damo o kaya'y gumamit ng gamot na pamatay damo.</li>
-              <li>Alisin ang mga halamang hindi kailangan. Bunutin ang mga ugat at tuod</li>
-              <li> Araruhin ang lugar na malinis na at makalipas ang 7 hanggang 10 araw araruhin ulit</li>
-             Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal.
-             Maari din gumawa ng kama-kama para doon itanim ang pinya.
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
-            alt="Korona Image"
-          />
-        </Card>
-      </CardActionArea>
-    </Grid>
-  )
-}
+
 const Tanim = () => {
   return (
-    <Grid sx={{ marginBottom: 3}} item >
+    <Grid sx={{ marginBottom: 3 }} item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -772,7 +779,7 @@ const Tanim = () => {
 }
 const Damo = () => {
   return (
-    <Grid sx={{marginBottom:10}}item >
+    <Grid sx={{ marginBottom: 10 }} item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -780,15 +787,15 @@ const Damo = () => {
               PAGSUGPO NG DAMO
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
-            <p>May dalawang paraan ng pagsugpo ng damo sa taniman ng pinya - ang paggamit ng kemikal at ang paggamaso pagpunot ng damo, Bagamat epektibo ang bawat isa mas mabuting pagsamahin ang dalawang paraan upang mas lalong epektibong masugpo ang damo.</p>
-            <p> Narito ang ilang mga hakbang: </p>
-            <li>Araruhin at suyurin ang lupang tataniman. Higit na kapaki-pakinabang kung ang bawat pag-aararo at pag-suyud ay ginagwa makalipasang 7 hanggang 10 araw.</li>
-            <li>Maari din mag-spray ng 'Power' sa lupang tataniman makalipas ang 7-10 araw matapos ang pag-bubungkal.</li>
-            <li>Ang ib pang damo ay maaring puksain ng 'pre-emergence' na pamatay damo tulad ng Karmex at Diuron. Ang mga ito ay mas mabisa at matipid kung gagamitin bilang pambomba sa damo 7 hanggang 10 araw pagkatanim. Maliban dito, pinapatay nito ang mga Damosa mga murang ugat at usbong ng mga ito.</li>
-            <p>Subalit, hindi ito maaring gamitin kung masyado nang malago ang mga damo. Kapag ito ay ibinomba ng hindi tama sa panahon maaring magdulot ito ng paninilaw ng dahon at tuluyang pagkalanta ng tanim. 
-              Maliban na lamang kung ang gamot ay direktang i-spray sa damo. Kung sakaling ganito ang paggamit maghalo ng 'sticker' katulad ng hoestick o sabon sa solusyon. </p>
-            <p>Kung ang tanim ay malago na ang mga damong tumutubo tulad ng agingay ay maaring sugpuin ng Onecide., isang uri ng pamatay damo na maaring ibomba ano man oras pagkatanim. Ang kogon naman ay maaring puksain ng 'round-up o power' bago itanim ang pinya.</p>
-            <p>Ang paggamit ng gamot ay suplemento lamang sa karaniwang paraan na pagalis ng damo.</p>
+              <p>May dalawang paraan ng pagsugpo ng damo sa taniman ng pinya - ang paggamit ng kemikal at ang paggamaso pagpunot ng damo, Bagamat epektibo ang bawat isa mas mabuting pagsamahin ang dalawang paraan upang mas lalong epektibong masugpo ang damo.</p>
+              <p> Narito ang ilang mga hakbang: </p>
+              <li>Araruhin at suyurin ang lupang tataniman. Higit na kapaki-pakinabang kung ang bawat pag-aararo at pag-suyud ay ginagwa makalipasang 7 hanggang 10 araw.</li>
+              <li>Maari din mag-spray ng 'Power' sa lupang tataniman makalipas ang 7-10 araw matapos ang pag-bubungkal.</li>
+              <li>Ang ib pang damo ay maaring puksain ng 'pre-emergence' na pamatay damo tulad ng Karmex at Diuron. Ang mga ito ay mas mabisa at matipid kung gagamitin bilang pambomba sa damo 7 hanggang 10 araw pagkatanim. Maliban dito, pinapatay nito ang mga Damosa mga murang ugat at usbong ng mga ito.</li>
+              <p>Subalit, hindi ito maaring gamitin kung masyado nang malago ang mga damo. Kapag ito ay ibinomba ng hindi tama sa panahon maaring magdulot ito ng paninilaw ng dahon at tuluyang pagkalanta ng tanim.
+                Maliban na lamang kung ang gamot ay direktang i-spray sa damo. Kung sakaling ganito ang paggamit maghalo ng 'sticker' katulad ng hoestick o sabon sa solusyon. </p>
+              <p>Kung ang tanim ay malago na ang mga damong tumutubo tulad ng agingay ay maaring sugpuin ng Onecide., isang uri ng pamatay damo na maaring ibomba ano man oras pagkatanim. Ang kogon naman ay maaring puksain ng 'round-up o power' bago itanim ang pinya.</p>
+              <p>Ang paggamit ng gamot ay suplemento lamang sa karaniwang paraan na pagalis ng damo.</p>
             </Typography>
           </CardContent>
           <CardMedia
@@ -802,6 +809,20 @@ const Damo = () => {
     </Grid>
   );
 }
+function createData(buwan, abono, dami, bilang) {
+  return { buwan, abono, dami, bilang };
+}
+
+const rows = [
+  createData('1 buwan pagkatanim', 'Ammonium phosphate (16-20-0)', 10, 7),
+  createData('', 'Muriate of Potash (0-0-60)', 5, 3.5),
+  createData('3 buwan pagkatanim', 'Urea (46-0-0)', 5, 3.5),
+  createData('5 buwan pagkatanim', 'Urea (46-0-0)', 5, 3.5),
+  createData('7 buwan ppagkatanim', 5, 3.5),
+  createData('1 buwan pagkatanim', 'Muriate of Potash (0-0-60)', 5, 3.5),
+  createData('Total', '', 35, 24.5),
+];
+
 const Abono = () => {
   return (
     <Grid item >
@@ -809,10 +830,56 @@ const Abono = () => {
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PAGAABONO
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <p>Kailangan ng pinya ang sapat na dami ng abono para ganap na maganda ang paglaki at pamumunga nito.</p>
+              <p>Dapat alamin ang likas na uaman o katabaan ng lupang tataniman sa pamamagitan ng pagpapasuri ng luupa. Mas higit na epektibo at matipid ang paglalagay ng pataba.</p>
+              <p>Sundin ang rekomendasyon ng Solis Laboratory o kaya ang resulta sa soil test kit sa Office ng Municipal Agriculturist.</p>
+              <p>Makakatulong din ang paggamit ng organikong pataba mula 6 hanggang 9 na sako sa bawat ektarya. Iwasan ang mag-abono ng halos isang dakot bawat halaman. Malaking porsiyento ang natatapon
+                o nawawala dahil sa pagsingaw o pagka-anod, pagsipsip ng lupa at damo.
+              </p>
+              <p>Upang mapataas ang kalidad ng bunga, gumamit ng tamang timpla ng abono. Ang potasyum ay nakakapagpatamis ng bunga, ang nitroheno naman ay nakakapagpalaki ng puno ay bunga.
+                Ang posporus naman ay nakakakapagpalago ng ugat.
+              </p>
+              <p>Kailangan din ng pinya ang iba pang sustansiya tulad ng boron. Lumalaki ang bunga kung magwiwisik ng Borax sa daming 3 gramo bawat litro ng tubig. Puwedeng gamitin mula 5 buwan
+                pagkatanim hanggang sa panahon ng pamumulaklak.
+              </p>
+              <p>Mag-abono kung medyo basa ang lupa. Kung mainit at tuyo ang lupa mainam na tunawin ang abono sa tubig at idilig sa puno ng pinya sa daming 40 cc bawat halaman.
+                Iwasan malagyan ang dahon dahil maaring masunog ito.
+              </p>
+              <p>Maari ding mag-abono sa panahon ng pamumulaklak. Ito ay nakakapagpalaki ng bunga at suhi.</p>
+              <p>Ilagay ang urea sa bandang puno ng pinya. Ang ammonium phospate at mureate of potasg ay maaring ilagay sa puno ng pinya.</p>
+              <p>Kung hindi nagawa ang pagpapasuri ng lupa, maaring sundin ang sumusunod na talaan na panahon ng pag-aabono.</p>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Buwan ng Pag-abono</TableCell>
+                      <TableCell align="right">Uri ng Abono</TableCell>
+                      <TableCell align="right">Dami bawat puno (gramo)</TableCell>
+                      <TableCell align="right">Bilang(sako)</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rows.map((row) => (
+                      <TableRow
+                        key={row.buwan}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.buwan}
+                        </TableCell>
+                        <TableCell align="right">{row.abono}</TableCell>
+                        <TableCell align="right">{row.dami}</TableCell>
+                        <TableCell align="right">{row.bilang}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <p> Sa halip na urea, puwede ring gamitin ang ammonium sulfate (21-0-0) sa dami na doble sa urea.</p>
+                <p> Mas mabuti kung makagawa ng takalan na may daming 5,10,20 gramo upang magamit sa pag-aabono.</p>
+              </TableContainer>
             </Typography>
           </CardContent>
           <CardMedia
@@ -826,17 +893,59 @@ const Abono = () => {
     </Grid>
   );
 }
+function Data(gamot, dami) {
+  return { gamot, dami };
+}
+
+const rowsData = [
+  Data('Ethrel (480)', '1 Dram (200 liters) Knapsack Sprayer (16 liters)'),
+  Data('Urea', '100 ml 4 kg 8 ml 320 g'),
+
+];
 const Bulaklak = () => {
   return (
-    <Grid  item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PAGPAPABULAKLAK
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <p>Ang pagpapabulaklak ng pinya na wala sa panahon ay mahalaga dahil napapataas nito ang porsiyento ng pamumulaklak; sabay-sabay ang pamumulaklak;
+                maaring mamulaklak kung kailan nais ng magsasaka; matipid at mataas ang kita.
+              </p>
+              <p>Ang pinya ay maaring pabulaklakin mga 10 hanggang 13 buwan makatapos itanim. Iwasan ang pagpapabunga ng maaga lalo na kung pitong buwan pa lamang
+                sapagkat maaring maliliit ang bunga.
+              </p>
+              <p>Sundin ang mga sumusunod na hakbang:</p>
+              <p>1. Maghanda ng ethephon (Ethrel 480), urea, pantakal,timba o timplahang dram at knapsack sprayer.</p>
+              <p>Sundin ang timplang 5 cc ethephone + 10 litro ng tubig + 200 gramo ng urea.</p>
+              <TableContainer component={Paper}>
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Gamot</TableCell>
+                      <TableCell align="right">Dami</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {rowsData.map((rowsData) => (
+                      <TableRow
+                        key={rowsData.gamot}
+                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {rowsData.gamot}
+                        </TableCell>
+                        <TableCell align="right">{rowsData.dami}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <p> 3. Maglagay ng 30 cc sa ubod ng bawat puno halaman.</p>
+              <p> 4. Maglagay ng pampabulaklak sa bandang hapon upang mataas ang porsiyento ng pamumulaklak.</p>
             </Typography>
           </CardContent>
           <CardMedia
@@ -850,49 +959,227 @@ const Bulaklak = () => {
     </Grid>
   );
 }
-const Peste= () => {
+const Peste = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
-            </Typography>
-            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
-            alt="Korona Image"
-          />
-        </Card>
-      </CardActionArea>
-    </Grid>
+    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
+      MGA PESTE NG PINYA
+      <Grid container spacing={2} style={{ marginBottom: 15 }}>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="a" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1, fontSize: 2 }}>
+                <Typography component="h6" variant="h6">
+                  Mealybugs
+                </Typography>
+                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                  <p>Ito'y isang insektong sumispsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.</p>
+                  <b>Sintomas:</b>
+                  <li>Pamumula ng dahon</li>
+                  <li>Pagkalanta ng dahon</li>
+                  <li>Panunuyo ng malaking bahaging dahong apektado</li>
+                  <li>Pagkupas ng berdeng kulay dahon</li>
+                  <li>Bansot ang halaman</li>
+                  <b>Pagpuksa:</b>
+                  <p>Ang mealybugs ay nabubuhay kasam ng mga langgam. Ang langgam ang naglilipat sa mga ito sa mga malulusog na bahagi ng halaman.</p>
+                  <li>Paggamit ng 'mealybug-free' na pananim</li>
+                  <li>Mag-gpray ng 1-1.4ml./li ng Malathion o Diazinon</li>
+                  <li>Puksain ang mga langgam na nagkakalat ng peste sa pamamagitan ng pagbobomba ng Sumicidin sa border area na may 4-6 na tudling.</li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/crown.jpg')}
+                alt="Korona Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="b" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Butt Rot
+                </Typography>
+                <Typography variant="subtitle1" paragraph xs={{ fontSize: 25 }}>
+                  <b>Sintomas</b>
+                  <li>Pagkabulok ng gawing puno ng halaman</li>
+                  <li>Pagkalanta ng buong halaman</li>
+                  <li>Biglaang pagkamatay ng halaman</li>
+                  <b>Pagpuksa/pag-iwas</b>
+                  <li>Iwasan na magkasugat ang halaman upang hindi makapasok ang fungus na nagdudulot ng sakit</li>
+                  <li>Maari ding ilubog ang puno ng halaman sa 2.5 gramo bawat litro ng Aliette solusyon habang sariwa pa ang sugat.</li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/arial.jpg')}
+                alt="Aerial Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="c" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Fruit Core Rot
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  <p>Ang sakit na ito ay dulot ng fungus. Ito ay labis na nagpapababa ng kalidad ng bunga ng pinya. </p>
+                  <b>Sintomas:</b>
+                  <li>Berde at maliit ang bunga</li>
+                  <li>Lubog ang mata ng apektadong bunga na kulay brown</li>
+                  <li>Kapag hiniwa ang apektadong bahagi ay nangingitim, matigas, basa at nabubulok</li>
+                  <b>Pagpuksa/pag-iwas:</b>
+                  <li>Panatilihing tama ang dami ng N, P at K.</li>
+                  <li>Mag-bomba ng 1-1.4 m/li ng malathion o kaya 0.1% Diazinon laban sa mealybugs na gumagawa ng butas o sira sa pinya na maaring pasukan ng fungus.</li>
+                  <li>iwasan ang pagtanggal ng ubod ng korona sa panahon ng tag-ulan.</li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="c" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Heart Rot
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  <p>Ang sakit na ito ay dulot ng fungus at karaniwang pinapatay nito ang bagong tanim na halaman. </p>
+                  <b>Sintomas:</b>
+                  <li>Paninilaw o pamumula ng dahon ng halaman sa gitna</li>
+                  <li>Pagkalanta ng mga gilid (margins) ng dahon</li>
+                  <li>Ang puno ng dahon ay nalilinaw hanggang kumupas maging puti, malambot at basa na kulay na kape ang gilid.
+                    Madaling matanggal ang ganitong dahon sa puno
+                  </li>
+                  <li>May mabahong amoy</li>
+                  <b>Pagpuksa/pag-iwas:</b>
+                  <li>Siguradong maayos ang labasan ng tubig</li>
+                  <li>Itaas hanggang 25cm ang taniman kung laganap ang sakit</li>
+                  <li>Maglagay ng kulob o mulch kung ginawang 25cm ang taas ng taniman</li>
+                  <li>Magtanim sa panahon ng tag-araw</li>
+                  <li>Illubog ang pananim ng ilang minuto sa 8-10 g/li solusyon ng Difoltan o 2.5 g/li ng Aliette.</li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={4} lg={4}>
+          <CardActionArea component="c" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Daga
+                </Typography>
+                <Typography variant="subtitle1" paragraph>
+                  <b>Pinsala:</b>
+                  <li>Kinakain ang prutas, murang dahon at ubod ng halaman</li>
+                  <b>Pagpuksa/pag-iwas</b>
+                  <li>Paglagay ng pain o lason ng Racumin. Ito ay maaring ihalo sa bigas at ikalat sa taniman. Maari din itong ilagay sa bunot ng niyog o kawayan na may butas.</li>
+                  <li>Panatilihing malinis ang taniman</li>
+                  <li></li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+      </Grid>
+    </Typography>
   );
 }
-const Paraan= () => {
+const Paraan = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
+    <Grid sx={{ marginBottom: 15 }} >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PARAAN NG PAGPAPALAKI NG BUNGA SA PANAHON NG PAMUMULAKLAK NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <p>Maaring palakihin ang bunga ng mga pinya kahit sa panahon na ito ng pamumulaklak. Sundin ang sumusunod:</p>
+              <Grid  xs={12} md={6} lg={6}>
+                <CardActionArea component="a" href="#">
+                  <Card sx={{ display: 'flex' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                      <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+                        <p>Maglagay ng abono sa simula ng pamulaklak o red bud stage. May malaking epekto ang paglagay ng hinalong 5 gramo ng urea ng pamulaklak o red bud stage.
+                          Matipid subalit malaki ang epekto lalo na sa mga lupang matagal lalo na sa mga lupang matagal ng tinaniman ng pinya. </p>
+                      </Typography>
+                    </CardContent>
+                    <CardMedia
+                      component="img"
+                      sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                      src={require('../image_src/crown.jpg')}
+                      alt="Korona Image"
+                    />
+                  </Card>
+                </CardActionArea>
+              </Grid>
+              <Grid  xs={12} md={6} lg={6}>
+                <CardActionArea component="b" href="#">
+                  <Card sx={{ display: 'flex' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                      <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+                        <p>Alisin ang korona isang linggo matapos ang pamulaklak o dry petal stage. Mas lalong lumalaki ang bunga at maikli ang tubo ng korona. Huwag isasagad ang pag-alis ng korona sa bunga. Gawin ito
+                          kung mainit ang panahon upang hindi ito tamaan ng sakit. Dahil ang sugat sa gawa sa pag-alis ng korona ay maaring maging sanhi o pagmulan ng sakit.
+                        </p>
+                      </Typography>
+                    </CardContent>
+                    <CardMedia
+                      component="img"
+                      sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                      src={require('../image_src/crown.jpg')}
+                      alt="Korona Image"
+                    />
+                  </Card>
+                </CardActionArea>
+              </Grid>
+              <Grid xs={12} md={6} lg={6}>
+                <CardActionArea component="b" href="#">
+                  <Card sx={{ display: 'flex' }}>
+                    <CardContent sx={{ flex: 1 }}>
+                      <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
+                        <p>Pag-spray ng Gibberellic acid pagkatapos ng pamumulaklak o dry petal stage. Gamitin ang timplang 1/2 o 3/4 tablet ng Berelex sa bawat sprayer load (16 litro ng tubig)
+                          at i-spray sa 1,000 bunga ng pinya. Siguruhin na basa ang lahat ng bahagi ng bunga ngunit iwasan na matamaan ang korona. Mag-ispray sa umaga o hapon upang mas higit na mabisa.
+                        </p>
+                      </Typography>
+                    </CardContent>
+                    <CardMedia
+                      component="img"
+                      sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                      src={require('../image_src/crown.jpg')}
+                      alt="Korona Image"
+                    />
+                  </Card>
+                </CardActionArea>
+              </Grid>
             </Typography>
           </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
-            alt="Korona Image"
-          />
         </Card>
       </CardActionArea>
     </Grid>
@@ -929,10 +1216,16 @@ const Dahon = () => {
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PAG-ANI NG DAHON NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <p>Ang dahon ng pinya ay isa sa pinagkukunan ng magandang uri ng hibla para sa tela at papel. Dagdag na kita ito sa mga magtatanim ng pinya kung aanihin at ipagbibili ang sariwang dahon o kaysa
+                pinatuyong hibla. Piliin ang magulang na dahon at walangs sira na may habang dalawang talampakan. Ginagawa ang pag-ani ng dahon matapos anihin ang bunga ng pinya.
+              </p>
+              <p>Sa halip na tabasin para makagawa ng 'walking alley' o daanan sa pag-ani at pag-hakot ng bunga maaring anihin ang dahon upang ibenta at gawing hibla. Ang mga natitirang dahon
+                ay anihin ang dahon upang ibenta at gawing hibla. Ang mga natitirang dahon ay anihin ulit pagkatapos anihin ang mga bunga.
+              </p>
+              <p>Napag-alaman na ang pag-ani ng dahon ay hindi nakakaapekto sa paglaki ng suhi na gagamitin pantanim.</p>
             </Typography>
           </CardContent>
           <CardMedia
@@ -953,10 +1246,19 @@ const Produkto = () => {
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              MGA PRODUKTO AT GAMIT NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <li>Prutas bilang sangkap sa salad</li>
+              <li>Sangkap ito sa paggawa ng ice cream, halo-halo at gelatin</li>
+              <li>Palaman sa paggawa ng cake, pies, tarts at tinapay</li>
+              <li>Sangkap sa mga lutuing karne, curry at iba pa</li>
+              <li>Ginagawang jam, jelly at pure</li>
+              <li>Ginagawang juice at iba pang inumin</li>
+              <li>Nagawang chunks, sliced or crushed na niluluto sa syrup</li>
+              <li>Ginagawang candies</li>
+              <li>Ginagawa suka, alak at toyo</li>
+              <li>Pinoproseso bilang nata de pina</li>
             </Typography>
           </CardContent>
           <CardMedia
@@ -972,26 +1274,79 @@ const Produkto = () => {
 }
 const Himagas = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
-      <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
-          <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
-            </Typography>
-            <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
-            </Typography>
-          </CardContent>
-          <CardMedia
-            component="img"
-            sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
-            alt="Korona Image"
-          />
-        </Card>
-      </CardActionArea>
-    </Grid>
+    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
+      PARAAN NG PAGHANDA NG PINYA BILANG PANGHIMAGAS O TABLE FRUIT
+      <Grid container spacing={2} style={{ marginBottom: 15 }}>
+        <Grid item xs={6} md={3} lg={3}>
+          <CardActionArea component="a" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1, fontSize: 2 }}>
+                <Typography component="h6" variant="h6">
+                  Alisin ang korona
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/crown.jpg')}
+                alt="Korona Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={6} md={3} lg={3}>
+          <CardActionArea component="b" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Putulin ang prutas ng pahaba
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/arial.jpg')}
+                alt="Aerial Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={6} md={3} lg={3}>
+          <CardActionArea component="c" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Putol-putulin ang pinya at tuklapin sa pamamagitan ng kutsilyo
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={6} md={3} lg={3}>
+          <CardActionArea component="d" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h2" variant="h5">
+                  Hiwa-hiwain ng bite size o kayang isubo sa bibig
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../image_src/ground.jpg')}
+                alt="Ground Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
+      </Grid>
+    </Typography>
   );
 }
 const Benta = () => {
@@ -1001,10 +1356,25 @@ const Benta = () => {
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PAGHAHANDA NG PINYANG IBEBENTA SA IBANG BANSA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <li>Piliin ang magandang uri ng bunga depende sa pangangailangan ng bumili.</li>
+              <li>Ingatan na hindi magalusan, masugatan at mabugbug ang pinya sa pag-ani at paghakot</li>
+              <li>Kung maari ilagay ang inaning pinya sa lalagyan na may sapin na dyaryo</li>
+              <li>Ihiwalay o alisin ang mga bunga na may sakit, may aphids o iba pang insekto</li>
+              <li>Linisin ang bunga sa pamamagitan ng paggamit ng lumang toothbrush o sipilyo</li>
+              <li>Putulin ang tangkay ng pinya.Itira ang kalahating puldgada ng tangkay. Iwasan na magalusan ang tangkay dahil maaring pasukin ito ng insekto na magdududlot ng sakit at pagkabulok ng pinya.</li>
+              <li>Karaniwang nilalagyan ng wax ang pinyang ibinebenta sa ibang bansa.</li>
+              <li>Sundin ang tamang timpla sa waxing.</li>
+              <li>Gumamit ng sprayer sa waxing para mablis at pantay ang pagkalagay.</li>
+              <li>Patuyuin sa hangin sa loob ng dalawang oras bago ilagay sa sisidlang karton.</li>
+              <p>Ang paglalagyan ng karton ay dapat may label o impormasyon tulad nito.</p>
+              <li>Pangalan ng produkto- nakasaan ang variety</li>
+              <li>Grade at laki/ o bilang kung ilang piraso ang laman ng karton</li>
+              <li>Net weight o timbang sa kilo</li>
+              <li>Pangalan ng producer at exporter</li>
+              <li>Dapat may nakasulat na "Product of the Philippines"</li>
             </Typography>
           </CardContent>
           <CardMedia
