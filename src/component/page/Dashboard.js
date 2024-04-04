@@ -1,4 +1,8 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { ImageList, Modal } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -443,10 +447,11 @@ const Opag = () => {
                     borderRadius: '50%',
                     width: '50%',
                     height: '50%',
-                    objectFit: 'cover'
+                    objectFit: 'cover',
+
                   }} />
-                <h3>{about.title}</h3>
-                <p>{about.text}</p>
+                <h3 style={{ fontFamily: 'Arial, Helvetica, sans-seri', fontWeight: 'bold', padding: 5 }}>{about.title}</h3>
+                <p style={{ fontFamily: 'monospace' }}>{about.text}</p>
               </div>
             ))
           }
@@ -455,296 +460,216 @@ const Opag = () => {
     </div>
   )
 }
+function Images({ imagesList }) {
+  return (
+    <Carousel>
+      {imagesList.map(image => (
+        <Carousel.Item>
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '600px', height: '408px' }} />
+        </Carousel.Item>
+      ))}
+    </Carousel>
+  )
+}
+const imagesList = [
+  "p1.jpg",
+  "p2.jpg",
+  "p3.jpg",
+  "p5.jpg",
+]
+
 const Information = ({ cName }) => (
-  <Box sx={{ fontFamily: 'Helvetica, sans-serif', fontSize: '20px', justifyContent: 'center' }}>
+  <Box sx={{ fontFamily: 'monospace', fontSize: '20px', justifyContent: 'center' }}>
     Ang queen ang pinakamatamis na uri ng pinya sa Pilipinas. Ito ay may matinik na dahon kung ikukumpara sa ibang uri ng pinya. Ang  bunga ang tumitimbang ng halos isang kilo.
     Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
     at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
     ng Queen kaysa sa Hawaiian.
   </Box>
 );
-// const pineList = [
-//   {
-//     url: 'p1.jpg',
-//     title: 'Uri ng Pananim',
-//     width: '25%',
-//     popoverText: 'Ang Korona isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Ang hapas o aerial suckers ay umuusbong naman sa itaas ng bahagi ng puno ng pinya. At ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa'
-//   },
-//   {
-//     url: 'p2.jpg',
-//     title: 'Large',
-//     width: '25%',
-//     popoverText: 'This is large'
-//   },
-//   {
-//     url: 'p3.jpg',
-//     title: 'Medium',
-//     width: '25%',
-//     popoverText: 'This is medium'
-//   },
-//   {
-//     url: 'p5.jpg',
-//     title: 'Butterball',
-//     width: '25%',
-//     popoverText: 'This is but'
-//   },
-// ];
+function nutrition(nutrients, amount) {
+  return { nutrients, amount }
+}
 
-// const Image = styled('span')(({ theme }) => ({
-//   position: 'absolute',
-//   left: 0,
-//   right: 0,
-//   top: 0,
-//   bottom: 0,
-//   display: 'flex',
-//   alignItems: 'center',
-//   justifyContent: 'center',
-//   color: theme.palette.common.white,
-// }));
-// const ImageButton = styled(ButtonBase)(({ theme }) => ({
-//   position: 'relative',
-//   height: 200,
-//   [theme.breakpoints.down('sm')]: {
-//     width: '100% !important', // Overrides inline-style
-//     height: 100,
-//   },
-//   '&:hover, &.Mui-focusVisible': {
-//     zIndex: 1,
-//     '& .MuiImageBackdrop-root': {
-//       opacity: 0.15,
-//     },
-//     '& .MuiImageMarked-root': {
-//       opacity: 0,
-//     },
-//     '& .MuiTypography-root': {
-//       border: '4px solid currentColor',
-//     },
-//     backgroundColor: 'transparent',
-//     borderColor: 'green',
-//     color: 'green',
-//     '&:hover': {
-//       backgroundColor: 'green',
-//       borderColor: 'green',
-//       color: 'white',
-//     },
-//   },
-// }));
-
+const r = [
+  nutrition('ph', 3.45),
+  nutrition('Soluble solids', 16.8),
+  nutrition('Acidity (%)', 0.45),
+  nutrition('Unsoluble solids', 5.13),
+  nutrition('Color,ppm beta carotene', 5.13),
+  nutrition('Essence,ppm', 127.50),
+  nutrition('Vitamin A', '15 i.u.'),
+  nutrition('Vitamin C', '21 mg'),
+  nutrition('Phosphorus', '19 mg'),
+  nutrition('Carbohydrates', '13 mg'),
+  nutrition('calium', '19 mg'),
+  nutrition('Sugar ang malaking bahagi ng prutas'),
+]
 
 const About = () => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [currentPopoverText, setCurrentPopoverText] = React.useState('');
 
-  const handlePopoverOpen = (event, popoverText) => {
-    setAnchorEl(event.currentTarget);
-    setCurrentPopoverText(popoverText);
-  };
-
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
-
-  const open = Boolean(anchorEl);
   return (
 
     <div style={{ backgroundColor: 'white' }}>
-      <div style={{ flexDirection: 'row', marginLeft: 15 }}>
-        <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white' }}>
-          KATANGIAN NG PINYANG QUEEN
-        </Typography>
-      </div>
-      {/* <div style={{ display: 'flex', flexWrap: 'wrap', width: '100%' }}>
-        {pineList.map((pine) => (
-          <ImageButton
-            focusRipple
-            key={pine.title}
-            style={{
-              width: pine.width,
-            }}
-          >
-            <img src={require(`../image_src/${pine.url}`)} alt={pine.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-
-            <Image>
-              <Typography
-                component="span"
-                variant="subtitle1"
-                color="inherit"
-                sx={{
-                  position: 'relative',
-                  p: 4,
-                  pt: 2,
-                  pb: (theme) => `calc(${theme.spacing(1)} + 6px)`,
-                }}
-                aria-owns={open ? 'mouse-over-popover' : undefined}
-                aria-haspopup="true"
-                onMouseEnter={(event) => handlePopoverOpen(event, pine.popoverText)}
-                onMouseLeave={handlePopoverClose}
-              >
-                {pine.title}
-              </Typography>
-              <Popover
-                id="mouse-over-popover"
-                sx={{
-                  pointerEvents: 'none',
-                }}
-                open={open}
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                onClose={handlePopoverClose}
-                disableRestoreFocus
-              >
-                <Typography sx={{ p: 1 }}>{currentPopoverText}</Typography>
-              </Popover>
-            </Image>
-          </ImageButton>
-        ))}
-      </div> */}
+      <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
+        KATANGIAN NG PINYANG QUEEN
+      </Typography>
 
       <div className='about' >
         <div className='about-col-one' >
-          <Information cName='about-text' />
+          <div><Information cName='about-text' /></div>
+          <div >
+            <Accordion style={{ borderColor: 'green', marginTop: 10 }}>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1-content"
+                id="panel1-header"
+              >
+                <b>Ayon pa rin sa Food and Nutrition Research Institute ito ay nagtataglay ng mga sumusunod:</b>
+              </AccordionSummary>
+              <AccordionDetails>
+                <TableContainer component={Paper} sx={{ width: '100%', height: '50%' }}>
+                  <Table aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Nutrients</TableCell>
+                        <TableCell align="right">Amount</TableCell>
+
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {r.map((row) => (
+                        <TableRow
+                          key={row.nutrients}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row.nutrients}
+                          </TableCell>
+                          <TableCell align="right">{row.amount}</TableCell>
+
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </AccordionDetails>
+            </Accordion>
+            <Accordion>
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2-content"
+                id="panel2-header"
+              >
+                <b>Ang Bureau of Agricultural Fishery Products Standards ay nagpalabas ng sumusunod na klasipikasyon base sa timbang ng pinyangqueen kasama ang korona.</b>
+              </AccordionSummary>
+              <AccordionDetails>
+                <p>Extra Large: (mahigit 1,000g)</p>
+                <p>Large: (850-1,000g)</p>
+                <p>Medium: (700-850g)</p>
+                <p>Small: (550-700g)</p>
+                <p>Butterball: (below 550g)</p>
+              </AccordionDetails>
+            </Accordion>
+          </div>
         </div>
         <div className='about-col-two'>
           <Images imagesList={imagesList} />
         </div>
       </div>
-
     </div>
 
   );
 };
 
+
 const Uri = () => {
   return (
-    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
-      MGA URI NG PANANIM
-
-      <Grid container spacing={2} style={{ marginBottom: 15 }}>
-        <Grid item xs={12} md={4} lg={4}>
-          <CardActionArea component="a" href="#">
-            <Card sx={{ display: 'flex' }}>
-              <CardContent sx={{ flex: 1, fontSize: 2 }}>
-                <Typography component="h6" variant="h6">
-                  Korona
-                </Typography>
-                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
-                  isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Karaniwan, ang bawat bunga ay may isa lamang korona.
-                  Halos pare-pareho ang gulang nito at ang punong bahagi ay mas malaki at doon lumalabas ang usbong na may maraming ugat.
-                  Karaniqang kasama ang korona ng bunga kung ibenta kaya bihira itong gamitin bilang pananim.
-                </Typography>
-              </CardContent>
-              <CardMedia
-                component="img"
-                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-                src={require('../image_src/crown.jpg')}
-                alt="Korona Image"
-              />
-            </Card>
-          </CardActionArea>
-        </Grid>
-        <Grid item xs={12} md={4} lg={4}>
-          <CardActionArea component="b" href="#">
-            <Card sx={{ display: 'flex' }}>
-              <CardContent sx={{ flex: 1 }}>
-                <Typography component="h2" variant="h5">
-                  Hapas o Aerial Suckers
-                </Typography>
-                <Typography variant="subtitle1" paragraph xs={{ fontSize: 25 }}>
-                  Ang hapas o aerial suckers ay umuusbong naman sa taas na bahagi ng puno ng pinya.
-                  Maari itong kunin  bilang pantanim mga 3 hanggang 5 buwan matapos anihin ang bunga ng pinya.
-                </Typography>
-              </CardContent>
-              <CardMedia
-                component="img"
-                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-                src={require('../image_src/arial.jpg')}
-                alt="Aerial Image"
-              />
-            </Card>
-          </CardActionArea>
-        </Grid>
-        <Grid item xs={12} md={4} lg={4}>
-          <CardActionArea component="c" href="#">
-            <Card sx={{ display: 'flex' }}>
-              <CardContent sx={{ flex: 1 }}>
-                <Typography component="h2" variant="h5">
-                  Suhi o Ground Suckers
-                </Typography>
-                <Typography variant="subtitle1" paragraph>
-                  Ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa. Makukuha ito bilang pantanim kasabay ng hapas.
-                </Typography>
-              </CardContent>
-              <CardMedia
-                component="img"
-                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-                src={require('../image_src/ground.jpg')}
-                alt="Ground Image"
-              />
-            </Card>
-          </CardActionArea>
-        </Grid>
-      </Grid>
-    </Typography>
+    <div style={{ backgroundColor: 'orange', paddingBottom: 10, display: 'flex', flexDirection: 'column', marginBottom:10 }}>
+      <Typography style={{ color: 'white', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15, paddingTop: 10}}>
+        MGA URI NG PANANIM
+      </Typography>
+      <div  style={{display:'flex', flexDirection:'row',margin:20, alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}}>
+      <div className='about-col-one' style={{flex:1}}>
+        <div styles={{fontSize: '25px'}}>
+          <li><b>Korona</b>- isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Karaniwan, ang bawat bunga ay may isa lamang korona.
+            Halos pare-pareho ang gulang nito at ang punong bahagi ay mas malaki at doon lumalabas ang usbong na may maraming ugat.
+            Karaniqang kasama ang korona ng bunga kung ibenta kaya bihira itong gamitin bilang pananim.
+          </li>
+          <li><b>Hapas o Aerial Suckers</b>- Ang hapas o aerial suckers ay umuusbong naman sa taas na bahagi ng puno ng pinya.
+            Maari itong kunin  bilang pantanim mga 3 hanggang 5 buwan matapos anihin ang bunga ng pinya.</li>
+          <li><b>Suhi o Ground Suckers</b>-  Ang suhi o ground suckers ay tumutubo naman sa puno ng pinya na nakadikit sa lupa. Makukuha ito bilang pantanim kasabay ng hapas.</li>
+        </div>
+      </div>
+      <div className='about-col-two'  style={{flex:1}}>
+        <img src={require('../image_src/uri.jpg')} style={{width:'70%'}}/>
+      </div>
+    
+      </div>
+    </div>
   );
 }
+
+const styles = {
+  container: {
+    backgroundColor: 'white',
+    paddingBottom: 10,
+    display: 'flex',
+    flexDirection: 'column',
+  },
+  gridItem: {
+    display: 'flex',
+  },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    height: '100%',
+  },
+};
+
 const Pili = () => {
   return (
-    <Grid container spacing={2} style={{ marginBottom: 15 }}>
-      <Grid item xs={12} md={6} lg={6}>
-        <CardActionArea component="a" href="#">
-          <Card sx={{ display: 'flex' }}>
-            <CardContent sx={{ flex: 1, fontSize: 2 }}>
-              <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-                PAGPILI AT PAGHAHANDA NG PANTANIM
-              </Typography>
-              <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
-                Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. Iwasan na gamitin ang sirang ubod na korona. Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit
-              </Typography>
-            </CardContent>
-            <CardMedia
-              component="img"
-              sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-              src={require('../image_src/crown.jpg')}
-              alt="Korona Image"
-            />
-          </Card>
-        </CardActionArea>
+    <div style={styles.container}>
+      <Grid container spacing={2} style={{ marginBottom: 15 }}>
+        <Grid item xs={12} md={6} lg={6} style={styles.gridItem}>
+          <CardActionArea component="a" href="#">
+            <Card sx={styles.card}>
+              <CardContent sx={{ flex: 1, fontSize: 2 }}>
+                <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+                  PAGPILI AT PAGHAHANDA NG PANTANIM
+                </Typography>
+                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                  Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. Iwasan na gamitin ang sirang ubod na korona. Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit
+                </Typography>
+              </CardContent>
+            </Card>
+          </CardActionArea>
+        </Grid>
+        <Grid item xs={12} md={6} lg={6} style={styles.gridItem}>
+          <CardActionArea component="b" href="#">
+            <Card sx={styles.card}>
+              <CardContent sx={{ flex: 1 }}>
+                <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+                  PAGHAHANDA NG LUPA
+                </Typography>
+                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                  Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Sundin ang mga sumusunod:
+                  <ul>
+                    <li>Linisin ang lugar na tataniman. Tabasin ang mga malalagong damo o kaya'y gumamit ng gamot na pamatay damo.</li>
+                    <li>Alisin ang mga halamang hindi kailangan. Bunutin ang mga ugat at tuod</li>
+                    <li> Araruhin ang lugar na malinis na at makalipas ang 7 hanggang 10 araw araruhin ulit</li>
+                  </ul>
+                  Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal.
+                  Maari din gumawa ng kama-kama para doon itanim ang pinya.
+                </Typography>
+              </CardContent>
+            </Card>
+          </CardActionArea>
+        </Grid>
       </Grid>
-      <Grid item xs={12} md={6} lg={6}>
-        <CardActionArea component="b" href="#">
-          <Card sx={{ display: 'flex' }}>
-            <CardContent sx={{ flex: 1 }}>
-              <Typography component="h6" variant="h6" style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-                PAGHAHANDA NG LUPA
-              </Typography>
-              <Typography variant="subtitle1" paragraph xs={{ fontSize: 25 }}>
-                Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Sundin ang mga sumusunod:
-                <li>Linisin ang lugar na tataniman. Tabasin ang mga malalagong damo o kaya'y gumamit ng gamot na pamatay damo.</li>
-                <li>Alisin ang mga halamang hindi kailangan. Bunutin ang mga ugat at tuod</li>
-                <li> Araruhin ang lugar na malinis na at makalipas ang 7 hanggang 10 araw araruhin ulit</li>
-                Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal.
-                Maari din gumawa ng kama-kama para doon itanim ang pinya.
-              </Typography>
-            </CardContent>
-            <CardMedia
-              component="img"
-              sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-              src={require('../image_src/arial.jpg')}
-              alt="Aerial Image"
-            />
-          </Card>
-        </CardActionArea>
-      </Grid>
-    </Grid>
+    </div>
   );
-}
+};
+
 
 const Tanim = () => {
   return (
@@ -756,7 +681,7 @@ const Tanim = () => {
               PAGTATANIM
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              itanim ang pinya sa umpisa ng tag-ulan. Doon sa mga lugar na may regular na distribution ng ulan maaring itanim ang pinya ano mang oras
+              Itanim ang pinya sa umpisa ng tag-ulan. Doon sa mga lugar na may regular na distribution ng ulan maaring itanim ang pinya ano mang oras
               basta nakahanda ang pantanim. Sundin ang mga sumusunod:
               <li>Kung ang pinyang queen ay itatanim bilang sali-tanim sa niyugan, mabuting planuhin ang mga daanan sa paglabas ng mga inang niyog.</li>
               <li> Hakutin ang pantanim sa lupang tataniman. Tantiyahin ang tamang bilang ng pantanim na hahakutin.</li>
@@ -779,7 +704,7 @@ const Tanim = () => {
 }
 const Damo = () => {
   return (
-    <Grid sx={{ marginBottom: 10 }} item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -1113,7 +1038,7 @@ const Peste = () => {
 }
 const Paraan = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} >
+    <Grid >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -1122,7 +1047,7 @@ const Paraan = () => {
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
               <p>Maaring palakihin ang bunga ng mga pinya kahit sa panahon na ito ng pamumulaklak. Sundin ang sumusunod:</p>
-              <Grid  xs={12} md={6} lg={6}>
+              <Grid xs={12} md={6} lg={4}>
                 <CardActionArea component="a" href="#">
                   <Card sx={{ display: 'flex' }}>
                     <CardContent sx={{ flex: 1 }}>
@@ -1140,7 +1065,7 @@ const Paraan = () => {
                   </Card>
                 </CardActionArea>
               </Grid>
-              <Grid  xs={12} md={6} lg={6}>
+              <Grid xs={12} md={6} lg={4}>
                 <CardActionArea component="b" href="#">
                   <Card sx={{ display: 'flex' }}>
                     <CardContent sx={{ flex: 1 }}>
@@ -1159,7 +1084,7 @@ const Paraan = () => {
                   </Card>
                 </CardActionArea>
               </Grid>
-              <Grid xs={12} md={6} lg={6}>
+              <Grid xs={12} md={6} lg={4}>
                 <CardActionArea component="b" href="#">
                   <Card sx={{ display: 'flex' }}>
                     <CardContent sx={{ flex: 1 }}>
@@ -1185,17 +1110,68 @@ const Paraan = () => {
     </Grid>
   );
 }
+function info(index, katangian) {
+  return { index, katangian };
+}
+
+const laman = [
+  info('1', 'Lahat ng mata ay kulay berde at medyo puti ang bracts at tuyo ang mga grooves sa gitna ng una hanggang pangalawang layer o baitang ng mata mula sa ibaiba. Makikita din ang paghihiwalay ng kulay dilaw (magulang na pinya ay maaring i-proseso bilangg dried o gawing kendi ito ang pinaka-angkop na panahon para anihin ang pinya para ma-itabi nang medyo matagal)'),
+  info('2', 'Tinatayang 2-3 layers na mata mula sa ibaba ang kulay dilaw angkop itong kainin panghimaga at i-proseso bilang juice at jams'),
+  info('3', '50% ng mata ay dilaw'),
+  info('4', 'Lagpag 75% ng mata ay dilaw (sobrang hinog)'),
+  info('5', 'Buong prutas ay dilaw (sobrang hinog'),
+];
+
 const Bunga = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
-              PAGPILI AT PAGHAHANDA NG PANTANIM
+              PAG-ANI NG BUNGA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 20 }}>
-              <pre> {'Mahusay na piliin ang semilyang pantanim upang makasigurong pare-pareho ang laki ng bunga sa panahon ng pag-ani. \n Pagsama- samahin ang magkaparehong uri.  Iwasan gumamit ng malaking semilya sapagkat namumulaklak ito ng maaga.\n  Subalit iwasan din naman ang sobrang maliit dahil mahinang klase din ang bunga nito. \n\n Kung korona ang gagamitin bilang pantanim iwasan gamitin ang doble o kumpol-kumpol na korona. \n Iwasan na gamitin ang sirang ubod na korona. \n\n Ikalat ang semilyang pantanim sa lugar na nasisiskatan ng araw sa loob ng dalawa hanggat tatlong araw. \n Sa ganitong paraan, mapapadali ang pag -uugat at maiiwasan ang pagkakaroon ng sakit'}  </pre>
+              <p>Ang bunga ng pinya ay maaring anihin 4 1/2 hanggang 5 buwan depende sa panahon at timpla ng ethephon na inilagay sa pagpabulaklak.Medyo matagal anihin kung ginagawa
+                sa panahon ng tag-ulan at mababa ang timpla ng pampabulaklak na ginamit.
+              </p>
+              <p>Mapapanatili ang mataas na kalidad ng inaning pinya kung susundin ang sumusunod:</p>
+              <ol style={{ listStyleType: 'circle' }}>
+                <li>Ingatan ang bunga sa pag-aani. Iwasang mabugbog ang bunga sa pag-ani at paghakot. Ito ang sanhi ng maagang pagkabulok o reject ng produkto para
+                  ipagbili sa ibang bansa
+                </li>
+                <li>Huwag hayaan madikkit ang inaning bunga sa lupa. Ang dumi na maaring dumikit sa bunga ay maaring maging sanhi ng sakit at madaling pagkasira ng produkto.
+                  Gumamit ng pansapin habang inaayos ang produktong inani.
+                </li>
+                <li>Anihin ang bunga ayon sa  pangangailangan ng mamimili. Gawin ang sapilitang pagpapahinog kung kinakailangan upang sabat at pantay na kulay ng hinog at manibalang (green ripe) pang bunga.
+                  Ang sapilitang pagpapahinog ay nakakasira ng kalidad ng prutas kung gagawin sa panahon na hilaw pa ang bunga. Matabang at makati ang lasa ng pinya sapilitang pinahinog ng wala pa sa tamang panahon.
+                </li>
+                <li>Maaring anihin ang pinya depende sa pangangailangan ng mamimili na ibat-iba ang antas ng pagkahinog tulad ng sumusunod:</li>
+                <b>Maturity index ng Pinyang Queen base sa inaprubahan na standards ng BAFPS.</b>
+                <TableContainer component={Paper}>
+                  <Table sx={{ alignItems: 'center' }} aria-label="simple table">
+                    <TableHead>
+                      <TableRow>
+                        <TableCell>Kulay ng Balat Index</TableCell>
+                        <TableCell align="right">Katangian</TableCell>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {laman.map((row) => (
+                        <TableRow
+                          key={row.index}
+                          sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                        >
+                          <TableCell component="th" scope="row">
+                            {row.index}
+                          </TableCell>
+                          <TableCell align="right">{row.katangian}</TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                </TableContainer>
+              </ol>
             </Typography>
           </CardContent>
           <CardMedia
@@ -1211,7 +1187,7 @@ const Bunga = () => {
 }
 const Dahon = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -1241,7 +1217,7 @@ const Dahon = () => {
 }
 const Produkto = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -1351,7 +1327,7 @@ const Himagas = () => {
 }
 const Benta = () => {
   return (
-    <Grid sx={{ marginBottom: 15 }} item >
+    <Grid item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -1388,23 +1364,6 @@ const Benta = () => {
     </Grid>
   );
 }
-function Images({ imagesList }) {
-  return (
-    <Carousel>
-      {imagesList.map(image => (
-        <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '600px', height: '408px' }} />
-        </Carousel.Item>
-      ))}
-    </Carousel>
-  )
-}
-const imagesList = [
-  "p1.jpg",
-  "p2.jpg",
-  "p3.jpg",
-  "p5.jpg",
-]
 
 
 function ScreenShots() {
