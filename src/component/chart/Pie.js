@@ -1,44 +1,34 @@
-import React, { Component } from 'react';
-import Chart from 'react-apexcharts'
+import React from 'react';
+import Chart from 'react-apexcharts';
 
-class Donut extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      options: {
-        labels: ['Daet', 'Talisay', 'Basud', 'San Vicente', 'Jose Panganiban', 'Labo', 'Capalonga'],
-        title: {
-          text: 'Expected QP Production',
-          align: 'left'
-      },
-        legend: {
-          position: 'bottom',
-        },
-        chart: {
-          // height: 500
-        },
-        plotOptions: {
-          pie: {
-            customScale: 1,
-
-          }
-        },
-        dataLabels: {
-          padding: 12
-        }
-      },
-      series: [44, 50, 28, 17, 10, 5, 18]
+function ExamplePieChart({ labels, data }) {
+  const options = {
+    labels: labels || ["Default Label"],
+    title: {
+      text: 'Expected QP Production',
+      align: 'left'
+    },
+    legend: {
+      position: 'bottom',
+    },
+    chart: {
+      // height: 500
+    },
+    plotOptions: {
+      pie: {
+        customScale: 1,
+      }
+    },
+    dataLabels: {
+      padding: 12
     }
-  }
+  };
 
-  render() {
+  const series = data || [44, 45]; // Use the provided data or a default series
 
-    return (
-        <Chart options={this.state.options} series={this.state.series} type="pie" width="100%" height='360' />
-    );
-  }
+  return (
+    <Chart options={options} series={series} type="pie" width="100%" height='360' />
+  );
 }
 
-export default Donut;
+export default ExamplePieChart;

@@ -18,19 +18,26 @@ function Farms() {
     const getData = async () => {
       try {
         const data = await getDocs(Geocollection);
-        const filteredData = data.docs.map(doc => {
+        const filteredData = data.docs.map(async doc => {
           const { title } = doc.data();
-          return { title };
+          const eventsCollection = collection(doc.ref, "events");
+          const eventsSnapshot = await getDocs(eventsCollection);
+          const eventsData = eventsSnapshot.docs.map(eventDoc => eventDoc.data());
+          return { title, events: eventsData };
         });
-
-        setMarkers(filteredData);
+        
+        const resolvedData = await Promise.all(filteredData);
+        setMarkers(resolvedData);
+        console.log("Events:", resolvedData); // Show events in console
       } catch (err) {
         console.error(err);
       }
     };
-
+  
     getData();
   }, []);
+  
+  
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });

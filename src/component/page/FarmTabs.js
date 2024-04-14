@@ -1,22 +1,17 @@
-
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import React, { useEffect, useState } from 'react';
+import { AppBar, Box, Container, Tab, Tabs, Toolbar, Typography } from '@mui/material';
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/Config';
+import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import * as React from 'react';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
-import { eventFarmOne, farmOne } from '../FarmsConstant';
 import FarmsSchedule from '../FarmsSchedule';
-import { useLocation } from 'react-router-dom';
+import FarmsConstant from '../FarmsConstant';
 
-function CustomTabPanel(props) {
-    const { children, value, index } = props;
+const Geocollection = collection(db, "farms");
 
+function CustomTabPanel({ children, value, index }) {
     return (
         <div
             role="tabpanel"
@@ -47,7 +42,8 @@ function a11yProps(index) {
 }
 
 function FarmTabs() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
+    const [markers, setMarkers] = useState([{ title: 'Farm', totalPriceAll: '', totalPriceMaterial: '' }]);
     const location = useLocation();
     const title = location.state ? location.state.title : '';
 
@@ -55,9 +51,63 @@ function FarmTabs() {
         setValue(newValue);
     };
 
+    useEffect(() => {
+        const getData = async () => {
+            try {
+                const data = await getDocs(Geocollection);
+                const filteredData = data.docs
+                    .filter(doc => doc.data().title === title) // Filter data based on title
+                    .map(async doc => {
+                        const { title } = doc.data();
+                        const eventsCollection = collection(doc.ref, "components");
+                        const eventsSnapshot = await getDocs(eventsCollection);
+                        const eventsData = eventsSnapshot.docs
+                            .map(eventDoc => eventDoc.data());
+    
+                        // Calculate total price for all events
+                        const totalPriceAll = eventsData.reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
+    
+                        // Calculate total price for events with particular: "Material"
+                        const totalPriceMaterial = eventsData
+                            .filter(event => event.particular.toLowerCase() === "material")
+                            .reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
+    
+                        // Calculate total price for events with particular: "labor"
+                        const totalPriceLabor = eventsData
+                            .filter(event => event.particular.toLowerCase() === "labor")
+                            .reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
+    
+                        // Calculate percentages
+                        const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
+                        const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
+    
+                        return { title, events: eventsData, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
+                    });
+    
+                const resolvedData = await Promise.all(filteredData);
+                setMarkers(resolvedData);
+                console.log("Events:", resolvedData); // Show events in console
+            } catch (err) {
+                console.error(err);
+            }
+        };
+    
+        if (title) {
+            getData();
+        }
+    }, [title]);
+    
+    // Custom rounding function to round to two decimal places
+    const roundToTwoDecimals = (num) => {
+        return Math.round(num * 100) / 100;
+    };
+    
+    
+    
+    
     return (
         <>
-            <div style={{ backgroundColor: '#fff' }}>
+            <div style={{ backgroundColor: '#fff' }}> 
                 <div>
                     <AppBar
                         position="absolute"
@@ -99,15 +149,15 @@ function FarmTabs() {
                                 value={value}
                                 onChange={handleChange}
                                 aria-label="basic tabs example"
-                                TabIndicatorProps={{ style: { background: 'orange' } }} 
+                                TabIndicatorProps={{ style: { background: 'orange' } }}
                             >
                                 <Tab
                                     label="Farm Profile"
                                     {...a11yProps(0)}
                                     sx={{
-                                        color: value === 0 ? 'orange' : 'white', 
+                                        color: value === 0 ? 'orange' : 'white',
                                         '&:hover': {
-                                            color: 'orange', 
+                                            color: 'orange',
                                         },
                                     }}
                                 />
@@ -115,9 +165,9 @@ function FarmTabs() {
                                     label="Gallery of Farm"
                                     {...a11yProps(1)}
                                     sx={{
-                                        color: value === 1 ? 'orange' : 'white', 
+                                        color: value === 1 ? 'orange' : 'white',
                                         '&:hover': {
-                                            color: 'orange', 
+                                            color: 'orange',
                                         },
                                     }}
                                 />
@@ -125,7 +175,7 @@ function FarmTabs() {
                                     label="Schedule of Farm"
                                     {...a11yProps(2)}
                                     sx={{
-                                        color: value === 2 ? 'orange' : 'white', 
+                                        color: value === 2 ? 'orange' : 'white',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -135,7 +185,7 @@ function FarmTabs() {
                                     label="Cost and Return Analysis"
                                     {...a11yProps(3)}
                                     sx={{
-                                        color: value === 3 ? 'orange' : 'white', 
+                                        color: value === 3 ? 'orange' : 'white',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -150,10 +200,11 @@ function FarmTabs() {
                             <Farm />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <FarmsSchedule farms={farmOne} events={eventFarmOne} />
+                            <FarmsSchedule markers={markers} />
+                            
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn />
+                            <CostAndReturn markers={markers} />
                         </CustomTabPanel>
                     </Box>
                 </div>
@@ -182,7 +233,7 @@ export default FarmTabs;
 // function FarmTabs() {
 
 //     const tabsTitle = [
-//         "Mga Litrato",
+//         "Mga Litrato",   
 //         "Skedyul ng mga Gawain",
 //         "Pagsusuri ng Gastos at Pagbabalik"
 //     ]
