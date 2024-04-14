@@ -132,6 +132,7 @@ function FarmTabs() {
                                         color: 'green',
                                         textDecoration: 'none',
                                     }}
+                                    style={{marginLeft:'10px'}}
                                 >
                                     QUEEN PINEAPPLE FARMING
                                 </Typography>

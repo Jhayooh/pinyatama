@@ -2,24 +2,11 @@
 * {
   font-family: 'Work Sans', sans-serif !important;
 }
-/* Default styles for all screen sizes */
-.container {
-  width: 100%;
-  max-width: 1200px; /* Example maximum width */
-  margin: 0 auto;
-  padding: 0 20px;
-}
 
-/* Styles for medium-sized screens (tablets) */
-@media screen and (min-width: 768px) {
-  .container {
-    padding: 0 40px;
-  }
-}
+/* @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 
-/* Styles for large screens (desktops) */
-@media screen and (min-width: 1024px) {
-  .container {
-    padding: 0 60px;
-  }
-}
+body, html {
+    font-family: 'Roboto', sans-serif;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+} */

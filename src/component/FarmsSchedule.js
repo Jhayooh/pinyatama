@@ -24,10 +24,6 @@ const startDate = new Date(eventClicked.start_time)
 const endDate = new Date(eventClicked.end_time)
 const formattedStart = startDate.toLocaleDateString('en-US', options);
 const formattedEnd = endDate.toLocaleDateString('en-US', options);
-
-console.log("startDate:", startDate);
-console.log("endDate:", endDate);
-
   return (
     <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)' }}>
       {/* lagay closing */}

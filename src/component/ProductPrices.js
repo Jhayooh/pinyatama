@@ -7,7 +7,11 @@ import {
   IconButton,
   InputBase,
   Modal,
-  CircularProgress
+  CircularProgress,
+  Select,
+  MenuItem,
+  InputLabel,
+  FormControl
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import {
@@ -20,7 +24,7 @@ import {
 
 // firebase
 import { db } from '../firebase/Config';
-import { collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
@@ -32,15 +36,19 @@ import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 
 export default function ProductPrices({ particularData }) {
+  console.log(particularData);
   const [rowModesModel, setRowModesModel] = useState({});
-  const [rows, setRows] = useState(particularData)
+  const [rows, setRows] = useState([])
+
+
 
   const [saving, setSaving] = useState(false)
 
   // State variables for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isAdd, setIsAdd] = useState(false)
+
   const [selectedRow, setSelectedRow] = useState({});
-  console.log("rows: ", selectedRow)
 
   const handleEditClick = (id, row) => () => {
     setSelectedRow(row);
@@ -100,7 +108,7 @@ export default function ProductPrices({ particularData }) {
         }}>
           {saving
             ?
-            <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <CircularProgress color="success" />
             </Box>
             :
@@ -160,6 +168,171 @@ export default function ProductPrices({ particularData }) {
       </Modal>
     );
   };
+
+  // Modal comp for adding row
+  const AddRowModal = () => {
+
+    // Data for adding row
+    const [partiName, setPartiName] = useState('')
+    const [partiPrice, setPartiPrice] = useState(0)
+    const [partiUnit, setPartiUnit] = useState('')
+    const [partiParent, setPartiParent] = useState('')
+    const [partiParti, setPartiParti] = useState('')
+    const [select, setSelect] = useState([])
+
+    const [adding, setAdding] = useState(false)
+
+    const selection = [
+      {
+        'name': 'material',
+        'data': ['Fertilizer']
+      },
+      {
+        'name': 'labor',
+        'data': ['Land Preparation']
+      },
+    ]
+
+    const handleParent = (event) => {
+      setPartiParent(event.target.value)
+    }
+
+    const handleParti = (event) => {
+      const value = event.target.value;
+      setPartiParti(value);
+      if (value !== '') {
+        setSelect(selection.filter(item => item.name === value))
+      } else {
+        setSelect([])
+      }
+    };
+    const handleAdd = async () => {
+      const partiRef = collection(db, 'particulars')
+      try {
+        const newParti = await addDoc(partiRef, {
+          name: partiName,
+          parent: partiParent.charAt(0).toUpperCase(),
+          particular: partiParti.charAt(0).toUpperCase(),
+          price: partiPrice,
+          unit: partiUnit
+        })
+        await updateDoc(newParti, { id: newParti.id })
+
+        setSaving(false)
+      } catch (e) {
+        console.log(e);
+      }
+    }
+
+    return (
+      <Modal
+        open={isAdd}
+        onClose={() => setIsAdd(false)}
+        aria-labelledby="edit-row-modal"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          borderRadius: '5px',
+          boxShadow: 24,
+          p: 4,
+          width: 380
+        }}>
+          <>
+            <h2 id="edit-row-modal">Add Row</h2>
+            <TextField
+              label="Name"
+              name="name"
+              value={partiName}
+              onChange={(name) => setPartiName(name.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Price"
+              name="price"
+              type='number'
+              value={partiPrice}
+              onChange={(price) => setPartiPrice(price.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Unit"
+              name="unit"
+              value={partiUnit}
+              onChange={(unit) => setPartiUnit(unit.target.value)}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <FormControl fullWidth>
+              <InputLabel id="partiLabel">Particular</InputLabel>
+              <Select
+                labelId="partiLabel"
+                id="parti"
+                value={partiParti}
+                label="Particular"
+                onChange={handleParti}
+                sx={{ mb: 2, width: '100%' }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value={"labor"}>Labor</MenuItem>
+                <MenuItem value={"material"}>Material</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+
+              <InputLabel id="parentLabel">Parent</InputLabel>
+              <Select
+                labelId="parentLabel"
+                id="parent"
+                value={partiParent}
+                label="Parent"
+                onChange={handleParent}
+                sx={{ mb: 2, width: '100%' }}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {select.map(particular => (
+                  particular.data.map(item => (
+                    <MenuItem key={item} value={item}>{item}</MenuItem>
+                  ))
+                ))}
+              </Select>
+            </FormControl>
+            <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+              {
+                adding
+                  ?
+                  <CircularProgress />
+                  :
+                  <>
+                    <button className='btn-view-all'
+                      onClick={() => {
+                        setAdding(true)
+                        handleAdd()
+                      }}
+                    >
+                      Add
+                    </button>
+                    <button className='btn-view-all'
+                      onClick={() => setIsAdd(false)}
+                    >
+                      Cancel
+                    </button>
+                  </>
+              }
+            </Box>
+          </>
+        </Box>
+      </Modal>
+    );
+  }
 
   const [columns, setColumns] = useState([
     {
@@ -263,7 +436,7 @@ export default function ProductPrices({ particularData }) {
                 </Box>
 
                 <button className='btn-view-all'
-                  onClick={() => null}
+                  onClick={() => setIsAdd(true)}
                 >
                   Add Data
                 </button>
@@ -287,6 +460,7 @@ export default function ProductPrices({ particularData }) {
             </Box>
           </Grid>
         </Grid>
+        <AddRowModal />
         <EditRowModal />
       </Box>
     </>

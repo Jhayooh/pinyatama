@@ -2,8 +2,6 @@
    background-color: white;
 }
 
-
-
 .nav-link {
     font-size: 1.8rem;
     font-weight: 700;
@@ -37,7 +35,7 @@
     background-color: white;
     width: 100%;
     height: auto;
-    padding: 82px 32px;
+    padding: 10px;
     display: flex;
 }
 .about-col-one {
@@ -49,7 +47,6 @@
 
 .about-text {
     font-size: 1.7rem;
-    padding: 18px;
     text-align: center;
 }
 

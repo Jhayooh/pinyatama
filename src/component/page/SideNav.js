@@ -44,7 +44,7 @@ import pineapple from '../image_src/pineapple.json';
 
 
 const drawerWidth = 160;
-const bgColor = '#22b14c'
+const bgColor = 'green'
 
 export default function SideNav() {
   const [selected, setSelected] = useState('dashboard')
