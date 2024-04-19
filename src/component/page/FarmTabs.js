@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule';
-import FarmsConstant from '../FarmsConstant';
+
 
 const Geocollection = collection(db, "farms");
 
@@ -60,13 +60,30 @@ function FarmTabs() {
                     .map(async doc => {
                         const { title } = doc.data();
                         const eventsCollection = collection(doc.ref, "components");
+                        const eventsCollection1 = collection(doc.ref, "roi");
                         const eventsSnapshot = await getDocs(eventsCollection);
+                        const eventsSnapshot1 = await getDocs(eventsCollection1);
                         const eventsData = eventsSnapshot.docs
                             .map(eventDoc => eventDoc.data());
+                        const eventsData1 = eventsSnapshot1.docs
+                            .map(eventDoc => eventDoc.data());
+
     
                         // Calculate total price for all events
                         const totalPriceAll = eventsData.reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
+
+                        const totalReturn = "₱" + eventsData.concat(eventsData1)
+                    .reduce((acc, curr) => acc + (curr.netReturn || 0), 0)
+                    .toLocaleString();
     
+                    const numpine = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.grossReturn || 0), 0);
+
+                    const numbut = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.batterBall || 0), 0);
+
+                    const numRoi = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.roi || 0), 0);
+
+
+
                         // Calculate total price for events with particular: "Material"
                         const totalPriceMaterial = eventsData
                             .filter(event => event.particular.toLowerCase() === "material")
@@ -80,8 +97,18 @@ function FarmTabs() {
                         // Calculate percentages
                         const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
                         const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
-    
-                        return { title, events: eventsData, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
+
+                        const priceBut = (numbut * 2) ;
+                        const pricePine = (numpine * 8) ;
+                        const numRoi1 = roundToTwoDecimals(numRoi);
+                        const numRoi2 = (numRoi1 +"%")
+                        const numIor = (100- numRoi1);
+
+                        const totalSale = (priceBut + pricePine);
+                        const percentageBut = roundToTwoDecimals((priceBut / totalSale) * 100);
+                        const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
+                        const totalSale1 = "₱" + (priceBut + pricePine).toLocaleString();
+                        return { title, events: eventsData.concat(eventsData1), totalReturn, numRoi2, numRoi, numRoi1, numIor, percentagePine, percentageBut, totalSale, totalSale1, priceBut, pricePine, numbut, numpine, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
                     });
     
                 const resolvedData = await Promise.all(filteredData);
@@ -116,7 +143,7 @@ function FarmTabs() {
                     >
                         <Container maxWidth="xl">
                             <Toolbar disableGutters>
-                                <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
+                                <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft alt="" />
                                 <Typography
                                     variant="h6"
                                     noWrap

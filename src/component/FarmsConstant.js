@@ -234,7 +234,11 @@ export const bentaSaPinya = {
     labelTwo: "Kabuuan na kita",
     data: [
         {
-            name: "Pinya", y: 100
+            name: "Pinya", y: 90
+        },
+
+        {
+            name: "Pinya", y: 10
         },
     ]
 }
