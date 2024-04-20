@@ -12,7 +12,6 @@ import ProductPrices from './component/ProductPrices';
 import Dash from './component/svg/Dash';
 import { auth } from "./firebase/Config";
 import { useAuthState } from 'react-firebase-hooks/auth';
-import Mechmap from "./component/Mechmap";
 
 function App() {
   const [user] = useAuthState(auth)
@@ -44,10 +43,6 @@ function App() {
     {
       path: '/Dash',
       element: <Dash />
-    },
-    {
-      path: '/mechmap',
-      element: <Mechmap />
     }
   ])
   return (
