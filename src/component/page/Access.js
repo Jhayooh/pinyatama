@@ -11,7 +11,8 @@ import {
   IconButton,
   InputBase,
   Modal,
-  CircularProgress
+  CircularProgress,
+  Alert
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import Dialog from '@mui/material/Dialog';
@@ -34,11 +35,13 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
 
 
 import { doc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
@@ -48,24 +51,21 @@ export default function Access({ usersRow }) {
   const handleClose = () => {
     setConfirm(!confirm)
   }
-  const registerAccount = () => {
+
+  const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
+    const { email, password } = clicked
+    console.log(clicked.email);
+    console.log(clicked.password);
+    const newAuth = getAuth()
     try {
-      auth
-        .createUser(
-          clicked
-        )
-        .then(async (userRecord) => {
-          // See the UserRecord reference doc for the contents of userRecord.
-          console.log('Successfully created new user:', userRecord.uid);
-          await updateDoc(userDocRef, { isRegistered: true });
-        })
-        .catch((error) => {
-          console.log('Error creating new user:', error);
-        });
-
-      // Update the document with the provided data
-
+      const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
+      <Alert variant="filled" severity="success">
+        {userCredential.user.displayName} has been created.
+      </Alert>
+      await updateDoc(userDocRef,{
+        isRegistered: true
+      } )
     } catch (error) {
       console.error('Error updating document:', error);
     }
@@ -113,6 +113,7 @@ export default function Access({ usersRow }) {
           <Button variant="contained" color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
+            console.log("laman ng row sa Acess", row);
           }}>Accept</Button>,
           <Button variant="contained" color="error">Delete</Button>
         ];

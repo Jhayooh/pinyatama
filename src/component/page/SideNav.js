@@ -61,7 +61,6 @@ export default function SideNav() {
   const usersQuery = query(usersRef, where("isRegistered", "==", false))
   const [usersRow, usersLoading, usersError] = useCollectionData(usersQuery)
   console.log("usersRow", usersRow);
-  console.log("error sa usersRow", usersError);
 
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
