@@ -119,11 +119,11 @@ export default function AdminHome({ setSelected, farms, events }) {
             <GeoLoc />
           </Box>
         </Grid>
-        <Grid lg={16}>
+        {/* <Grid lg={16}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
             <Heatmap />
           </Box>
-        </Grid>
+        </Grid> */}
       </Grid>
     </Box >
 
