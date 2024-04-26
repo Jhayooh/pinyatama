@@ -74,7 +74,7 @@ function CostAndReturn({ markers }) {
 
 {markers.map((marker, index) => (
       <Row>
-        <Col><CalendarChart /></Col>
+       
         <Col><Doughnut title={"Return on Investment"} label1={percent[index].data4} label2={b.labelTwo} data={percent[index].data3} /></Col>
         <Col><Column data={percent[index].data6} title={percent[index].data7} /></Col>
       </Row>

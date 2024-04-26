@@ -8,7 +8,7 @@ import './Farms.css';
 
 const Geocollection = collection(db, "farms");
 
-function Farms() {
+function Farms(events, farms) {
   const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
