@@ -408,22 +408,22 @@ function Dashboard() {
 }
 const aboutList = [
   {
-    url: 'les.jpg',
+    url: 'gov.jpg',
     title: "Hon. Ricarte R. Padilla",
     text: "Governor"
   },
   {
-    url: "jay.jpg",
+    url: "abad.png",
     title: "Engr. Almirante A. Abad",
     text: "Provincial Agriculturist"
   },
   {
-    url: "nay.jpg",
+    url: "marilyn.jpg",
     title: "Marilyn C. Pauto",
     text: "Supervising Agriculturist -CROPS Division"
   },
   {
-    url: "glen.png",
+    url: "rowil.png",
     title: "Rowil B. Diaz",
     text: "Agriculturist II/ Provincial Pineapple Coordinator "
   }
@@ -508,8 +508,7 @@ const r = [
 const About = () => {
 
   return (
-
-    <div style={{ backgroundColor: 'white' }}>
+    <div style={{ backgroundColor: 'white', paddingLeft:5, paddingRight:5 }}>
       <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
         KATANGIAN NG PINYANG QUEEN
       </Typography>
@@ -589,7 +588,7 @@ const Uri = () => {
         MGA URI NG PANANIM
       </Typography>
       <div  style={{display:'flex', flexDirection:'row',margin:20, alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}}>
-      <div className='about-col-one' style={{flex:1}}>
+      <div className='about-col-one' style={{flex:1,paddingLeft:10, paddingRight:10}}>
         <div styles={{fontSize: '25px'}}>
           <li><b>Korona</b>- isang uri ng pananim na nakausbong sa ibabaw ng bunga ng pinya. Karaniwan, ang bawat bunga ay may isa lamang korona.
             Halos pare-pareho ang gulang nito at ang punong bahagi ay mas malaki at doon lumalabas ang usbong na may maraming ugat.
@@ -629,7 +628,7 @@ const styles = {
 const Pili = () => {
   return (
     <div style={styles.container}>
-      <Grid container spacing={2} style={{ marginBottom: 15 }}>
+      <Grid container spacing={2} style={{ marginBottom: 15,paddingLeft:5, paddingRight:5 }}>
         <Grid item xs={12} md={6} lg={6} style={styles.gridItem}>
           <CardActionArea component="a" href="#">
             <Card sx={styles.card}>
@@ -673,7 +672,7 @@ const Pili = () => {
 
 const Tanim = () => {
   return (
-    <Grid sx={{ marginBottom: 3 }} item >
+    <Grid sx={{ marginBottom: 3 ,paddingLeft:5, paddingRight:5}} item >
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
@@ -694,7 +693,7 @@ const Tanim = () => {
           <CardMedia
             component="img"
             sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
-            src={require('../image_src/crown.jpg')}
+            src={require('../image_src/tanim.jpg')}
             alt="Korona Image"
           />
         </Card>
@@ -706,7 +705,7 @@ const Damo = () => {
   return (
     <Grid item >
       <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex' , paddingRight:5, paddingLeft:5}}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
               PAGSUGPO NG DAMO
@@ -752,7 +751,7 @@ const Abono = () => {
   return (
     <Grid item >
       <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex' ,paddingLeft:5, paddingRight:5}}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
               PAGAABONO
@@ -831,7 +830,7 @@ const Bulaklak = () => {
   return (
     <Grid item >
       <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex' }}>
+        <Card sx={{ display: 'flex' ,paddingLeft:5, paddingRight:5}}>
           <CardContent sx={{ flex: 1 }}>
             <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
               PAGPAPABULAKLAK
@@ -886,7 +885,7 @@ const Bulaklak = () => {
 }
 const Peste = () => {
   return (
-    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
+    <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 ,paddingLeft:5, paddingRight:5}}>
       MGA PESTE NG PINYA
       <Grid container spacing={2} style={{ marginBottom: 15 }}>
         <Grid item xs={12} md={4} lg={4}>
