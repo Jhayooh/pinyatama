@@ -41,6 +41,8 @@ import Geoloc from './GeoLoc';
 
 
 import pineapple from '../image_src/pineapple.json';
+import { red } from '@mui/material/colors';
+import FarmTabs from './FarmTabs';
 
 
 const drawerWidth = 160;
@@ -150,6 +152,7 @@ export default function SideNav() {
     });
   }
   return (
+    
     <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
       {/* <CssBaseline /> */}
       {/* <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -166,7 +169,7 @@ export default function SideNav() {
         }}
       >
         {/* <Toolbar /> */}
-
+        
         <Box sx={{ p: 2.4 }}>
           <img src={logo} alt='pinyatamap logo' width='100%' />
         </Box>
@@ -224,7 +227,7 @@ export default function SideNav() {
               </ListItemButton>
             </ListItem> */}
         </List>
-        <Box sx={{ alignItems: 'flex-end', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' }}>
+        <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' , }}>
           {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
           <Button variant="contained" onClick={handleSignOut}>Log out </Button>
         </Box>
@@ -243,7 +246,8 @@ export default function SideNav() {
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
-          {selected === 'Farms' && <Farms farms={farms} />}
+          {selected === 'Farms' && <Farms farms={farms} events={events} />}
+          
         </Box>
       }
     </Box>

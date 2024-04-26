@@ -6,12 +6,13 @@ import { useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
-import FarmsSchedule from '../FarmsSchedule';
+import FarmsSchedule from '../FarmsSchedule1';
 
 
 const Geocollection = collection(db, "farms");
 
 function CustomTabPanel({ children, value, index }) {
+    
     return (
         <div
             role="tabpanel"
@@ -41,7 +42,8 @@ function a11yProps(index) {
     };
 }
 
-function FarmTabs() {
+export default function FarmTabs({ }) {
+    const [events, setEvents] = useState([])
     const [value, setValue] = useState(0);
     const [markers, setMarkers] = useState([{ title: 'Farm', totalPriceAll: '', totalPriceMaterial: '' }]);
     const location = useLocation();
@@ -50,7 +52,7 @@ function FarmTabs() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
-
+    
     useEffect(() => {
         const getData = async () => {
             try {
@@ -61,6 +63,9 @@ function FarmTabs() {
                         const { title } = doc.data();
                         const eventsCollection = collection(doc.ref, "components");
                         const eventsCollection1 = collection(doc.ref, "roi");
+                        const eventsCollection2 = collection(doc.ref, "events");
+                        const eventsSnapshot2 = await getDocs(eventsCollection2);
+                        const eventsData2 = eventsSnapshot2.docs.map(eventDoc => eventDoc.data());
                         const eventsSnapshot = await getDocs(eventsCollection);
                         const eventsSnapshot1 = await getDocs(eventsCollection1);
                         const eventsData = eventsSnapshot.docs
@@ -108,7 +113,7 @@ function FarmTabs() {
                         const percentageBut = roundToTwoDecimals((priceBut / totalSale) * 100);
                         const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
                         const totalSale1 = "₱" + (priceBut + pricePine).toLocaleString();
-                        return { title, events: eventsData.concat(eventsData1), totalReturn, numRoi2, numRoi, numRoi1, numIor, percentagePine, percentageBut, totalSale, totalSale1, priceBut, pricePine, numbut, numpine, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
+                        return { title, events: eventsData.concat(eventsData1, eventsData2), totalReturn, numRoi2, numRoi, numRoi1, numIor, percentagePine, percentageBut, totalSale, totalSale1, priceBut, pricePine, numbut, numpine, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
                     });
     
                 const resolvedData = await Promise.all(filteredData);
@@ -228,7 +233,7 @@ function FarmTabs() {
                             <Farm />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <FarmsSchedule markers={markers} />
+                            <FarmsSchedule farms={markers} events={events} />
                             
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
@@ -241,7 +246,6 @@ function FarmTabs() {
     );
 }
 
-export default FarmTabs;
 
 
 

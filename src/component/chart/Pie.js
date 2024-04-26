@@ -27,7 +27,7 @@ function ExamplePieChart({ labels, data }) {
   const series = data || [44, 45]; // Use the provided data or a default series
 
   return (
-    <Chart options={options} series={series} type="pie" width="100%" height='360' />
+    <Chart options={options} series={series} type="pie"  />
   );
 }
 
