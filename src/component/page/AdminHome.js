@@ -34,9 +34,6 @@ function Legend({ legends }) {
   );
 }
 
-
-
-
 export default function AdminHome({ setSelected, farms, events }) {
   const navigate = useNavigate();
   // Redirect to the admin page
