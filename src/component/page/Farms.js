@@ -114,7 +114,10 @@ function Farms(events, farms) {
                 src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 '/>
               </div>
               <p>{marker.title}</p>
-              <button onClick={() => handleButtonClick(marker.title)}>Click here</button>
+              <button onClick={() => {
+                handleButtonClick(marker.title)
+                console.log("this is the marker", marker)
+                }}>Click here</button>
             </Box>
           </Box>
         ))}

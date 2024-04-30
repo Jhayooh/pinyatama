@@ -69,6 +69,8 @@ export default function SideNav() {
   const [usersRow, usersLoading, usersError] = useCollectionData(usersQuery)
   console.log("usersRow", usersRow);
 
+  
+
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
     const year = date[0]
