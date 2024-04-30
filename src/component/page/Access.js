@@ -47,9 +47,11 @@ export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
   const [confirm, setConfirm] = useState(false)
   const [clicked, setClicked] = useState({})
+  const [del, setDel] = useState(false)
 
   const handleClose = () => {
-    setConfirm(!confirm)
+    setConfirm(false)
+    setDel(false)
   }
 
   const registerAccount = async () => {
@@ -60,17 +62,12 @@ export default function Access({ usersRow }) {
     const newAuth = getAuth()
     try {
       const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
-      <Alert variant="filled" severity="success">
-        {userCredential.user.displayName} has been created.
-      </Alert>
-      await updateDoc(userDocRef,{
+      await updateDoc(userDocRef, {
         isRegistered: true
-      } )
+      })
     } catch (error) {
       console.error('Error updating document:', error);
     }
-
-
     handleClose()
   }
 
@@ -201,10 +198,33 @@ export default function Access({ usersRow }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
           <Button variant='contained' onClick={registerAccount} autoFocus>
             Accept
           </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={del}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Deleting registration
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location. This means sending anonymous
+            location data to Google, even when no apps are running.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
+          <Button variant='contained' color="error" onClick={registerAccount} autoFocus>
+            Delete
+          </Button>
         </DialogActions>
       </Dialog>
     </>

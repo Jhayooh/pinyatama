@@ -32,6 +32,11 @@ import particularspng from '../image_src/particulars.png';
 import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
+import access from '../image_src/access.png';
+import accessSelected from '../image_src/accessSelected.png';
+import farm from '../image_src/farm.png';
+import farmSelected from '../image_src/farmSelected.png'
+
 //
 
 import { Button, CircularProgress } from '@mui/material';
@@ -63,6 +68,8 @@ export default function SideNav() {
   const usersQuery = query(usersRef, where("isRegistered", "==", false))
   const [usersRow, usersLoading, usersError] = useCollectionData(usersQuery)
   console.log("usersRow", usersRow);
+
+  
 
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
@@ -204,17 +211,17 @@ export default function SideNav() {
           <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
             <ListItemButton>
               <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
+              <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
               </ListItemIcon>
-              <ListItemText primary='Access Requests' sx={{ color: '#fff' }} />
+              <ListItemText primary='Access Requests' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
             <ListItemButton>
               <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
+              <img src={selected === 'Farms' ? farmSelected : farm} style={{ width: 24 }} />
               </ListItemIcon>
-              <ListItemText primary='Farms' sx={{ color: '#fff' }} />
+              <ListItemText primary='Farms' />
             </ListItemButton>
           </ListItem>
           {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
