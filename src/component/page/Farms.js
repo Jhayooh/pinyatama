@@ -88,22 +88,36 @@ function Farms(events, farms) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
+            <MenuItem value={"Basud"}> Basud</MenuItem>
+            <MenuItem value={"Capalongga"}>Capalongga</MenuItem>
+            <MenuItem value={"Daet"}>Daet</MenuItem>
+            <MenuItem value={"Jose Panganiban"}>Jose Panganiban</MenuItem>
             <MenuItem value={"Labo"}>Labo</MenuItem>
             <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
+            <MenuItem value={"Paracale"}>Paracale</MenuItem>
+            <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
+            <MenuItem value={"San Vicente"}>San Vicente</MenuItem>
+            <MenuItem value={"Santa Elena"}>Santa Elena</MenuItem>
+            <MenuItem value={"Talisay"}>Talisay</MenuItem>
+            <MenuItem value={"Vinzons"}>Vinzons</MenuItem>
+
           </Select>
         </FormControl>
       </Box>
       <br />
       <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
         {filteredMarkers.map((marker, index) => (
-          <Box key={index} sx={{ width: 'calc(22% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0, border: 1 }}>
+          <Box key={index} sx={{ width: 'calc(22% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
             <Box sx={{ paddingY: 2, paddingTop: 0 }}>
               <div className="image-holder">
-                <img className='img' src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 ' alt="Placeholder" />
+                <img className='img' 
+                src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 '/>
               </div>
               <p>{marker.title}</p>
-              <button onClick={() => handleButtonClick(marker.title)}>Click here</button>
+              <button onClick={() => {
+                handleButtonClick(marker.title)
+                console.log("this is the marker", marker)
+                }}>Click here</button>
             </Box>
           </Box>
         ))}
