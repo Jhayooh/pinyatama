@@ -1,49 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Box, FormControl, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/Config';
+import { Box, FormControl, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { collection } from 'firebase/firestore';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase/Config';
 import './Farms.css';
 
 const Geocollection = collection(db, "farms");
 
-function Farms(events, farms) {
+function Farms({ events, farms }) {
   const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const getData = async () => {
-      try {
-        const data = await getDocs(Geocollection);
-        const filteredData = data.docs.map(async doc => {
-          const { title } = doc.data();
-          const eventsCollection = collection(doc.ref, "events");
-          const eventsSnapshot = await getDocs(eventsCollection);
-          const eventsData = eventsSnapshot.docs.map(eventDoc => eventDoc.data());
-          return { title, events: eventsData };
-        });
-        
-        const resolvedData = await Promise.all(filteredData);
-        setMarkers(resolvedData);
-        console.log("Events:", resolvedData); // Show events in console
-      } catch (err) {
-        console.error(err);
-      }
-    };
-  
-    getData();
-  }, []);
-  
-  
-
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
   };
 
-  const filteredMarkers = markers.filter(marker => {
+  const filteredMarkers = farms.filter(marker => {
     if (!searchInput && !selectedMunicipality) {
       return true;
     }
@@ -110,14 +85,14 @@ function Farms(events, farms) {
           <Box key={index} sx={{ width: 'calc(22% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
             <Box sx={{ paddingY: 2, paddingTop: 0 }}>
               <div className="image-holder">
-                <img className='img' 
-                src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 '/>
+                <img className='img'
+                  src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 ' />
               </div>
               <p>{marker.title}</p>
               <button onClick={() => {
-                handleButtonClick(marker.title)
-                console.log("this is the marker", marker)
-                }}>Click here</button>
+                handleButtonClick(marker.id)
+                console.log("farm clicked", marker);
+              }}>Click here</button>
             </Box>
           </Box>
         ))}
