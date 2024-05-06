@@ -92,7 +92,6 @@ function Farms({ events, farms }) {
               <button onClick={() => {
                 handleButtonClick(marker.id)
                 console.log("farm clicked", marker);
-
               }}>Click here</button>
             </Box>
           </Box>
