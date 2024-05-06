@@ -63,7 +63,7 @@ function Farms({ events, farms }) {
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
-            <MenuItem value={"Basud"}> Basud</MenuItem>
+            <MenuItem value={"Basud"}>Basud</MenuItem>
             <MenuItem value={"Capalongga"}>Capalongga</MenuItem>
             <MenuItem value={"Daet"}>Daet</MenuItem>
             <MenuItem value={"Jose Panganiban"}>Jose Panganiban</MenuItem>
@@ -82,13 +82,13 @@ function Farms({ events, farms }) {
       <br />
       <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap' }}>
         {filteredMarkers.map((marker, index) => (
-          <Box key={index} sx={{ width: 'calc(22% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
+          <Box key={index} sx={{ width: 'calc(30% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
             <Box sx={{ paddingY: 2, paddingTop: 0 }}>
               <div className="image-holder">
                 <img className='img'
                   src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 ' />
               </div>
-              <p>{marker.title}</p>
+              <p style={{paddingLeft:20, fontFamily:'monospace', color:'orange', fontWeight:'bold', fontSize:30}}>{marker.title}</p>
               <button onClick={() => {
                 handleButtonClick(marker.id)
                 console.log("farm clicked", marker);
