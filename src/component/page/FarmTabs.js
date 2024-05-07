@@ -7,9 +7,7 @@ import PropTypes from 'prop-types';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
-
-
-const Geocollection = collection(db, "farms");
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 function CustomTabPanel({ children, value, index }) {
     
@@ -42,139 +40,48 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ }) {
-    const [events, setEvents] = useState([])
+export default function FarmTabs({ farm }) {
+    var farm = farm[0]
+    const roundToTwoDecimals = (num) => {
+        return Math.round(num * 100) / 100;
+    };
     const [value, setValue] = useState(0);
-    const [markers, setMarkers] = useState([{ title: 'Farm', totalPriceAll: '', totalPriceMaterial: '' }]);
-    const location = useLocation();
-    const title = location.state ? location.state.title : '';
+    const eventsColl = collection(db, `farms/${farm.id}/events`)
+  const [events] = useCollectionData(eventsColl)
+  const roiColl = collection(db, `farms/${farm.id}/roi`)
+  const [roi] = useCollectionData(roiColl)
+  const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
+  const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
+const totalPines = totalPine+ totalBat
+const priceBat = (totalBat * 2) ;
+const pricePine = (totalPine * 8) ;
+const totalSale = (priceBat + pricePine);
 
+const percentageBut = roundToTwoDecimals((priceBat / totalSale) * 100);
+const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
+const totalSale1 = "₱" + (priceBat + pricePine).toLocaleString();
+  // si 3
+  console.log(farm);
+  console.log(events);
+  console.log(roi);
+ 
+  console.log("this is "+ totalPines);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
     
-    useEffect(() => {
-        const getData = async () => {
-            try {
-                const data = await getDocs(Geocollection);
-                const filteredData = data.docs
-                    .filter(doc => doc.data().title === title) // Filter data based on title
-                    .map(async doc => {
-                        const { title } = doc.data();
-                        const eventsCollection = collection(doc.ref, "components");
-                        const eventsCollection1 = collection(doc.ref, "roi");
-                        const eventsCollection2 = collection(doc.ref, "events");
-                        const eventsSnapshot2 = await getDocs(eventsCollection2);
-                        const eventsData2 = eventsSnapshot2.docs.map(eventDoc => eventDoc.data());
-                        const eventsSnapshot = await getDocs(eventsCollection);
-                        const eventsSnapshot1 = await getDocs(eventsCollection1);
-                        const eventsData = eventsSnapshot.docs
-                            .map(eventDoc => eventDoc.data());
-                        const eventsData1 = eventsSnapshot1.docs
-                            .map(eventDoc => eventDoc.data());
-
-    
-                        // Calculate total price for all events
-                        const totalPriceAll = eventsData.reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
-
-                        const totalReturn = "₱" + eventsData.concat(eventsData1)
-                    .reduce((acc, curr) => acc + (curr.netReturn || 0), 0)
-                    .toLocaleString();
-    
-                    const numpine = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.grossReturn || 0), 0);
-
-                    const numbut = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.batterBall || 0), 0);
-
-                    const numRoi = eventsData.concat(eventsData1).reduce((acc, curr) => acc + (curr.roi || 0), 0);
-
-
-
-                        // Calculate total price for events with particular: "Material"
-                        const totalPriceMaterial = eventsData
-                            .filter(event => event.particular.toLowerCase() === "material")
-                            .reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
-    
-                        // Calculate total price for events with particular: "labor"
-                        const totalPriceLabor = eventsData
-                            .filter(event => event.particular.toLowerCase() === "labor")
-                            .reduce((acc, curr) => acc + (curr.totalPrice || 0), 0);
-    
-                        // Calculate percentages
-                        const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
-                        const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
-
-                        const priceBut = (numbut * 2) ;
-                        const pricePine = (numpine * 8) ;
-                        const numRoi1 = roundToTwoDecimals(numRoi);
-                        const numRoi2 = (numRoi1 +"%")
-                        const numIor = (100- numRoi1);
-
-                        const totalSale = (priceBut + pricePine);
-                        const percentageBut = roundToTwoDecimals((priceBut / totalSale) * 100);
-                        const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
-                        const totalSale1 = "₱" + (priceBut + pricePine).toLocaleString();
-                        return { title, events: eventsData.concat(eventsData1, eventsData2), totalReturn, numRoi2, numRoi, numRoi1, numIor, percentagePine, percentageBut, totalSale, totalSale1, priceBut, pricePine, numbut, numpine, totalPriceAll, totalPriceMaterial, totalPriceLabor, percentageMaterial, percentageLabor };
-                    });
-    
-                const resolvedData = await Promise.all(filteredData);
-                setMarkers(resolvedData);
-                console.log("Events:", resolvedData); // Show events in console
-            } catch (err) {
-                console.error(err);
-            }
-        };
-    
-        if (title) {
-            getData();
-        }
-    }, [title]);
-    
+  
     // Custom rounding function to round to two decimal places
-    const roundToTwoDecimals = (num) => {
-        return Math.round(num * 100) / 100;
-    };
-    
-    
-    
+   
+
     
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}> 
-                <div>
-                    <AppBar
-                        position="absolute"
-                        elevation={0}
-                        style={{ backgroundColor: 'white' }}
-                    >
-                        <Container maxWidth="xl">
-                            <Toolbar disableGutters>
-                                <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft alt="" />
-                                <Typography
-                                    variant="h6"
-                                    noWrap
-                                    component="a"
-                                    href="#app-bar-with-responsive-menu"
-                                    sx={{
-                                        mr: 2,
-                                        display: 'flex',
-                                        alignItems: 'center', // Center vertically
-                                        fontFamily: 'monospace',
-                                        fontWeight: 700,
-                                        letterSpacing: '.3rem',
-                                        color: 'green',
-                                        textDecoration: 'none',
-                                    }}
-                                    style={{marginLeft:'10px'}}
-                                >
-                                    QUEEN PINEAPPLE FARMING
-                                </Typography>
-                            </Toolbar>
-                        </Container>
-                    </AppBar>
-                </div>
+                
 
                 <div >
-                    <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{title}</h2>
+                    <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
                     <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>Daet, Camarines Norte</span>
                     <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -233,11 +140,11 @@ export default function FarmTabs({ }) {
                             <Farm />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <FarmsSchedule farms={markers} events={events} />
+                            <FarmsSchedule farms= {farm} events={events} />
                             
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn markers={markers} />
+                            <CostAndReturn />
                         </CustomTabPanel>
                     </Box>
                 </div>

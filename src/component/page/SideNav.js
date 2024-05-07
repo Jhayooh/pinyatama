@@ -60,6 +60,7 @@ export default function SideNav() {
   const farmsQuery = query(farmsRef, orderBy("farmerName"))
   const [farms, loading, error] = useCollectionData(farmsQuery)
   const [events, setEvents] = useState([])
+  const [roi, setRoi] = useState([])
 
   const particularsRef = collection(db, '/particulars')
   const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
@@ -148,6 +149,20 @@ export default function SideNav() {
       setEvents(allEvents.flat());
     };
 
+    const fetchRoi = async () => {
+      const roiPromises = farms.map(async (farm) => {
+        const roiRef = collection(db, `farms/${farm.id}/roi`);
+        const roiSnapshot = await getDocs(roiRef);
+        const roiData = roiSnapshot.docs.map((doc) => ({
+          ...doc.data()
+        }))
+        console.log("roi data", roiData);
+        return roiData;
+      });
+      const allRoi = await Promise.all(roiPromises);
+      setRoi(allRoi.flat());
+    };
+    fetchRoi()
     fetchEvents();
   }, [farms]);
 
@@ -253,12 +268,15 @@ export default function SideNav() {
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
-          {selected === 'Farms' && <Farms farms={farms} events={events} />}
+          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} />}
+          
           
         </Box>
       }
     </Box>
+    
   );
+  
 }
 
 const styles = {
