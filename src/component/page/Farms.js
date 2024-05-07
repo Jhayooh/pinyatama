@@ -5,14 +5,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/Config';
 import './Farms.css';
-
-const Geocollection = collection(db, "farms");
+import FarmTabs from './FarmTabs.js';
 
 function Farms({ events, farms }) {
+console.log(farms);
   const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
   const navigate = useNavigate();
+  const [showFarmTabs, setShowFarmTabs] = useState(false);
+  const [indFarm, setindFarm] = useState('')
+  
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
@@ -35,9 +38,19 @@ function Farms({ events, farms }) {
 
     return isMatched;
   });
+  
+  function GetIndObj (object, id){
+    return object.filter((obj)=>{
+      return obj.id === id;
+    });
+  }
+  
+  console.log("indFarm", GetIndObj(farms, indFarm));
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} />:
+      <Box>
       <Box sx={{ width: 280 }}>
         <FormControl fullWidth size="small">
           <OutlinedInput
@@ -90,13 +103,18 @@ function Farms({ events, farms }) {
               </div>
               <p style={{paddingLeft:20, fontFamily:'monospace', color:'orange', fontWeight:'bold', fontSize:30}}>{marker.title}</p>
               <button onClick={() => {
-                handleButtonClick(marker.id)
-                console.log("farm clicked", marker);
-              }}>Click here</button>
+                setShowFarmTabs(true)
+                setindFarm(marker.id)
+                console.log("this is the ind farm", marker);
+                } }>Click here</button>
+             
             </Box>
           </Box>
         ))}
       </Box>
+       
+      </Box>}
+      
     </Box>
   );
 }
