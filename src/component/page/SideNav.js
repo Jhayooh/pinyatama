@@ -11,7 +11,6 @@ import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
 // import { farms, events } from '../FarmsConstant';
-import Farms from './Farms';
 import { signOut } from 'firebase/auth';
 import {
   Timestamp,
@@ -24,18 +23,19 @@ import {
   where
 } from 'firebase/firestore';
 import { auth, db } from '../../firebase/Config';
+import Farms from './Farms';
 
 // icons
+import access from '../image_src/access.png';
+import accessSelected from '../image_src/accessSelected.png';
 import dashboard from '../image_src/dashboard.png';
 import dashboardSelected from '../image_src/dashboardSelected.png';
+import farm from '../image_src/farm.png';
+import farmSelected from '../image_src/farmSelected.png';
 import particularspng from '../image_src/particulars.png';
 import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
-import access from '../image_src/access.png';
-import accessSelected from '../image_src/accessSelected.png';
-import farm from '../image_src/farm.png';
-import farmSelected from '../image_src/farmSelected.png'
 
 //
 
@@ -46,8 +46,6 @@ import Geoloc from './GeoLoc';
 
 
 import pineapple from '../image_src/pineapple.json';
-import { red } from '@mui/material/colors';
-import FarmTabs from './FarmTabs';
 
 
 const drawerWidth = 160;
@@ -251,7 +249,7 @@ export default function SideNav() {
         </List>
         <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' , }}>
           {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
-          <Button variant="contained" onClick={handleSignOut}>Log out </Button>
+          <Button variant="contained" onClick={handleSignOut} sx={{backgroundColor:'orange'}}>Log out </Button>
         </Box>
       </Drawer>
       {loading && particularLoading && usersLoading

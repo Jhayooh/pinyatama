@@ -1,22 +1,14 @@
-import React, { useState, useEffect } from 'react'
+import SearchIcon from '@mui/icons-material/Search';
 import {
-    Divider,
     Box,
-    Button,
-    Paper,
-    IconButton,
-    InputBase,
-    TextField,
-    OutlinedInput,
+    FormControl,
     InputAdornment,
     InputLabel,
-    Input,
-    FormControl,
-    Select,
     MenuItem,
-} from '@mui/material'
-import SearchIcon from '@mui/icons-material/Search';
-import Grid from '@mui/material/Unstable_Grid2';
+    OutlinedInput,
+    Select
+} from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
 
 export default function Timeline({ farms, events }) {
@@ -76,9 +68,20 @@ export default function Timeline({ farms, events }) {
                                 <MenuItem value="">
                                     <em>None</em>
                                 </MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
+                                <MenuItem value={"San Lorenzo Ruiz"}>Basud</MenuItem>
+                                <MenuItem value={"San Lorenzo Ruiz"}>Capalongga</MenuItem>
+                                <MenuItem value={"San Lorenzo Ruiz"}>Daet</MenuItem>
+                                <MenuItem value={"San Lorenzo Ruiz"}> Jose Panganiban</MenuItem>
                                 <MenuItem value={"Labo"}>Labo</MenuItem>
                                 <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
+                                <MenuItem value={"Mercedes"}>Paracale</MenuItem>
+                                <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
+                                <MenuItem value={"Mercedes"}>San Vicente</MenuItem>
+                                <MenuItem value={"Mercedes"}>Santa Elena</MenuItem>
+                                <MenuItem value={"Mercedes"}>Talisay</MenuItem>
+                                <MenuItem value={"Mercedes"}>Vinzons</MenuItem>
+                                
+                                
                             </Select>
                         </FormControl>
                     </Box>
