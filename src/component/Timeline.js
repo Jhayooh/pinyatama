@@ -66,22 +66,20 @@ export default function Timeline({ farms, events }) {
                                 onChange={handleChange}
                             >
                                 <MenuItem value="">
-                                    <em>None</em>
+                                    <em>Lahat</em>
                                 </MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Basud</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Capalongga</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Daet</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}> Jose Panganiban</MenuItem>
+                                <MenuItem value={"Basud"}>Basud</MenuItem>
+                                <MenuItem value={"Capalongga"}>Capalongga</MenuItem>
+                                <MenuItem value={"Daet"}>Daet</MenuItem>
+                                <MenuItem value={"Jose Panganiban"}>Jose Panganiban</MenuItem>
                                 <MenuItem value={"Labo"}>Labo</MenuItem>
                                 <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
-                                <MenuItem value={"Mercedes"}>Paracale</MenuItem>
+                                <MenuItem value={"Paracale"}>Paracale</MenuItem>
                                 <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
-                                <MenuItem value={"Mercedes"}>San Vicente</MenuItem>
-                                <MenuItem value={"Mercedes"}>Santa Elena</MenuItem>
-                                <MenuItem value={"Mercedes"}>Talisay</MenuItem>
-                                <MenuItem value={"Mercedes"}>Vinzons</MenuItem>
-                                
-                                
+                                <MenuItem value={"San Vicente"}>San Vicente</MenuItem>
+                                <MenuItem value={"Santa Elena"}>Santa Elena</MenuItem>
+                                <MenuItem value={"Talisay"}>Talisay</MenuItem>
+                                <MenuItem value={"Vinzons"}>Vinzons</MenuItem>
                             </Select>
                         </FormControl>
                     </Box>

@@ -511,7 +511,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p2.jpg',
+    url: 'planting.jpg',
     title: 'PAGTATANIM',
     content: ' Itanim ang pinya sa umpisa ng tag-ulan. Doon sa mga lugar na may regular na distribution ng ulan maaring itanim ang pinya ano mang oras basta nakahanda ang pantanim. Sundin ang mga sumusunod:',
     additionalContent: [
@@ -525,7 +525,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p5.jpg',
+    url: 'prep.jpg',
     title: 'PAGHAHANDA NG LUPA',
     content: ' Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal. Maari din gumawa ng kama-kama para doon itanim ang pinya. Sundin ang mga sumusunod:',
     additionalContent: ['Linisin ang lugar na tataniman. Tabasin ang mga malalagong damo o kayay gumamit ng gamot na pamatay damo.',
@@ -535,7 +535,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p3.jpg',
+    url: 'damo.jpg',
     title: 'PAGSUGPO NG DAMO',
     content: 'May dalawang paraan ng pagsugpo ng damo sa taniman ng pinya - ang paggamit ng kemikal at ang paggamaso pagpunot ng damo, Bagamat epektibo ang bawat isa mas mabuting pagsamahin ang dalawang paraan upang mas lalong epektibong masugpo ang damo. Narito ang ilang mga hakbang:',
     additionalContent: [

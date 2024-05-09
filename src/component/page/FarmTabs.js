@@ -1,13 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { AppBar, Box, Container, Tab, Tabs, Toolbar, Typography } from '@mui/material';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/Config';
-import { useLocation } from 'react-router-dom';
+import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { collection } from 'firebase/firestore';
 import PropTypes from 'prop-types';
+import React, { useState } from 'react';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { db } from '../../firebase/Config';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 function CustomTabPanel({ children, value, index }) {
     
@@ -82,7 +81,7 @@ const totalSale1 = "₱" + (priceBat + pricePine).toLocaleString();
 
                 <div >
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-                    <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>Daet, Camarines Norte</span>
+                    <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>This is the location</span>
                     <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
