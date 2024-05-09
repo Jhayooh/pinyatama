@@ -38,8 +38,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
 
-
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteField } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
@@ -52,6 +51,15 @@ export default function Access({ usersRow }) {
   const handleClose = () => {
     setConfirm(false)
     setDel(false)
+  }
+
+  const deleteAccount = async () => {
+    const userDocRef = doc(db, 'users', clicked.uid)
+    try {
+      await deleteDoc(userDocRef)
+    } catch (e) {
+      console.log('error deleting document:', e);
+    }
   }
 
   const registerAccount = async () => {
@@ -105,14 +113,15 @@ export default function Access({ usersRow }) {
       cellClassName: 'actions',
       editable: false,
       getActions: ({ id, row }) => {
-
         return [
           <Button variant="contained" color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
-            console.log("laman ng row sa Acess", row);
           }}>Accept</Button>,
-          <Button variant="contained" color="error">Delete</Button>
+          <Button variant="contained" color="error" onClick={()=>{
+            setDel(true)
+            setClicked(row)
+          }}>Delete</Button>
         ];
       },
     },
@@ -222,7 +231,7 @@ export default function Access({ usersRow }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' color="error" onClick={registerAccount} autoFocus>
+          <Button variant='contained' color="error" onClick={deleteAccount} autoFocus>
             Delete
           </Button>
         </DialogActions>
