@@ -50,24 +50,65 @@ export default function FarmTabs({ farm }) {
   const roiColl = collection(db, `farms/${farm.id}/roi`)
   const [roi] = useCollectionData(roiColl)
   const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
+  const totalPriceLabor = roi ? roi.reduce((total, roiItem) => total + roiItem.laborTotal, 0) : 0;
+  const totalPriceMaterial = roi ? roi.reduce((total, roiItem) => total + roiItem.materialTotal, 0) : 0;
+  const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
   const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
-const totalPines = totalPine+ totalBat
-const priceBat = (totalBat * 2) ;
-const pricePine = (totalPine * 8) ;
+  const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
+  const totalBats = totalBat/2
+  const totalPines = totalPine/8
+const totalPines1 = totalPines+ totalBats
+const priceBat = (totalBat / 2) ;
+const pricePine = (totalPine / 8) ;
 const totalSale = (priceBat + pricePine);
+const numRoi1 = roundToTwoDecimals(numRoi);
+const numRoi2 = (numRoi1 +"%")
+const numIor = (100- numRoi1);
+// Calculate percentages
+const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
+const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
+let markers = [
+    { name: 'totalPines', totalPine: 0 }
+    
+  ];
+  
+  
 
 const percentageBut = roundToTwoDecimals((priceBat / totalSale) * 100);
 const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
-const totalSale1 = "₱" + (priceBat + pricePine).toLocaleString();
+const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
   // si 3
   console.log(farm);
   console.log(events);
-  console.log(roi);
- 
+  console.log("test"+totalSale);
+
   console.log("this is "+ totalPines);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    markers = markers.map(marker => {
+        switch (marker.name) {
+          case 'totalPines':
+            return { ...marker, totalPine: pricePine,
+                totalPriceMaterial: totalPriceMaterial,
+                totalPriceLabor: totalPriceLabor,
+                totalSale1: totalSale1,
+                priceBut: priceBat,
+                numRoi1:numRoi1,
+                numIor: numIor,
+                numbut: totalBat,
+                numpine: totalPine,
+                numRoi2: numRoi2,
+
+              };
+          
+          default:
+            return marker;
+        }
+      });
+      console.log(markers);
+ 
     
   
     // Custom rounding function to round to two decimal places
@@ -143,7 +184,7 @@ const totalSale1 = "₱" + (priceBat + pricePine).toLocaleString();
                             
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn />
+                            <CostAndReturn markers={markers}/>
                         </CustomTabPanel>
                     </Box>
                 </div>

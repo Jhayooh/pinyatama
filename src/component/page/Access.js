@@ -44,6 +44,15 @@ export default function Access({ usersRow }) {
     }
   }
 
+  const deleteAccount = async () => {
+    const userDocRef = doc(db, 'users', clicked.uid)
+    try {
+      await deleteDoc(userDocRef)
+    } catch (e) {
+      console.log('error deleting document:', e);
+    }
+  }
+
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
     const { email, password } = clicked
@@ -95,14 +104,15 @@ export default function Access({ usersRow }) {
       cellClassName: 'actions',
       editable: false,
       getActions: ({ id, row }) => {
-
         return [
           <Button variant="contained" color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
-            console.log("laman ng row sa Acess", row);
-          }}>Tanggapin</Button>,
-          <Button variant="contained" color="error">Tanggalin</Button>
+          }}>Accept</Button>,
+          <Button variant="contained" color="error" onClick={()=>{
+            setDel(true)
+            setClicked(row)
+          }}>Delete</Button>
         ];
       },
     },
@@ -207,8 +217,8 @@ export default function Access({ usersRow }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' color="error" onClick={registerAccount} autoFocus>
-            Tanggalin
+          <Button variant='contained' color="error" onClick={deleteAccount} autoFocus>
+            Delete
           </Button>
         </DialogActions>
       </Dialog>

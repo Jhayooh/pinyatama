@@ -30,15 +30,6 @@
     const mapRef = useRef(null);
     const [imgUrls, setImgUrls] = useState({});
 
-    const fetchImage = async (imageUrl) => {
-      try {
-        const imageRef = storage.ref().child(imageUrl);
-        return await imageRef.getDownloadURL();
-      } catch (error) {
-        console.error('Error fetching image:', error);
-        return null;
-      }
-    };
     const currentDate = new Date();
     const [Location, setlocationList] = useState([]);
   
@@ -69,15 +60,19 @@
           });
       
           const filteredData1 = data.docs
-            .filter(doc => doc.data().title === markers[0].title)
-            .map(doc => {
-              const eventsCollection = collection(doc.ref, "events");
-              return { eventsCollection };
-            });
+    .filter(doc => doc.data().title === markers[0].title)
+    .map(doc => {
+        const eventsCollection = collection(doc.ref, "events");
+        console.log("Filtered Data:", eventsCollection);
+        return { eventsCollection };
+    });
+
+console.log("Filtered Data Array:", filteredData1);
+
       
           const resolvedData = await Promise.all(filteredData1);
           setMarkers(markers);
-          console.log("Filtered Data:", resolvedData);
+          console.log("Filtered Data:", filteredData1);
         } catch (err) {
           console.error(err);
         }
@@ -86,6 +81,44 @@
       getData();
     }, []);
     
+    const HeatLayerExample = ({ markers }) => {
+      const map = useMap();
+  
+      useEffect(() => {
+          if (!markers || markers.length === 0) {
+              // Remove any existing heat layer when markers are empty
+              map.eachLayer(layer => {
+                  if (layer instanceof L.HeatLayer) {
+                      map.removeLayer(layer);
+                  }
+              });
+              return;
+          }
+  
+          try {
+              const data = markers.map(marker => [
+                  marker.position[0],
+                  marker.position[1],
+                  1 // Fixed intensity value for all markers
+              ]);
+  
+              // Remove any existing heat layer before adding a new one
+              map.eachLayer(layer => {
+                  if (layer instanceof L.HeatLayer) {
+                      map.removeLayer(layer);
+                  }
+              });
+  
+              L.heatLayer(data, { radius: 80 }).addTo(map); // Increase the radius value to make the points bigger
+          } catch (error) {
+              console.error('Error in HeatLayerExample:', error);
+          }
+      }, [map, markers]);
+  
+      return null;
+  };
+  
+  
 
     return (
       
@@ -103,11 +136,10 @@
             icon={customIcon}
           >
             <Popup>
-              <div>
-                <p>{marker.title}</p>
-                {/* Assuming you want to display the title as the marker info */}
-                <img src={imgUrls} alt="Marker Image" style={{ maxWidth: '100%' }} />
-              </div>
+            <div>
+              <p>{marker.title}</p>
+              
+            </div>
             </Popup>
           </Marker>
         ))}
@@ -119,23 +151,7 @@
     );
   };
 
-  const HeatLayerExample = ({ markers }) => {
-    const map = useMap();
-  
-    useEffect(() => {
-      if (!markers || markers.length === 0) return;
-  
-      const data = markers.map(marker => [
-        marker.position[0],
-        marker.position[1],
-        1 // Fixed intensity value for all markers
-      ]);
-  
-      L.heatLayer(data, { radius: 80 }).addTo(map); // Increase the radius value to make the points bigger
-    }, [map, markers]);
-  
-    return null;
-  };
+ 
   
 
 
