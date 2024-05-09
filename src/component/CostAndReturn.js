@@ -21,11 +21,11 @@ function CostAndReturn({ markers }) {
     data1: [marker.totalSale1],
     data2: [
       {
-          name: "Pinya", y: marker.pricePine
+          name: "Pinya", y: marker.numpine
       },
 
       {
-          name: "Butterball", y: marker.priceBut
+          name: "Butterball", y: marker.numbut
       },
   ],
     data3: [
