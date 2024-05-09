@@ -20,7 +20,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
 
-import { doc, updateDoc, deleteField } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
@@ -42,6 +42,7 @@ export default function Access({ usersRow }) {
     } catch (e) {
       console.log('error deleting document:', e);
     }
+    handleClose()
   }
 
   const deleteAccount = async () => {
