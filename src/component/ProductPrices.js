@@ -169,194 +169,21 @@ export default function ProductPrices({ particularData }) {
     );
   };
 
-  // Modal comp for adding row
-  // const AddRowModal = () => {
+  // Search state
+  const [searchInput, setSearchInput] = useState('');
 
-  //   // Data for adding row
-  //   const [partiName, setPartiName] = useState('')
-  //   const [partiPrice, setPartiPrice] = useState(0)
-  //   const [partiUnit, setPartiUnit] = useState('')
-  //   const [partiParent, setPartiParent] = useState('')
-  //   const [partiParti, setPartiParti] = useState('')
-  //   const [select, setSelect] = useState([])
+  // Handle search input change
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
 
-  //   const [adding, setAdding] = useState(false)
-
-  //   const selection = [
-  //     {
-  //       'name': 'material',
-  //       'data': ['Fertilizer']
-  //     },
-  //     {
-  //       'name': 'labor',
-  //       'data': ['Land Preparation']
-  //     },
-  //   ]
-
-  //   const handleParent = (event) => {
-  //     setPartiParent(event.target.value)
-  //   }
-
-  //   const handleParti = (event) => {
-  //     const value = event.target.value;
-  //     setPartiParti(value);
-  //     if (value !== '') {
-  //       setSelect(selection.filter(item => item.name === value))
-  //     } else {
-  //       setSelect([])
-  //     }
-  //   };
-  //   const handleAdd = async () => {
-  //     const partiRef = collection(db, 'particulars')
-  //     try {
-  //       const newParti = await addDoc(partiRef, {
-  //         name: partiName,
-  //         parent: partiParent.charAt(0).toUpperCase(),
-  //         particular: partiParti.charAt(0).toUpperCase(),
-  //         price: partiPrice,
-  //         unit: partiUnit
-  //       })
-  //       await updateDoc(newParti, { id: newParti.id })
-
-  //       setSaving(false)
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   }
-
-  //   return (
-  //     <Modal
-  //       open={isAdd}
-  //       onClose={() => setIsAdd(false)}
-  //       aria-labelledby="edit-row-modal"
-  //     >
-  //       <Box sx={{
-  //         position: 'absolute',
-  //         top: '50%', left: '50%',
-  //         transform: 'translate(-50%, -50%)',
-  //         bgcolor: 'background.paper',
-  //         borderRadius: '5px',
-  //         boxShadow: 24,
-  //         p: 4,
-  //         width: 380
-  //       }}>
-  //         <>
-  //           <h2 id="edit-row-modal">Add Row</h2>
-  //           <FormControl fullWidth>
-  //             <InputLabel id="partiLabel">Particular</InputLabel>
-  //             <Select
-  //               labelId="partiLabel"
-  //               id="parti"
-  //               value={partiParti}
-  //               label="Particular"
-  //               onChange={handleParti}
-  //               sx={{ mb: 2, width: '100%' }}
-  //             >
-  //               <MenuItem value="">
-  //                 <em>None</em>
-  //               </MenuItem>
-  //               <MenuItem value={"labor"}>Labor</MenuItem>
-  //               <MenuItem value={"material"}>Material</MenuItem>
-  //             </Select>
-  //           </FormControl>
-  //           <FormControl fullWidth>
-  //             <InputLabel id="nameLabel">Name</InputLabel>
-  //             <Select
-  //               labelId="nameLabel"
-  //               id="name"
-  //               value={partiName}
-  //               label="Name"
-  //               onChange={handleParti}
-  //               sx={{ mb: 2, width: '100%' }}
-  //             >
-  //               <MenuItem value="">
-  //                 <em>None</em>
-  //               </MenuItem>
-  //               <MenuItem value={"labor"}>Labor</MenuItem>
-  //               <MenuItem value={"material"}>Material</MenuItem>
-  //             </Select>
-  //           </FormControl>
-  //           <TextField
-  //             label="Name"
-  //             name="name"
-  //             value={partiName}
-  //             onChange={(name) => setPartiName(name.target.value)}
-  //             fullWidth
-  //             sx={{ mb: 2 }}
-  //           />
-  //           <TextField
-  //             label="Price"
-  //             name="price"
-  //             type='number'
-  //             value={partiPrice}
-  //             onChange={(price) => setPartiPrice(price.target.value)}
-  //             fullWidth
-  //             sx={{ mb: 2 }}
-  //           />
-  //           <TextField
-  //             label="Unit"
-  //             name="unit"
-  //             value={partiUnit}
-  //             onChange={(unit) => setPartiUnit(unit.target.value)}
-  //             fullWidth
-  //             sx={{ mb: 2 }}
-  //           />
-  //           <FormControl fullWidth>
-
-  //             <InputLabel id="parentLabel">Parent</InputLabel>
-  //             <Select
-  //               labelId="parentLabel"
-  //               id="parent"
-  //               value={partiParent}
-  //               label="Parent"
-  //               onChange={handleParent}
-  //               sx={{ mb: 2, width: '100%' }}
-  //             >
-  //               <MenuItem value="">
-  //                 <em>None</em>
-  //               </MenuItem>
-  //               {select.map(particular => (
-  //                 particular.data.map(item => (
-  //                   <MenuItem key={item} value={item}>{item}</MenuItem>
-  //                 ))
-  //               ))}
-  //             </Select>
-  //           </FormControl>
-  //           <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-  //             {
-  //               adding
-  //                 ?
-  //                 <CircularProgress />
-  //                 :
-  //                 <>
-  //                   <button className='btn-view-all'
-  //                     onClick={() => {
-  //                       setAdding(true)
-  //                       handleAdd()
-  //                     }}
-  //                   >
-  //                     Add
-  //                   </button>
-  //                   <button className='btn-view-all'
-  //                     onClick={() => setIsAdd(false)}
-  //                   >
-  //                     Cancel
-  //                   </button>
-  //                 </>
-  //             }
-  //           </Box>
-  //         </>
-  //       </Box>
-  //     </Modal>
-  //   );
-  // }
+  // Filtered particularData based on search input
+  const filteredParticularData = particularData.filter(particular => {
+    return particular.name.toLowerCase().includes(searchInput.toLowerCase());
+  });
 
   const [columns, setColumns] = useState([
-    {
-      field: 'index',
-      headerName: 'No.',
-      width: 80
-    },
+   
     {
       field: 'name',
       headerName: 'Particular',
@@ -401,85 +228,66 @@ export default function ProductPrices({ particularData }) {
             onClick={handleEditClick(id, row)}
             color="inherit"
           />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            className="textPrimary"
-            onClick={() => (null)}
-            color="inherit"
-          />
+          // <GridActionsCellItem
+          //   icon={<DeleteIcon />}
+          //   label="Delete"
+          //   className="textPrimary"
+          //   onClick={() => (null)}
+          //   color="inherit"
+          // />
         ];
       },
     },
-
-    // {
-    //   field: 'actions',
-    //   headerName: 'Action',
-    //   minWidth: 160,
-    //   align: 'center',
-    // }
-  ])
+  ]);
 
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
-        {/* <Grid container spacing={4} alignItems='stretch' sx={{height: '100%'}}> */}
-        <Grid lg={12} md={12} sm={12} xs={12} sx={{ height: '100%' }}>
-          <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1, height: '100%', overflowY: 'hidden' }} >
-            {/* <PricesBuilder particularData={particularData} /> */}
-            <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', height: 'auto', pt: 2, pr: 2 }}>
-              <Box
-                component='form'
-                sx={{
-                  p: '2px 4px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  width: 400,
-                  borderRadius: 2.5,
-                  border: '2px solid #dcdcdc',
-                  // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
-                  //             0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                  //             0 3px 1px -2px rgba(0, 0, 0, 0.12)`
-                }}
-              >
-                <IconButton sx={{ p: '7px' }} aria-label="menu">
-                  <SearchIcon />
-                </IconButton>
-                <InputBase
-                  sx={{ ml: 1, flex: 1 }}
-                  placeholder="Search particulars"
-                  inputProps={{ 'aria-label': 'search particulars' }}
-                />
-              </Box>
-
-              {/* <button className='btn-view-all'
-                  onClick={() => setIsAdd(true)}
-                >
-                  Add Data
-                </button> */}
-            </Box>
-            <Box sx={{ overflowY: 'auto', height: '100%' }}>
-              <DataGrid
-                rows={particularData.map((partiData, index) => { return { index: index + 1, ...partiData } })}
-                columns={columns}
-                initialState={{
-                  sorting: {
-                    sortModel: [{ field: 'index', sort: 'asc' }],
-                  },
-                }}
-                editMode='row'
-                rowModesModel={rowModesModel}
-                onRowEditStop={handleRowEditStop}
-                pageSizeOptions={[25, 50, 100]}
-                disableRowSelectionOnClick
-                sx={{ border: 'none', p: 2 }} />
+        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1, height: '100%', overflowY: 'hidden' }} >
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', height: 'auto', pt: 2, pr: 2 }}>
+            <Box
+              component='form'
+              sx={{
+                p: '2px 4px',
+                display: 'flex',
+                alignItems: 'center',
+                width: 400,
+                borderRadius: 2.5,
+                border: '2px solid #dcdcdc',
+              }}
+            >
+              <IconButton sx={{ p: '7px' }} aria-label="menu">
+                <SearchIcon />
+              </IconButton>
+              <InputBase
+                sx={{ ml: 1, flex: 1 }}
+                placeholder="Search particulars"
+                inputProps={{ 'aria-label': 'search particulars' }}
+                value={searchInput}
+                onChange={handleSearchInputChange}
+              />
             </Box>
           </Box>
-        </Grid>
-        {/* </Grid> */}
-        {/* <AddRowModal /> */}
-        <EditRowModal />
+          <Box sx={{ overflowY: 'auto', height: 'calc(100% - 48px)' }}>
+            <DataGrid
+              rows={filteredParticularData.map((partiData, index) => { return { index: index + 1, ...partiData } })}
+              columns={columns}
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: 'index', sort: 'asc' }],
+                },
+              }}
+              editMode='row'
+              rowModesModel={rowModesModel}
+              onRowEditStop={handleRowEditStop}
+              pageSizeOptions={[25, 50, 100]}
+              disableRowSelectionOnClick
+              sx={{ border: 'none', p: 2 }}
+            />
+          </Box>
+        </Box>
       </Box>
+      <EditRowModal />
     </>
   )
 };
