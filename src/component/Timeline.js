@@ -73,6 +73,7 @@ export default function Timeline({ farms, events }) {
                                 <MenuItem value={"Labo"}>Labo</MenuItem>
                                 <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
                                 <MenuItem value={"Paracale"}>Paracale</MenuItem>
+                                <MenuItem value={"Paracale"}>Paracale</MenuItem>
                                 <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
                                 <MenuItem value={"San Vicente"}>San Vicente</MenuItem>
                                 <MenuItem value={"Santa Elena"}>Santa Elena</MenuItem>
