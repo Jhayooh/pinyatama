@@ -8,7 +8,6 @@ import './Farms.css';
 
 function Farms({ events, farms }) {
   console.log(farms);
-  console.log(farms);
   const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
@@ -63,7 +62,8 @@ function Farms({ events, farms }) {
       {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
-            <Box sx={{ width: 280 }}>
+            <Box sx={{ width: 800 }}>
+              
               <FormControl fullWidth size="small">
                 <OutlinedInput
                   id="outlined-adornment-amount"
@@ -75,7 +75,7 @@ function Farms({ events, farms }) {
               </FormControl>
             </Box>
             <br />
-            <Box sx={{ minWidth: 180 }}>
+            <Box sx={{ minWidth: 300 }}>
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                 <Select
@@ -140,7 +140,8 @@ function Farms({ events, farms }) {
             ))}
           </Box>
 
-        </Box>}
+        </Box>
+        }
 
     </Box>
   );

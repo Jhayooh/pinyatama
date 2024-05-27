@@ -28,7 +28,8 @@ export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
   const [confirm, setConfirm] = useState(false)
   const [clicked, setClicked] = useState({})
-  const [del, setDel] = useState(false)
+  const [del, setDel] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
 
   const handleClose = () => {
     setConfirm(false)
@@ -44,16 +45,6 @@ export default function Access({ usersRow }) {
     }
     handleClose()
   }
-
-  const deleteAccount = async () => {
-    const userDocRef = doc(db, 'users', clicked.uid)
-    try {
-      await deleteDoc(userDocRef)
-    } catch (e) {
-      console.log('error deleting document:', e);
-    }
-  }
-
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
     const { email, password } = clicked
@@ -123,6 +114,16 @@ export default function Access({ usersRow }) {
     return row?.uid
   }
 
+  // Handle search input change
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  // Filtered usersRow based on search input (Pangalan)
+  const filteredUsersRow = usersRow.filter(user => {
+    return user.displayName.toLowerCase().includes(searchInput.toLowerCase());
+  });
+
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
@@ -149,8 +150,10 @@ export default function Access({ usersRow }) {
                   </IconButton>
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search Account"
+                    placeholder="Maghanap..."
                     inputProps={{ 'aria-label': 'search farms' }}
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
                   />
                 </Box>
 
@@ -160,7 +163,7 @@ export default function Access({ usersRow }) {
 
                 <DataGrid
                   getRowId={getRowId}
-                  rows={usersRow}
+                  rows={filteredUsersRow}
                   columns={columns}
                   initialState={{
                     sorting: {

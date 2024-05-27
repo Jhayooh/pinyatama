@@ -40,7 +40,7 @@ export default function Timeline({ farms, events }) {
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
                 <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2,borderRadius:20 }}>
                     <Box
-                        sx={{ width: 280 }}
+                        sx={{ width: 800 }}
                     >
                         <FormControl fullWidth size="small" >
                             <OutlinedInput
@@ -52,7 +52,7 @@ export default function Timeline({ farms, events }) {
                             />
                         </FormControl>
                     </Box>
-                    <Box sx={{ minWidth: 180 }}>
+                    <Box sx={{ minWidth: 300 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
@@ -66,19 +66,20 @@ export default function Timeline({ farms, events }) {
                                 <MenuItem value="">
                                     <em>Lahat</em>
                                 </MenuItem>
-                                <MenuItem value={"Basud"}>Basud</MenuItem>
-                                <MenuItem value={"Capalongga"}>Capalongga</MenuItem>
-                                <MenuItem value={"Daet"}>Daet</MenuItem>
-                                <MenuItem value={"Jose Panganiban"}>Jose Panganiban</MenuItem>
-                                <MenuItem value={"Labo"}>Labo</MenuItem>
-                                <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
-                                <MenuItem value={"Paracale"}>Paracale</MenuItem>
-                                <MenuItem value={"Paracale"}>Paracale</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
-                                <MenuItem value={"San Vicente"}>San Vicente</MenuItem>
-                                <MenuItem value={"Santa Elena"}>Santa Elena</MenuItem>
-                                <MenuItem value={"Talisay"}>Talisay</MenuItem>
-                                <MenuItem value={"Vinzons"}>Vinzons</MenuItem>
+                                <MenuItem value={"BASUD"}>Basud</MenuItem>
+                                <MenuItem value={"CAPALONGA"}>Capalonga</MenuItem>
+                                <MenuItem value={"DAET"}>Daet</MenuItem>
+                                <MenuItem value={"JOSE PANGANIBAN"}> Jose Panganiban</MenuItem>
+                                <MenuItem value={"LABO"}>Labo</MenuItem>
+                                <MenuItem value={"MERCEDES"}>Mercedes</MenuItem>
+                                <MenuItem value={"PARACALE"}>Paracale</MenuItem>
+                                <MenuItem value={"SAN LORENZO RUIZ"}>San Lorenzo Ruiz</MenuItem>
+                                <MenuItem value={"SAN VICENTE"}>San Vicente</MenuItem>
+                                <MenuItem value={"SANTA ELENA"}>Santa Elena</MenuItem>
+                                <MenuItem value={"TALISAY"}>Talisay</MenuItem>
+                                <MenuItem value={"VINZONS"}>Vinzons</MenuItem>
+                                
+                                
                             </Select>
                         </FormControl>
                     </Box>
