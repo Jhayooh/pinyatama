@@ -17,11 +17,12 @@ import { useState } from 'react';
 
 // icons
 import SearchIcon from '@mui/icons-material/Search';
+import CheckIcon from '@mui/icons-material/Check';
+import moment from 'moment';
 
-
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { doc, updateDoc } from 'firebase/firestore';
-import { db } from '../../firebase/Config';
+import { doc, updateDoc, deleteField } from 'firebase/firestore';
+import { db, auth } from '../../firebase/Config';
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
 export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
@@ -32,6 +33,15 @@ export default function Access({ usersRow }) {
   const handleClose = () => {
     setConfirm(false)
     setDel(false)
+  }
+
+  const deleteAccount = async () => {
+    const userDocRef = doc(db, 'users', clicked.uid)
+    try {
+      await deleteDoc(userDocRef)
+    } catch (e) {
+      console.log('error deleting document:', e);
+    }
   }
 
   const registerAccount = async () => {

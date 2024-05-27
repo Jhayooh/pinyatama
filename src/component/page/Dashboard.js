@@ -209,7 +209,8 @@ function Dashboard() {
                     >
                       <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
                       <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
-
+                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
 
                       <MenuItem onClick={handleClickNested}>
                         More Options
@@ -224,12 +225,7 @@ function Dashboard() {
                         vertical: 'top',
                         horizontal: 'right',
                       }}
-
-
                     >
-
-                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
                       <MenuItem onClick={() => scrollToRef(pesteRef)}>Mga Peste</MenuItem>
                       <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng pagpapalaki</MenuItem>
                       <MenuItem onClick={() => scrollToRef(bungaRef)}>Pagaani ng bunga</MenuItem>
@@ -396,7 +392,7 @@ const aboutList = [
   {
     url: 'gov.jpg',
     title: "Hon. Ricarte R. Padilla",
-    text: "Governor"
+    text: "Camarines Norte Governor"
   },
   {
     url: "abad.png",
