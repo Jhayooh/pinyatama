@@ -38,14 +38,14 @@ export default function Timeline({ farms, events }) {
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
+                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2,borderRadius:20 }}>
                     <Box
                         sx={{ width: 280 }}
                     >
                         <FormControl fullWidth size="small" >
                             <OutlinedInput
                                 id="outlined-adornment-amount"
-                                placeholder="Search for farms"
+                                placeholder="Maghanap..."
                                 startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
                                 value={search}
                                 onChange={handleSearch}
@@ -56,9 +56,7 @@ export default function Timeline({ farms, events }) {
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
-                                sx={{
-                                    border: "none"
-                                }}
+                                sx={{border: "none"}}
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={mun}
