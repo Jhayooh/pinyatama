@@ -9,7 +9,7 @@ import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
 
 function CustomTabPanel({ children, value, index }) {
-    
+
     return (
         <div
             role="tabpanel"
@@ -46,80 +46,70 @@ export default function FarmTabs({ farm }) {
     };
     const [value, setValue] = useState(0);
     const eventsColl = collection(db, `farms/${farm.id}/events`)
-  const [events] = useCollectionData(eventsColl)
-  const roiColl = collection(db, `farms/${farm.id}/roi`)
-  const [roi] = useCollectionData(roiColl)
-  const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
-  const totalPriceLabor = roi ? roi.reduce((total, roiItem) => total + roiItem.laborTotal, 0) : 0;
-  const totalPriceMaterial = roi ? roi.reduce((total, roiItem) => total + roiItem.materialTotal, 0) : 0;
-  const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
-  const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
-  const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
-  const totalBats = totalBat/2
-  const totalPines = totalPine/8
-const totalPines1 = totalPines+ totalBats
-const priceBat = (totalBat / 2) ;
-const pricePine = (totalPine / 8) ;
-const totalSale = (priceBat + pricePine);
-const numRoi1 = roundToTwoDecimals(numRoi);
-const numRoi2 = (numRoi1 +"%")
-const numIor = (100- numRoi1);
-// Calculate percentages
-const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
-const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
-let markers = [
-    { name: 'totalPines', totalPine: 0 }
-    
-  ];
-  
-  
+    const [events] = useCollectionData(eventsColl)
+    const roiColl = collection(db, `farms/${farm.id}/roi`)
+    const [roi] = useCollectionData(roiColl)
+    const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
+    const totalPriceLabor = roi ? roi.reduce((total, roiItem) => total + roiItem.laborTotal, 0) : 0;
+    const totalPriceMaterial = roi ? roi.reduce((total, roiItem) => total + roiItem.materialTotal, 0) : 0;
+    const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
+    const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
+    const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
+    const totalBats = totalBat / 2
+    const totalPines = totalPine / 8
+    const totalPines1 = totalPines + totalBats
+    const priceBat = (totalBat / 2);
+    const pricePine = (totalPine / 8);
+    const totalSale = (priceBat + pricePine);
+    const numRoi1 = roundToTwoDecimals(numRoi);
+    const numRoi2 = (numRoi1 + "%")
+    const numIor = (100 - numRoi1);
+    // Calculate percentages
+    const percentageMaterial = roundToTwoDecimals((totalPriceMaterial / totalPriceAll) * 100);
+    const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
+    let markers = [
+        { name: 'totalPines', totalPine: 0 }
 
-const percentageBut = roundToTwoDecimals((priceBat / totalSale) * 100);
-const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
-const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
-  // si 3
-  console.log(farm);
-  console.log(events);
-  console.log("test"+totalSale);
+    ];
 
-  console.log("this is "+ totalPines);
+    const percentageBut = roundToTwoDecimals((priceBat / totalSale) * 100);
+    const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
+    const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
+    // si 3
+    console.log(farm);
+    console.log(events);
+    console.log("test" + totalSale);
+
+    console.log("this is " + totalPines);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
     markers = markers.map(marker => {
         switch (marker.name) {
-          case 'totalPines':
-            return { ...marker, totalPine: pricePine,
-                totalPriceMaterial: totalPriceMaterial,
-                totalPriceLabor: totalPriceLabor,
-                totalSale1: totalSale1,
-                priceBut: priceBat,
-                numRoi1:numRoi1,
-                numIor: numIor,
-                numbut: totalBat,
-                numpine: totalPine,
-                numRoi2: numRoi2,
+            case 'totalPines':
+                return {
+                    ...marker,
+                    totalPine: pricePine,
+                    totalPriceMaterial: totalPriceMaterial,
+                    totalPriceLabor: totalPriceLabor,
+                    totalSale1: totalSale1,
+                    priceBut: priceBat,
+                    numRoi1: numRoi1,
+                    numIor: numIor,
+                    numbut: totalBat,
+                    numpine: totalPine,
+                    numRoi2: numRoi2,
+                };
 
-              };
-          
-          default:
-            return marker;
+            default:
+                return marker;
         }
-      });
-      console.log(markers);
- 
-    
-  
+    });
     // Custom rounding function to round to two decimal places
-   
-
-    
     return (
         <>
-            <div style={{ backgroundColor: '#fff' }}> 
-                
-
+            <div style={{ backgroundColor: '#fff' }}>
                 <div >
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
                     <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>This is the location</span>
@@ -174,17 +164,17 @@ const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
                             </Tabs>
                         </div>
                         <CustomTabPanel value={value} index={0}>
-                            <Farm />
+                            <Farm farmId={farm.id} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
-                            <Farm />
+                            <Farm farmId={farm.id} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <FarmsSchedule farms= {farm} events={events} />
-                            
+                            <FarmsSchedule farms={farm} events={events} />
+
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn markers={markers}/>
+                            <CostAndReturn markers={markers} />
                         </CustomTabPanel>
                     </Box>
                 </div>
@@ -212,7 +202,7 @@ const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
 // function FarmTabs() {
 
 //     const tabsTitle = [
-//         "Mga Litrato",   
+//         "Mga Litrato",
 //         "Skedyul ng mga Gawain",
 //         "Pagsusuri ng Gastos at Pagbabalik"
 //     ]
