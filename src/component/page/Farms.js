@@ -1,7 +1,8 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
 import { collection } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
+import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import FarmTabs from './FarmTabs.js';
 import './Farms.css';
@@ -116,23 +117,17 @@ function Farms({ events, farms }) {
                       src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 ' />
                   </div>
                   <div >
-                  <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p>
+                    <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
+                    <Typography variant='subtitle2' component='h2' sx={{paddingLeft:3,}}>{marker.mun}</Typography>
+                  {/* <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p> */}
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <button style={{
-                    marginRight:10,
-                    backgroundColor: 'green',
-                    color: 'white',
-                    borderRadius: 5,
-                    border:0,
-                    padding:5
-                    
-                  }} onClick={() => {
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight:10}}>
+                  <Button variant="contained" color="success" onClick={() => {
                     setShowFarmTabs(true)
                     setindFarm(marker.id)
-
                     console.log("this is the ind farm", marker);
-                  }}>Iba pang Impormasyon</button>
+                  }}>
+                    Iba pang Impormasyon</Button>
                   </div>
 
                 </Box>
