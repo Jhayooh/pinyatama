@@ -97,43 +97,58 @@ import { Gradient } from '@mui/icons-material';
       const map = useMap();
   
       useEffect(() => {
-          if (!markers || markers.length === 0) {
-              // Remove any existing heat layer when markers are empty
-              map.eachLayer(layer => {
-                  if (layer instanceof L.HeatLayer) {
-                      map.removeLayer(layer);
-                  }
-              });
-              return;
-          }
-  
-          try {
-              const data = markers.map(marker => [
-                  marker.position[0],
-                  marker.position[1],
+        if (!markers || markers.length === 0) {
+            // Remove any existing heat layer when markers are empty
+            map.eachLayer(layer => {
+                if (layer instanceof L.HeatLayer) {
+                    map.removeLayer(layer);
+                }
+            });
+            return;
+        }
+    
+        try {
+            // Remove any existing heat layer before adding a new one
+            map.eachLayer(layer => {
+                if (layer instanceof L.HeatLayer) {
+                    map.removeLayer(layer);
+                }
+            });
+    
+            const data = markers.map(marker => [
+                marker.position[0],
+                marker.position[1],
                 90 // Fixed intensity value for all markers
-              ]);
-  
-   // Remove any existing heat layer before adding a new one
-              map.eachLayer(layer => {
-                  if (layer instanceof L.HeatLayer) {
-                      map.removeLayer(layer);
-                  }
-              });
-  
-              L.heatLayer(data, { radius: 50,    gradient: {
-               
-                
-                0.6: 'green',
-               
-                
-            }, blur: 25 }).addTo(map); // Increase the radius value to make the points bigger
-          } catch (error) {
-              console.error('Error in HeatLayerExample:', error);
-          }
-      }, [map, markers]);
-  
-      return null;
+            ]);
+    
+            const gradient = {};
+markers.forEach(marker => {
+    if (marker.title === marker.title) {
+        gradient[1.0] = getStatusColor(marker.cropStage);
+    }
+});
+    
+            L.heatLayer(data, { radius: 50, gradient: gradient, blur: 25 }).addTo(map); // Increase the radius value to make the points bigger
+        } catch (error) {
+            console.error('Error in HeatLayerExample:', error);
+        }
+    }, [map, markers]);
+    
+    const getStatusColor = (status) => {
+        switch (status) {
+            case 'vegetative':
+                return 'green';
+            case 'flowering':
+                return 'yellow';
+            case 'fruiting':
+                return 'orange';
+            default:
+                return 'gray'; // Default color for unknown status
+        }
+    };
+    
+    return null;
+    
   };
  
   // vegetative
