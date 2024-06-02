@@ -1,9 +1,10 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { collection } from 'firebase/firestore';
-import React, { useState, useEffect } from 'react';
-import Button from '@mui/material/Button';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { db } from '../../firebase/Config';
+import './Farms.css';
 import FarmTabs from './FarmTabs.js';
 import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
@@ -101,8 +102,7 @@ function Farms({ events, farms }) {
       {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
-            <Box sx={{ width: 800 }}>
-
+            <Box sx={{ width: 280 }}>
               <FormControl fullWidth size="small">
                 <OutlinedInput
                   id="outlined-adornment-amount"
@@ -114,7 +114,7 @@ function Farms({ events, farms }) {
               </FormControl>
             </Box>
             <br />
-            <Box sx={{ minWidth: 300 }}>
+            <Box sx={{ minWidth: 180 }}>
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                 <Select
@@ -158,14 +158,15 @@ function Farms({ events, farms }) {
                     )}
                   </div>
                   <div >
-                    <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
-                    <Typography variant='subtitle2' component='h2' sx={{paddingLeft:3,}}>{marker.mun}</Typography>
-                  {/* <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p> */}
+                  <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight:10}}>
-                  <Button variant="contained" color="success" onClick={() => {
+                  <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  <Button variant='success'
+                    
+                  onClick={() => {
                     setShowFarmTabs(true)
                     setindFarm(marker.id)
+                    console.log("this is the ind farm", marker);
                   }}>
                     Iba pang Impormasyon</Button>
                   </div>
@@ -176,7 +177,7 @@ function Farms({ events, farms }) {
           </Box>
 
         </Box>
-      }
+        }
 
     </Box>
   );
