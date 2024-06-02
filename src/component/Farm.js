@@ -97,8 +97,6 @@ export default function Farm({ farmId }) {
 
                 const imagePromises = result.items.map(async (itemRef) => {
                     const downloadURL = await getDownloadURL(itemRef);
-                    // const metadata = await itemRef.getMetadata();
-                    console.log("dlURL:", downloadURL);
                     return {
                         src: downloadURL,
                     };
