@@ -37,9 +37,7 @@ function Legend({ legends }) {
 export default function AdminHome({ setSelected, farms, users, events }) {
   const navigate = useNavigate();
   // Redirect to the admin page
-  const redirectToAdmin = () => {
-    navigate('/geo'); // Replace '/admin' with your actual admin route
-  };
+  
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -115,7 +113,7 @@ export default function AdminHome({ setSelected, farms, users, events }) {
           </Box>
         </Grid>
         <Grid lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin} >
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
             <GeoLoc />
           </Box>
         </Grid>

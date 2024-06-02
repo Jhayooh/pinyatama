@@ -16079,7 +16079,7 @@ const polygonCoordsBAS = [
       </SlidingPane>
     ))}
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onClick={redirectToAdmin}>
+      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
         <div className={`map-container ${selectedMarker ? 'map-container-open' : ''}`}>
           <MapContainer
             center={
@@ -16092,7 +16092,7 @@ const polygonCoordsBAS = [
               position: 'absolute',
             }}
             ref={mapRef}
-            onClick={handleMapClick}
+            
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
