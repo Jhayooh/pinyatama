@@ -38,27 +38,25 @@ export default function Timeline({ farms, events }) {
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
+                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2,borderRadius:20 }}>
                     <Box
-                        sx={{ width: 280 }}
+                        sx={{ width: 800 }}
                     >
                         <FormControl fullWidth size="small" >
                             <OutlinedInput
                                 id="outlined-adornment-amount"
-                                placeholder="Search for farms"
+                                placeholder="Maghanap..."
                                 startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
                                 value={search}
                                 onChange={handleSearch}
                             />
                         </FormControl>
                     </Box>
-                    <Box sx={{ minWidth: 180 }}>
+                    <Box sx={{ minWidth: 300 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
-                                sx={{
-                                    border: "none"
-                                }}
+                                sx={{border: "none"}}
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={mun}
@@ -66,20 +64,20 @@ export default function Timeline({ farms, events }) {
                                 onChange={handleChange}
                             >
                                 <MenuItem value="">
-                                    <em>None</em>
+                                    <em>Lahat</em>
                                 </MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Basud</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Capalongga</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>Daet</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}> Jose Panganiban</MenuItem>
-                                <MenuItem value={"Labo"}>Labo</MenuItem>
-                                <MenuItem value={"Mercedes"}>Mercedes</MenuItem>
-                                <MenuItem value={"Mercedes"}>Paracale</MenuItem>
-                                <MenuItem value={"San Lorenzo Ruiz"}>San Lorenzo Ruiz</MenuItem>
-                                <MenuItem value={"Mercedes"}>San Vicente</MenuItem>
-                                <MenuItem value={"Mercedes"}>Santa Elena</MenuItem>
-                                <MenuItem value={"Mercedes"}>Talisay</MenuItem>
-                                <MenuItem value={"Mercedes"}>Vinzons</MenuItem>
+                                <MenuItem value={"BASUD"}>Basud</MenuItem>
+                                <MenuItem value={"CAPALONGA"}>Capalonga</MenuItem>
+                                <MenuItem value={"DAET"}>Daet</MenuItem>
+                                <MenuItem value={"JOSE PANGANIBAN"}> Jose Panganiban</MenuItem>
+                                <MenuItem value={"LABO"}>Labo</MenuItem>
+                                <MenuItem value={"MERCEDES"}>Mercedes</MenuItem>
+                                <MenuItem value={"PARACALE"}>Paracale</MenuItem>
+                                <MenuItem value={"SAN LORENZO RUIZ"}>San Lorenzo Ruiz</MenuItem>
+                                <MenuItem value={"SAN VICENTE"}>San Vicente</MenuItem>
+                                <MenuItem value={"SANTA ELENA"}>Santa Elena</MenuItem>
+                                <MenuItem value={"TALISAY"}>Talisay</MenuItem>
+                                <MenuItem value={"VINZONS"}>Vinzons</MenuItem>
                                 
                                 
                             </Select>

@@ -60,6 +60,10 @@ export default function SideNav() {
   const [events, setEvents] = useState([])
   const [roi, setRoi] = useState([])
 
+  const userRef = collection(db, '/users')
+  const userQuery = query(userRef)
+  const [users] = useCollectionData(userQuery)
+
   const particularsRef = collection(db, '/particulars')
   const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
 
@@ -69,7 +73,6 @@ export default function SideNav() {
   console.log("usersRow", usersRow);
 
   
-
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
     const year = date[0]
@@ -261,7 +264,7 @@ export default function SideNav() {
         </Box>
         :
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} />}
+          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users}/>}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}

@@ -1,45 +1,26 @@
-import { useState } from 'react';
 import {
-  MaterialReactTable,
-  useMaterialReactTable,
-} from 'material-react-table';
-import {
-  Divider,
   Box,
   Button,
-  TextField,
   IconButton,
-  InputBase,
-  Modal,
-  CircularProgress,
-  Alert
+  InputBase
 } from '@mui/material';
-import Grid from '@mui/material/Unstable_Grid2';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Grid from '@mui/material/Unstable_Grid2';
 import {
-  GridRowModes,
-  DataGrid,
-  GridToolbarContainer,
-  GridActionsCellItem,
-  GridRowEditStopReasons,
-} from '@mui/x-data-grid'
+  DataGrid
+} from '@mui/x-data-grid';
+import { useState } from 'react';
 
 // icons
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import moment from 'moment';
 
-
-import { doc, updateDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 
@@ -47,13 +28,23 @@ export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
   const [confirm, setConfirm] = useState(false)
   const [clicked, setClicked] = useState({})
-  const [del, setDel] = useState(false)
+  const [del, setDel] = useState(false);
+  const [searchInput, setSearchInput] = useState('');
 
   const handleClose = () => {
     setConfirm(false)
     setDel(false)
   }
 
+  const deleteAccount = async () => {
+    const userDocRef = doc(db, 'users', clicked.uid)
+    try {
+      await deleteDoc(userDocRef)
+    } catch (e) {
+      console.log('error deleting document:', e);
+    }
+    handleClose()
+  }
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
     const { email, password } = clicked
@@ -72,14 +63,14 @@ export default function Access({ usersRow }) {
   }
 
   const [columns, setColumns] = useState([
-    {
-      field: 'uid',
-      headerName: 'ID',
-      flex: 1,
-    },
+    // {
+    //   field: 'uid',
+    //   headerName: 'ID',
+    //   flex: 1,
+    // },
     {
       field: 'displayName',
-      headerName: 'Name',
+      headerName: 'Pangalan',
       flex: 1,
     },
     {
@@ -105,14 +96,15 @@ export default function Access({ usersRow }) {
       cellClassName: 'actions',
       editable: false,
       getActions: ({ id, row }) => {
-
         return [
           <Button variant="contained" color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
-            console.log("laman ng row sa Acess", row);
           }}>Accept</Button>,
-          <Button variant="contained" color="error">Delete</Button>
+          <Button variant="contained" color="error" onClick={()=>{
+            setDel(true)
+            setClicked(row)
+          }}>Delete</Button>
         ];
       },
     },
@@ -121,6 +113,16 @@ export default function Access({ usersRow }) {
   function getRowId(row) {
     return row?.uid
   }
+
+  // Handle search input change
+  const handleSearchInputChange = (event) => {
+    setSearchInput(event.target.value);
+  };
+
+  // Filtered usersRow based on search input (Pangalan)
+  const filteredUsersRow = usersRow.filter(user => {
+    return user.displayName.toLowerCase().includes(searchInput.toLowerCase());
+  });
 
   return (
     <>
@@ -148,22 +150,20 @@ export default function Access({ usersRow }) {
                   </IconButton>
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search Account"
+                    placeholder="Maghanap..."
                     inputProps={{ 'aria-label': 'search farms' }}
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
                   />
                 </Box>
 
-                <button className='btn-view-all'
-                  onClick={() => null}
-                >
-                  Add Data
-                </button>
+               
               </Box>
               <Box >
 
                 <DataGrid
                   getRowId={getRowId}
-                  rows={usersRow}
+                  rows={filteredUsersRow}
                   columns={columns}
                   initialState={{
                     sorting: {
@@ -193,14 +193,13 @@ export default function Access({ usersRow }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+            Sigurado ka bang gusto mong tanggapin ang account na ito?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button variant='contained' onClick={registerAccount} autoFocus>
-            Accept
+            Tanggapin
           </Button>
         </DialogActions>
       </Dialog>
@@ -222,7 +221,7 @@ export default function Access({ usersRow }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' color="error" onClick={registerAccount} autoFocus>
+          <Button variant='contained' color="error" onClick={deleteAccount} autoFocus>
             Delete
           </Button>
         </DialogActions>

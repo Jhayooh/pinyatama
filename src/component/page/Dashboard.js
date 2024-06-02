@@ -209,7 +209,8 @@ function Dashboard() {
                     >
                       <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
                       <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
-
+                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
+                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
 
                       <MenuItem onClick={handleClickNested}>
                         More Options
@@ -224,12 +225,7 @@ function Dashboard() {
                         vertical: 'top',
                         horizontal: 'right',
                       }}
-
-
                     >
-
-                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
                       <MenuItem onClick={() => scrollToRef(pesteRef)}>Mga Peste</MenuItem>
                       <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng pagpapalaki</MenuItem>
                       <MenuItem onClick={() => scrollToRef(bungaRef)}>Pagaani ng bunga</MenuItem>
@@ -396,7 +392,7 @@ const aboutList = [
   {
     url: 'gov.jpg',
     title: "Hon. Ricarte R. Padilla",
-    text: "Governor"
+    text: "Camarines Norte Governor"
   },
   {
     url: "abad.png",
@@ -511,7 +507,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p2.jpg',
+    url: 'planting.jpg',
     title: 'PAGTATANIM',
     content: ' Itanim ang pinya sa umpisa ng tag-ulan. Doon sa mga lugar na may regular na distribution ng ulan maaring itanim ang pinya ano mang oras basta nakahanda ang pantanim. Sundin ang mga sumusunod:',
     additionalContent: [
@@ -525,7 +521,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p5.jpg',
+    url: 'prep.jpg',
     title: 'PAGHAHANDA NG LUPA',
     content: ' Mahalagang maayos at maihandang mabuti ang lupang tataniman ng pinya. Kailangan itong bungkalin at suyuin ng husto upang makasigurong normal ang paglaki ng halaman. Mas mabuting ihanda ang lupa bago sumapit ang tag-ulan. Mas madaling araruhin at suyurin ang lupa sa ganitong panahon. Kung ang lupa ay maputik at naiipon ang tubig maglagay ng tubig daluyan o kanal. Maari din gumawa ng kama-kama para doon itanim ang pinya. Sundin ang mga sumusunod:',
     additionalContent: ['Linisin ang lugar na tataniman. Tabasin ang mga malalagong damo o kayay gumamit ng gamot na pamatay damo.',
@@ -535,7 +531,7 @@ const imageMenu = [
     width: '20%',
   },
   {
-    url: 'p3.jpg',
+    url: 'damo.jpg',
     title: 'PAGSUGPO NG DAMO',
     content: 'May dalawang paraan ng pagsugpo ng damo sa taniman ng pinya - ang paggamit ng kemikal at ang paggamaso pagpunot ng damo, Bagamat epektibo ang bawat isa mas mabuting pagsamahin ang dalawang paraan upang mas lalong epektibong masugpo ang damo. Narito ang ilang mga hakbang:',
     additionalContent: [
@@ -1568,7 +1564,7 @@ const Benta = () => {
 
 function ScreenShots() {
   return (
-    <div className='screenshot' id="Gallery" style={{ fontFamily: 'Arial' }}>
+    <div className='screenshot' id="Gallery" style={{ fontFamily: 'Arial', }}>
       <span>SCREENSHOTS</span>
       <ImageGal />
     </div>
