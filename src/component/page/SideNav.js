@@ -48,6 +48,7 @@ import Geoloc from './GeoLoc';
 import pineapple from '../image_src/pineapple.json';
 
 
+
 const drawerWidth = 160;
 const bgColor = 'green'
 
@@ -68,8 +69,8 @@ export default function SideNav() {
   const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
 
   const usersRef = collection(db, '/users')
-  const usersQuery = query(usersRef, where("isRegistered", "==", false))
-  const [usersRow, usersLoading, usersError] = useCollectionData(usersQuery)
+  // const usersQuery = query(usersRef, where("isRegistered", "==", false))
+  const [usersRow, usersLoading, usersError] = useCollectionData(usersRef)
   console.log("usersRow", usersRow);
 
   
@@ -230,7 +231,7 @@ export default function SideNav() {
               <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
               <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
               </ListItemIcon>
-              <ListItemText primary='Access Requests' />
+              <ListItemText primary='Accounts' />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
@@ -268,6 +269,7 @@ export default function SideNav() {
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users}/>}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
+  
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
           {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} />}
@@ -276,9 +278,7 @@ export default function SideNav() {
         </Box>
       }
     </Box>
-    
   );
-  
 }
 
 const styles = {

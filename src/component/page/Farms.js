@@ -8,8 +8,6 @@ import FarmTabs from './FarmTabs.js';
 import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../firebase/Config.js';
 
 function Farms({ events, farms }) {
   console.log(farms);
@@ -21,7 +19,6 @@ function Farms({ events, farms }) {
   const [indFarm, setindFarm] = useState('')
   const [timelineFarms, setTimelineFarms] = useState(farms)
   const [timelineEvents, setTimelineEvents] = useState(events)
-  const [imageUrls, setImageUrls] = useState({});
   const [imageUrls, setImageUrls] = useState({});
 
   const handleButtonClick = (title) => {
@@ -140,12 +137,9 @@ function Farms({ events, farms }) {
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
-      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 800 }}>
-
-
               <FormControl fullWidth size="small">
                 <OutlinedInput
                   id="outlined-adornment-amount"
@@ -199,11 +193,6 @@ function Farms({ events, farms }) {
                     ) : (
                       <p>Loading image...</p>
                     )}
-                    {imageUrls[marker.id] ? (
-                      <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
-                    ) : (
-                      <p>Loading image...</p>
-                    )}
                   </div>
                   <div >
                     <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
@@ -224,7 +213,6 @@ function Farms({ events, farms }) {
           </Box>
 
         </Box>
-      }
       }
 
     </Box>
