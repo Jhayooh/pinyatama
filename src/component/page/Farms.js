@@ -8,6 +8,8 @@ import FarmTabs from './FarmTabs.js';
 import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
+import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
+import { storage } from '../../firebase/Config.js';
 
 function Farms({ events, farms }) {
   console.log(farms);
@@ -20,10 +22,12 @@ function Farms({ events, farms }) {
   const [timelineFarms, setTimelineFarms] = useState(farms)
   const [timelineEvents, setTimelineEvents] = useState(events)
   const [imageUrls, setImageUrls] = useState({});
+  const [imageUrls, setImageUrls] = useState({});
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
   };
+
 
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
@@ -95,13 +99,52 @@ function Farms({ events, farms }) {
       console.error('Error fetching images: ', error);
     }
   }
+  useEffect(() => {
+    // Fetch image URLs for filtered markers
+    async function fetchImageUrls() {
+      const urls = {};
+      for (const marker of filteredMarkers) {
+        const url = await getImage(marker.id);
+        if (url) {
+          urls[marker.id] = url;
+        }
+      }
+      setImageUrls(urls);
+    }
+
+    fetchImageUrls();
+  }, [filteredMarkers]);
+
+  async function getImage(id) {
+    const imageUrl = ""
+    try {
+      const listRef = ref(storage, `FarmImages/${id}`);
+      const result = await listAll(listRef);
+      const downloadUrl = await getDownloadURL(result.items[0])
+      // const imagePromises = result.items.map(async (itemRef) => {
+      //   const downloadURL = await getDownloadURL(itemRef);
+      //   // const metadata = await itemRef.getMetadata();
+      //   console.log("dlURL:", downloadURL);
+      //   return {
+      //     src: downloadURL,
+      //   };
+      // });
+      // const imagesData = await Promise.all(imagePromises);
+      // setImages(imagesData);
+      return downloadUrl
+    } catch (error) {
+      console.error('Error fetching images: ', error);
+    }
+  }
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
+      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 800 }}>
+
 
               <FormControl fullWidth size="small">
                 <OutlinedInput
@@ -156,6 +199,11 @@ function Farms({ events, farms }) {
                     ) : (
                       <p>Loading image...</p>
                     )}
+                    {imageUrls[marker.id] ? (
+                      <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
+                    ) : (
+                      <p>Loading image...</p>
+                    )}
                   </div>
                   <div >
                     <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
@@ -176,6 +224,7 @@ function Farms({ events, farms }) {
           </Box>
 
         </Box>
+      }
       }
 
     </Box>
