@@ -1,6 +1,5 @@
 import {
-  Box,
-  Button
+  Box
 } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Grid from '@mui/material/Unstable_Grid2';
@@ -13,7 +12,6 @@ import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import GeoLoc from './GeoLoc';
 import Heatmap from './Heatmap';
-
 
 // icons
 import farmer from '../image_src/farmer.png';
@@ -81,17 +79,15 @@ export default function AdminHome({ setSelected, farms, users, events }) {
           </Box>
         </Grid>
         <Grid lg={3} md={6} sm={6} xs={12}>
-          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }} 
-          onClick={() => setSelected('access')}>
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }} >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
-              
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} />
             </Box>
-          </Button>
+          </Box>
         </Grid>
         <Grid lg={12} sx={{}}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }} >
