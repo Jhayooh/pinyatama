@@ -112,7 +112,7 @@ export default function Access({ usersRow }) {
       editable: false,
       getActions: ({ id, row }) => {
         return [
-          <Button  color="success" conClick={() => {
+          <Button  color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
           
