@@ -1,12 +1,8 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Button } from '@mui/material';
 import { collection } from 'firebase/firestore';
 import React, { useState } from 'react';
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { db } from '../../firebase/Config';
-import './Farms.css';
 import { db } from '../../firebase/Config';
 import './Farms.css';
 import FarmTabs from './FarmTabs.js';
