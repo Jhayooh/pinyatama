@@ -174,6 +174,7 @@ export default function SideNav() {
       // An error happened.
     });
   }
+  console.log("eventsssss:", events);
   return (
     
     <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
