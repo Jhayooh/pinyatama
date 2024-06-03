@@ -58,7 +58,8 @@ export default function Access({ usersRow }) {
     try {
       const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
       await updateDoc(userDocRef, {
-        isRegistered: true
+        isRegistered: true,
+        userUid: userCredential.user.uid
       })
     } catch (error) {
       console.error('Error updating document:', error);

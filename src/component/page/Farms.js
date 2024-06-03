@@ -1,14 +1,15 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { collection } from 'firebase/firestore';
+import React, { useState } from 'react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { db } from '../../firebase/Config';
 import './Farms.css';
-import FarmTabs from './FarmTabs.js';
+import { db } from '../../firebase/Config';
 import './Farms.css';
-import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../firebase/Config.js';
+import FarmTabs from './FarmTabs.js';
 
 function Farms({ events, farms }) {
   console.log(farms);
@@ -20,12 +21,11 @@ function Farms({ events, farms }) {
   const [indFarm, setindFarm] = useState('')
   const [timelineFarms, setTimelineFarms] = useState(farms)
   const [timelineEvents, setTimelineEvents] = useState(events)
-  const [imageUrls, setImageUrls] = useState({});
+
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
   };
-
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
 
@@ -59,47 +59,11 @@ function Farms({ events, farms }) {
     });
   }
 
-  useEffect(() => {
-    // Fetch image URLs for filtered markers
-    async function fetchImageUrls() {
-      const urls = {};
-      for (const marker of filteredMarkers) {
-        const url = await getImage(marker.id);
-        if (url) {
-          urls[marker.id] = url;
-        }
-      }
-      setImageUrls(urls);
-    }
-
-    fetchImageUrls();
-  }, [filteredMarkers]);
-
-  async function getImage(id) {
-    const imageUrl = ""
-    try {
-      const listRef = ref(storage, `FarmImages/${id}`);
-      const result = await listAll(listRef);
-      const downloadUrl = await getDownloadURL(result.items[0])
-      // const imagePromises = result.items.map(async (itemRef) => {
-      //   const downloadURL = await getDownloadURL(itemRef);
-      //   // const metadata = await itemRef.getMetadata();
-      //   console.log("dlURL:", downloadURL);
-      //   return {
-      //     src: downloadURL,
-      //   };
-      // });
-      // const imagesData = await Promise.all(imagePromises);
-      // setImages(imagesData);
-      return downloadUrl
-    } catch (error) {
-      console.error('Error fetching images: ', error);
-    }
-  }
+  console.log("indFarm", GetIndObj(farms, indFarm));
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
+      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 280 }}>
@@ -151,11 +115,8 @@ function Farms({ events, farms }) {
               <Box key={index} sx={{ width: 'calc(30% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
                 <Box sx={{ paddingY: 2, paddingTop: 0 }}>
                   <div className="image-holder">
-                    {imageUrls[marker.id] ? (
-                      <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
-                    ) : (
-                      <p>Loading image...</p>
-                    )}
+                    <img className='img'
+                      src='https://firebasestorage.googleapis.com/v0/b/pinyatama-64d69.appspot.com/o/Farms%2FVwluEFdRHb2KG35mKbNR%2Fw.png?alt=media&token=d7bedb44-2d5c-4c8c-a470-f352e3a74503 ' />
                   </div>
                   <div >
                   <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p>
