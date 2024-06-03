@@ -269,12 +269,9 @@ export default function SideNav() {
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users}/>}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-  
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
           {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} />}
-          
-          
         </Box>
       }
     </Box>

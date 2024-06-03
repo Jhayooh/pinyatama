@@ -90,7 +90,6 @@ export default function Timeline({ farms, events }) {
                                 ))}
                             </Select>
                         </FormControl>
-                        
                     </Box>
                 </Box>
                 <FarmsSchedule farms={timelineFarms} events={timelineEvents} />
