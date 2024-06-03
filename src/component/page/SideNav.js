@@ -271,7 +271,7 @@ export default function SideNav() {
           {selected === 'timeline' && <Timeline farms={farms} events={events} />}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
-          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} />}
+          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
         </Box>
       }
     </Box>

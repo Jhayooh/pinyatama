@@ -7,6 +7,7 @@ import { db } from '../../firebase/Config';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
+import Profile from './Profile';
 
 function CustomTabPanel({ children, value, index }) {
 
@@ -39,8 +40,10 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ farm, setShow }) {
+export default function FarmTabs({ farm, setShow, user }) {
     var farm = farm[0]
+    var user= user[0]
+    console.log("jdhsfai",user);
     const roundToTwoDecimals = (num) => {
         return Math.round(num * 100) / 100;
     };
@@ -106,7 +109,8 @@ export default function FarmTabs({ farm, setShow }) {
                 <Button onClick={()=>{setShow(false)}} >Magbalik {`<<<<<<<<`} </Button>
                 <div>
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-                    <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
+            
+                    <Box style={{ width: '100%', backgroundColor: '#fff', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
                                 value={value}
@@ -118,7 +122,7 @@ export default function FarmTabs({ farm, setShow }) {
                                     label="Farm Profile"
                                     {...a11yProps(0)}
                                     sx={{
-                                        color: value === 0 ? 'orange' : 'white',
+                                        color: value === 0 ? 'orange' : 'green',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -128,7 +132,7 @@ export default function FarmTabs({ farm, setShow }) {
                                     label="Gallery of Farm"
                                     {...a11yProps(1)}
                                     sx={{
-                                        color: value === 1 ? 'orange' : 'white',
+                                        color: value === 1 ? 'orange' : 'green',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -138,7 +142,7 @@ export default function FarmTabs({ farm, setShow }) {
                                     label="Schedule of Farm"
                                     {...a11yProps(2)}
                                     sx={{
-                                        color: value === 2 ? 'orange' : 'white',
+                                        color: value === 2 ? 'orange' : 'green',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -148,7 +152,7 @@ export default function FarmTabs({ farm, setShow }) {
                                     label="Cost and Return Analysis"
                                     {...a11yProps(3)}
                                     sx={{
-                                        color: value === 3 ? 'orange' : 'white',
+                                        color: value === 3 ? 'orange' : 'green',
                                         '&:hover': {
                                             color: 'orange',
                                         },
@@ -157,7 +161,7 @@ export default function FarmTabs({ farm, setShow }) {
                             </Tabs>
                         </div>
                         <CustomTabPanel value={value} index={0}>
-                            <Farm farmId={farm.id} />
+                            <Profile user={user}/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
                             <Farm farmId={farm.id} />
