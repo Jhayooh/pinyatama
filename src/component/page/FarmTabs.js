@@ -105,13 +105,8 @@ export default function FarmTabs({ farm, setShow }) {
             <div style={{ backgroundColor: '#fff' }}>
                 <Button onClick={()=>{setShow(false)}} >Magbalik {`<<<<<<<<`} </Button>
                 <div >
-<<<<<<< Updated upstream
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
             
-=======
-                    <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-                    <span style={{ fontFamily: 'monospace', marginLeft: '20px' }}>This is the location</span>
->>>>>>> Stashed changes
                     <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
