@@ -15,10 +15,14 @@ import {
 } from '@mui/x-data-grid';
 import { useState } from 'react';
 
+
 // icons
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
+
 import moment from 'moment';
+
 
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
@@ -75,9 +79,9 @@ export default function Access({ usersRow }) {
       flex: 1,
     },
     {
-      field: 'email',
-      headerName: 'Email',
-      flex: 1,
+      field:'phoneNumber',
+      headerName:'Phone Number',
+      flex:1,
     },
     {
       field: 'address',
@@ -90,22 +94,37 @@ export default function Access({ usersRow }) {
       },
     },
     {
+      field: 'email',
+      headerName: 'Email',
+      flex: 1,
+    },
+    {
+      field:'status',
+      headerName:'Status',
+      flex:1
+    },
+    {
       field: 'actions',
       type: 'actions',
       headerName: 'Actions',
-      flex: 1.5,
+      flex: 1,
       cellClassName: 'actions',
       editable: false,
       getActions: ({ id, row }) => {
         return [
-          <Button variant="contained" color="success" onClick={() => {
+          <Button  color="success" conClick={() => {
             setConfirm(true)
             setClicked(row)
-          }}>Accept</Button>,
-          <Button variant="contained" color="error" onClick={()=>{
+          
+          }}>
+            <CheckIcon/>
+          </Button>,
+          <Button  color="error" onClick={()=>{
             setDel(true)
             setClicked(row)
-          }}>Delete</Button>
+          }}>
+            <ClearIcon/>
+          </Button>
         ];
       },
     },
