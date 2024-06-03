@@ -1,4 +1,4 @@
-import { Box, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Tab, Tabs, Typography } from '@mui/material';
 import { collection } from 'firebase/firestore';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
@@ -39,7 +39,7 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ farm }) {
+export default function FarmTabs({ farm, setShow }) {
     var farm = farm[0]
     const roundToTwoDecimals = (num) => {
         return Math.round(num * 100) / 100;
@@ -69,18 +69,11 @@ export default function FarmTabs({ farm }) {
     const percentageLabor = roundToTwoDecimals((totalPriceLabor / totalPriceAll) * 100);
     let markers = [
         { name: 'totalPines', totalPine: 0 }
-
     ];
-
     const percentageBut = roundToTwoDecimals((priceBat / totalSale) * 100);
     const percentagePine = roundToTwoDecimals((pricePine / totalSale) * 100);
     const totalSale1 = "₱" + (totalBat + totalPine).toLocaleString();
     // si 3
-    console.log(farm);
-    console.log(events);
-    console.log("test" + totalSale);
-
-    console.log("this is " + totalPines);
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
@@ -110,9 +103,9 @@ export default function FarmTabs({ farm }) {
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <div >
+                <Button onClick={()=>{setShow(false)}} >Magbalik {`<<<<<<<<`} </Button>
+                <div>
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-            
                     <Box style={{ width: '100%', backgroundColor: '#22b14c', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
