@@ -11,7 +11,6 @@ import {
 import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
 
-
 export default function Timeline({ farms, events }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
     const [timelineEvents, setTimelineEvents] = useState(events)
@@ -36,29 +35,10 @@ export default function Timeline({ farms, events }) {
         setTimelineFarms(filteredFarms);
     }, [search, farms, mun]);
 
-    const municipalities = [
-        { name: "Lahat", value: "" },
-        { name: "Basud", value: "BASUD" },
-        { name: "Capalonga", value: "CAPALONGA" },
-        { name: "Daet", value: "DAET (Capital)" },
-        { name: "Jose Panganiban", value: "JOSE PANGANIBAN" },
-        { name: "Labo", value: "LABO" },
-        { name: "Mercedes", value: "MERCEDES" },
-        { name: "Paracale", value: "PARACALE" },
-        { name: "San Lorenzo Ruiz", value: "SAN LORENZO RUIZ" },
-        { name: "San Vicente", value: "SAN VICENTE" },
-        { name: "Santa Elena", value: "SANTA ELENA" },
-        { name: "Talisay", value: "TALISAY" },
-        { name: "Vinzons", value: "VINZONS" }
-    ];
-
-    // Filter the municipalities based on the selected mun
-    const filteredMunicipalities = municipalities.filter(m => m.value === mun);
-
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2, borderRadius: 20 }}>
+                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2,borderRadius:20 }}>
                     <Box
                         sx={{ width: 800 }}
                     >
@@ -76,21 +56,32 @@ export default function Timeline({ farms, events }) {
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
-                                sx={{ border: "none" }}
+                                sx={{border: "none"}}
                                 labelId="demo-simple-select-label"
                                 id="demo-simple-select"
                                 value={mun}
                                 label="Municipality"
                                 onChange={handleChange}
                             >
-                                {municipalities.map((municipality) => (
-                                    <MenuItem key={municipality.value} value={municipality.value}>
-                                        {municipality.name}
-                                    </MenuItem>
-                                ))}
+                                <MenuItem value="">
+                                    <em>Lahat</em>
+                                </MenuItem>
+                                <MenuItem value={"BASUD"}>Basud</MenuItem>
+                                <MenuItem value={"CAPALONGA"}>Capalonga</MenuItem>
+                                <MenuItem value={"DAET"}>Daet</MenuItem>
+                                <MenuItem value={"JOSE PANGANIBAN"}> Jose Panganiban</MenuItem>
+                                <MenuItem value={"LABO"}>Labo</MenuItem>
+                                <MenuItem value={"MERCEDES"}>Mercedes</MenuItem>
+                                <MenuItem value={"PARACALE"}>Paracale</MenuItem>
+                                <MenuItem value={"SAN LORENZO RUIZ"}>San Lorenzo Ruiz</MenuItem>
+                                <MenuItem value={"SAN VICENTE"}>San Vicente</MenuItem>
+                                <MenuItem value={"SANTA ELENA"}>Santa Elena</MenuItem>
+                                <MenuItem value={"TALISAY"}>Talisay</MenuItem>
+                                <MenuItem value={"VINZONS"}>Vinzons</MenuItem>
+                                
+                                
                             </Select>
                         </FormControl>
-                        
                     </Box>
                 </Box>
                 <FarmsSchedule farms={timelineFarms} events={timelineEvents} />
