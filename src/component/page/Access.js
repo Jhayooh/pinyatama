@@ -52,14 +52,12 @@ export default function Access({ usersRow }) {
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
     const { email, password } = clicked
-    console.log(clicked.email);
-    console.log(clicked.password);
     const newAuth = getAuth()
     try {
       const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
       await updateDoc(userDocRef, {
         isRegistered: true,
-        userUid: userCredential.user.uid
+        id: userCredential.user.uid       
       })
     } catch (error) {
       console.error('Error updating document:', error);
@@ -73,7 +71,7 @@ export default function Access({ usersRow }) {
     //   headerName: 'ID',
     //   flex: 1,
     // },
-    {
+    {       
       field: 'displayName',
       headerName: 'Pangalan',
       flex: 1,
@@ -112,7 +110,7 @@ export default function Access({ usersRow }) {
       editable: false,
       getActions: ({ id, row }) => {
         return [
-          <Button  color="success" conClick={() => {
+          <Button  color="success" onClick={() => {
             setConfirm(true)
             setClicked(row)
           
