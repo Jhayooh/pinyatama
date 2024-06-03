@@ -159,7 +159,7 @@ function Farms({ events, farms }) {
                   </div>
                   <div >
                     <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
-                    <Typography variant='subtitle2' component='h2' sx={{paddingLeft:3,}}>{marker.mun}</Typography>
+                    <Typography variant='subtitle2' component='h2' sx={{paddingLeft:3,}}>{marker.brgy},{marker.mun}</Typography>
                   {/* <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p> */}
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight:10}}>
