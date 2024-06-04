@@ -61,11 +61,22 @@ function Farms({ events, farms, users }) {
     });
   }
 
+  async function getImage(id) {
+    try {
+      const listRef = ref(storage, `FarmImages/${id}`);
+      const result = await listAll(listRef);
+      const downloadUrl = await getDownloadURL(result.items[0])
+      return downloadUrl
+    } catch (error) {
+      console.error('Error fetching images: ', error);
+    }
+  }
+  
   useEffect(() => {
     // Fetch image URLs for filtered markers
     async function fetchImageUrls() {
       const urls = {};
-      for (const marker of filteredMarkers) {
+      for (const marker of farms) {
         const url = await getImage(marker.id);
         if (url) {
           urls[marker.id] = url;
@@ -75,68 +86,7 @@ function Farms({ events, farms, users }) {
     }
 
     fetchImageUrls();
-  }, [filteredMarkers]);
-
-  async function getImage(id) {
-    const imageUrl = ""
-    try {
-      const listRef = ref(storage, `FarmImages/${id}`);
-      const result = await listAll(listRef);
-      const downloadUrl = await getDownloadURL(result.items[0])
-      // const imagePromises = result.items.map(async (itemRef) => {
-      //   const downloadURL = await getDownloadURL(itemRef);
-      //   // const metadata = await itemRef.getMetadata();
-      //   console.log("dlURL:", downloadURL);
-      //   return {
-      //     src: downloadURL,
-      //   };
-      // });
-      // const imagesData = await Promise.all(imagePromises);
-      // setImages(imagesData);
-      return downloadUrl
-    } catch (error) {
-      console.error('Error fetching images: ', error);
-    }
-  }
-  useEffect(() => {
-    // Fetch image URLs for filtered markers
-    async function fetchImageUrls() {
-      const urls = {};
-      for (const marker of filteredMarkers) {
-        const url = await getImage(marker.id);
-        if (url) {
-          urls[marker.id] = url;
-        }
-      }
-      setImageUrls(urls);
-    }
-
-    fetchImageUrls();
-  }, [filteredMarkers]);
-
-  async function getImage(id) {
-    const imageUrl = ""
-    try {
-      const listRef = ref(storage, `FarmImages/${id}`);
-      const result = await listAll(listRef);
-      const downloadUrl = await getDownloadURL(result.items[0])
-      // const imagePromises = result.items.map(async (itemRef) => {
-      //   const downloadURL = await getDownloadURL(itemRef);
-      //   // const metadata = await itemRef.getMetadata();
-      //   console.log("dlURL:", downloadURL);
-      //   return {
-      //     src: downloadURL,
-      //   };
-      // });
-      // const imagesData = await Promise.all(imagePromises);
-      // setImages(imagesData);
-      return downloadUrl
-    } catch (error) {
-      console.error('Error fetching images: ', error);
-    }
-  }
-console.log('ejdjs',users)
-console.log('farsjdka',farms)
+  }, []);
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
