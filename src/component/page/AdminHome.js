@@ -36,9 +36,35 @@ function Legend({ legends }) {
   );
 }
 
-export default function AdminHome({ setSelected, farms, users, events }) {
-  const navigate = useNavigate();
+export default function AdminHome({ setSelected, farms, users, events, roi }) {
+  const navigate = useNavigate()
+  
+  const percent = farms.map((farms) => ({
+    data: [farms.mun], // Use your actual data here
+    data2: [farms.title],
+    
+  }));
+  const combinedData = roi.map((roi) => ({
+    data: roi.grossReturn / 8,
+    data1: roi.batterBall / 2,
+    total: (roi.grossReturn / 8) + (roi.batterBall / 2)
+  }));
+  
+  const pieData = combinedData.reduce(
+    (acc, current) => {
+      acc.data += current.data;
+      acc.data1 += current.data1;
+      return acc;
+    },
+    { data: 0, data1: 0 }
+  );
+  
+  // Now you have the combined data and data1 values
+  const pieChartData = [
+    { label: 'Data', value: pieData.data }
+  ];
   // Redirect to the admin page
+  console.log(percent)
   
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
@@ -106,11 +132,14 @@ export default function AdminHome({ setSelected, farms, users, events }) {
               <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
-        <Grid lg={4} >
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }} >
-            <Pie />
-          </Box>
-        </Grid>
+        
+       
+       <Grid lg={4} key="pieChart">
+    <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }}>
+      <Pie data={pieChartData} />
+    </Box>
+  </Grid>
+        
         <Grid lg={8} >
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }} >
             <SplineArea />
