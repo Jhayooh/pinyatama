@@ -2,7 +2,7 @@ import {
   Box,
   Button,
   IconButton,
-  InputBase, 
+  InputBase,
   InputAdornment,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -22,6 +22,7 @@ import { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import BlockIcon from '@mui/icons-material/Block';
 
 import moment from 'moment';
 
@@ -33,8 +34,8 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
 export default function Access({ usersRow }) {
   const [rowModesModel, setRowModesModel] = useState({});
   const [confirm, setConfirm] = useState(false)
-  const [clicked, setClicked] = useState({})
   const [del, setDel] = useState(false);
+  const [clicked, setClicked] = useState({})
   const [searchInput, setSearchInput] = useState('');
 
   const handleClose = () => {
@@ -46,11 +47,40 @@ export default function Access({ usersRow }) {
     const userDocRef = doc(db, 'users', clicked.uid)
     try {
       await deleteDoc(userDocRef)
+      // deletin din ang profile url sa storage
     } catch (e) {
       console.log('error deleting document:', e);
     }
     handleClose()
   }
+
+  const blockAccount = async (row) => {
+    console.log("clickeddddddd", row.uid);
+    const userDocRef = doc(db, 'users', row.uid)
+    try {
+      await updateDoc(userDocRef, {
+        status: 'blocked'
+      })
+      // deletin din ang profile url sa storage
+    } catch (e) {
+      console.log('error blocking document:', e);
+    }
+    handleClose()
+  }
+
+  const unblockAccount = async (row) => {
+    const userDocRef = doc(db, 'users', row.uid)
+    try {
+      await updateDoc(userDocRef, {
+        status: 'active'
+      })
+      // deletin din ang profile url sa storage
+    } catch (e) {
+      console.log('error unblocking document:', e);
+    }
+    handleClose()
+  }
+
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', clicked.uid);
     const { email, password } = clicked
@@ -58,8 +88,8 @@ export default function Access({ usersRow }) {
     try {
       const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
       await updateDoc(userDocRef, {
-        isRegistered: true,
-        id: userCredential.user.uid       
+        status: 'active',
+        id: userCredential.user.uid
       })
     } catch (error) {
       console.error('Error updating document:', error);
@@ -68,18 +98,13 @@ export default function Access({ usersRow }) {
   }
 
   const [columns, setColumns] = useState([
-    // {
-    //   field: 'uid',
-    //   headerName: 'ID',
-    //   flex: 1,
-    // },
-    {       
+    {
       field: 'displayName',
       headerName: 'Pangalan',
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center' }}>
           <InputAdornment position="start">
-            <Avatar src={params.row.photoURL} alt="Profile"  />
+            <Avatar src={params.row.photoURL} alt="Profile" />
           </InputAdornment>
           {params.row.displayName}
         </Box>
@@ -87,9 +112,9 @@ export default function Access({ usersRow }) {
       flex: 1,
     },
     {
-      field:'phoneNumber',
-      headerName:'Phone Number',
-      flex:1,
+      field: 'phoneNumber',
+      headerName: 'Phone Number',
+      flex: 1,
     },
     {
       field: 'address',
@@ -107,10 +132,10 @@ export default function Access({ usersRow }) {
       flex: 1,
     },
     {
-      field:'status',
-      headerName:'Status',
-      flex:1,
-      editable:false,
+      field: 'status',
+      headerName: 'Status',
+      flex: 1,
+      editable: false,
 
     },
     {
@@ -121,20 +146,40 @@ export default function Access({ usersRow }) {
       cellClassName: 'actions',
       editable: false,
       getActions: ({ id, row }) => {
-        return [
-          <Button  color="success" variant='outlined' onClick={() => {
-            setConfirm(true)
-            setClicked(row)
-          }}>
-            <CheckIcon/>
-          </Button>,
-          <Button  color="error" variant='outlined' onClick={()=>{
-            setDel(true)
-            setClicked(row)
-          }}>
-            <ClearIcon/>
-          </Button>
-        ];
+        if (!row) return null
+        const { status } = row
+        if (status === 'pending') {
+          return [
+            <Button color="success" variant='outlined' onClick={() => {
+              setConfirm(true)
+              setClicked(row)
+            }}>
+              <CheckIcon />
+            </Button>,
+            <Button color="error" variant='outlined' onClick={() => {
+              setDel(true)
+              setClicked(row)
+            }}>
+              <ClearIcon />
+            </Button>
+          ]
+        } else if (status === 'active') {
+          return [
+            <Button color="secondary" variant='outlined' onClick={() => {
+              blockAccount(row)
+            }}>
+              <BlockIcon />
+            </Button>
+          ]
+        } else if (status === 'blocked') {
+          return [
+            <Button color="secondary" variant='outlined' onClick={() => {
+              unblockAccount(row)
+            }}>
+              Unblock
+            </Button>
+          ]
+        }
       },
     },
   ])
@@ -185,11 +230,8 @@ export default function Access({ usersRow }) {
                     onChange={handleSearchInputChange}
                   />
                 </Box>
-
-               
               </Box>
               <Box >
-
                 <DataGrid
                   getRowId={getRowId}
                   rows={filteredUsersRow}
