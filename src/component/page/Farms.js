@@ -55,9 +55,9 @@ function Farms({ events, farms, users }) {
     return isMatched;
   });
 
-  function GetIndObj(object, id) {
+  function GetIndObj(object, id, key) {
     return object.filter((obj) => {
-      return obj.id === id;
+      return obj[key] === id;
     });
   }
 
@@ -90,7 +90,7 @@ function Farms({ events, farms, users }) {
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} user={GetIndObj(users, indUser)}/> :
+      {showFarmTabs ? <FarmTabs farms={GetIndObj(farms, indFarm, 'id')} setShow={setShowFarmTabs} user={GetIndObj(users, indUser, 'id')} event={GetIndObj(events, indFarm, 'group')}/> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 800 }}>

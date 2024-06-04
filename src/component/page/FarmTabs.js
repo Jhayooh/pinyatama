@@ -40,10 +40,11 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ farm, setShow, user }) {
-    var farm = farm[0]
-    var user= user[0]
-    console.log("jdhsfai",user);
+export default function FarmTabs({ farms, setShow, user, event}) {
+    var farm = farms[0]
+    var user = user[0]
+    console.log("farm fffffff", farms);
+    console.log("event eeeeee", event);
     const roundToTwoDecimals = (num) => {
         return Math.round(num * 100) / 100;
     };
@@ -102,7 +103,7 @@ export default function FarmTabs({ farm, setShow, user }) {
                 return marker;
         }
     });
-    // Custom rounding function to round to two decimal places
+
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
@@ -167,8 +168,7 @@ export default function FarmTabs({ farm, setShow, user }) {
                             <Farm farmId={farm.id} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            <FarmsSchedule farms={farm} events={events} />
-
+                            <FarmsSchedule farms={farms} events={event} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
                             <CostAndReturn markers={markers} />

@@ -48,6 +48,9 @@ function FarmsSchedule({ farms, events }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
+  console.log("farm sched f:", farms);
+  console.log("farm sched e:", events);
+
   const keys = {
     groupIdKey: 'id',
     groupTitleKey: 'title',
