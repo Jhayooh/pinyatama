@@ -2,8 +2,10 @@ import {
   Box,
   Button,
   IconButton,
-  InputBase
+  InputBase, 
+  InputAdornment,
 } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -74,6 +76,14 @@ export default function Access({ usersRow }) {
     {       
       field: 'displayName',
       headerName: 'Pangalan',
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center' }}>
+          <InputAdornment position="start">
+            <Avatar src={params.row.photoURL} alt="Profile"  />
+          </InputAdornment>
+          {params.row.displayName}
+        </Box>
+      ),
       flex: 1,
     },
     {
@@ -99,7 +109,9 @@ export default function Access({ usersRow }) {
     {
       field:'status',
       headerName:'Status',
-      flex:1
+      flex:1,
+      editable:false,
+
     },
     {
       field: 'actions',
@@ -110,14 +122,13 @@ export default function Access({ usersRow }) {
       editable: false,
       getActions: ({ id, row }) => {
         return [
-          <Button  color="success" onClick={() => {
+          <Button  color="success" variant='outlined' onClick={() => {
             setConfirm(true)
             setClicked(row)
-          
           }}>
             <CheckIcon/>
           </Button>,
-          <Button  color="error" onClick={()=>{
+          <Button  color="error" variant='outlined' onClick={()=>{
             setDel(true)
             setClicked(row)
           }}>

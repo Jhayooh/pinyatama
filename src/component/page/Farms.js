@@ -9,17 +9,19 @@ import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 
-function Farms({ events, farms }) {
+function Farms({ events, farms, users }) {
   console.log(farms);
   const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
   const navigate = useNavigate();
   const [showFarmTabs, setShowFarmTabs] = useState(false);
-  const [indFarm, setindFarm] = useState('')
+  const [indFarm, setindFarm] = useState('');
+  const [indUser, setindUser] = useState('');
   const [timelineFarms, setTimelineFarms] = useState(farms)
   const [timelineEvents, setTimelineEvents] = useState(events)
   const [imageUrls, setImageUrls] = useState({});
+
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
@@ -133,10 +135,12 @@ function Farms({ events, farms }) {
       console.error('Error fetching images: ', error);
     }
   }
+console.log('ejdjs',users)
+console.log('farsjdka',farms)
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} /> :
+      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} user={GetIndObj(users, indUser)}/> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 800 }}>
@@ -203,6 +207,7 @@ function Farms({ events, farms }) {
                   <Button variant="contained" color="success" onClick={() => {
                     setShowFarmTabs(true)
                     setindFarm(marker.id)
+                    setindUser(marker.brgyUID)
                   }}>
                     Iba pang Impormasyon</Button>
                   </div>
