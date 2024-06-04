@@ -23,7 +23,7 @@ const getStatusColor = (status) => {
     case 'Vegetative':
       return 'green';
     case 'Flowering':
-      return 'yellow';
+      return 'red';
     case 'fruiting':
       return 'orange';
     default:
