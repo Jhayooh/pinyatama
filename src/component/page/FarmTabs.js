@@ -8,6 +8,7 @@ import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
 
 function CustomTabPanel({ children, value, index }) {
 
@@ -108,7 +109,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <Button onClick={()=>{setShow(false)}} >Magbalik {`<<<<<<<<`} </Button>
+                <Button onClick={()=>{setShow(false)}} sx={{marginTop:5, marginBottom:0}}> Farms{' >>>'} Information </Button>
                 <div>
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
             

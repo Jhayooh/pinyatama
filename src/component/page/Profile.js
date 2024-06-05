@@ -39,7 +39,7 @@ function Profile({ user, farm }) {
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '500px', width: '700px', justifyContent: 'center' }}>
                     <Typography variant='h6'
                         sx={{
-                            color: 'red',
+                            color: 'green',
                             fontFamily: 'monospace',
                             paddingLeft: 5
                         }}>
@@ -149,7 +149,7 @@ function Profile({ user, farm }) {
                 <Box>
                     <Typography
                         sx={{
-                            color: 'red',
+                            color: 'green',
                             fontFamily: 'monospace',
                             paddingLeft:5,
                             paddingTop:5,
