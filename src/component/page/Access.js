@@ -4,6 +4,7 @@ import {
   IconButton,
   InputBase,
   InputAdornment,
+  Tooltip,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
@@ -22,7 +23,8 @@ import { useState } from 'react';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
-import BlockIcon from '@mui/icons-material/Block';
+import LockIcon from '@mui/icons-material/LockOutlined';
+import Unlockcon from '@mui/icons-material/LockOpenOutlined';
 
 import moment from 'moment';
 
@@ -60,6 +62,7 @@ export default function Access({ usersRow }) {
     try {
       await updateDoc(userDocRef, {
         status: 'blocked'
+
       })
       // deletin din ang profile url sa storage
     } catch (e) {
@@ -150,34 +153,44 @@ export default function Access({ usersRow }) {
         const { status } = row
         if (status === 'pending') {
           return [
-            <Button color="success" variant='outlined' onClick={() => {
-              setConfirm(true)
-              setClicked(row)
-            }}>
-              <CheckIcon />
-            </Button>,
-            <Button color="error" variant='outlined' onClick={() => {
-              setDel(true)
-              setClicked(row)
-            }}>
-              <ClearIcon />
-            </Button>
+            <Tooltip title='Accept'>
+              <Button color="success" variant='outlined' onClick={() => {
+                setConfirm(true)
+                setClicked(row)
+              }}>
+                <CheckIcon />
+              </Button>
+            </Tooltip>,
+            <Tooltip title='Reject'>
+              <Button color="error" variant='outlined' onClick={() => {
+                setDel(true)
+                setClicked(row)
+              }}>
+                <ClearIcon />
+              </Button>
+            </Tooltip>
           ]
         } else if (status === 'active') {
           return [
-            <Button color="secondary" variant='outlined' onClick={() => {
-              blockAccount(row)
-            }}>
-              <BlockIcon />
-            </Button>
+            <Tooltip title='Block Account'>
+              <Button color='error' variant='outlined' onClick={() => {
+                blockAccount(row)
+              }}
+                sx={{ color: 'red' }}>
+                Blocked
+              </Button>
+            </Tooltip>
           ]
         } else if (status === 'blocked') {
           return [
-            <Button color="secondary" variant='outlined' onClick={() => {
-              unblockAccount(row)
-            }}>
-              Unblock
-            </Button>
+            <Tooltip title='Unblock Account'>
+              <Button color='success' variant='outlined' onClick={() => {
+                unblockAccount(row)
+              }}
+                sx={{ color: 'green' }}>
+                Unblocked
+              </Button>
+            </Tooltip>
           ]
         }
       },
@@ -269,7 +282,7 @@ export default function Access({ usersRow }) {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' onClick={registerAccount} autoFocus>
+          <Button color='success' variant='contained' onClick={registerAccount} autoFocus>
             Tanggapin
           </Button>
         </DialogActions>
@@ -282,18 +295,17 @@ export default function Access({ usersRow }) {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Deleting registration
+          {clicked.displayName}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+           Sigurado ka bang gusto mong alisin ang account na ito?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
           <Button variant='contained' color="error" onClick={deleteAccount} autoFocus>
-            Delete
+            Alisin
           </Button>
         </DialogActions>
       </Dialog>

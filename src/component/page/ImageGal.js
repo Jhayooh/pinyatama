@@ -1,7 +1,7 @@
-import React, { Component, useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react';
 import { storage } from '../../firebase/Config';
 import { ref, listAll, getDownloadURL } from 'firebase/storage';
-import './ImageGal.css'
+import './ImageGal.css';
 
 import { Gallery } from "react-grid-gallery";
 
@@ -13,9 +13,15 @@ const ImageGal = () => {
             try {
                 const result = await listAll(listRef);
 
-                const imagePromises = result.items.map(async (itemRef) => {
+                // Shuffle the array of items randomly
+                const shuffledItems = result.items.sort(() => 0.5 - Math.random());
+
+                // Fetch more than 10 random images
+                const randomItems = shuffledItems.slice(0, 20);
+
+                const imagePromises = randomItems.map(async (itemRef) => {
                     const downloadURL = await getDownloadURL(itemRef);
-                    return { src: downloadURL, width: 200, heigth: 480 };
+                    return { src: downloadURL, width: '100%', height: '100%' };
                 });
 
                 const subdirectoryPromises = result.prefixes.map((folderRef) => {
@@ -35,24 +41,19 @@ const ImageGal = () => {
         const fetchImages = async () => {
             const rootRef = ref(storage, 'FarmImages');
             const allImages = await fetchImagesRecursively(rootRef);
-            setImages(allImages);
+
+            // Select 10 random images from the fetched images
+            const selectedImages = allImages.sort(() => .5 - Math.random()).slice(0, 10);
+
+            setImages(selectedImages);
         };
 
         fetchImages();
     }, [storage]);
+
     return (
         <Gallery images={images} margin={8} />
-        // <div className='images-api'>
-        //     {photos.map((photo) => (
-        //         <img key={photo.id} src={photo.url} style={{width: "200px", height: "auto"}}/>
-        //     ))}
-        // </div>
-    )
+    );
 }
-// export default class ImageGal extends Component {
-//   render() {
-//     console.log(getData())
-//     return ()
-//   }
-// }
-export default ImageGal
+
+export default ImageGal;

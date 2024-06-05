@@ -162,7 +162,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
                             </Tabs>
                         </div>
                         <CustomTabPanel value={value} index={0}>
-                            <Profile user={user}/>
+                            <Profile user={user} farm={farm}/>
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
                             <Farm farmId={farm.id} />

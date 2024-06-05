@@ -12,7 +12,7 @@ function ExamplePieChart({ labels, data }) {
       position: 'bottom',
     },
     chart: {
-      // height: 500
+      height:'100%', weight:'100%'
     },
     plotOptions: {
       pie: {
@@ -24,8 +24,7 @@ function ExamplePieChart({ labels, data }) {
     }
   };
 
-  const series = data || [44, 45]; // Use the provided data or a default series
-
+  const series = data || [44, 45]
   return (
     <Chart options={options} series={series} type="pie"  />
   );
