@@ -20,9 +20,9 @@ const Geocollection = collection(db, "farms");
 
 const getStatusColor = (status) => {
   switch (status) {
-    case 'Vegetative':
+    case 'vegetative':
       return 'green';
-    case 'Flowering':
+    case 'flowering':
       return 'red';
     case 'fruiting':
       return 'orange';
@@ -65,13 +65,13 @@ const HeatLayerExample = ({ markers }) => {
 
       // Create a heat layer for each group with different gradient
       Object.keys(groupedMarkers).forEach(cropStage => {
-        const gradientColor = getStatusColor(cropStage);
+        const gradientColor = getStatusColor(cropStage.toString().toLowerCase());
         const gradient = {
           0.2: 'blue',
           0.9: gradientColor
         };
 
-        L.heatLayer(groupedMarkers[cropStage], { radius: 50, gradient, blur: 25 }).addTo(map);
+        L.heatLayer(groupedMarkers[cropStage], { radius: 50, gradient, blur: 10 }).addTo(map);
       });
 
     } catch (error) {

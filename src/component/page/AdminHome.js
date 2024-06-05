@@ -42,21 +42,69 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     return acc;
   }, {});
 
+  const groupedByMun= roi.reduce((acc, roiItem) => {
+    const mun = farms.mun;
+    if (!acc[mun]) {
+      acc[mun] = [];
+    }
+    acc[mun].push(roiItem.grossReturn);
+    return acc;
+  }, {});
+
+  
+
+
   // Create combinedData array with separated grossReturn values by farm title
   const combinedData = Object.keys(groupedByTitle).map(title => ({
     title,
     data: groupedByTitle[title].map(grossReturn => grossReturn / 8),
   }));
 
+  const combinedData1 = Object.keys(groupedByMun).map(mun => ({
+    mun,
+    data: groupedByTitle[mun].map(grossReturn => grossReturn / 8),
+  }));
   // Flatten the data for pie chart
   const pieData = combinedData.flatMap(item => item.data);
+  const pieData1 = combinedData1.flatMap(item => item.data);
   const pieChartData = farms.map((farm, index) => ({
     label: farm.title,
     value: pieData[index] || 0,
+    
   }));
+
+
+  const pieChartData1 = farms.map((farm, index) => ({
+    label: farm.mun,
+    value: pieData1[index] || 0,
+  }));
+
+
+  const combinedData2 = farms.reduce((acc, farm, index) => {
+    const existing = acc.find(item => item.label === farm.mun);
+    if (existing) {
+      existing.value += pieData1[index] || 0;
+    } else {
+      acc.push({
+        label: farm.mun,
+        value: pieData1[index] || 0,
+      });
+    }
+    return acc;
+  }, []);
+  
+
+
 
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
+  const events1 = pieChartData.map(item => item.event);
+  const series2 = pieChartData1.map(item => item.value);
+  const labels2 = pieChartData1.map(item => item.label);
+  const series1 = combinedData2.map(item => item.value);
+  const labels1 = combinedData2.map(item => item.label);
+ 
+
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
@@ -118,14 +166,14 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
-        <Grid item lg={4}>
+        <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }}>
-            <Pie labels={labels} data={series} />
+            <Pie labels={labels1} data={series1} />
           </Box>
         </Grid>
-        <Grid item lg={8}>
+        <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }}>
-            <SplineArea />
+          <Pie labels={labels} data={series} />
           </Box>
         </Grid>
         <Grid item lg={12}>
