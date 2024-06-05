@@ -1566,7 +1566,7 @@ const Benta = () => {
 function ScreenShots() {
   return (
     <div className='screenshot' id="Gallery" style={{ fontFamily: 'Arial', }}>
-      <span>SCREENSHOTS</span>
+      <span>GALLERY</span>
       <ImageGal />
     </div>
   )
