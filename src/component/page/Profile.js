@@ -1,211 +1,239 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import { Avatar, Typography } from '@mui/material';
-import Paper from '@mui/material/Paper'
+import { Avatar, Typography, Paper } from '@mui/material';
 import EmailIcon from '@mui/icons-material/MailOutline';
-import { useResolvedPath } from 'react-router-dom';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import Grid from '@mui/material/Grid';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import { styled } from '@mui/system';
+import FormLabel from '@mui/material/FormLabel';
+
 
 const FormGrid = styled(Grid)(() => ({
     display: 'flex',
     flexDirection: 'column',
 }));
 
-function Profile({ user }) {
+const Container = styled(Box)({
+    display: 'flex',
+    justifyContent: 'space-between',
+});
 
+
+
+function Profile({ user, farm }) {
     return (
-        <div style={{ display: 'flex' }}>
-            <Box
+        <Container>
+            <Paper
+                variant='elevation'
+                elevation={3}
                 sx={{
                     display: 'flex',
-                    flexWrap: 'wrap',
-                    '& > :not(style)': {
-                        m: 1,
+                    height: '100%',
+                    width: '70%',
+                    boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)',
 
-                    },
-                }}
-            >
-                <div style={{ display: 'flex', flexDirection: 'row', gap: 5 }}>
+                }} >
 
-                    <Paper
-                        variant='elevation'
-                        elevation={3}
+                {/* Farm Info */}
+
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '500px', width: '700px', justifyContent: 'center' }}>
+                    <Typography variant='h6'
                         sx={{
-                            display: 'flex',
-                            height: '500px',
-                            width: '700px',
-                            boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)'
-                        }} >
-                        <Grid container spacing={3} sx={{padding:10}}>
-                            <FormGrid item xs={12} md={6}>
-                                <FormLabel htmlFor="first-name" required>
-                                    First name
-                                </FormLabel>
-                                <TextField
-                                    id="outlined-read-only-input"
-                                    defaultValue="Hello World"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
-                                    sx={{ minWidth: '800' }}
-                                />
-                            </FormGrid>
-                            <FormGrid item xs={12} md={6}>
-                                <FormLabel htmlFor="last-name" required>
-                                    Last name
-                                </FormLabel>
-                                <TextField
-                                    id="outlined-read-only-input"
-                             
-                                    defaultValue="Hello World"
-                                    InputProps={{
-                                        readOnly: true,
-                                    }}
-                                    sx={{ minWidth: '800' }}
-                                />
-                            </FormGrid>
-
-                        </Grid>
-                    </Paper>
-
-
-                    <Paper
-                        variant='elevation'
-                        elevation={3}
-                        sx={{
-                            display: 'flex',
-                            height: '500px',
-                            width: '300px',
-                            flexDirection: 'column',
-                            boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)'
+                            color: 'red',
+                            fontFamily: 'monospace',
+                            paddingLeft: 5
                         }}>
-                        <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-                            <Avatar
-                                src={user.photoURL}
-                                alt="Profile"
-                                sx={{
-                                    alignItems: 'center',
-                                    marginTop: 5,
-                                    width: 150,
-                                    height: 150
-                                }} />
-                            <Typography
-                                variant='h6'
-                                component='h6'
-                                style={{
-                                    textAlign: 'center',
-                                    fontWeight: 'bold'
-                                }}>
-                                {user.displayName}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom
-                                sx={{ marginRight: 2 }}>
-                                Barangay:
-                            </Typography>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom>
-                                {user.brgy}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', marginRight: 10 }}>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom
-                            >
-                                Municipality:
-                            </Typography>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom>
-                                {user.mun}
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center', paddingRight: 2 }}>
-                            <EmailIcon sx={{ color: 'blue', marginRight: 1 }} />
-                            <Typography variant="subtitle2" gutterBottom>
-                                Email:
-                            </Typography>
-                        </Box>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography variant="subtitle2" gutterBottom>
-                                {user.email}
-                            </Typography>
-                        </Box>
+                        IMPORMASYON NG BUKID</Typography>
 
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom
-                                sx={{ marginRight: 2 }}>
-                                Phone Number:
-                            </Typography>
-                            <Typography
-                                variant="subtitle2"
-                                gutterBottom>
-                                {user.phoneNumber}
-                            </Typography>
-                        </Box>
-                    </Paper>
-                </div>
+                    <Grid container spacing={3} sx={{ padding: 2, }}>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
+                                Pangalan ng Magsasaka
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.farmerName}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '300px' }}
+                            />
+                        </FormGrid>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="Gender" sx={{ fontWeight: 'bold' }}>
+                                Kasarian
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.sex}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '100px' }}
+                            />
+                        </FormGrid>
+
+                    </Grid>
+                    <Grid container spacing={3} sx={{ padding: 2 }}>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="brgy" sx={{ fontWeight: 'bold' }} >
+                                Baranggay
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.brgy}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '800' }}
+
+                            />
+                        </FormGrid>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="mun" sx={{ fontWeight: 'bold' }} >
+                                Municipality
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.mun}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '800' }}
+                            />
+                        </FormGrid>
+                    </Grid>
+                    <Grid container spacing={3} sx={{ padding: 2 }}>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="plants" sx={{ fontWeight: 'bold' }} >
+                                Bilang ng Tanim
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.plantNumber}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '800' }}
+
+                            />
+                        </FormGrid>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="area" sx={{ fontWeight: 'bold' }} >
+                                Land Area
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.area}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                                sx={{ minWidth: '800' }}
+                            />
+                        </FormGrid>
+                    </Grid>
+                </Box>
+            </Paper>
+
+            <Paper
+                variant='elevation'
+                elevation={5}
+                sx={{
+                    display: 'flex',
+                    height: '500px',
+                    width: '30%',
+                    flexDirection: 'column',
+                    boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)'
+                }}>
+                {/* Profile Info */}
+                <Box>
+                    <Typography
+                        sx={{
+                            color: 'red',
+                            fontFamily: 'monospace',
+                            paddingLeft:5,
+                            paddingTop:5,
+                        }}>
+                        BARANGAY EXTENSIONIST</Typography>
+
+                    <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: 2, marginLeft: 5 }}>
 
 
+                        <Avatar
+                            src={user.photoURL}
+                            alt="Profile"
+                            sx={{
+                                alignItems: 'center',
+                                width: 150,
+                                height: 150
+                            }} />
+                        <Typography
+                            variant='h6'
+                            component='h6'
+                            style={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                color: 'orange'
+                            }}>
+                            {user.displayName}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            Barangay:
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom>
+                            {user.brgy}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', paddingRight: 2 }}>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}
+                        >
+                            Municipality:
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom>
+                            {user.mun}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', alignItems: 'center', paddingRight: 2 }}>
+                        {/* <EmailIcon sx={{ color: 'blue', marginRight: 1 }} /> */}
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            Email:
+                        </Typography>
+                        <Typography variant="subtitle2" gutterBottom>
+                            {user.email}
+                        </Typography>
+                    </Box>
 
-            </Box>
-        </div>
-        // <div>
-        //     <Box
-        //         component="form"
-        //         sx={{
-        //             '& .MuiTextField-root': { m: 1, width: '25ch' },
-        //         }}
-        //         noValidate
-        //         autoComplete="off"
-        //     >
-        //         <Grid container spacing={2}>
-        //             <Grid item xs={12} sm={9}>
-        //                 <TextField
-        //                     id="outlined-read-only-input"
-        //                     label="Farmer Name"
-        //                     defaultValue="Hello World"
-        //                     InputProps={{
-        //                         readOnly: true,
-        //                     }}
-        //                     sx={{minWidth:'800'}}
-        //                 />
-        //             </Grid>
-        //             <Grid item xs={12} sm={3}>
-        //                 <TextField
-        //                     id="outlined-read-only-input"
-        //                     label="Sex"
-        //                     defaultValue="Hello World"
-        //                     InputProps={{
-        //                         readOnly: true,
-        //                     }}
-        //                 />
-        //             </Grid>
-        //             <Grid item xs={12}>
-        //                 <TextField
-        //                     id="outlined-read-only-input"
-        //                     label="Address"
-        //                     defaultValue="Hello World"
-        //                     InputProps={{
-        //                         readOnly: true,
-        //                     }}
-        //                 />
-        //             </Grid>
-        //         </Grid>
-        //     </Box>
-        // </div>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            Phone Number:
+                        </Typography>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom>
+                            {user.phoneNumber}
+                        </Typography>
+                    </Box>
+                </Box>
+            </Paper>
+        </Container>
     );
 };
 

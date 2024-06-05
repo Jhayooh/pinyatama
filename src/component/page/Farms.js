@@ -1,6 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
 import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
-import { collection } from 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -10,32 +9,23 @@ import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 
 function Farms({ events, farms, users }) {
-  console.log(farms);
-  const [markers, setMarkers] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [selectedMunicipality, setSelectedMunicipality] = useState('');
   const navigate = useNavigate();
   const [showFarmTabs, setShowFarmTabs] = useState(false);
-  const [indFarm, setindFarm] = useState('');
-  const [indUser, setindUser] = useState('');
-  const [timelineFarms, setTimelineFarms] = useState(farms)
-  const [timelineEvents, setTimelineEvents] = useState(events)
+  const [indFarm, setIndFarm] = useState('');
+  const [indUser, setIndUser] = useState('');
   const [imageUrls, setImageUrls] = useState({});
-
 
   const handleButtonClick = (title) => {
     navigate('/farmname', { state: { title } });
   };
 
-
   const [mun, setMun] = useState('');
-  const [search, setSearch] = useState('');
-
 
   const handleChange = (event) => {
     setMun(event.target.value);
   };
-
 
   const filteredMarkers = farms.filter(marker => {
     if (!searchInput && !selectedMunicipality) {
@@ -55,12 +45,6 @@ function Farms({ events, farms, users }) {
     return isMatched;
   });
 
-  function GetIndObj(object, id) {
-    return object.filter((obj) => {
-      return obj.id === id;
-    });
-  }
-
   async function getImage(id) {
     try {
       const listRef = ref(storage, `FarmImages/${id}`);
@@ -71,9 +55,8 @@ function Farms({ events, farms, users }) {
       console.error('Error fetching images: ', error);
     }
   }
-  
+
   useEffect(() => {
-    // Fetch image URLs for filtered markers
     async function fetchImageUrls() {
       const urls = {};
       for (const marker of farms) {
@@ -88,10 +71,27 @@ function Farms({ events, farms, users }) {
     fetchImageUrls();
   }, []);
 
+  const municipalities = [
+    { name: "Lahat", value: "" },
+    { name: "Basud", value: "BASUD" },
+    { name: "Capalonga", value: "CAPALONGA" },
+    { name: "Daet", value: "DAET (Capital)" },
+    { name: "Jose Panganiban", value: "JOSE PANGANIBAN" },
+    { name: "Labo", value: "LABO" },
+    { name: "Mercedes", value: "MERCEDES" },
+    { name: "Paracale", value: "PARACALE" },
+    { name: "San Lorenzo Ruiz", value: "SAN LORENZO RUIZ" },
+    { name: "San Vicente", value: "SAN VICENTE" },
+    { name: "Santa Elena", value: "SANTA ELENA" },
+    { name: "Talisay", value: "TALISAY" },
+    { name: "Vinzons", value: "VINZONS" }
+  ];
+
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      {showFarmTabs ? <FarmTabs farm={GetIndObj(farms, indFarm)} setShow={setShowFarmTabs} user={GetIndObj(users, indUser)}/> :
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }}>
+      {showFarmTabs ? 
+        <FarmTabs farms={filteredMarkers.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
+        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: 800 }}>
               <FormControl fullWidth size="small">
@@ -112,26 +112,15 @@ function Farms({ events, farms, users }) {
                   sx={{ border: "none" }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
+                  value={mun}
                   label="Municipality"
-                  value={selectedMunicipality}
                   onChange={handleChange}
                 >
-                  <MenuItem value="">
-                    <em>Lahat</em>
-                  </MenuItem>
-                  <MenuItem value={"BASUD"}>Basud</MenuItem>
-                  <MenuItem value={"CAPALONGA"}>Capalonga</MenuItem>
-                  <MenuItem value={"DAET"}>Daet</MenuItem>
-                  <MenuItem value={"JOSE PANGANIBAN"}> Jose Panganiban</MenuItem>
-                  <MenuItem value={"LABO"}>Labo</MenuItem>
-                  <MenuItem value={"MERCEDES"}>Mercedes</MenuItem>
-                  <MenuItem value={"PARACALE"}>Paracale</MenuItem>
-                  <MenuItem value={"SAN LORENZO RUIZ"}>San Lorenzo Ruiz</MenuItem>
-                  <MenuItem value={"SAN VICENTE"}>San Vicente</MenuItem>
-                  <MenuItem value={"SANTA ELENA"}>Santa Elena</MenuItem>
-                  <MenuItem value={"TALISAY"}>Talisay</MenuItem>
-                  <MenuItem value={"VINZONS"}>Vinzons</MenuItem>
-
+                  {municipalities.map((municipality) => (
+                    <MenuItem key={municipality.value} value={municipality.value}>
+                      {municipality.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Box>
@@ -149,27 +138,23 @@ function Farms({ events, farms, users }) {
                     )}
                   </div>
                   <div >
-                    <Typography variant='h6' component='h6' sx={{paddingLeft:3,color:'orange'}}>{marker.title}</Typography>
-                    <Typography variant='subtitle2' component='h2' sx={{paddingLeft:3,}}>{marker.brgy},{marker.mun}</Typography>
-                  {/* <p style={{ paddingLeft: 20, paddingTop: 10, color: 'orange', fontWeight: 'bold', fontSize: 15 }}>{marker.title}</p> */}
+                    <Typography variant='h6' component='h6' sx={{ paddingLeft: 3, color: 'orange' }}>{marker.title}</Typography>
+                    <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy},{marker.mun}</Typography>
                   </div>
-                  <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight:10}}>
-                  <Button variant="contained" color="success" onClick={() => {
-                    setShowFarmTabs(true)
-                    setindFarm(marker.id)
-                    setindUser(marker.brgyUID)
-                  }}>
-                    Iba pang Impormasyon</Button>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 10 }}>
+                    <Button variant="contained" color="success" onClick={() => {
+                      setShowFarmTabs(true)
+                      setIndFarm(marker.id)
+                      setIndUser(marker.brgyUID)
+                    }}>
+                      Iba pang Impormasyon</Button>
                   </div>
-
                 </Box>
               </Box>
             ))}
           </Box>
-
         </Box>
       }
-
     </Box>
   );
 }
