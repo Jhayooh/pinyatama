@@ -63,7 +63,7 @@ function CostAndReturn({ markers }) {
                 labels={["Materyales", "Labor"]}
                 data={percent[index].data}  // Use item.data to get data for each marker
                 width="100%"
-                height="360"
+                height="100%"
               />
           </Col>
        

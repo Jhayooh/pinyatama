@@ -88,75 +88,73 @@ function Farms({ events, farms, users }) {
   ];
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
-      <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1, height: '100%', overflowY: 'hidden' }} >
-        {showFarmTabs ?
-          <FarmTabs farms={filteredMarkers.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
-          <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
-            <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
-              <Box sx={{ width: 800 }}>
-                <FormControl fullWidth size="small">
-                  <OutlinedInput
-                    id="outlined-adornment-amount"
-                    placeholder="Maghanap..."
-                    startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
-                    value={searchInput}
-                    onChange={(e) => setSearchInput(e.target.value)}
-                  />
-                </FormControl>
-              </Box>
-              <br />
-              <Box sx={{ minWidth: 300 }}>
-                <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
-                  <Select
-                    sx={{ border: "none" }}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={mun}
-                    label="Municipality"
-                    onChange={handleChange}
-                  >
-                    {municipalities.map((municipality) => (
-                      <MenuItem key={municipality.value} value={municipality.value}>
-                        {municipality.name}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </Box>
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      {showFarmTabs ? 
+        <FarmTabs farms={filteredMarkers.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
+        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
+          <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
+            <Box sx={{ width: 800 }}>
+              <FormControl fullWidth size="small">
+                <OutlinedInput
+                  id="outlined-adornment-amount"
+                  placeholder="Maghanap..."
+                  startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                  value={searchInput}
+                  onChange={(e) => setSearchInput(e.target.value)}
+                />
+              </FormControl>
             </Box>
             <br />
-            <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap', paddingLeft: 5 }}>
-              {filteredMarkers.map((marker, index) => (
-                <Box key={index} sx={{ width: 'calc(30% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
-                  <Box sx={{ paddingY: 2, paddingTop: 0 }}>
-                    <div className="image-holder">
-                      {imageUrls[marker.id] ? (
-                        <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
-                      ) : (
-                        <p>Loading image...</p>
-                      )}
-                    </div>
-                    <div >
-                      <Typography variant='h6' component='h6' sx={{ paddingLeft: 3, color: 'orange' }}>{marker.title}</Typography>
-                      <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy},{marker.mun}</Typography>
-                    </div>
-                    <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 10 }}>
-                      <Button variant="contained" color="success" onClick={() => {
-                        setShowFarmTabs(true)
-                        setIndFarm(marker.id)
-                        setIndUser(marker.brgyUID)
-                      }}>
-                        Iba pang Impormasyon</Button>
-                    </div>
-                  </Box>
-                </Box>
-              ))}
+            <Box sx={{ minWidth: 300 }}>
+              <FormControl fullWidth size="small">
+                <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
+                <Select
+                  sx={{ border: "none" }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={mun}
+                  label="Municipality"
+                  onChange={handleChange}
+                >
+                  {municipalities.map((municipality) => (
+                    <MenuItem key={municipality.value} value={municipality.value}>
+                      {municipality.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             </Box>
           </Box>
-        }
-      </Box>
+          <br />
+          <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap', paddingLeft: 5 }}>
+            {filteredMarkers.map((marker, index) => (
+              <Box key={index} sx={{ width: 'calc(30% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
+                <Box sx={{ paddingY: 2, paddingTop: 0 }}>
+                  <div className="image-holder">
+                    {imageUrls[marker.id] ? (
+                      <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
+                    ) : (
+                      <p>Loading image...</p>
+                    )}
+                  </div>
+                  <div >
+                    <Typography variant='h6' component='h6' sx={{ paddingLeft: 3, color: 'orange' }}>{marker.title}</Typography>
+                    <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy},{marker.mun}</Typography>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 10 }}>
+                    <Button variant="contained" color="success" onClick={() => {
+                      setShowFarmTabs(true)
+                      setIndFarm(marker.id)
+                      setIndUser(marker.brgyUID)
+                    }}>
+                      Iba pang Impormasyon</Button>
+                  </div>
+                </Box>
+              </Box>
+            ))}
+          </Box>
+        </Box>
+      }
     </Box>
   );
 }
