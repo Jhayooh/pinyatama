@@ -1,34 +1,41 @@
-import React, { Component } from 'react';
-import CanvasJSReact from '@canvasjs/react-charts';
+  import React from 'react';
+  import Chart from 'react-apexcharts';
 
-var CanvasJS = CanvasJSReact.CanvasJS;
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
-
-class Column extends Component {
-  render() {
-    const { data, title } = this.props;
-
+  function ExampleBarChart({ labels, data }) {
     const options = {
-      exportEnabled: true,
-      height: 280,
-      // width: 380,
-      title: {
-        text: title
+      chart: {
+        type: 'bar',
+       
       },
-      data: [
-        {
-          type: "column",
-          dataPoints: data
+      title: {
+        text: 'Pineapple Price',
+        align: 'left'
+      },
+      legend: {
+        position: 'bottom',
+      },
+      plotOptions: {
+        bar: {
+          horizontal: false,
+          columnWidth: '40%', // Adjust the percentage to control the bar thickness
         }
-      ]
+      },
+      xaxis: {
+        categories: labels || ["Default Label"],
+      },
+      dataLabels: {
+        enabled: true,
+      }
     };
 
+    const series = [{
+      name: 'Production',
+      data: data || [44, 45]
+    }];
+
     return (
-      <>
-        <CanvasJSChart options={options} />
-      </>
+      <Chart options={options} series={series} type="bar" />
     );
   }
-}
 
-export default Column;
+  export default ExampleBarChart;
