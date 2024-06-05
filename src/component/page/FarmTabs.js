@@ -87,7 +87,8 @@ export default function FarmTabs({ farms, setShow, user, event}) {
             case 'totalPines':
                 return {
                     ...marker,
-                    totalPine: pricePine,
+                    totalBats:totalBats,
+                    totalPines: totalPines,
                     totalPriceMaterial: totalPriceMaterial,
                     totalPriceLabor: totalPriceLabor,
                     totalSale1: totalSale1,

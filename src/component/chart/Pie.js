@@ -5,7 +5,7 @@ function ExamplePieChart({ labels, data }) {
   const options = {
     labels: labels || ["Default Label"],
     title: {
-      text: 'Expected QP Production',
+      text: 'labor and Material Cost',
       align: 'left'
     },
     legend: {
@@ -21,7 +21,10 @@ function ExamplePieChart({ labels, data }) {
     },
     dataLabels: {
       padding: 12
-    }
+    },
+    
+      colors: ['#F44336', '#E91E63', '#9C27B0']
+    
   };
 
   const series = data || [44, 45]
