@@ -11,6 +11,7 @@ const ImageGal = () => {
     useEffect(() => {
         const fetchImagesRecursively = async (listRef) => {
             try {
+                // const result = await list(listRef, { maxResults: 2 });
                 const result = await listAll(listRef);
 
                 // Shuffle the array of items randomly

@@ -44,8 +44,6 @@ function a11yProps(index) {
 export default function FarmTabs({ farms, setShow, user, event}) {
     var farm = farms[0]
     var user = user[0]
-    console.log("farm fffffff", farms);
-    console.log("event eeeeee", event);
     const roundToTwoDecimals = (num) => {
         return Math.round(num * 100) / 100;
     };

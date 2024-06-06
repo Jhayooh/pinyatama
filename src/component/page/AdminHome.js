@@ -146,16 +146,18 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #c17a05', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}>
+        <Grid lg={3} md={6} sm={6} xs={12}>
+          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}
+            onClick={() => setSelected('access')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
+
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} alt="Farmer icon" />
             </Box>
-          </Box>
+          </Button>
         </Grid>
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }}>
@@ -163,6 +165,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
+            <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
