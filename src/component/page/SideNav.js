@@ -78,7 +78,6 @@ export default function SideNav() {
   const [modalIdle, setModalIdle] = useState(false)
   const [remainingTime, setRemainingTime] = useState(0)
 
-
   const handleClose = (event, reason) => {
     if (reason && reason === "backdropClick") 
       return;
