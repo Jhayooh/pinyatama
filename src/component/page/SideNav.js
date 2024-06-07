@@ -89,7 +89,7 @@ export default function SideNav() {
     setRemainingTime(30); //set 15 seconds as time remaining
   };
 
-  const { isIdle } = useIdle({ onIdle: handleIdle, idleTime: 0.3 });
+  const { isIdle } = useIdle({ onIdle: handleIdle, idleTime: 1 });
 
   useEffect(() => {
     let interval;

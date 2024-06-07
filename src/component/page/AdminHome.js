@@ -52,8 +52,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     return acc;
   }, {});
 
-
-
   // Create combinedData array with separated grossReturn values by farm title
   const combinedData = Object.keys(groupedByTitle).map(title => ({
     title,
@@ -70,15 +68,12 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const pieChartData = farms.map((farm, index) => ({
     label: farm.title,
     value: pieData[index] || 0,
-    
   }));
-
 
   const pieChartData1 = farms.map((farm, index) => ({
     label: farm.mun,
     value: pieData1[index] || 0,
   }));
-
 
   const combinedData2 = farms.reduce((acc, farm, index) => {
     const existing = acc.find(item => item.label === farm.mun);
@@ -92,9 +87,10 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     }
     return acc;
   }, []);
-  
 
+  function getFarmMun(){
 
+  }
 
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
@@ -104,8 +100,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const series1 = combinedData2.map(item => item.value);
   const labels1 = combinedData2.map(item => item.label);
  
-
-
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -152,7 +146,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
-
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} alt="Farmer icon" />
@@ -165,7 +158,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
-            <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
