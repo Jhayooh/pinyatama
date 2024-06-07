@@ -24,6 +24,12 @@ import {
 } from 'firebase/firestore';
 import { auth, db } from '../../firebase/Config';
 import Farms from './Farms';
+import useIdle from '../provider/IdleTimer'
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // icons
 import access from '../image_src/access.png';
@@ -38,7 +44,6 @@ import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
 
 //
-
 import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Access from './Access';
@@ -46,8 +51,6 @@ import Geoloc from './GeoLoc';
 
 
 import pineapple from '../image_src/pineapple.json';
-
-
 
 const drawerWidth = 160;
 const bgColor = 'green'
@@ -72,8 +75,48 @@ export default function SideNav() {
   // const usersQuery = query(usersRef, where("isRegistered", "==", false))
   const [usersRow, usersLoading, usersError] = useCollectionData(usersRef)
   console.log("usersRow", usersRow);
+  const [modalIdle, setModalIdle] = useState(false)
+  const [remainingTime, setRemainingTime] = useState(0)
 
-  
+
+  const handleClose = (event, reason) => {
+    if (reason && reason === "backdropClick") 
+      return;
+    setModalIdle(false)
+  }
+
+  const handleIdle = () => {
+    setModalIdle(true); //show modal
+    setRemainingTime(30); //set 15 seconds as time remaining
+  };
+
+  const { isIdle } = useIdle({ onIdle: handleIdle, idleTime: 0.3 });
+
+  useEffect(() => {
+    let interval;
+
+    if (isIdle && modalIdle) {
+      interval = setInterval(() => {
+        setRemainingTime(
+          (prevRemainingTime) =>
+            prevRemainingTime > 0 ? prevRemainingTime - 1 : 0 //reduces the second by 1
+        );
+      }, 1000);
+    }
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isIdle, modalIdle]);
+
+  useEffect(() => {
+    if (remainingTime === 0 && modalIdle) {
+      // alert("Time out!");
+      setModalIdle(false);
+      handleSignOut()
+    }
+  }, [remainingTime, modalIdle]);
+
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
     const year = date[0]
@@ -170,6 +213,7 @@ export default function SideNav() {
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
+      handleClose()
       // Sign-out successful.
     }).catch((error) => {
       // An error happened.
@@ -177,72 +221,66 @@ export default function SideNav() {
   }
   console.log("eventsssss:", events);
   return (
-    
-    <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
-      {/* <CssBaseline /> */}
-      {/* <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <Header />
-        </Toolbar>
-      </AppBar> */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, backgroundColor: bgColor, border: 'none', display: 'flex', flexDirection: 'column' },
-        }}
-      >
-        {/* <Toolbar /> */}
-        
-        <Box sx={{ p: 2.4 }}>
-          <img src={logo} alt='pinyatamap logo' width='100%' />
-        </Box>
-        <Divider />
-        <List>
-          <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Dashboard' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
-                <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Timeline' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
-                <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Particulars' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-              <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Accounts' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-              <img src={selected === 'Farms' ? farmSelected : farm} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Farms' />
-            </ListItemButton>
-          </ListItem>
-          {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
+    <>
+      <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
+        <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: { width: drawerWidth, backgroundColor: bgColor, border: 'none', display: 'flex', flexDirection: 'column' },
+          }}
+        >
+          {/* <Toolbar /> */}
+
+          <Box sx={{ p: 2.4 }}>
+            <img src={logo} alt='pinyatamap logo' width='100%' />
+          </Box>
+          <Divider />
+          <List>
+            <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Dashboard' />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  {/* <InboxIcon /> */}
+                  <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Timeline' />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  {/* <InboxIcon /> */}
+                  <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Particulars' />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Accounts' />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton>
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  <img src={selected === 'Farms' ? farmSelected : farm} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Farms' />
+              </ListItemButton>
+            </ListItem>
+            {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
 
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: '35px' }}>
@@ -251,30 +289,53 @@ export default function SideNav() {
                 <ListItemText primary='Logout' sx={{ color: '#fff' }} />
               </ListItemButton>
             </ListItem> */}
-        </List>
-        <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column' , }}>
-          {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
-          <Button variant="contained" onClick={handleSignOut} sx={{backgroundColor:'orange'}}>Log out </Button>
-        </Box>
-      </Drawer>
-      {loading && particularLoading && usersLoading
-        ?
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-            <CircularProgress />
+          </List>
+          <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
+            {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
+            <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
           </Box>
-        </Box>
-        :
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi}/>}
-          {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-          {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-          {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-          {selected === 'Geo' && <Geoloc />}
-          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
-        </Box>
-      }
-    </Box>
+        </Drawer>
+        {loading && particularLoading && usersLoading
+          ?
+          <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+            <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+              <CircularProgress />
+            </Box>
+          </Box>
+          :
+          <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
+            {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
+            {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
+            {selected === 'timeline' && <Timeline farms={farms} events={events} />}
+            {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
+            {selected === 'Geo' && <Geoloc />}
+            {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
+          </Box>
+        }
+      </Box>
+      <Dialog
+        open={modalIdle}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        maxWidth="sm"
+      >
+        <DialogTitle sx={{backgroundColor: 'green', color: 'white'}} id="alert-dialog-title">
+          Idle timeout warning
+        </DialogTitle>
+        <DialogContent dividers>
+          <DialogContentText id="alert-dialog-description">
+            You are about to be logged out due to inactivity. {`(${remainingTime})`}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button variant='contained' color="error" onClick={handleSignOut} autoFocus>
+            Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 }
 
