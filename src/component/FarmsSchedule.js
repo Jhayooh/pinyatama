@@ -11,21 +11,18 @@ import { Box, Paper, Slide } from '@mui/material'
 
 function SideDetails({ farms, eventClicked }) {
   const farmClicked = getObject(farms, "id", eventClicked.group)
-  console.log("this is the farm", farmClicked);
-  console.log('This is the event', eventClicked);
-
-  var options = { 
+  var options = {
     month: 'long', // Full month name
     day: 'numeric', // Day of the month
     year: 'numeric' // Full year
-};
+  };
 
-const startDate = new Date(eventClicked.start_time)
-const endDate = new Date(eventClicked.end_time)
-const formattedStart = startDate.toLocaleDateString('en-US', options);
-const formattedEnd = endDate.toLocaleDateString('en-US', options);
+  const startDate = new Date(eventClicked.start_time)
+  const endDate = new Date(eventClicked.end_time)
+  const formattedStart = startDate.toLocaleDateString('en-US', options);
+  const formattedEnd = endDate.toLocaleDateString('en-US', options);
   return (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)' }}>
+    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1'}}>
       {/* lagay closing */}
       <h2>{farmClicked.farmerName}</h2>
       <h5>Phase:{eventClicked.title}</h5>
@@ -47,9 +44,6 @@ function getObject(list, key, value) {
 function FarmsSchedule({ farms, events }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
-
-  console.log("farm sched f:", farms);
-  console.log("farm sched e:", events);
 
   const keys = {
     groupIdKey: 'id',
@@ -121,12 +115,12 @@ function FarmsSchedule({ farms, events }) {
   // )
 
   return (
-    <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .85)' }} ref={containerRef}>
-      <Box sx={{ overflowY: 'auto', minHeight: 'calc(100% * .85)' }}>
+    <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .85)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
+      <Box sx={{ overflowY: 'auto', minHeight: 'calc(100% * .85)', flex: 1 }}>
         <Timeline
           keys={keys}
           groups={farms}
-          onItemSelect={(item)=>(setClicked(getObject(events, "id", item)))}
+          onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
           itemRenderer={itemRender}
           items={events}
@@ -180,8 +174,11 @@ function FarmsSchedule({ farms, events }) {
           </TimelineHeaders>
         </Timeline >
       </Box >
-      {Object.keys(clicked).length !== 0 &&
-        <SideDetails farms={farms} eventClicked={clicked} />
+      {
+        Object.keys(clicked).length !== 0 &&
+        <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
+          <SideDetails farms={farms} eventClicked={clicked} />
+        </Box>
       }
     </Box>
   )

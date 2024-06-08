@@ -107,7 +107,6 @@ export default function Farm({ farmId }) {
                 console.error('Error fetching images: ', error);
             }
         };
-
         fetchImages();
     }, [farmId]);
 

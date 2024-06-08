@@ -52,8 +52,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     return acc;
   }, {});
 
-
-
   // Create combinedData array with separated grossReturn values by farm title
   const combinedData = Object.keys(groupedByTitle).map(title => ({
     title,
@@ -70,15 +68,12 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const pieChartData = farms.map((farm, index) => ({
     label: farm.title,
     value: pieData[index] || 0,
-    
   }));
-
 
   const pieChartData1 = farms.map((farm, index) => ({
     label: farm.mun,
     value: pieData1[index] || 0,
   }));
-
 
   const combinedData2 = farms.reduce((acc, farm, index) => {
     const existing = acc.find(item => item.label === farm.mun);
@@ -92,9 +87,10 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     }
     return acc;
   }, []);
-  
 
+  function getFarmMun(){
 
+  }
 
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
@@ -104,8 +100,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const series1 = combinedData2.map(item => item.value);
   const labels1 = combinedData2.map(item => item.label);
  
-
-
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -146,8 +140,9 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #c17a05', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}>
+        <Grid lg={3} md={6} sm={6} xs={12}>
+          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}
+            onClick={() => setSelected('access')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
@@ -155,7 +150,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
               <img src={farmer} alt="Farmer icon" />
             </Box>
-          </Box>
+          </Button>
         </Grid>
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }}>
