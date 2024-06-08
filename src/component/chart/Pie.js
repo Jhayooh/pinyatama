@@ -1,7 +1,7 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function ExamplePieChart({ labels, data }) {
+function ExamplePieChart({ labels, data, colors }) {
   const options = {
     labels: labels || ["Default Label"],
     title: {
@@ -23,7 +23,7 @@ function ExamplePieChart({ labels, data }) {
       padding: 12
     },
     
-      colors: ['#F44336', '#E91E63', '#9C27B0']
+      colors: ['#ffd700', '#065535', '#ffff00', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#800080', '#cc0000']
     
   };
 
