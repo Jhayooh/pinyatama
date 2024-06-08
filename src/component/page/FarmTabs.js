@@ -8,6 +8,7 @@ import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
+import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
 
 function CustomTabPanel({ children, value, index }) {
 
@@ -43,8 +44,6 @@ function a11yProps(index) {
 export default function FarmTabs({ farms, setShow, user, event}) {
     var farm = farms[0]
     var user = user[0]
-    console.log("farm fffffff", farms);
-    console.log("event eeeeee", event);
     const roundToTwoDecimals = (num) => {
         return Math.round(num * 100) / 100;
     };
@@ -108,7 +107,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <Button onClick={()=>{setShow(false)}} >Magbalik {`<<<<<<<<`} </Button>
+                <Button onClick={()=>{setShow(false)}} sx={{marginTop:5, marginBottom:0}}> Farms{' >>>'} Information </Button>
                 <div>
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
             

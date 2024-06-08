@@ -67,7 +67,6 @@ function Farms({ events, farms, users }) {
       }
       setImageUrls(urls);
     }
-
     fetchImageUrls();
   }, []);
 
