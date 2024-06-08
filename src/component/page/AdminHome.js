@@ -34,6 +34,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const navigate = useNavigate();
  
   // Group the roi data by farm title
+
+  // Group the roi data by farm title 
   const groupedByTitle = roi.reduce((acc, roiItem) => {
     const title = farms.title;
     if (!acc[title]) {
@@ -51,6 +53,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
     acc[mun].push(roiItem.grossReturn);
     return acc;
   }, {});
+
+
 
   // Create combinedData array with separated grossReturn values by farm title
   const combinedData = Object.keys(groupedByTitle).map(title => ({
@@ -132,7 +136,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #c17a05', borderRadius: 3, backgroundColor: '#af7f35', display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
-              <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
+              <h1 style={{ fontWeight: 'bold' }}>12</h1>
               <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
@@ -176,11 +180,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             <GeoLoc />
           </Box>
         </Grid>
-        <Grid item lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }}>
-            <Heatmap />
-          </Box>
-        </Grid>
+        
       </Grid>
     </Box>
   );

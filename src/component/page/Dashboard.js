@@ -1575,30 +1575,48 @@ function ScreenShots() {
 const agencyList = [
   {
     name: "Camarines Norte",
-    logo: "POCN_logo.png"
+    logo: "POCN_logo.png",
+    url: 'https://www.camsnorte.com'
   },
   {
     name: "OPAG - Cam Norte",
-    logo: "OPAG_logo.png"
+    logo: "OPAG_logo.png",
+    url: 'https://www.opagcamnorte.com'
+  
   },
   {
     name: "DA - CNLRRS",
-    logo: "DOA_logo.png"
+    logo: "DOA_logo.png",
+    url: 'https://www.da.gov.ph'
   }
 ]
 
 function Agencies({ agencyList }) {
+  const handleClick = (url) => {
+    window.open(url, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <div className='agencies' id='Agencies' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
-        <div className='agency'>
-          <img src={require(`../image_src/${agency.logo}`)} alt={agency.name} className="logo-image" />
+        <div 
+          className='agency' 
+          key={agency.name} 
+          onClick={() => handleClick(agency.url)} 
+          style={{ cursor: 'pointer' }}
+        >
+          <img 
+            src={require(`../image_src/${agency.logo}`)} 
+            alt={agency.name} 
+            className="logo-image" 
+          />
           <span>{agency.name}</span>
         </div>
       ))}
     </div>
-  )
+  );
 }
+
 
 function AgencySec() {
   return (

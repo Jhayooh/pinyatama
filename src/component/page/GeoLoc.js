@@ -2,7 +2,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import React, { useRef, useState, useEffect } from 'react';
-import { MapContainer, Marker, Polygon, TileLayer, Tooltip } from 'react-leaflet';
+import { MapContainer, Marker, Polygon, TileLayer, Tooltip, useMap} from 'react-leaflet';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
 import './GeoLoc.css';
@@ -19,9 +19,6 @@ import {
 
 const Geocollection = collection(db, "farms")
 
-const Heatmap = () => {
-  const mapRef = useRef(null);
-}
 
 
 
@@ -42,6 +39,137 @@ const App = () => {
     isPaneOpen: false,
     selectedMarker: null,
   });
+
+  const [markers1, setMarkers1] = useState([]);
+  const bounds = [
+    [14.10051, 122.56002], // Southwest coordinates
+    [14.10051, 123.06002],  // Northeast coordinates
+  ];
+  const [imgUrls, setImgUrls] = useState({});
+  const [locationList, setLocationList] = useState([]);
+  const [isValid, setIsValid] = useState(true);
+
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'vegetative':
+        return 'green';
+      case 'flowering':
+        return 'red';
+      case 'fruiting':
+        return 'orange';
+      default:
+        return 'gray'; // Default color for unknown status
+    }
+  };
+  
+  const HeatLayerExample = ({ markers }) => {
+    const map = useMap();
+  
+    useEffect(() => {
+      if (!markers || markers.length === 0) {
+        // Remove any existing heat layer when markers are empty
+        map.eachLayer(layer => {
+          if (layer instanceof L.HeatLayer) {
+            map.removeLayer(layer);
+          }
+        });
+        return;
+      }
+  
+      try {
+        // Remove any existing heat layer before adding new ones
+        map.eachLayer(layer => {
+          if (layer instanceof L.HeatLayer) {
+            map.removeLayer(layer);
+          }
+        });
+  
+        // Group markers by cropStage
+        const groupedMarkers = markers.reduce((acc, marker) => {
+          const { cropStage } = marker;
+          if (!acc[cropStage]) {
+            acc[cropStage] = [];
+          }
+          acc[cropStage].push([marker.position[0], marker.position[1], 90]); // Fixed intensity value
+          return acc;
+        }, {});
+  
+        // Create a heat layer for each group with different gradient
+        Object.keys(groupedMarkers).forEach(cropStage => {
+          const gradientColor = getStatusColor(cropStage.toString().toLowerCase());
+          const gradient = {
+            0.2: 'blue',
+            0.9: gradientColor
+          };
+  
+          L.heatLayer(groupedMarkers[cropStage], { radius: 50, gradient, blur: 10 }).addTo(map);
+        });
+  
+      } catch (error) {
+        console.error('Error in HeatLayerExample:', error);
+      }
+    }, [map, markers]);
+  
+    return null;
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getDocs(Geocollection);
+        const filteredData = data.docs.map(doc => {
+          const { geopoint, title, cropStage } = doc.data();
+          return { geopoint, title, cropStage };
+        });
+
+        const markers = filteredData.flatMap(({ geopoint, title, cropStage }) => {
+          if (geopoint && Array.isArray(geopoint)) {
+            return geopoint.map(geoPoint => ({
+              cropStage,
+              title,
+              position: [geoPoint.latitude, geoPoint.longitude]
+            }));
+          }
+          if (geopoint) {
+            return [{
+              cropStage,
+              title,
+              position: [geopoint.latitude, geopoint.longitude]
+            }];
+          }
+          return [];
+        });
+
+        const sortedData = await Promise.all(
+          data.docs.map(async (doc) => {
+            const eventsCollection = collection(doc.ref, "events");
+            const snapshot = await getDocs(eventsCollection);
+            const eventsData = snapshot.docs.map((doc) => {
+              const eventData = doc.data();
+              return {
+                ...eventData,
+                date: eventData.start_time.toDate(), // Convert timestamp to date
+                startDate: new Date(eventData.start_time.toDate().getTime() - 86400000), // Set timestamp to be 1 day before the date
+                endDate: eventData.end_time.toDate(), // Set timestamp to be the date itself
+              };
+            });
+            return { title: doc.data().title, eventsData };
+          })
+        );
+
+        const filteredSortedData = sortedData.sort((a, b) => a.title.localeCompare(b.title));
+
+        console.log("Filtered and Sorted Data:", filteredSortedData);
+        setMarkers(markers);
+        setMarkers1(sortedData);
+        console.log("marker data:", markers1);
+      } catch (err) {
+        console.error("Error fetching data:", err);
+      }
+    };
+
+    getData();
+  }, []);
 
   const [markers, setMarkers] = useState([
     { title: 'Farm', Info:'Test' , position: { lat: 14.10051, lng: 122.96002 } },
@@ -16079,7 +16207,7 @@ const polygonCoordsBAS = [
       </SlidingPane>
     ))}
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} >
+      
         <div className={`map-container ${selectedMarker ? 'map-container-open' : ''}`}>
           <MapContainer
             center={
@@ -16092,7 +16220,8 @@ const polygonCoordsBAS = [
               position: 'absolute',
             }}
             ref={mapRef}
-            
+            maxBounds={bounds}
+            maxBoundsViscosity={1.0}
           >
             <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -16191,10 +16320,11 @@ const polygonCoordsBAS = [
           <Polygon positions={polygonSVE} color="white" fillColor="purple" fillOpacity={0.4} weight={2} opacity={0.8} dashArray="5, 10" dashOffset="0"><Tooltip direction="top" offset={[0, -20]}>
             San Vicente
           </Tooltip></Polygon>
+          <HeatLayerExample markers={markers} />
         </MapContainer>
       </div>
       </Box>
-      </Box>
+     
     </div>
   );
 };
