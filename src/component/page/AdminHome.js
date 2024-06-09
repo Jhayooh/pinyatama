@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useState}from 'react';
 import { Box, Button, Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import FarmsSchedule from '../FarmsSchedule';
 import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
+import { Modal } from 'react-bootstrap';
 import GeoLoc from './GeoLoc';
 import Heatmap from './Heatmap';
 
@@ -19,6 +20,7 @@ const legends = [
   "Nagbubunga",
   "Pag-aani"
 ];
+
 
 function Legend({ legends }) {
   return (
@@ -96,6 +98,14 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
 
   }
 
+  const [show, setShow] = useState(false);
+
+const handleClose = () => setShow(false);
+const handleShow = () => {
+  setShow(!show);
+};
+
+
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
   const events1 = pieChartData.map(item => item.event);
@@ -103,9 +113,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const labels2 = pieChartData1.map(item => item.label);
   const series1 = combinedData2.map(item => item.value);
   const labels1 = combinedData2.map(item => item.label);
+
+  
  
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
         <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }}>
           <h1 style={{ color: '#000' }}>Dashboard</h1>
@@ -144,7 +156,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             </Box>
           </Box>
         </Grid>
-        <Grid lg={3} md={6} sm={6} xs={12}>
+        <Box lg={3} md={6} sm={6} xs={12}>
           <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}
             onClick={() => setSelected('access')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
@@ -155,7 +167,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <img src={farmer} alt="Farmer icon" />
             </Box>
           </Button>
-        </Grid>
+        </Box>
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
@@ -165,13 +177,58 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} />
           </Box>
         </Grid>
-        <Grid item lg={6}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }}>
-            <Pie labels={labels1} data={series1} />
-          </Box>
+        <Grid item lg={6} onClick={handleShow} >
+        
+         
+         <>
+         
+          
+            <Pie labels={labels1} data={series1}  />
+           
+            
+            
+            <Modal show={show} onHide={handleClose}>
+  <Modal.Header closeButton>
+    <Modal.Title>Chart Details</Modal.Title>
+  </Modal.Header>
+  <Modal.Body>
+    <table className="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Labour</th>
+          <th>Material</th>
+          
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Data 1</td>
+          <td>Data 2</td>
+          <td>Data 3</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Data 4</td>
+          <td>Data 5</td>
+          <td>Data 6</td>
+        </tr>
+        {/* Add more rows as needed */}
+      </tbody>
+    </table>
+  </Modal.Body>
+  <Modal.Footer>
+    <Button variant="secondary" onClick={handleClose}>
+      Close
+    </Button>
+  </Modal.Footer>
+</Modal>
+
+</>
         </Grid>
         <Grid item lg={6}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%' }}>
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
           <Pie labels={labels} data={series} />
           </Box>
         </Grid>
@@ -182,6 +239,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
         </Grid>
         
       </Grid>
+      
     </Box>
   );
 }
