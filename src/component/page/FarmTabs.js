@@ -50,6 +50,8 @@ export default function FarmTabs({ farms, setShow, user, event}) {
     const [value, setValue] = useState(0);
     const eventsColl = collection(db, `farms/${farm.id}/events`)
     const [events] = useCollectionData(eventsColl)
+    const partColl = collection(db, `farms/${farm.id}/components`);
+  const [parts, loading, error] = useCollectionData(partColl);
     const roiColl = collection(db, `farms/${farm.id}/roi`)
     const [roi] = useCollectionData(roiColl)
     const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
@@ -58,6 +60,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
     const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
     const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
     const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
+    
     const totalBats = totalBat / 2
     const totalPines = totalPine / 8
     const totalPines1 = totalPines + totalBats
@@ -86,6 +89,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
             case 'totalPines':
                 return {
                     ...marker,
+                    
                     totalBats:totalBats,
                     totalPines: totalPines,
                     totalPriceMaterial: totalPriceMaterial,
@@ -171,7 +175,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
                             <FarmsSchedule farms={farms} events={event} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn markers={markers} />
+                            <CostAndReturn markers={markers} parts={parts} />
                         </CustomTabPanel>
                     </Box>
                 </div>
