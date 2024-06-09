@@ -11,6 +11,11 @@ import { storage } from '../../firebase/Config.js';
 function Farms({ events, farms, users }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
   const [filteredUsers, setFilteredUsers] = useState(users);
+  const [newUser, setNewUser] = useState([{
+    uid: '1',
+    id: '',
+    displayName: 'Lahat',
+  }, ...users])
   const [showFarmTabs, setShowFarmTabs] = useState(false);
   const [indFarm, setIndFarm] = useState('');
   const [indUser, setIndUser] = useState('');
@@ -39,12 +44,12 @@ function Farms({ events, farms, users }) {
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       return matchesMunicipality && matchesSearch && matchesUser;
     });
-    const filteredUsers = users.filter((user) => {
+    const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
     });
     setFilteredFarms(filteredFarms);
     setFilteredUsers(filteredUsers);
-  }, [search, farms, mun, users, userFilter]);
+  }, [search, farms, mun, newUser, userFilter]);
 
   async function getImage(id) {
     try {
@@ -116,7 +121,7 @@ function Farms({ events, farms, users }) {
                   onChange={handleUser}
                 >
                   {
-                    users.map((user) => (
+                    newUser.map((user) => (
                       <MenuItem key={user.uid} value={user.id}>
                         {user.displayName}
                       </MenuItem>

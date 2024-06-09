@@ -16,7 +16,11 @@ export default function Timeline({ farms, events, users, setSelected }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
     const [timelineEvents, setTimelineEvents] = useState(events)
     const [filteredUsers, setFilteredUsers] = useState(users);
-
+    const [newUser, setNewUser] = useState([{
+        uid: '1',
+        id: '',
+        displayName: 'Lahat',
+    }, ...users])
     const [mun, setMun] = useState('');
     const [search, setSearch] = useState('');
     const [userFilter, setUserFilter] = useState('');
@@ -40,12 +44,12 @@ export default function Timeline({ farms, events, users, setSelected }) {
             const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
             return matchesMunicipality && matchesSearch && matchesUser;
         });
-        const filteredUsers = users.filter((user) => {
+        const filteredUsers = newUser.filter((user) => {
             return user.displayName.includes(userFilter);
         });
         setTimelineFarms(filteredFarms);
         setFilteredUsers(filteredUsers);
-    }, [search, farms, mun, users, userFilter]);
+    }, [search, farms, mun, newUser, userFilter]);
 
     const municipalities = [
         { name: "Lahat", value: "" },
@@ -116,7 +120,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                                 onChange={handleUser}
                             >
                                 {
-                                    users.map((user) => (
+                                    newUser.map((user) => (
                                         <MenuItem key={user.uid} value={user.id}>
                                             {user.displayName}
                                         </MenuItem>
