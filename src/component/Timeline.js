@@ -37,7 +37,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
         const filteredFarms = farms.filter((farm) => {
             const matchesMunicipality = mun ? farm.mun === mun : true;
             const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-            const matchesUser = userFilter ? farm.brgyUID === userFilter: true;
+            const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
             return matchesMunicipality && matchesSearch && matchesUser;
         });
         const filteredUsers = users.filter((user) => {
@@ -126,7 +126,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </FormControl>
                     </Box>
                 </Box>
-                <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected}/>
+                <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
             </Box>
         </Box>
     )
