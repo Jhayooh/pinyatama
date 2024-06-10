@@ -34,8 +34,7 @@ import { auth } from '../../firebase/Config';
 import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
-
-
+import Footer  from "./Footer";
 
 function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -972,10 +971,10 @@ const Abono = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" justifyContent='center'>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Buwan ng Pag-abono</TableCell>
-                      <TableCell align="center">Uri ng Abono</TableCell>
-                      <TableCell align="center">Dami bawat puno (gramo)</TableCell>
-                      <TableCell align="center">Bilang(sako)</TableCell>
+                      <TableCell sx={{color:'orange'}}>Buwan ng Pag-abono</TableCell>
+                      <TableCell sx={{color:'orange'}} >Uri ng Abono</TableCell>
+                      <TableCell sx={{color:'orange'}}align="center">Dami bawat puno (gramo)</TableCell>
+                      <TableCell sx={{color:'orange'}} align="center">Bilang(sako)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -987,7 +986,7 @@ const Abono = () => {
                         <TableCell component="th" scope="row">
                           {row.buwan}
                         </TableCell>
-                        <TableCell align="center">{row.abono}</TableCell>
+                        <TableCell>{row.abono}</TableCell>
                         <TableCell align="center">{row.dami}</TableCell>
                         <TableCell align="center">{row.bilang}</TableCell>
                       </TableRow>
@@ -1035,11 +1034,11 @@ const Bulaklak = () => {
               <p>1. Maghanda ng ethephon (Ethrel 480), urea, pantakal,timba o timplahang dram at knapsack sprayer.</p>
               <p>Sundin ang timplang 5 cc ethephone + 10 litro ng tubig + 200 gramo ng urea.</p>
               <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <Table sx={{ minWidth: 400 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
                       <TableCell>Gamot</TableCell>
-                      <TableCell align="center">Dami</TableCell>
+                      <TableCell  >Dami</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1051,7 +1050,7 @@ const Bulaklak = () => {
                         <TableCell component="th" scope="row">
                           {rowsData.gamot}
                         </TableCell>
-                        <TableCell align="center">{rowsData.dami}</TableCell>
+                        <TableCell> {rowsData.dami}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1349,8 +1348,8 @@ const Bunga = () => {
                   <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell>Kulay ng Balat Index</TableCell>
-                        <TableCell align="center">Katangian</TableCell>
+                        <TableCell sx={{color:'orange'}}>Kulay ng Balat Index</TableCell>
+                        <TableCell sx={{color:'orange'}} align="center">Katangian</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -1362,7 +1361,7 @@ const Bunga = () => {
                           <TableCell component="th" scope="row">
                             {row.index}
                           </TableCell>
-                          <TableCell align="center">{row.katangian}</TableCell>
+                          <TableCell >{row.katangian}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -1639,10 +1638,13 @@ function AgencySec() {
 
 function ContactSec() {
   return (
+    <>
     <div className='contact-sec' id='Contacts'>
-      <span>GET IN TOUCH</span>
+      <span>CONTACT US</span>
       <Contact />
     </div>
+    <Footer/>
+    </>
     //   <Contacts contactList={contactList} />
     // </div>
   )
