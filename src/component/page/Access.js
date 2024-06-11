@@ -3,8 +3,13 @@ import {
   Button,
   IconButton,
   InputBase,
-  InputAdornment,
   Tooltip,
+  OutlinedInput,
+  Select,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+  MenuItem,
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
@@ -16,7 +21,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import {
   DataGrid
 } from '@mui/x-data-grid';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
 // icons
@@ -39,6 +44,19 @@ export default function Access({ usersRow }) {
   const [del, setDel] = useState(false);
   const [clicked, setClicked] = useState({})
   const [searchInput, setSearchInput] = useState('');
+
+  const [userRow, setUserRow] = useState(usersRow)
+
+  const [mun, setMun] = useState('');
+  const [search, setSearch] = useState('');
+
+  const handleMun = (event) => {
+    setMun(event.target.value);
+  };
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value)
+  };
 
   const handleClose = () => {
     setConfirm(false)
@@ -99,6 +117,22 @@ export default function Access({ usersRow }) {
     }
     handleClose()
   }
+
+  const municipalities = [
+    { name: "Lahat", value: "" },
+    { name: "Basud", value: "BASUD" },
+    { name: "Capalonga", value: "CAPALONGA" },
+    { name: "Daet", value: "DAET (Capital)" },
+    { name: "Jose Panganiban", value: "JOSE PANGANIBAN" },
+    { name: "Labo", value: "LABO" },
+    { name: "Mercedes", value: "MERCEDES" },
+    { name: "Paracale", value: "PARACALE" },
+    { name: "San Lorenzo Ruiz", value: "SAN LORENZO RUIZ" },
+    { name: "San Vicente", value: "SAN VICENTE" },
+    { name: "Santa Elena", value: "SANTA ELENA" },
+    { name: "Talisay", value: "TALISAY" },
+    { name: "Vinzons", value: "VINZONS" }
+  ];
 
   const [columns, setColumns] = useState([
     {
@@ -210,6 +244,18 @@ export default function Access({ usersRow }) {
     setSearchInput(event.target.value);
   };
 
+  useEffect(() => {
+    const filteredUser = usersRow.filter((user) => {
+      const matchesSearch = user.displayName.toLowerCase().includes(search.toLowerCase())
+      const matchesMunicipality = mun ? user.mun === mun : true;
+      return matchesSearch && matchesMunicipality;
+    })
+    setUserRow(filteredUser)
+  }, [search, usersRow, mun])
+
+  console.log("userRowwwwwwww=====", usersRow);
+
+
   // Filtered usersRow based on search input (Pangalan)
   const filteredUsersRow = usersRow.filter(user => {
     return user.displayName.toLowerCase().includes(searchInput.toLowerCase());
@@ -221,37 +267,46 @@ export default function Access({ usersRow }) {
         <Grid container spacing={4} alignItems='stretch'>
           <Grid lg={12} md={12} sm={12} xs={12} sx={{}}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1 }} >
-              <Box sx={{ marginBottom: 1.5, display: 'flex', width: 1, justifyContent: 'flex-end', height: 'auto', gap: 2, pt: 2, pr: 2 }}>
+              <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2, borderRadius: 20 }}>
                 <Box
-                  component='form'
-                  sx={{
-                    p: '2px 4px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    width: 400,
-                    borderRadius: 2.5,
-                    border: '2px solid #dcdcdc',
-                    // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
-                    //             0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                    //             0 3px 1px -2px rgba(0, 0, 0, 0.12)`
-                  }}
+                  sx={{ width: 800 }}
                 >
-                  <IconButton sx={{ p: '7px' }} aria-label="menu">
-                    <SearchIcon />
-                  </IconButton>
-                  <InputBase
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="Maghanap..."
-                    inputProps={{ 'aria-label': 'search farms' }}
-                    value={searchInput}
-                    onChange={handleSearchInputChange}
-                  />
+                  <FormControl fullWidth size="small" >
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      placeholder="Maghanap..."
+                      startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                      value={search}
+                      onChange={handleSearch}
+                    />
+                  </FormControl>
+                </Box>
+                <Box sx={{ minWidth: 300 }}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
+                    <Select
+                      sx={{ border: "none" }}
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={mun}
+                      label="Municipality"
+                      onChange={handleMun}
+                    >
+                      {
+                        municipalities.map((municipality) => (
+                          <MenuItem key={municipality.value} value={municipality.value}>
+                            {municipality.name}
+                          </MenuItem>
+                        ))
+                      }
+                    </Select>
+                  </FormControl>
                 </Box>
               </Box>
               <Box >
                 <DataGrid
                   getRowId={getRowId}
-                  rows={filteredUsersRow}
+                  rows={userRow}
                   columns={columns}
                   initialState={{
                     sorting: {
@@ -303,7 +358,7 @@ export default function Access({ usersRow }) {
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-           Sigurado ka bang gusto mong alisin ang account na ito?
+            Sigurado ka bang gusto mong alisin ang account na ito?
           </DialogContentText>
         </DialogContent>
         <DialogActions>
