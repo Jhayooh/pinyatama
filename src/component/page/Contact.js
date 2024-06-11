@@ -6,45 +6,45 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import emailjs from "emailjs-com";
 import React, { useState } from "react";
 
-const initialState = {
-    name: "",
-    email: "",
-    message: "",
-};
+// const initialState = {
+//     name: "",
+//     email: "",
+//     message: "",
+// };
 
 export const Contact = () => {
-    const [{ name, email, message }, setState] = useState(initialState);
+    // const [{ name, email, message }, setState] = useState(initialState);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setState((prevState) => ({ ...prevState, [name]: value }));
-    };
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+    //     setState((prevState) => ({ ...prevState, [name]: value }));
+    // };
 
-    const clearState = () => setState({ ...initialState });
+    // const clearState = () => setState({ ...initialState });
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(name, email, message);
+    // const handleSubmit = (e) => {
+    //     e.preventDefault();
+    //     console.log(name, email, message);
 
-        // Replace below with your own Service ID, Template ID, and Public Key from your EmailJS account
-        emailjs
-            .sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", e.target, "YOUR_PUBLIC_KEY")
-            .then(
-                (result) => {
-                    console.log(result.text);
-                    clearState();
-                },
-                (error) => {
-                    console.log(error.text);
-                }
-            );
-    };
+    //     // Replace below with your own Service ID, Template ID, and Public Key from your EmailJS account
+    //     emailjs
+    //         .sendForm("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", e.target, "YOUR_PUBLIC_KEY")
+    //         .then(
+    //             (result) => {
+    //                 console.log(result.text);
+    //                 clearState();
+    //             },
+    //             (error) => {
+    //                 console.log(error.text);
+    //             }
+    //         );
+    // };
 
     return (
         <div id="contact" style={{ fontFamily: 'Arial', borderColor: 'green' }}>
             <div className="container" style={{ alignContent: 'center', alignItems: 'center' }}>
                 <div className="row">
-                    <div className="col-md-6">
+                    {/* <div className="col-md-6">
                         <div className="section-title">
                             <p style={{ fontFamily: 'Arial', fontSize: 20 }}>
                                 Please fill out the form below to send us an email and we will get back to you as soon as possible.
@@ -101,43 +101,46 @@ export const Contact = () => {
                                 Send Message
                             </button>
                         </form>
-                    </div>
-                    <div className="col-md-6">
+                    </div> */}
                         <div className="contact-info">
-                            <h3 style={{ color: 'orange' }}>Contact Info</h3>
-                            <p style={{ color: 'black' }}>
-                                <span style={{ color: 'green' }}>
+                            <div className="row">
+                                <div className="col-md-6">
+                                <p style={{ color: 'black' }}>
+                                    <span style={{ color: 'green' }}>
                                     <LocationOnIcon /> Address: <br />
-                                </span>
-                                2nd Floor Provincial Capitol Annex Building <br />
-                                Brgy. III, Daet Camarines Norte
-                            </p>
-                            <p style={{ color: 'black' }}>
-                                <span  style={{ color: 'green' }}>
+                                    </span>
+                                    2nd Floor Provincial Capitol Annex Building <br />
+                                    Brgy. III, Daet Camarines Norte
+                                </p>
+                                <p style={{ color: 'black' }}>
+                                    <span style={{ color: 'green' }}>
                                     <PhoneIcon /> Telephone Number: <br />
-                                </span>
-                                054 721-0291
-                            </p>
-                            <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'green' }}>
+                                    </span>
+                                    054 721-0291
+                                </p>
+                                </div>
+                                <div className="col-md-6">
+                                <p style={{ color: 'black' }}>
+                                    <span style={{ color: 'green' }}>
                                     <EmailIcon /> Email Address:<br />
-                                </span>
-                                opagcamnorte@yahoo.com <br /> opagcamsnorte@gmail.com
-                            </p>
-                            <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'green' }}>
+                                    </span>
+                                    opagcamnorte@yahoo.com <br /> opagcamsnorte@gmail.com
+                                </p>
+                                <p style={{ color: 'black' }}>
+                                    <span style={{ color: 'green' }}>
                                     <FacebookIcon /> Facebook:<br />
-                                </span>
-                                OPAg Camarines Norte
-                            </p>
-                            <p  style={{ color: 'black' }}>
-                                <span  style={{ color: 'green' }}>
+                                    </span>
+                                    OPAg Camarines Norte
+                                </p>
+                                <p style={{ color: 'black' }}>
+                                    <span style={{ color: 'green' }}>
                                     <LanguageIcon /> Website:<br />
-                                </span>
-                                https://opagcamnorte.com
-                            </p>
-                        </div>
-                    </div>
+                                    </span>
+                                    <a href="https://opagcamnorte.com">https://opagcamnorte.com</a>
+                                </p>
+                                </div>
+                            </div>
+                            </div>  
                 </div>
             </div>
         </div>
