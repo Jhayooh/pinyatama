@@ -9,6 +9,7 @@ import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
+import ProductPrices from '../ProductPrices';
 
 function CustomTabPanel({ children, value, index }) {
 
@@ -41,7 +42,7 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ farms, setShow, user, event}) {
+export default function FarmTabs({ farms, setShow, user, event, particularData}) {
     var farm = farms[0]
     var user = user[0]
     const roundToTwoDecimals = (num) => {
@@ -163,7 +164,9 @@ export default function FarmTabs({ farms, setShow, user, event}) {
                                         },
                                     }}
                                 />
+                              
                             </Tabs>
+                            
                         </div>
                         <CustomTabPanel value={value} index={0}>
                             <Profile user={user} farm={farm}/>
@@ -177,6 +180,7 @@ export default function FarmTabs({ farms, setShow, user, event}) {
                         <CustomTabPanel value={value} index={3}>
                             <CostAndReturn markers={markers} parts={parts} />
                         </CustomTabPanel>
+                       
                     </Box>
                 </div>
             </div>
