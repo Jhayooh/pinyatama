@@ -34,7 +34,28 @@ import { auth } from '../../firebase/Config';
 import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
-import Footer  from "./Footer";
+import Login from '../Login';
+import { Link } from 'react-router-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+import BgImage from '../image_src/bg.jpg';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CloseIcon from '@mui/icons-material/Close';
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+
+const defaultTheme = createTheme();
 
 function Dashboard() {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -59,8 +80,6 @@ function Dashboard() {
     setAnchorEl(null);
     setOpen(false);
   };
-
-
 
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
   const [registerModalDisplay, setRegisterModalDisplay] = useState(false);
@@ -143,247 +162,344 @@ function Dashboard() {
   const produktoRef = useRef(null);
   const himagasRef = useRef(null);
   const bentaRef = useRef(null);
+
+  const [logged, setLogged] = useState(false)
   return (
     <>
-      <div >
-        <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-          <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <AppBar
-              position="fixed"
-              elevation={0}
-              style={{
-                backgroundColor: isScrolled ? '#ffffff' : 'transparent',
-                backdropFilter: isScrolled ? 'none' : 'blur(8px)',
-                boxShadow: isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
-                transition: 'background-color 0.3s, backdrop-filter 0.3s, box-shadow 0.3s',
+      {logged ?
+        <ThemeProvider theme={defaultTheme}>
+          <Grid container component="main" sx={{ height: '100vh' }}>
+            <CssBaseline />
+            <Grid
+              item
+              xs={false}
+              sm={4}
+              md={7}
+              sx={{
+                backgroundImage: `url(${BgImage})`,
+                backgroundRepeat: 'no-repeat',
+                backgroundColor: (t) =>
+                  t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+                backgroundSize: '130% 130%',
+                backgroundPosition: 'center',
               }}
-            >
-
-              {/* <AppBar position="fixed" elevation={4} style={{ backgroundColor: 'transparent', backdropFilter: 'blur(8px)', boxShadow: 'none' }}> */}
-              <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                  <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
-                  <Typography
-                    variant="h6"
-                    noWrap
-                    component="a"
-                    href="#app-bar-with-responsive-menu"
-                    sx={{
-                      mr: 2,
-                      display: { xs: 'none', md: 'flex' },
-                      fontFamily: 'monospace',
-                      fontWeight: 700,
-                      letterSpacing: '.3rem',
-                      color: 'green',
-                      textDecoration: 'none',
-                    }}
-                    style={{ marginLeft: '10px' }}
-                  >
-                    QUEEN PINEAPPLE FARMING
-                  </Typography>
-
-                  <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', lg: 'flex' } }}>
-                    <Button
-                      onClick={scrollToTop}
-                      sx={{ my: 2, color: 'green', display: 'block' }}
-                    >
-                      Home
-                    </Button>
-                    <Button
-                      id="fade-button"
-                      aria-controls={open ? 'fade-menu' : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={open ? 'true' : undefined}
-                      onClick={handleClick}
-                      sx={{ my: 2, color: 'green', display: 'block' }}
-                    >
-                      About
-                    </Button>
-                    <Menu
-                      id="fade-menu"
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                      TransitionComponent={Fade}
-                    >
-                      <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
-
-                      <MenuItem onClick={handleClickNested}>
-                        More Options
-                      </MenuItem>
-                    </Menu>
-                    <Menu
-                      id="nested-menu"
-                      anchorEl={anchorElNested}
-                      open={openNested}
-                      onClose={handleCloseNested}
-                      anchorOrigin={{
-                        vertical: 'top',
-                        horizontal: 'right',
-                      }}
-                    >
-                      <MenuItem onClick={() => scrollToRef(pesteRef)}>Mga Peste</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng pagpapalaki</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(bungaRef)}>Pagaani ng bunga</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(dahonRef)}>Pagaani ng dahon</MenuItem>
-                      <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng paghanda ng pinya</MenuItem>
-                    </Menu>
-
-                    <Button
-                      onClick={() => scrollToRef(galleryRef)}
-                      sx={{ my: 2, color: 'green', display: 'block' }}
-                    >
-                      Gallery
-                    </Button>
-                    <Button
-                      onClick={() => scrollToRef(agenciesRef)}
-                      sx={{ my: 2, color: 'green', display: 'block' }}
-                    >
-                      Agencies
-                    </Button>
-                    <Button
-                      onClick={() => scrollToRef(contactsRef)}
-                      sx={{ my: 2, color: 'green', display: 'block' }}
-                    >
-                      Contacts
-                    </Button>
-                  </Box>
-
-                  <Box sx={{ flexGrow: 0 }}>
-                    <div style={{ marginLeft: 'auto' }}>
-                      <Button
-                        variant='outlined'
-                        onClick={openLoginModal}
-                        sx={{
-                          color: 'green',
-                          borderColor: 'green',
-                          '&:hover': {
-                            backgroundColor: 'green',
-                            color: 'white',
-                          },
-                        }}
-                      >Login</Button>
-                    </div>
-                  </Box>
-                </Toolbar>
-              </Container>
-            </AppBar>
-            <Modal
-              open={loginModalDisplay}
-              onClose={closeLoginModal}
-              aria-labelledby="modal-modal-title"
-              aria-describedby="modal-modal-description"
-            >
-              {/* <Container component='main' maxWidth='xs'>
-                <CssBaseline /> */}
-              <Box sx={{
-                position: 'fixed',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                zIndex: '9999',
-                backgroundColor: 'white',
-                padding: '20px',
-                borderRadius: '10px',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-              }}>
-                {/* <Box sx={{width:25, height:25, justifyContent:'center', alignItems:'center'}}>
-                    <img src={require('../image_src/pinyatamap-logo.png')}/>
-                  </Box> */}
-                <h1 style={{ color: 'orange' }}>MALIGAYANG PAGDATING!</h1>
-                <h5 style={{ alignItems: 'center' }}>Mag-login sa iyong account</h5>
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  id="email"
-                  name="email"
-                  autoComplete="email"
-                  autoFocus
-                  label="Email"
-                  color="secondary"
-                  value={email}
-                  onChange={(event) => { setEmail(event.target.value) }}
-                  InputProps={{ style: { borderColor: 'green' } }}
-                />
-
-                <TextField
-                  margin="normal"
-                  required
-                  fullWidth
-                  name="password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  label="Password"
-                  color="secondary"
-                  value={password}
-                  onChange={(event) => { setPassword(event.target.value) }}
-                  InputProps={{ style: { borderColor: 'green' } }} />
-                <Button
-                  fullWidth
-                  variant="contained"
-                  style={{ backgroundColor: 'green' }}
-                  onClick={handleLogin}
-
-                >
-                  Sign In
+            />
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+              <Box
+                sx={{
+                  my: 8,
+                  mx: 4,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <Button style={{ position: 'absolute', top: 0, right: 0 }}>
+                  <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
                 </Button>
 
+                <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
+
+                <Typography component="h1" variant="h5">
+                  Sign in
+                </Typography>
+                <Box sx={{ mt: 1 }}>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    label="Email"
+                    color="secondary"
+                    value={email}
+                    onChange={(event) => { setEmail(event.target.value) }}
+                    InputProps={{ style: { borderColor: 'green' } }}
+                  />
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    label="Password"
+                    color="secondary"
+                    value={password}
+                    onChange={(event) => {
+                      setPassword(event.target.value)
+                      console.log('pass')
+                    }}
+                    InputProps={{ style: { borderColor: 'green' } }}
+                  />
+                  <Button
+                    type="submit"
+                    fullWidth
+                    variant="contained"
+                    sx={{
+                      color: 'white',
+                      backgroundColor: 'orange',
+                      borderColor: 'green',
+                      '&:hover': {
+                        backgroundColor: 'green',
+                        color: 'white',
+                      },
+                    }}
+                    onClick={handleLogin}
+                  >
+                    Login
+                  </Button>
+                  <Copyright sx={{ mt: 5 }} />
+                </Box>
               </Box>
-              {/* </Container> */}
-            </Modal>
+            </Grid>
+          </Grid>
+        </ThemeProvider> :
+
+        <div >
+          <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
+            <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
+            <div style={{ position: 'relative', zIndex: 1 }}>
+              <AppBar
+                position="fixed"
+                elevation={0}
+                style={{
+                  backgroundColor: isScrolled ? '#ffffff' : 'transparent',
+                  backdropFilter: isScrolled ? 'none' : 'blur(8px)',
+                  boxShadow: isScrolled ? '0px 2px 4px rgba(0, 0, 0, 0.1)' : 'none',
+                  transition: 'background-color 0.3s, backdrop-filter 0.3s, box-shadow 0.3s',
+                }}
+              >
+
+                {/* <AppBar position="fixed" elevation={4} style={{ backgroundColor: 'transparent', backdropFilter: 'blur(8px)', boxShadow: 'none' }}> */}
+                <Container maxWidth="xl">
+                  <Toolbar disableGutters>
+                    <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
+                    <Typography
+                      variant="h6"
+                      noWrap
+                      component="a"
+                      href="#app-bar-with-responsive-menu"
+                      sx={{
+                        mr: 2,
+                        display: { xs: 'none', md: 'flex' },
+                        fontFamily: 'monospace',
+                        fontWeight: 700,
+                        letterSpacing: '.3rem',
+                        color: 'green',
+                        textDecoration: 'none',
+                      }}
+                      style={{ marginLeft: '10px' }}
+                    >
+                      QUEEN PINEAPPLE FARMING
+                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', lg: 'flex' } }}>
+                      <Button
+                        onClick={scrollToTop}
+                        sx={{ my: 2, color: 'green', display: 'block' }}
+                      >
+                        Home
+                      </Button>
+                      <Button
+                        id="fade-button"
+                        aria-controls={open ? 'fade-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        onClick={handleClick}
+                        sx={{ my: 2, color: 'green', display: 'block' }}
+                      >
+                        About
+                      </Button>
+                      <Menu
+                        id="fade-menu"
+                        anchorEl={anchorEl}
+                        open={open}
+                        onClose={handleClose}
+                        TransitionComponent={Fade}
+                      >
+                        <MenuItem onClick={() => scrollToRef(opagRef)}>Opag</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(aboutRef)}>Katangian ng Pinyang Queen</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(abonoRef)}>Pagaabono</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(bulaklakRef)}>Pagpapabulaklak</MenuItem>
+
+                        <MenuItem onClick={handleClickNested}>
+                          More Options
+                        </MenuItem>
+                      </Menu>
+                      <Menu
+                        id="nested-menu"
+                        anchorEl={anchorElNested}
+                        open={openNested}
+                        onClose={handleCloseNested}
+                        anchorOrigin={{
+                          vertical: 'top',
+                          horizontal: 'right',
+                        }}
+                      >
+                        <MenuItem onClick={() => scrollToRef(pesteRef)}>Mga Peste</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng pagpapalaki</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(bungaRef)}>Pagaani ng bunga</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(dahonRef)}>Pagaani ng dahon</MenuItem>
+                        <MenuItem onClick={() => scrollToRef(paraanRef)}>Paraan ng paghanda ng pinya</MenuItem>
+                      </Menu>
+
+                      <Button
+                        onClick={() => scrollToRef(galleryRef)}
+                        sx={{ my: 2, color: 'green', display: 'block' }}
+                      >
+                        Gallery
+                      </Button>
+                      <Button
+                        onClick={() => scrollToRef(agenciesRef)}
+                        sx={{ my: 2, color: 'green', display: 'block' }}
+                      >
+                        Agencies
+                      </Button>
+                      <Button
+                        onClick={() => scrollToRef(contactsRef)}
+                        sx={{ my: 2, color: 'green', display: 'block' }}
+                      >
+                        Contacts
+                      </Button>
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0 }}>
+                      <div style={{ marginLeft: 'auto' }}>
+                        <Button
+                          variant='outlined'
+                          onClick={() => { setLogged(true) }}
+                          sx={{
+                            color: 'green',
+                            borderColor: 'green',
+                            '&:hover': {
+                              backgroundColor: 'green',
+                              color: 'white',
+                            },
+                          }}
+
+                        >  Login</Button>
+                      </div>
+                    </Box>
+                  </Toolbar>
+                </Container>
+              </AppBar>
+              <Modal
+                open={loginModalDisplay}
+                onClose={closeLoginModal}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                {/* <Container component='main' maxWidth='xs'>
+                <CssBaseline /> */}
+                <Box sx={{
+                  position: 'fixed',
+                  top: '50%',
+                  left: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  zIndex: '9999',
+                  backgroundColor: 'white',
+                  padding: '20px',
+                  borderRadius: '10px',
+                  boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                }}>
+                  {/* <Box sx={{width:25, height:25, justifyContent:'center', alignItems:'center'}}>
+                    <img src={require('../image_src/pinyatamap-logo.png')}/>
+                  </Box> */}
+                  <h1 style={{ color: 'orange' }}>MALIGAYANG PAGDATING!</h1>
+                  <h5 style={{ alignItems: 'center' }}>Mag-login sa iyong account</h5>
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    id="email"
+                    name="email"
+                    autoComplete="email"
+                    autoFocus
+                    label="Email"
+                    color="secondary"
+                    value={email}
+                    onChange={(event) => { setEmail(event.target.value) }}
+                    InputProps={{ style: { borderColor: 'green' } }}
+                  />
+
+                  <TextField
+                    margin="normal"
+                    required
+                    fullWidth
+                    name="password"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    label="Password"
+                    color="secondary"
+                    value={password}
+                    onChange={(event) => { setPassword(event.target.value) }}
+                    InputProps={{ style: { borderColor: 'green' } }} />
+                  <Button
+                    fullWidth
+                    variant="contained"
+                    style={{ backgroundColor: 'green' }}
+                    onClick={handleLogin}
+
+                  >
+                    Sign In
+                  </Button>
+
+                </Box>
+                {/* </Container> */}
+              </Modal>
+            </div>
+          </div>
+          <div ref={opagRef}>
+            <Opag />
+          </div>
+          <div ref={aboutRef}>
+            <About />
+          </div>
+
+
+          <div ref={abonoRef}>
+            <Abono />
+          </div>
+          <div ref={bulaklakRef}>
+            <Bulaklak />
+          </div>
+          <div ref={pesteRef}>
+            <Peste />
+          </div>
+          <div ref={paraanRef}>
+            <Paraan />
+          </div>
+          <div ref={bungaRef}>
+            <Bunga />
+          </div>
+          <div ref={dahonRef}>
+            <Dahon />
+          </div>
+          <div ref={produktoRef}>
+            <Produkto />
+          </div>
+          <div ref={himagasRef}>
+            <Himagas />
+          </div>
+          <div ref={bentaRef}>
+            <Benta />
+          </div>
+          <div ref={galleryRef}>
+            <ScreenShots />
+          </div>
+          <div ref={agenciesRef}>
+            <AgencySec />
+          </div>
+          <div ref={contactsRef}>
+            <ContactSec />
           </div>
         </div>
-        <div ref={opagRef}>
-          <Opag />
-        </div>
-        <div ref={aboutRef}>
-          <About />
-        </div>
-
-
-        <div ref={abonoRef}>
-          <Abono />
-        </div>
-        <div ref={bulaklakRef}>
-          <Bulaklak />
-        </div>
-        <div ref={pesteRef}>
-          <Peste />
-        </div>
-        <div ref={paraanRef}>
-          <Paraan />
-        </div>
-        <div ref={bungaRef}>
-          <Bunga />
-        </div>
-        <div ref={dahonRef}>
-          <Dahon />
-        </div>
-        <div ref={produktoRef}>
-          <Produkto />
-        </div>
-        <div ref={himagasRef}>
-          <Himagas />
-        </div>
-        <div ref={bentaRef}>
-          <Benta />
-        </div>
-        <div ref={galleryRef}>
-          <ScreenShots />
-        </div>
-        <div ref={agenciesRef}>
-          <AgencySec />
-        </div>
-        <div ref={contactsRef}>
-          <ContactSec />
-        </div>
-      </div>
+      }
     </>
   )
 }
@@ -412,7 +528,7 @@ const aboutList = [
 ]
 const Opag = () => {
   return (
-    <div className="text-center" style={{ backgroundColor: 'white', padding:5}}>
+    <div className="text-center" style={{ backgroundColor: 'white', padding: 5 }}>
       <div >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginTop: 20 }}>
@@ -971,10 +1087,10 @@ const Abono = () => {
                 <Table sx={{ minWidth: 650 }} aria-label="simple table" justifyContent='center'>
                   <TableHead>
                     <TableRow>
-                      <TableCell sx={{color:'orange'}}>Buwan ng Pag-abono</TableCell>
-                      <TableCell sx={{color:'orange'}} >Uri ng Abono</TableCell>
-                      <TableCell sx={{color:'orange'}}align="center">Dami bawat puno (gramo)</TableCell>
-                      <TableCell sx={{color:'orange'}} align="center">Bilang(sako)</TableCell>
+                      <TableCell>Buwan ng Pag-abono</TableCell>
+                      <TableCell align="center">Uri ng Abono</TableCell>
+                      <TableCell align="center">Dami bawat puno (gramo)</TableCell>
+                      <TableCell align="center">Bilang(sako)</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -986,7 +1102,7 @@ const Abono = () => {
                         <TableCell component="th" scope="row">
                           {row.buwan}
                         </TableCell>
-                        <TableCell>{row.abono}</TableCell>
+                        <TableCell align="center">{row.abono}</TableCell>
                         <TableCell align="center">{row.dami}</TableCell>
                         <TableCell align="center">{row.bilang}</TableCell>
                       </TableRow>
@@ -1034,11 +1150,11 @@ const Bulaklak = () => {
               <p>1. Maghanda ng ethephon (Ethrel 480), urea, pantakal,timba o timplahang dram at knapsack sprayer.</p>
               <p>Sundin ang timplang 5 cc ethephone + 10 litro ng tubig + 200 gramo ng urea.</p>
               <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 400 }} aria-label="simple table">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow>
                       <TableCell>Gamot</TableCell>
-                      <TableCell  >Dami</TableCell>
+                      <TableCell align="center">Dami</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -1050,7 +1166,7 @@ const Bulaklak = () => {
                         <TableCell component="th" scope="row">
                           {rowsData.gamot}
                         </TableCell>
-                        <TableCell> {rowsData.dami}</TableCell>
+                        <TableCell align="center">{rowsData.dami}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -1348,8 +1464,8 @@ const Bunga = () => {
                   <Table aria-label="simple table">
                     <TableHead>
                       <TableRow>
-                        <TableCell sx={{color:'orange'}}>Kulay ng Balat Index</TableCell>
-                        <TableCell sx={{color:'orange'}} align="center">Katangian</TableCell>
+                        <TableCell>Kulay ng Balat Index</TableCell>
+                        <TableCell align="center">Katangian</TableCell>
                       </TableRow>
                     </TableHead>
                     <TableBody>
@@ -1361,7 +1477,7 @@ const Bunga = () => {
                           <TableCell component="th" scope="row">
                             {row.index}
                           </TableCell>
-                          <TableCell >{row.katangian}</TableCell>
+                          <TableCell align="center">{row.katangian}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -1381,7 +1497,7 @@ const Dahon = () => {
   return (
     <Grid item  >
       <CardActionArea component="a" href="#">
-        <Card sx={{ display: 'flex', paddingLeft: 10 ,paddingTop:3, paddingBottom:3}}>
+        <Card sx={{ display: 'flex', paddingLeft: 10, paddingTop: 3, paddingBottom: 3 }}>
           <CardMedia
             component="img"
             sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
@@ -1446,7 +1562,7 @@ const Himagas = () => {
     <Grid>
       <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
         PARAAN NG PAGHANDA NG PINYA BILANG PANGHIMAGAS O TABLE FRUIT
-        <Grid container spacing={2} style={{ padding:10 }}>
+        <Grid container spacing={2} style={{ padding: 10 }}>
           <Grid item xs={6} md={3} lg={3}>
             <CardActionArea component="a" href="#">
               <Card sx={{ display: 'flex' }}>
@@ -1536,7 +1652,7 @@ const Benta = () => {
               <li>Kung maari ilagay ang inaning pinya sa lalagyan na may sapin na dyaryo</li>
               <li>Ihiwalay o alisin ang mga bunga na may sakit, may aphids o iba pang insekto</li>
               <li>Linisin ang bunga sa pamamagitan ng paggamit ng lumang toothbrush o sipilyo</li>
-              <li>Putulin ang tangkay ng pinya.Itira ang kalahating puldgada ng tangkay. <br/> Iwasan na magalusan ang tangkay dahil maaring pasukin ito ng insekto na magdududlot ng sakit at pagkabulok ng pinya.</li>
+              <li>Putulin ang tangkay ng pinya.Itira ang kalahating puldgada ng tangkay. <br /> Iwasan na magalusan ang tangkay dahil maaring pasukin ito ng insekto na magdududlot ng sakit at pagkabulok ng pinya.</li>
               <li>Karaniwang nilalagyan ng wax ang pinyang ibinebenta sa ibang bansa.</li>
               <li>Sundin ang tamang timpla sa waxing.</li>
               <li>Gumamit ng sprayer sa waxing para mablis at pantay ang pagkalagay.</li>
@@ -1581,7 +1697,7 @@ const agencyList = [
     name: "OPAG - Cam Norte",
     logo: "OPAG_logo.png",
     url: 'https://www.opagcamnorte.com'
-  
+
   },
   {
     name: "DA - CNLRRS",
@@ -1598,16 +1714,16 @@ function Agencies({ agencyList }) {
   return (
     <div className='agencies' id='Agencies' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
-        <div 
-          className='agency' 
-          key={agency.name} 
-          onClick={() => handleClick(agency.url)} 
+        <div
+          className='agency'
+          key={agency.name}
+          onClick={() => handleClick(agency.url)}
           style={{ cursor: 'pointer' }}
         >
-          <img 
-            src={require(`../image_src/${agency.logo}`)} 
-            alt={agency.name} 
-            className="logo-image" 
+          <img
+            src={require(`../image_src/${agency.logo}`)}
+            alt={agency.name}
+            className="logo-image"
           />
           <span>{agency.name}</span>
         </div>
@@ -1656,13 +1772,10 @@ function AgencySec() {
 
 function ContactSec() {
   return (
-    <>
     <div className='contact-sec' id='Contacts'>
-      <span>CONTACT US</span>
+      <span>GET IN TOUCH</span>
       <Contact />
     </div>
-    <Footer/>
-    </>
     //   <Contacts contactList={contactList} />
     // </div>
   )
