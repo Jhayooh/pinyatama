@@ -1,9 +1,10 @@
+.img {
 
-  
-  .img {
-    
-    width: 100%;
-    height: 300px;
-  }
-  
- 
+  width: 100%;
+  height: 300px;
+}
+
+.btn-view-all {
+  background-color: #ffa500;
+  color: #fff
+}

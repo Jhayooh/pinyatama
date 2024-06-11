@@ -33,7 +33,6 @@ import Unlockcon from '@mui/icons-material/LockOpenOutlined';
 
 import moment from 'moment';
 
-
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth"
@@ -252,9 +251,6 @@ export default function Access({ usersRow }) {
     })
     setUserRow(filteredUser)
   }, [search, usersRow, mun])
-
-  console.log("userRowwwwwwww=====", usersRow);
-
 
   // Filtered usersRow based on search input (Pangalan)
   const filteredUsersRow = usersRow.filter(user => {

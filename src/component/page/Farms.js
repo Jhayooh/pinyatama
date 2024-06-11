@@ -7,6 +7,12 @@ import FarmTabs from './FarmTabs.js';
 import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
+import { createTheme } from '@mui/material/styles';
+
+import Importer from '../Importer.js';
+import Exporter from '../Exporter.js';
+
+// icon
 
 function Farms({ events, farms, users }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
@@ -24,6 +30,17 @@ function Farms({ events, farms, users }) {
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
+
+  const theme = createTheme({
+    palette: {
+      yellow: {
+        main: '#ffa500',
+        light: '#E9DB5D',
+        dark: '#A29415',
+        contrastText: '#242105',
+      },
+    },
+  });
 
   const handleMun = (event) => {
     setMun(event.target.value);
@@ -93,7 +110,7 @@ function Farms({ events, farms, users }) {
   ];
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh'}}>
       {showFarmTabs ?
         <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
@@ -130,7 +147,6 @@ function Farms({ events, farms, users }) {
                 </Select>
               </FormControl>
             </Box>
-            <br />
             <Box sx={{ minWidth: 300 }}>
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
@@ -142,19 +158,26 @@ function Farms({ events, farms, users }) {
                   label="Municipality"
                   onChange={handleMun}
                 >
-                  {municipalities.map((municipality) => (
-                    <MenuItem key={municipality.value} value={municipality.value}>
-                      {municipality.name}
-                    </MenuItem>
-                  ))}
+                  {
+                    municipalities.map((municipality) => (
+                      <MenuItem key={municipality.value} value={municipality.value}>
+                        {municipality.name}
+                      </MenuItem>
+                    ))
+                  }
                 </Select>
               </FormControl>
             </Box>
+            <Box>
+              <Importer />
+            </Box>
+            <Box>
+              <Exporter farms={farms} />
+            </Box>
           </Box>
-          <br />
-          <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap', paddingLeft: 5 }}>
+          <Box sx={{ display: 'flex', gap: 7, flexWrap: 'wrap', paddingLeft: 5, overflow: 'auto', height: '100%', paddingBottom: 12 }}>
             {filteredFarms.map((marker, index) => (
-              <Box key={index} sx={{ width: 'calc(30% - 8px)', marginBottom: 8, boxShadow: 3, borderRadius: 0 }}>
+              <Box key={index} sx={{ width: 'calc(30% - 8px)', boxShadow: 3, borderRadius: 0 }}>
                 <Box sx={{ paddingY: 2, paddingTop: 0 }}>
                   <div className="image-holder">
                     {imageUrls[marker.id] ? (
