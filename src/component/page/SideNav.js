@@ -44,11 +44,7 @@ import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
 import LogoutIcon from '@mui/icons-material/Logout';
-<<<<<<< Updated upstream
 import InfoIcon from '@mui/icons-material/InfoOutlined';
-=======
->>>>>>> Stashed changes
-
 //
 import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -123,10 +119,6 @@ export default function SideNav() {
     }
   }, [remainingTime, modalIdle]);
 
-<<<<<<< Updated upstream
-=======
-
->>>>>>> Stashed changes
   function parseDate(rawDate, day) {
     const date = rawDate.split('-')
     const year = date[0]
@@ -230,7 +222,6 @@ export default function SideNav() {
     });
   }
   console.log("eventsssss:", events);
-<<<<<<< Updated upstream
 
   //Logout
   const [logoutModalDisplay, setLogoutModalDisplay] = useState(false);
@@ -415,114 +406,6 @@ export default function SideNav() {
         </DialogActions>
       </Dialog>
     </>
-=======
-  return (
-
-    <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
-      {/* <CssBaseline /> */}
-      {/* <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
-        <Toolbar>
-          <Header />
-        </Toolbar>
-      </AppBar> */}
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: drawerWidth, backgroundColor: bgColor, border: 'none', display: 'flex', flexDirection: 'column' },
-        }}
-      >
-        {/* <Toolbar /> */}
-
-        <Box sx={{ p: 2.4 }}>
-          <img src={logo} alt='pinyatamap logo' width='100%' />
-        </Box>
-        <Divider />
-        <List>
-          <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Dashboard' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
-                <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Timeline' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                {/* <InboxIcon /> */}
-                <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Particulars' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Accounts' />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                <img src={selected === 'Farms' ? farmSelected : farm} style={{ width: 24 }} />
-              </ListItemIcon>
-              <ListItemText primary='Farms' />
-            </ListItemButton>
-          </ListItem>
-          {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
-
-              <ListItemButton>
-                <ListItemIcon sx={{ minWidth: '35px' }}>
-                   <InboxIcon />
-                </ListItemIcon>
-                <ListItemText primary='Logout' sx={{ color: '#fff' }} />
-              </ListItemButton>
-            </ListItem> */}
-          <ListItem disablePadding onClick={handleSignOut} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected} >
-            <ListItemButton>
-              <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                <LogoutIcon style={{ width: 24, color:'orange', flexDirection:'flex-end' }} />
-              </ListItemIcon>
-              <ListItemText primary='Logout' />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
-          <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
-        </Box> */}
-      </Drawer>
-      {loading && particularLoading && usersLoading
-        ?
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-            <CircularProgress />
-          </Box>
-        </Box>
-        :
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
-          {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-          {selected === 'timeline' && <Timeline farms={farms} events={events} />}
-          {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-          {selected === 'Geo' && <Geoloc />}
-          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
-        </Box>
-      }
-    </Box>
->>>>>>> Stashed changes
   );
 }
 
