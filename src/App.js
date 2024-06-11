@@ -12,6 +12,7 @@ import ProductPrices from './component/ProductPrices';
 import Dash from './component/svg/Dash';
 import { auth } from "./firebase/Config";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import Login from "./component/Login";
 
 function App() {
   const [user] = useAuthState(auth)
@@ -22,27 +23,6 @@ function App() {
     {
       path: "/",
       element: element
-    },
-    {
-      path: "/farmname",
-      element: <FarmTabs />
-    },
-    {
-      path: "/Geo",
-      element: <GeoLoc />
-    },
-
-    {
-      path: "/table",
-      element: <ProductPrices />
-    },
-    {
-      path: "/Heat",
-      element: <Heatmap />
-    },
-    {
-      path: '/Dash',
-      element: <Dash />
     }
   ])
   return (

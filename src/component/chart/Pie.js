@@ -12,7 +12,7 @@ function ExamplePieChart({ labels, data, colors }) {
       position: 'bottom',
     },
     chart: {
-      height:'100%', weight:'100%'
+      height:'100%', weight:'100%' 
     },
     plotOptions: {
       pie: {
