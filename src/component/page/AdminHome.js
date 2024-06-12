@@ -12,6 +12,9 @@ import Heatmap from './Heatmap';
 
 // icons
 import farmer from '../image_src/farmer.png';
+import farm from '../image_src/seedling.png';
+import production from '../image_src/production.png';
+import accounts from '../image_src/account.png'
 
 const legends = [
   "Pagtatanim",
@@ -126,13 +129,14 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
           <Divider sx={{ borderBottomWidth: 2 }} />
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #789e4f', borderRadius: 3, backgroundColor: 'green', display: 'flex', flexDirection: 'row' }}>
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #789e4f', borderRadius: 3, backgroundColor: 'green', display: 'flex', flexDirection: 'row', color:'black' }}
+           onClick={() => setSelected('Farms')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
               <h5 style={{ margin: 0 }}>Farms</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmer} alt="Farmer icon" />
+              <img src={farm} alt="Farms icon" style={{width:'100%', height:'100%'}}/>
             </Box>
           </Box>
         </Grid>
@@ -143,7 +147,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <h5 style={{ margin: 0 }}>Production</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmer} alt="Farmer icon" />
+              <img src={production} alt="Production icon" style={{width:'100%', height:'100%'}}/>
             </Box>
           </Box>
         </Grid>
@@ -154,19 +158,19 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmer} alt="Farmer icon" />
+              <img src={farmer} alt="Farmer icon" style={{width:'100%', height:'100%', display:'flex'}}/>
             </Box>
           </Box>
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row' }}
+          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row', color:'black' }}
             onClick={() => setSelected('access')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmer} alt="Farmer icon" />
+              <img src={accounts} alt="Accounts icon" style={{width:'100%', height:'100%'}}/>
             </Box>
           </Button>
         </Grid>
