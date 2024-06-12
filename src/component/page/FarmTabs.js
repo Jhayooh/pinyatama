@@ -11,6 +11,8 @@ import Profile from './Profile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
 import ProductPrices from '../ProductPrices';
 
+import BackIcon from '@mui/icons-material/ArrowBackIosNew';
+
 function CustomTabPanel({ children, value, index }) {
 
     return (
@@ -112,11 +114,10 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <Button onClick={() => { setShow(false) }} sx={{ marginTop: 5, marginBottom: 0 }}> Farms{' >>>'} Information </Button>
+                <Button onClick={() => { setShow(false) }} sx={{ marginTop: 5, marginBottom: 0 }}> <BackIcon/> </Button>
                 <div>
-                    <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-
-                    <Box style={{ width: '100%', backgroundColor: '#fff', padding: '30px' }}>
+                    <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
+                    <Box style={{ width: '100%', backgroundColor: '#fff', padding: '10px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
                                 value={value}

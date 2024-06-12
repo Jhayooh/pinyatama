@@ -303,7 +303,7 @@ export default function SideNav() {
                 <ListItemText primary='Farms' />
               </ListItemButton>
             </ListItem>
-            <div className='fixed-bottom' style={{marginBottom:50}}>
+            <div style={{marginTop:'80%'}}>
             <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
@@ -375,8 +375,8 @@ export default function SideNav() {
           <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
             {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
             {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-            {/* {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>} */}
-            {selected === 'timeline' && <ListView />}
+            {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>}
+            {/* {selected === 'timeline' && <ListView />} */}
             {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
             {selected === 'Geo' && <Geoloc />}
             {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
