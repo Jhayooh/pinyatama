@@ -13,6 +13,7 @@ import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
 
 // icon
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Farms({ events, farms, users }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
@@ -184,11 +185,11 @@ function Farms({ events, farms, users }) {
             {filteredFarms.map((marker, index) => (
               <Box key={index} sx={{ width: 'calc(30% - 8px)', boxShadow: 3, borderRadius: 0 }}>
                 <Box sx={{ paddingY: 2, paddingTop: 0 }}>
-                  <div className="image-holder">
+                  <div className="image-holder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:5 }}>
                     {imageUrls[marker.id] ? (
                       <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
                     ) : (
-                      <p>Loading image...</p>
+                      <CircularProgress color='success'/>
                     )}
                   </div>
                   <div >
