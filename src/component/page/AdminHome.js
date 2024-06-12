@@ -98,12 +98,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
 
   }
 
-  const [show, setShow] = useState(false);
-
-const handleClose = () => setShow(false);
-const handleShow = () => {
-  setShow(!show);
-};
+  
 
 
   const series = pieChartData.map(item => item.value);
@@ -177,55 +172,17 @@ const handleShow = () => {
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} setSelected={setSelected} />
           </Box>
         </Grid>
-        <Grid item lg={6} onClick={handleShow} >
+        <Grid item lg={6}>
         
          
-         <>
+        
          
           
             <Pie labels={labels1} data={series1}  />
            
             
             
-            <Modal show={show} onHide={handleClose}>
-  <Modal.Header closeButton>
-    <Modal.Title>Chart Details</Modal.Title>
-  </Modal.Header>
-  <Modal.Body>
-    <table className="table">
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Labour</th>
-          <th>Material</th>
-          
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>1</td>
-          <td>Data 1</td>
-          <td>Data 2</td>
-          <td>Data 3</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Data 4</td>
-          <td>Data 5</td>
-          <td>Data 6</td>
-        </tr>
-        {/* Add more rows as needed */}
-      </tbody>
-    </table>
-  </Modal.Body>
-  <Modal.Footer>
-    <Button variant="secondary" onClick={handleClose}>
-      Close
-    </Button>
-  </Modal.Footer>
-</Modal>
 
-</>
         </Grid>
         <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
