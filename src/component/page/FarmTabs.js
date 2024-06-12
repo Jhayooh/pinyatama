@@ -188,7 +188,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
                             <FarmsSchedule farms={farms} events={event} />
                         </CustomTabPanel> */}
                         <CustomTabPanel value={value} index={2}>
-                            <CostAndReturn markers={markers} parts={parts} />
+                            <CostAndReturn markers={markers} parts={parts} farm={farm} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
 
