@@ -45,8 +45,8 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="http://queenpineapple.lesterintheclouds.com">
+        Queen Pineapple Farming
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -168,9 +168,9 @@ function Dashboard() {
     <>
       {logged ?
         <ThemeProvider theme={defaultTheme}>
-          <Grid container component="main" sx={{ height: '100vh' }}>
+          <Grid container component="main" sx={{ height: '100vh', justifyContent: 'center', position:'absolute', width:'100%' }}>
             <CssBaseline />
-            <Grid
+            <Box
               item
               xs={false}
               sm={4}
@@ -180,11 +180,21 @@ function Dashboard() {
                 backgroundRepeat: 'no-repeat',
                 backgroundColor: (t) =>
                   t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                backgroundSize: '130% 130%',
+                backgroundSize: 'cover',
                 backgroundPosition: 'center',
+                position: 'absolute',
+                zIndex: -1,
+                top: 0,
+                left: 0,
+                width:'100%',
+                height:'100%',
+                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+                filter: 'brightness(50%)', 
+                
               }}
             />
-            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} sx={{ alignItems: 'center', zIndex: 1, height: '80%', marginTop:10 }} square>
               <Box
                 sx={{
                   my: 8,
@@ -192,14 +202,16 @@ function Dashboard() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
+                  borderRadius:20
+                  
                 }}
               >
-                <Button style={{ position: 'absolute', top: 0, right: 0 }}>
+                {/* <Button style={{ position: 'absolute', top: 0, right: 0 }}>
                   <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
-                </Button>
+                </Button> */}
 
                 <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
-
+                
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
@@ -1773,7 +1785,7 @@ function AgencySec() {
 function ContactSec() {
   return (
     <div className='contact-sec' id='Contacts'>
-      <span>GET IN TOUCH</span>
+      <span>CONTACT US</span>
       <Contact />
     </div>
     //   <Contacts contactList={contactList} />

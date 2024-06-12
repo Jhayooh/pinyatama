@@ -109,13 +109,24 @@ function Farms({ events, farms, users }) {
     { name: "Vinzons", value: "VINZONS" }
   ];
 
+  function dateFormatter(date) {
+    const d = new Date(date.toMillis())
+    return d.toLocaleDateString()
+  }
+
   return (
+<<<<<<< Updated upstream
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh'}}>
       {showFarmTabs ?
         <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
+=======
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      {showFarmTabs ?
+        <FarmTabs farms={filteredMarkers.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
+>>>>>>> Stashed changes
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
-            <Box sx={{ width: 800 }}>
+            <Box sx={{ width: '80%' }}>
               <FormControl fullWidth size="small">
                 <OutlinedInput
                   id="outlined-adornment-amount"
@@ -126,6 +137,7 @@ function Farms({ events, farms, users }) {
                 />
               </FormControl>
             </Box>
+<<<<<<< Updated upstream
             <Box sx={{ minWidth: 300 }}>
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
@@ -148,6 +160,10 @@ function Farms({ events, farms, users }) {
               </FormControl>
             </Box>
             <Box sx={{ minWidth: 300 }}>
+=======
+            <br />
+            <Box sx={{ minWidth: '30%' }}>
+>>>>>>> Stashed changes
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                 <Select
@@ -189,6 +205,8 @@ function Farms({ events, farms, users }) {
                   <div >
                     <Typography variant='h6' component='h6' sx={{ paddingLeft: 3, color: 'orange' }}>{marker.title}</Typography>
                     <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy},{marker.mun}</Typography>
+                    <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, }}> Date of Planting: {dateFormatter(marker.start_date)}</Typography>
+                    <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, }}> Date of expected Harvest: {dateFormatter(marker.harvest_date)}</Typography>
                   </div>
                   <div style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 10 }}>
                     <Button variant="contained" color="success" onClick={() => {
