@@ -1,11 +1,11 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function ExamplePieChart({ labels, data, colors }) {
+function ExamplePieChart({ labels, data, colors, title }) {
   const options = {
     labels: labels || ["Default Label"],
     title: {
-      text: 'labor and Material Cost',
+      text: title || 'labor and Material Cost',
       align: 'left'
     },
     legend: {

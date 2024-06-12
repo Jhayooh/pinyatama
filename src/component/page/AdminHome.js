@@ -35,6 +35,13 @@ function Legend({ legends }) {
 export default function AdminHome({ setSelected, farms, users, events, roi }) {
   const navigate = useNavigate();
  
+
+  const legendItems = [
+    { color: 'red', label: 'Danger' },
+    { color: 'yellow', label: 'Warning' },
+    { color: 'green', label: 'Safe' }
+  ];
+
   // Group the roi data by farm title
 
   // Group the roi data by farm title 
@@ -170,6 +177,23 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
             <FarmsSchedule farms={farms.slice(0, 5)} events={events} setSelected={setSelected} />
+            <Box>
+<div className="legend">
+    
+      
+<div className="legend-item">
+  <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
+  <span className="legend-label"> Vegetative</span>
+  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 5px" }}></span>
+  <span className="legend-label">Flowering</span>
+  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
+  <span className="legend-label">Fruiting</span>
+</div>
+
+        
+     
+    </div>
+    </Box>
           </Box>
         </Grid>
         <Grid item lg={6}>
@@ -178,7 +202,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
         
          
           
-            <Pie labels={labels1} data={series1}  />
+            <Pie labels={labels1} data={series1} title="Municipalties" />
            
             
             
@@ -186,7 +210,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
         </Grid>
         <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
-          <Pie labels={labels} data={series} />
+          <Pie labels={labels} data={series}  title="Farms"/>
           </Box>
         </Grid>
         <Grid item lg={12}>
@@ -199,4 +223,4 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
       
     </Box>
   );
-}
+} 

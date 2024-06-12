@@ -7,9 +7,9 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../firebase/Config'
 import './ripple.css'
 import Textfield from './Timeline'
-import { Box, Button, Paper, Slide } from '@mui/material'
+import { Box, Paper, Slide } from '@mui/material'
 
-function SideDetails({ farms, eventClicked, setSelected }) {
+function SideDetails({ farms, eventClicked }) {
   const farmClicked = getObject(farms, "id", eventClicked.group)
   var options = {
     month: 'long', // Full month name
@@ -31,7 +31,6 @@ function SideDetails({ farms, eventClicked, setSelected }) {
       <p></p>
       <h5>Activities: </h5>
       <p>No Activities</p>
-    <Button onClick={()=>setSelected('Farms')} >More details</Button>
     </Box>
   )
 }
@@ -42,7 +41,7 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({ farms, events, setSelected }) {
+function FarmsSchedule({ farms, events }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
@@ -178,7 +177,7 @@ function FarmsSchedule({ farms, events, setSelected }) {
       {
         Object.keys(clicked).length !== 0 &&
         <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
-          <SideDetails farms={farms} eventClicked={clicked} setSelected={setSelected} />
+          <SideDetails farms={farms} eventClicked={clicked} />
         </Box>
       }
     </Box>

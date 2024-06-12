@@ -24,3 +24,26 @@
     opacity: 0;
     transition: transform 0.5s, opacity 1s;
 }
+
+.legend {
+    /* Your styles for the legend container */
+  }
+  
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 5px;
+  }
+  
+  .bullet {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 10px;
+  }
+  
+  .legend-label {
+    /* Your styles for the legend label */
+  }
+  
