@@ -25,6 +25,7 @@
     "apexcharts": "^3.46.0",
     "bootstrap": "^5.3.2",
     "emailjs-com": "^3.2.0",
+    "file-saver": "^2.0.5",
     "firebase": "^10.8.0",
     "firebase-admin": "^12.1.0",
     "json-loader": "^0.5.7",
@@ -57,7 +58,8 @@
     "react-tooltip": "^5.26.3",
     "sort-by": "^1.2.0",
     "styled-components": "^6.1.8",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

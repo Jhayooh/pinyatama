@@ -12,12 +12,18 @@ import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
 
 
-export default function Timeline({ farms, events }) {
+export default function Timeline({ farms, events, users, setSelected }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
     const [timelineEvents, setTimelineEvents] = useState(events)
-
+    const [filteredUsers, setFilteredUsers] = useState(users);
+    const [newUser, setNewUser] = useState([{
+        uid: '1',
+        id: '',
+        displayName: 'Lahat',
+    }, ...users])
     const [mun, setMun] = useState('');
     const [search, setSearch] = useState('');
+    const [userFilter, setUserFilter] = useState('');
 
     const handleChange = (event) => {
         setMun(event.target.value);
@@ -27,14 +33,23 @@ export default function Timeline({ farms, events }) {
         setSearch(event.target.value)
     };
 
+    const handleUser = (event) => {
+        setUserFilter(event.target.value)
+    };
+
     useEffect(() => {
         const filteredFarms = farms.filter((farm) => {
             const matchesMunicipality = mun ? farm.mun === mun : true;
             const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-            return matchesMunicipality && matchesSearch;
+            const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
+            return matchesMunicipality && matchesSearch && matchesUser;
+        });
+        const filteredUsers = newUser.filter((user) => {
+            return user.displayName.includes(userFilter);
         });
         setTimelineFarms(filteredFarms);
-    }, [search, farms, mun]);
+        setFilteredUsers(filteredUsers);
+    }, [search, farms, mun, newUser, userFilter]);
 
     const municipalities = [
         { name: "Lahat", value: "" },
@@ -83,16 +98,39 @@ export default function Timeline({ farms, events }) {
                                 label="Municipality"
                                 onChange={handleChange}
                             >
-                                {municipalities.map((municipality) => (
-                                    <MenuItem key={municipality.value} value={municipality.value}>
-                                        {municipality.name}
-                                    </MenuItem>
-                                ))}
+                                {
+                                    municipalities.map((municipality) => (
+                                        <MenuItem key={municipality.value} value={municipality.value}>
+                                            {municipality.name}
+                                        </MenuItem>
+                                    ))
+                                }
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box sx={{ minWidth: 300 }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
+                            <Select
+                                sx={{ border: "none" }}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={userFilter}
+                                label="Extensionist"
+                                onChange={handleUser}
+                            >
+                                {
+                                    newUser.map((user) => (
+                                        <MenuItem key={user.uid} value={user.id}>
+                                            {user.displayName}
+                                        </MenuItem>
+                                    ))
+                                }
                             </Select>
                         </FormControl>
                     </Box>
                 </Box>
-                <FarmsSchedule farms={timelineFarms} events={timelineEvents} />
+                <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
             </Box>
         </Box>
     )

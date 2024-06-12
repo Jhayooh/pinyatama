@@ -1,12 +1,13 @@
 import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
+import { Modal } from '@mui/material';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import ProductPrices from '../ProductPrices';
 import Timeline from '../Timeline';
 import AdminHome from './AdminHome';
@@ -42,15 +43,17 @@ import particularspng from '../image_src/particulars.png';
 import particularspngSelected from '../image_src/particularsSelected.png';
 import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
-
+import LogoutIcon from '@mui/icons-material/Logout';
+import InfoIcon from '@mui/icons-material/InfoOutlined';
 //
 import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 
-
 import pineapple from '../image_src/pineapple.json';
+import GridView from './GridView';
+
 
 const drawerWidth = 160;
 const bgColor = 'green'
@@ -79,7 +82,7 @@ export default function SideNav() {
   const [remainingTime, setRemainingTime] = useState(0)
 
   const handleClose = (event, reason) => {
-    if (reason && reason === "backdropClick") 
+    if (reason && reason === "backdropClick")
       return;
     setModalIdle(false)
   }
@@ -110,7 +113,6 @@ export default function SideNav() {
 
   useEffect(() => {
     if (remainingTime === 0 && modalIdle) {
-      // alert("Time out!");
       setModalIdle(false);
       handleSignOut()
     }
@@ -219,19 +221,40 @@ export default function SideNav() {
     });
   }
   console.log("eventsssss:", events);
+
+  //Logout
+  const [logoutModalDisplay, setLogoutModalDisplay] = useState(false);
+  const modalRef = useRef(null);
+
+  const openLogoutModal = () => {
+    setLogoutModalDisplay(true);
+  };
+  const closeLogoutMdal = () => {
+    setLogoutModalDisplay(false);
+  };
+
+  //Reloading page
+  const handleReload = () => {
+    window.location.reload();
+  };
+
   return (
     <>
-      <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed' }}>
+      <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed', overflowY:'auto' ,}}>
         <Drawer
           variant="permanent"
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: drawerWidth, backgroundColor: bgColor, border: 'none', display: 'flex', flexDirection: 'column' },
+            [`& .MuiDrawer-paper`]: 
+            { width: drawerWidth, 
+              backgroundColor: bgColor,
+               border: 'none', 
+               display: 'flex', 
+               flexDirection: 'column' },
           }}
         >
           {/* <Toolbar /> */}
-
           <Box sx={{ p: 2.4 }}>
             <img src={logo} alt='pinyatamap logo' width='100%' />
           </Box>
@@ -279,20 +302,66 @@ export default function SideNav() {
                 <ListItemText primary='Farms' />
               </ListItemButton>
             </ListItem>
-            {/* <ListItem disablePadding onClick={() => setSelected('particular')}>
-
+            <div className='fixed-bottom' style={{marginBottom:50}}>
+            <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
-                <ListItemIcon sx={{ minWidth: '35px' }}>
-                   <InboxIcon />
+                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                  <LogoutIcon style={{ width: 24, color: 'orange' }} />
                 </ListItemIcon>
-                <ListItemText primary='Logout' sx={{ color: '#fff' }} />
+                <ListItemText primary='Logout' />
               </ListItemButton>
-            </ListItem> */}
+            </ListItem>
+            </div>
           </List>
-          <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
-            {/* <Button variant="contained" onClick={uploadPineapple}>Upload baby</Button> */}
+          <Modal
+            open={logoutModalDisplay}
+            onClose={closeLogoutMdal}
+          >
+            <Box sx={{
+              position: 'fixed',
+              top: '50%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              zIndex: '9999',
+              backgroundColor: 'white',
+              padding: '20px',
+              borderRadius: '10px',
+              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+
+
+            }}>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+
+              }}>
+                <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
+                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                <Button
+                  variant="contained" color='success'
+                  style={{ flexDirection: 'column' }}
+                  onClick={handleSignOut}
+                >
+                  Proceed
+                </Button>
+                <Button
+                  variant="outlined"
+                  style={{ flexDirection: 'column', marginLeft: 5 }}
+                  onClick={closeLogoutMdal}
+                >
+                  Cancel
+                </Button>
+              </Box>
+              </Box>
+
+          </Modal>
+          {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
             <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
-          </Box>
+          </Box> */}
         </Drawer>
         {loading && particularLoading && usersLoading
           ?
@@ -305,7 +374,8 @@ export default function SideNav() {
           <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
             {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
             {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-            {selected === 'timeline' && <Timeline farms={farms} events={events} />}
+            {/* {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>} */}
+            {selected === 'timeline' && <GridView />}
             {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
             {selected === 'Geo' && <Geoloc />}
             {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
@@ -319,8 +389,8 @@ export default function SideNav() {
         aria-describedby="alert-dialog-description"
         maxWidth="sm"
       >
-        <DialogTitle sx={{backgroundColor: 'green', color: 'white'}} id="alert-dialog-title">
-          Idle timeout warning
+        <DialogTitle sx={{ backgroundColor: 'green', color: 'white' }} id="alert-dialog-title">
+          Session Time Out
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">

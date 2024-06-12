@@ -52,7 +52,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
     const eventsColl = collection(db, `farms/${farm.id}/events`)
     const [events] = useCollectionData(eventsColl)
     const partColl = collection(db, `farms/${farm.id}/components`);
-  const [parts, loading, error] = useCollectionData(partColl);
+    const [parts, loading, error] = useCollectionData(partColl);
     const roiColl = collection(db, `farms/${farm.id}/roi`)
     const [roi] = useCollectionData(roiColl)
     const totalPine = roi ? roi.reduce((total, roiItem) => total + roiItem.grossReturn, 0) : 0;
@@ -61,7 +61,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
     const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
     const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
     const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
-    
+
     const totalBats = totalBat / 2
     const totalPines = totalPine / 8
     const totalPines1 = totalPines + totalBats
@@ -90,8 +90,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
             case 'totalPines':
                 return {
                     ...marker,
-                    
-                    totalBats:totalBats,
+
+                    totalBats: totalBats,
                     totalPines: totalPines,
                     totalPriceMaterial: totalPriceMaterial,
                     totalPriceLabor: totalPriceLabor,
@@ -112,10 +112,10 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <Button onClick={()=>{setShow(false)}} sx={{marginTop:5, marginBottom:0}}> Farms{' >>>'} Information </Button>
+                <Button onClick={() => { setShow(false) }} sx={{ marginTop: 5, marginBottom: 0 }}> Farms{' >>>'} Information </Button>
                 <div>
                     <h2 style={{ marginTop: '65px', fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
-            
+
                     <Box style={{ width: '100%', backgroundColor: '#fff', padding: '30px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
                             <Tabs
@@ -144,8 +144,18 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
                                         },
                                     }}
                                 />
-                                <Tab
+                                {/* <Tab
                                     label="Schedule of Farm"
+                                    {...a11yProps(2)}
+                                    sx={{
+                                        color: value === 2 ? 'orange' : 'green',
+                                        '&:hover': {
+                                            color: 'orange',
+                                        },
+                                    }}
+                                /> */}
+                                <Tab
+                                    label="Cost and Return Analysis"
                                     {...a11yProps(2)}
                                     sx={{
                                         color: value === 2 ? 'orange' : 'green',
@@ -155,7 +165,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
                                     }}
                                 />
                                 <Tab
-                                    label="Cost and Return Analysis"
+                                    label='Reports'
                                     {...a11yProps(3)}
                                     sx={{
                                         color: value === 3 ? 'orange' : 'green',
@@ -169,16 +179,19 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
                             
                         </div>
                         <CustomTabPanel value={value} index={0}>
-                            <Profile user={user} farm={farm}/>
+                            <Profile user={user} farm={farm} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={1}>
                             <Farm farmId={farm.id} />
                         </CustomTabPanel>
-                        <CustomTabPanel value={value} index={2}>
+                        {/* <CustomTabPanel value={value} index={2}>
                             <FarmsSchedule farms={farms} events={event} />
+                        </CustomTabPanel> */}
+                        <CustomTabPanel value={value} index={2}>
+                            <CostAndReturn markers={markers} parts={parts} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
-                            <CostAndReturn markers={markers} parts={parts} />
+
                         </CustomTabPanel>
                        
                     </Box>
