@@ -302,7 +302,7 @@ export default function SideNav() {
                 <ListItemText primary='Farms' />
               </ListItemButton>
             </ListItem>
-            <Box sx={{mt:'auto', pt:'auto'}}>
+            <div className='fixed-bottom' style={{marginBottom:50}}>
             <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
               <ListItemButton>
                 <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
@@ -311,7 +311,7 @@ export default function SideNav() {
                 <ListItemText primary='Logout' />
               </ListItemButton>
             </ListItem>
-            </Box>
+            </div>
           </List>
           <Modal
             open={logoutModalDisplay}
