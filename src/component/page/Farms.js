@@ -115,15 +115,9 @@ function Farms({ events, farms, users }) {
   }
 
   return (
-<<<<<<< Updated upstream
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh'}}>
       {showFarmTabs ?
         <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
-=======
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-      {showFarmTabs ?
-        <FarmTabs farms={filteredMarkers.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
->>>>>>> Stashed changes
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: '80%' }}>
@@ -137,7 +131,6 @@ function Farms({ events, farms, users }) {
                 />
               </FormControl>
             </Box>
-<<<<<<< Updated upstream
             <Box sx={{ minWidth: 300 }}>
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
@@ -160,10 +153,6 @@ function Farms({ events, farms, users }) {
               </FormControl>
             </Box>
             <Box sx={{ minWidth: 300 }}>
-=======
-            <br />
-            <Box sx={{ minWidth: '30%' }}>
->>>>>>> Stashed changes
               <FormControl fullWidth size="small">
                 <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                 <Select
