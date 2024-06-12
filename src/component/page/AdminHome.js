@@ -167,7 +167,7 @@ const handleShow = () => {
               <img src={farmer} alt="Farmer icon" />
             </Box>
           </Button>
-        </Box>
+        </Grid>
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>

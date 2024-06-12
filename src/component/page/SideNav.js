@@ -51,8 +51,8 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 
-
 import pineapple from '../image_src/pineapple.json';
+import GridView from './GridView';
 
 
 const drawerWidth = 160;
@@ -113,7 +113,6 @@ export default function SideNav() {
 
   useEffect(() => {
     if (remainingTime === 0 && modalIdle) {
-      // alert("Time out!");
       setModalIdle(false);
       handleSignOut()
     }
@@ -256,7 +255,6 @@ export default function SideNav() {
           }}
         >
           {/* <Toolbar /> */}
-
           <Box sx={{ p: 2.4 }}>
             <img src={logo} alt='pinyatamap logo' width='100%' />
           </Box>
@@ -376,7 +374,8 @@ export default function SideNav() {
           <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
             {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
             {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-            {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>}
+            {/* {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>} */}
+            {selected === 'timeline' && <GridView />}
             {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
             {selected === 'Geo' && <Geoloc />}
             {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
