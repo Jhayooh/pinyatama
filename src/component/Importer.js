@@ -1,9 +1,11 @@
 import { Modal, Box } from '@mui/material'
 import React, { useState } from 'react'
 import * as XLSX from 'xlsx';
+import Button from '@mui/material/Button';
 
 // icon
-import PublishIcon from '@mui/icons-material/Publish';
+import UploadIcon from '@mui/icons-material/FileUploadOutlined';
+import CloseIcon from '@mui/icons-material/CloseOutlined';
 
 function Importer() {
     const [showModal, setShowModal] = useState(false)
@@ -14,21 +16,24 @@ function Importer() {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-              const data = e.target.result;
-              const workbook = XLSX.read(data, { type: "binary" });
-              const sheetName = workbook.SheetNames[0];
-              const worksheet = workbook.Sheets[sheetName];
-              const json = XLSX.utils.sheet_to_json(worksheet);
-              setJsonData(JSON.stringify(json, null, 2))
-              console.log("The json data:", JSON.stringify(json, null, 2))
+                const data = e.target.result;
+                const workbook = XLSX.read(data, { type: "binary" });
+                const sheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[sheetName];
+                const json = XLSX.utils.sheet_to_json(worksheet);
+                setJsonData(JSON.stringify(json, null, 2))
+                console.log("The json data:", JSON.stringify(json, null, 2))
             };
             reader.readAsBinaryString(file);
-          }
+        }
+    }
+    const handleClose = () => {
+        setShowModal(false)
     }
 
     return (
         <>
-            <button className='btn-view-all' onClick={() => setShowModal(true)}><PublishIcon />Import</button>
+            <Button variant='outlined' color='success' onClick={() => setShowModal(true)}><UploadIcon />Upload</Button>
 
             <Modal
                 open={showModal}
@@ -46,12 +51,32 @@ function Importer() {
                     boxShadow: 24,
                     p: 4,
                 }}>
+                    <Button
+                        variant='text'
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            zIndex: 1,
+                            color: 'grey'
+                        }}
+                        onClick={() => setShowModal(false)}>
+                        <CloseIcon />
+                    </Button>
+
                     <input
                         type="file"
                         accept=".xls,.xlsx"
                         onChange={(e) => setFile(e.target.files[0])}
                     />
-                    <button onClick={handleConvert}>Convert</button>
+                    <Button
+                        variant='contained'
+                        color='success'
+                        fullWidth
+                        sx={{ justifyContent: 'center', alignItems: 'center', mt: 2, }}
+                        onClick={handleConvert}>
+                        Save
+                    </Button>
                     <pre>{jsonData}</pre>
                 </Box>
             </Modal >

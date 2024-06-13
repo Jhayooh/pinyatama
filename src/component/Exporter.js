@@ -2,9 +2,10 @@ import { Modal, Box } from '@mui/material'
 import React, { useState } from 'react'
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import Button from '@mui/material/Button';
 
 // icon
-import GetAppIcon from '@mui/icons-material/GetApp';
+import DownloadIcon from '@mui/icons-material/FileDownloadOutlined';
 
 function Exporter({ farms }) {
     const [fileName, setFileName] = useState('PINEAPPLE')
@@ -28,7 +29,7 @@ function Exporter({ farms }) {
 
     return (
         <>
-        <button className='btn-view-all' onClick={()=>{setExportModal(true)}}><GetAppIcon /></button>
+        <Button variant='outlined' color='error' onClick={()=>{setExportModal(true)}}><DownloadIcon /> Download</Button>
 
         <Modal
                 open={exportModal}
@@ -46,7 +47,7 @@ function Exporter({ farms }) {
                     boxShadow: 24,
                     p: 4,
                 }}>
-                    <button onClick={handleExport}>Save</button>
+                    <Button onClick={handleExport}>Save</Button>
                 </Box>
             </Modal >
         </>
