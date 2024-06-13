@@ -23,7 +23,7 @@ function CustomTabPanel({ children, value, index }) {
             aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && (
-                <Box sx={{ p: 4 }}>
+                <Box >
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -114,7 +114,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
-                <Button onClick={() => { setShow(false) }} sx={{ marginTop: 5, marginBottom: 0 }}> <BackIcon/> </Button>
+                <Button onClick={() => { setShow(false) }} sx={{marginTop: 3}}><BackIcon/></Button>
                 <div>
                     <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px' }}>{farm.title}</h2>
                     <Box style={{ width: '100%', backgroundColor: '#fff', padding: '10px' }}>

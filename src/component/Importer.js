@@ -12,23 +12,26 @@ function Importer() {
     const [file, setFile] = useState(null)
     const [jsonData, setJsonData] = useState("")
 
+    const handleClose = () => {
+        setShowModal(false)
+    }
+
     const handleConvert = () => {
         if (file) {
             const reader = new FileReader();
             reader.onload = (e) => {
-                const data = e.target.result;
-                const workbook = XLSX.read(data, { type: "binary" });
-                const sheetName = workbook.SheetNames[0];
-                const worksheet = workbook.Sheets[sheetName];
-                const json = XLSX.utils.sheet_to_json(worksheet);
-                setJsonData(JSON.stringify(json, null, 2))
-                console.log("The json data:", JSON.stringify(json, null, 2))
+              const data = e.target.result;
+              const workbook = XLSX.read(data, { type: "binary" });
+              const sheetName = workbook.SheetNames[0];
+              const worksheet = workbook.Sheets[sheetName];
+              const json = XLSX.utils.sheet_to_json(worksheet, {header: ['mun', 'brgy', 'farmerName', 'sex', 'area', 'plantNumber', 'start_date', 'cropStage', 'harvest_date']});
+              console.log("workbook:", workbook);
+              console.log("sheetName:", sheetName);
+              console.log("worksheet:", worksheet);
+              setJsonData(JSON.stringify(json, null, 2))
             };
             reader.readAsBinaryString(file);
         }
-    }
-    const handleClose = () => {
-        setShowModal(false)
     }
 
     return (
@@ -37,7 +40,7 @@ function Importer() {
 
             <Modal
                 open={showModal}
-                onClose={setShowModal}
+                onClose={handleClose}
             >
                 <Box sx={{
                     position: 'absolute',
