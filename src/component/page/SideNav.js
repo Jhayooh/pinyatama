@@ -45,6 +45,8 @@ import logo from '../image_src/pinyatamap-logo.png';
 import timelinepng from '../image_src/timeline.png';
 import LogoutIcon from '@mui/icons-material/Logout';
 import InfoIcon from '@mui/icons-material/InfoOutlined';
+import CloseIcon from '@mui/icons-material/CloseOutlined';
+
 //
 import { Button, CircularProgress } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
@@ -242,18 +244,20 @@ export default function SideNav() {
 
   return (
     <>
-      <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed', overflowY:'auto' ,}}>
+      <Box sx={{ display: 'flex', height: '100vh', width: 1, position: 'fixed', overflowY: 'auto', }}>
         <Drawer
           variant="permanent"
           sx={{
             width: drawerWidth,
             flexShrink: 0,
-            [`& .MuiDrawer-paper`]: 
-            { width: drawerWidth, 
+            [`& .MuiDrawer-paper`]:
+            {
+              width: drawerWidth,
               backgroundColor: bgColor,
-               border: 'none', 
-               display: 'flex', 
-               flexDirection: 'column' },
+              border: 'none',
+              display: 'flex',
+              flexDirection: 'column'
+            },
           }}
         >
           {/* <Toolbar /> */}
@@ -305,15 +309,15 @@ export default function SideNav() {
                 <ListItemText primary='Farms' />
               </ListItemButton>
             </ListItem>
-            <div style={{marginTop:'80%'}}>
-            <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton>
-                <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
-                  <LogoutIcon style={{ width: 24, color: 'orange' }} />
-                </ListItemIcon>
-                <ListItemText primary='Logout' />
-              </ListItemButton>
-            </ListItem>
+            <div style={{ marginTop: '80%' }}>
+              <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
+                <ListItemButton>
+                  <ListItemIcon sx={{ minWidth: 24, mr: 1.1 }}>
+                    <LogoutIcon style={{ width: 24, color: 'orange' }} />
+                  </ListItemIcon>
+                  <ListItemText primary='Logout' />
+                </ListItemButton>
+              </ListItem>
             </div>
           </List>
           <Modal
@@ -333,58 +337,71 @@ export default function SideNav() {
 
 
             }}>
-              <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
+              <Button
+                variant='text'
+                sx={{
+                  position: 'absolute',
+                  top: 0,
+                  right: 0,
+                  zIndex: 1,
+                  color: 'grey'
+                }}
+                onClick={() => closeLogoutMdal(false)}>
+                <CloseIcon />
+              </Button>
+            
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
 
-              }}>
-                <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
-                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                <Button
-                  variant="contained" color='success'
-                  style={{ flexDirection: 'column' }}
-                  onClick={handleSignOut}
-                >
-                  Proceed
-                </Button>
-                <Button
-                  variant="outlined"
-                  style={{ flexDirection: 'column', marginLeft: 5 }}
-                  onClick={closeLogoutMdal}
-                >
-                  Cancel
-                </Button>
-              </Box>
-              </Box>
-
-          </Modal>
-          {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
-            <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
-          </Box> */}
-        </Drawer>
-        {loading && particularLoading && usersLoading
-          ?
-          <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-            <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-              <CircularProgress />
+            }}>
+              <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
+              <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+              <Button
+                variant="contained" color='success'
+                style={{ flexDirection: 'column' }}
+                onClick={handleSignOut}
+              >
+                Proceed
+              </Button>
+              <Button
+                variant="outlined"
+                style={{ flexDirection: 'column', marginLeft: 5 }}
+                onClick={closeLogoutMdal}
+              >
+                Cancel
+              </Button>
             </Box>
           </Box>
-          :
-          <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-            {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
-            {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-            {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected}/>}
-            {/* {selected === 'timeline' && <ListView />} */}
-            {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-            {selected === 'Geo' && <Geoloc />}
-            {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
+
+        </Modal>
+        {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
+            <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
+          </Box> */}
+      </Drawer>
+      {loading && particularLoading && usersLoading
+        ?
+        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+          <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+            <CircularProgress />
           </Box>
-        }
-      </Box>
+        </Box>
+        :
+        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
+          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
+          {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
+          {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
+          {/* {selected === 'timeline' && <ListView />} */}
+          {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
+          {selected === 'Geo' && <Geoloc />}
+          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
+        </Box>
+      }
+    </Box >
       <Dialog
         open={modalIdle}
         onClose={handleClose}
