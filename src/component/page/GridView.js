@@ -26,7 +26,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser , ima
         </div>
         <div >
           <Typography variant='h6' component='h6' sx={{ paddingLeft: 3, color: 'orange' }}>{marker.title}</Typography>
-          <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy},{marker.mun}</Typography>
+          <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, }}>{marker.brgy}, {marker.mun}</Typography>
           <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, }}> Date of Planting: {dateFormatter(marker.start_date)}</Typography>
           <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, }}> Date of expected Harvest: {dateFormatter(marker.harvest_date)}</Typography>
         </div>
