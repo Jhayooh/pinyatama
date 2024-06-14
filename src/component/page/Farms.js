@@ -15,7 +15,6 @@ import Exporter from '../Exporter.js';
 // icon
 import CircularProgress from '@mui/material/CircularProgress';
 
-
 function Farms({ events, farms, users }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
   const [filteredUsers, setFilteredUsers] = useState(users);
@@ -117,9 +116,12 @@ function Farms({ events, farms, users }) {
   }
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh'}}>
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh' }}>
       {showFarmTabs ?
-        <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} /> :
+        <Box sx={{ height: '100%', overflowY: 'auto' }}>
+          <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} />
+        </Box >
+        :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, p: 2 }}>
             <Box sx={{ width: '80%' }}>
@@ -186,11 +188,11 @@ function Farms({ events, farms, users }) {
             {filteredFarms.map((marker, index) => (
               <Box key={index} sx={{ width: 'calc(30% - 8px)', boxShadow: 3, borderRadius: 0 }}>
                 <Box sx={{ paddingY: 2, paddingTop: 0 }}>
-                  <div className="image-holder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop:5 }}>
+                  <div className="image-holder" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: 5 }}>
                     {imageUrls[marker.id] ? (
                       <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
                     ) : (
-                      <CircularProgress color='success'/>
+                      <CircularProgress color='success' />
                     )}
                   </div>
                   <div >
