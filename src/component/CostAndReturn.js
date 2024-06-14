@@ -21,7 +21,7 @@ function CostAndReturn({ markers, parts, farm, roi }) {
   const [localParts, setLocalParts] = useState([]);
   const [saving, setSaving] = useState(false);
   const [laborMaterial, setLaborMaterial] = useState([])
-  const [newRoi, setNewRoi] = useState(null)
+  const [newRoi, setNewRoi] = useState(roi[0])
   const [editedRowData, setEditedRowData] = useState([]);
 
   // name:"totalPines"
@@ -57,7 +57,7 @@ function CostAndReturn({ markers, parts, farm, roi }) {
   // materialTotal: 42559
   // netReturn: 81710
   // roi: 55.20945945945947
-
+  
   useEffect(() => {
     setLocalParts(parts);
     setLaborMaterial([markers[0].totalPriceMaterial, markers[0].totalPriceLabor])

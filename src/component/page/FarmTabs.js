@@ -110,6 +110,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData})
                 return marker;
         }
     });
+    roi && console.log("farmtabs roi", roi)
 
     return (
         <>
