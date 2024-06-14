@@ -168,9 +168,9 @@ function Dashboard() {
     <>
       {logged ?
         <ThemeProvider theme={defaultTheme}>
-          <Grid container component="main" sx={{ height: '100%', justifyContent: 'center', position:'absolute', width:'100%' }}>
+          <Grid container component="main" sx={{ height: '100vh', justifyContent: 'center', position: 'absolute', width: '100%' }}>
             <CssBaseline />
-            <Box
+            {/* <Box
               item
               xs={false}
               sm={4}
@@ -192,26 +192,25 @@ function Dashboard() {
                 filter: 'brightness(50%)', 
                 
               }}
-            />
+            /> */}
 
-            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} sx={{ alignItems: 'center', zIndex: 1, height: '80%', marginTop:10 }} square>
+            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} sx={{ alignItems: 'center', zIndex: 1, height: '80%', marginTop: 10 }} square>
               <Box
                 sx={{
-                  my: 8,
-                  mx: 4,
+                  mt: 5,
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  borderRadius:20
-                  
+                  position: 'relative',
+                  borderRadius: 1
                 }}
               >
-                {/* <Button style={{ position: 'absolute', top: 0, right: 0 }}>
+                <Button style={{ position: 'absolute', top: 0, right: 0 }}>
                   <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
-                </Button> */}
+                </Button>
 
                 <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
-                
+
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
@@ -269,11 +268,23 @@ function Dashboard() {
               </Box>
             </Grid>
           </Grid>
-        </ThemeProvider> :
+        </ThemeProvider > :
 
         <div >
           <div style={{ position: 'relative', width: '100%', height: '100vh', overflow: 'hidden' }}>
-            <img src={require('../image_src/bg.jpg')} alt='pineapple' className='pineapple-image' style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: -1 }} />
+            <Box>
+              <img src={require('../image_src/bg.jpg')}
+                alt='pineapple'
+                // className='pineapple-image'
+                style={{
+                  position: 'absolute',
+                  top: 0, left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  // zIndex: -1
+                }} />
+            </Box>
             <div style={{ position: 'relative', zIndex: 1 }}>
               <AppBar
                 position="fixed"
@@ -543,7 +554,7 @@ const Opag = () => {
     <div className="text-center" style={{ backgroundColor: 'white', padding: 5 }}>
       <div >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginTop: 20 }}>
+          <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15, marginTop: 3, marginBottom: 3 }}>
             OFFICE OF THE PROVINCIAL AGRICULTURIST
           </Typography>
         </div>
@@ -575,7 +586,7 @@ function Images({ imagesList }) {
     <Carousel>
       {imagesList.map(image => (
         <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '600px', height: '408px' }} />
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '100%', height: '100%' }} />
         </Carousel.Item>
       ))}
     </Carousel>
@@ -589,7 +600,7 @@ const imagesList = [
 ]
 
 const Information = ({ cName }) => (
-  <Box sx={{ fontFamily: 'monospace', fontSize: '20px', justifyContent: 'center' }}>
+  <Box sx={{ fontFamily: 'monospace', fontSize: 15, justifyContent: 'center' }}>
     Ang queen ang pinakamatamis na uri ng pinya sa Pilipinas. Ito ay may matinik na dahon kung ikukumpara sa ibang uri ng pinya. Ang  bunga ang tumitimbang ng halos isang kilo.
     Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
     at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
@@ -676,13 +687,13 @@ const ImageButton = styled(ButtonBase)(({ theme }) => ({
   position: 'relative',
   height: 200,
   [theme.breakpoints.down('sm')]: {
-    width: '100% !important', // Overrides inline-style
+    width: '100% !important',
     height: 100,
   },
   '& img': {
     width: '100%',
     height: '100%',
-    objectFit: 'cover', // Ensures the image covers the entire box without stretching
+    objectFit: 'cover',
   },
   '&:hover, &.Mui-focusVisible': {
     zIndex: 1,
@@ -715,6 +726,8 @@ const Image = styled('span')(({ theme }) => ({
   right: 0,
   top: 0,
   bottom: 0,
+  paddingLeft: '5px',
+  paddingRight: '5px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -909,7 +922,7 @@ const About = () => {
 const Uri = () => {
   return (
     <div style={{ backgroundColor: 'orange', paddingBottom: 10, display: 'flex', flexDirection: 'column', marginBottom: 10 }}>
-      <Typography style={{ color: 'white', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15, paddingTop: 10 }}>
+      <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
         MGA URI NG PANANIM
       </Typography>
       <div style={{ display: 'flex', flexDirection: 'row', margin: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' }}>
@@ -1032,7 +1045,7 @@ const Damo = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex', paddingRight: 5, paddingLeft: 5 }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAGSUGPO NG DAMO
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1078,7 +1091,7 @@ const Abono = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAGAABONO
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }} >
@@ -1100,7 +1113,7 @@ const Abono = () => {
                   <TableHead>
                     <TableRow>
                       <TableCell>Buwan ng Pag-abono</TableCell>
-                      <TableCell align="center">Uri ng Abono</TableCell>
+                      <TableCell align="justify">Uri ng Abono</TableCell>
                       <TableCell align="center">Dami bawat puno (gramo)</TableCell>
                       <TableCell align="center">Bilang(sako)</TableCell>
                     </TableRow>
@@ -1114,7 +1127,7 @@ const Abono = () => {
                         <TableCell component="th" scope="row">
                           {row.buwan}
                         </TableCell>
-                        <TableCell align="center">{row.abono}</TableCell>
+                        <TableCell align='justify'>{row.abono}</TableCell>
                         <TableCell align="center">{row.dami}</TableCell>
                         <TableCell align="center">{row.bilang}</TableCell>
                       </TableRow>
@@ -1148,7 +1161,7 @@ const Bulaklak = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex', paddingLeft: 5, paddingRight: 5 }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAGPAPABULAKLAK
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1205,7 +1218,7 @@ const Peste = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15, paddingLeft: 5, paddingRight: 5 }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               MGA PESTE NG PINYA
               <Grid container spacing={2} style={{ marginBottom: 15, justifyContent: 'center', alignItems: 'center' }}>
                 <Grid container spacing={2} marginBottom={5} marginTop={5}>
@@ -1371,7 +1384,7 @@ const Paraan = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PARAAN NG PAGPAPALAKI NG BUNGA SA PANAHON NG PAMUMULAKLAK NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1452,7 +1465,7 @@ const Bunga = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAG-ANI NG BUNGA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1489,7 +1502,7 @@ const Bunga = () => {
                           <TableCell component="th" scope="row">
                             {row.index}
                           </TableCell>
-                          <TableCell align="center">{row.katangian}</TableCell>
+                          <TableCell align="justify">{row.katangian}</TableCell>
                         </TableRow>
                       ))}
                     </TableBody>
@@ -1517,7 +1530,7 @@ const Dahon = () => {
             alt="Korona Image"
           />
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAG-ANI NG DAHON NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1542,7 +1555,7 @@ const Produkto = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               MGA PRODUKTO AT GAMIT NG PINYA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1572,7 +1585,7 @@ const Produkto = () => {
 const Himagas = () => {
   return (
     <Grid>
-      <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', marginLeft: 15 }}>
+      <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
         PARAAN NG PAGHANDA NG PINYA BILANG PANGHIMAGAS O TABLE FRUIT
         <Grid container spacing={2} style={{ padding: 10 }}>
           <Grid item xs={6} md={3} lg={3}>
@@ -1655,7 +1668,7 @@ const Benta = () => {
       <CardActionArea component="a" href="#">
         <Card sx={{ display: 'flex' }}>
           <CardContent sx={{ flex: 1 }}>
-            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700' }}>
+            <Typography style={{ color: 'orange', fontFamily: 'Arial, Helvetica, sans-seri', fontSize: '1.4rem', fontWeight: '700', backgroundColor: 'white', marginLeft: 15 }}>
               PAGHAHANDA NG PINYANG IBEBENTA SA IBANG BANSA
             </Typography>
             <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
@@ -1694,7 +1707,7 @@ function ScreenShots() {
   return (
     <div className='screenshot' id="Gallery" style={{ fontFamily: 'Arial', }}>
       <span>GALLERY</span>
-      <ImageGal />
+      <ImageGal sx={{ width: '50%', height: '50%' }} />
     </div>
   )
 }
@@ -1726,19 +1739,39 @@ function Agencies({ agencyList }) {
   return (
     <div className='agencies' id='Agencies' style={{ fontFamily: 'Arial' }}>
       {agencyList.map(agency => (
-        <div
-          className='agency'
-          key={agency.name}
-          onClick={() => handleClick(agency.url)}
-          style={{ cursor: 'pointer' }}
-        >
-          <img
-            src={require(`../image_src/${agency.logo}`)}
-            alt={agency.name}
-            className="logo-image"
-          />
-          <span>{agency.name}</span>
-        </div>
+        <Paper elevation={3}
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 15,
+            padding:5
+          }}>
+          <div
+            // className='agency'
+            key={agency.name}
+            onClick={() => handleClick(agency.url)}
+            style={{ cursor: 'pointer' }}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center', 
+                textAlign: 'center', 
+              }}
+            >
+              <img
+                src={require(`../image_src/${agency.logo}`)}
+                alt={agency.name}
+                className="logo-image"
+              />
+              <span style={{marginTop:5}}>{agency.name}</span>
+            </Box>
+
+          </div>
+        </Paper>
       ))}
     </div>
   );
