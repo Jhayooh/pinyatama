@@ -1,7 +1,7 @@
 import React, {useState}from 'react';
 import { Box, Button, Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import FarmsSchedule from '../FarmsSchedule';
+import FarmsSchedule1 from '../FarmsSchedule1';
 import Pie from '../chart/Pie';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
@@ -175,12 +175,12 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
           </Button>
         </Grid>
         <Grid item lg={12}>
-          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 360 }}>
+          <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 1000 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
-            <FarmsSchedule farms={farms.slice(0, 5)} events={events} setSelected={setSelected} />
+            <FarmsSchedule1 farms={farms.slice(0, 12)} events={events} setSelected={setSelected} />
             <Box>
 <div className="legend">
     

@@ -168,7 +168,7 @@ function Dashboard() {
     <>
       {logged ?
         <ThemeProvider theme={defaultTheme}>
-          <Grid container component="main" sx={{ height: '100vh', justifyContent: 'center', position:'absolute', width:'100%' }}>
+          <Grid container component="main" sx={{ height: '100%', justifyContent: 'center', position:'absolute', width:'100%' }}>
             <CssBaseline />
             <Box
               item

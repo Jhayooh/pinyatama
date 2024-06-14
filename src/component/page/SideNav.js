@@ -85,7 +85,7 @@ export default function SideNav() {
   const [remainingTime, setRemainingTime] = useState(0)
 
   const handleClose = (event, reason) => {
-    if (reason && reason === "backdropClick")
+    if (reason && reason === "backdropClick") 
       return;
     setModalIdle(false)
   }
@@ -116,6 +116,7 @@ export default function SideNav() {
 
   useEffect(() => {
     if (remainingTime === 0 && modalIdle) {
+      // alert("Time out!");
       setModalIdle(false);
       handleSignOut()
     }
@@ -260,6 +261,7 @@ export default function SideNav() {
           }}
         >
           {/* <Toolbar /> */}
+
           <Box sx={{ p: 2.4 }}>
             <img src={logo} alt='pinyatamap logo' width='100%' />
           </Box>
