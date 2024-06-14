@@ -247,14 +247,14 @@ function CostAndReturn({ markers, parts, farm, roi }) {
                 </Box>
               )}
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-              <Box>
+            <Box sx={{  display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{flex:1}}>
                 <Pie
                   labels={["Materyales", "Labor"]}
                   data={laborMaterial}
                 />
               </Box>
-              <Box>
+              <Box  sx={{flex:1}}>
                 <Doughnut
                   labels={["Return on Investment", "Potential Return"]}
                   data={[newRoi.roi, 100 - newRoi.roi]}

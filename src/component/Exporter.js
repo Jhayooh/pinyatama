@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 // icon
 import DownloadIcon from '@mui/icons-material/FileDownloadOutlined';
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
+import CloseIcon from '@mui/icons-material/CloseOutlined';
 
 function Exporter({ farms }) {
     const [fileName, setFileName] = useState('PINEAPPLE')
@@ -54,6 +55,18 @@ function Exporter({ farms }) {
                         flexDirection: 'column',
                         alignItems: 'center',
                     }}>
+                        <Button
+                        variant='text'
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            zIndex: 1,
+                            color: 'grey'
+                        }}
+                        onClick={() => setExportModal(false)}>
+                        <CloseIcon />
+                    </Button>
                     <Box
                         sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center',}} >
                         <FileIcon />
