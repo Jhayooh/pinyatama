@@ -54,7 +54,6 @@ import Access from './Access';
 import Geoloc from './GeoLoc';
 
 import pineapple from '../image_src/pineapple.json';
-import GridView from './GridView';
 import ListView from './ListView';
 
 
@@ -394,8 +393,8 @@ export default function SideNav() {
         <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-          {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
-          {/* {selected === 'timeline' && <ListView/>} */}
+          {/* {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />} */}
+          {selected === 'timeline' && <ListView/>}
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
           {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}

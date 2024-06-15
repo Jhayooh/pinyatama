@@ -1,34 +1,37 @@
-import React from 'react';
-import { Box } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import React from 'react'
+import { Box, Button, CircularProgress } from '@mui/material';
 
-function ListView() {
-  const columns = [
-    { field: 'id', headerName: 'ID', flex: 1 },
-    { field: 'farmName', headerName: 'Pangalan ng Bukid', flex: 1 },
-    { field: 'address', headerName: 'Address', flex: 1 },
-    { field: 'planting', headerName: 'Date of Planting', flex: 1 },
-    { field: 'harvest', headerName: 'Date of Harvest', flex: 1 },
-  ];
+// icon
+import farm from '../image_src/seedling.png';
 
-  const rows = [
-    { id: 1, farmName: 'Farm 1', address: 'Address 1', planting: '2024-01-01', harvest: '2024-06-01' },
-    { id: 2, farmName: 'Farm 2', address: 'Address 2', planting: '2024-01-02', harvest: '2024-06-02' },
-    // Add more rows as needed
-  ];
+function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imageUrls }) {
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
-      <div style={{ height: 400, width: '100%' }}>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          checkboxSelection
-        />
-      </div>
-    </Box>
-  );
+    <Button key={index} sx={{ height: 70, width: 1, backgroundColor: 'red' }} onClick={() => {
+      setShowFarmTabs(true)
+      setIndFarm(marker.id)
+      setIndUser(marker.brgyUID)
+    }} >
+      <Box sx={{ display: 'flex', justifyContent: 'space-around', height: '100%', width: '100%' }}>
+        <Box sx={{ display: 'flex', height: '100%', alignItems: 'center', backgroundColor: 'green', alignItems: 'center' }}>
+          <img src={farm} alt="Farms icon" height='60%' />
+        </Box>
+        <Box sx={{ display: 'flex', height: '100%', backgroundColor: 'green', alignItems: 'center' }}>
+          <h3>hello world</h3>
+        </Box>
+        <Box sx={{ display: 'flex', height: '100%', backgroundColor: 'green', alignItems: 'center' }}>
+          {/* {imageUrls[marker.id] ? (
+            <img className='img' src={imageUrls[marker.id]} alt={marker.title} height='90%' width='100%' />
+          ) : (
+            <CircularProgress color='success' />
+          )} */}
+        </Box>
+        <Box sx={{ display: 'flex', height: '100%', backgroundColor: 'green', alignItems: 'center' }}>
+          <h3>hello world</h3>
+        </Box>
+      </Box>
+    </Button>
+  )
 }
 
-export default ListView;
+export default ListView
