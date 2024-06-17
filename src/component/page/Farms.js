@@ -192,11 +192,11 @@ function Farms({ events, farms, users }) {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2}}>
-            <Button variant="contained" startIcon={<ViewListIcon />} onClick={() => {
+            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewListIcon />} onClick={() => {
               setGrid(false)
             }}>
             </Button>
-            <Button variant="contained" startIcon={<ViewModuleIcon />} onClick={() => {
+            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewModuleIcon />} onClick={() => {
               setGrid(true)
             }}>
               Grid
