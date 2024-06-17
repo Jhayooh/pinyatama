@@ -98,7 +98,6 @@ function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
           </Box> */}
       </Box >
     </Button >
-
   )
 }
 

@@ -16,7 +16,6 @@ import Exporter from '../Exporter.js';
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
 
-
 import GridView from './GridView.js';
 import ListView from './ListView.js';
 
