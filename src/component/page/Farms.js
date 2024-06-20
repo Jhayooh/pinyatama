@@ -15,10 +15,6 @@ import Exporter from '../Exporter.js';
 // icon
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 
 import GridView from './GridView.js';
 import ListView from './ListView.js';
@@ -196,19 +192,11 @@ function Farms({ events, farms, users }) {
             </Box>
           </Box>
           <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2}}>
-<<<<<<< HEAD
-            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewListIcon />} onClick={() => {
-              setGrid(false)
-            }}>
-            </Button>
-            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewModuleIcon />} onClick={() => {
-=======
             <Button variant="contained" startIcon={<ViewListIcon />} onClick={() => {
               setGrid(false)
             }}>
             </Button>
             <Button variant="contained" startIcon={<ViewModuleIcon />} onClick={() => {
->>>>>>> main
               setGrid(true)
             }}>
               Grid
