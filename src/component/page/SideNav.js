@@ -394,12 +394,7 @@ export default function SideNav() {
           {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
           {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
           {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-<<<<<<< Updated upstream
           {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
-=======
-          {/* {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />} */}
-          {selected === 'timeline' && <ListView/>}
->>>>>>> Stashed changes
           {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
           {selected === 'Geo' && <Geoloc />}
         </Box>
