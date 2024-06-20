@@ -13,6 +13,7 @@ import Dash from './component/svg/Dash';
 import { auth } from "./firebase/Config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Login from "./component/Login";
+import About from  "./component/page/About"
 
 function App() {
   const [user] = useAuthState(auth)
