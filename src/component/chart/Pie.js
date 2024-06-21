@@ -5,7 +5,7 @@ function ExamplePieChart({ labels, data, colors, title }) {
   const options = {
     labels: labels || ["Default Label"],
     title: {
-      text: title || 'labor and Material Cost',
+      text: title || 'Labor and Material Cost',
       align: 'left'
     },
     legend: {

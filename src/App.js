@@ -14,6 +14,7 @@ import { auth } from "./firebase/Config";
 import { useAuthState } from 'react-firebase-hooks/auth';
 import Login from "./component/Login";
 
+
 function App() {
   const [user] = useAuthState(auth)
   console.log(user);

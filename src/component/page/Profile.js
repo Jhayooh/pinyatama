@@ -44,8 +44,8 @@ function Profile({ user, farm }) {
                             paddingLeft: 5
                         }}>
                         IMPORMASYON NG BUKID</Typography>
-                        <Grid container spacing={3} sx={{ padding: 2, }}>
-                        
+                    <Grid container spacing={3} sx={{ padding: 2, }}>
+
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
                                 Field ID
@@ -59,12 +59,12 @@ function Profile({ user, farm }) {
                                 sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
-                        
+
 
                     </Grid>
 
                     <Grid container spacing={3} sx={{ padding: 2, }}>
-                        
+
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
                                 Pangalan ng Magsasaka
@@ -170,8 +170,8 @@ function Profile({ user, farm }) {
                         sx={{
                             color: 'green',
                             fontFamily: 'monospace',
-                            paddingLeft:5,
-                            paddingTop:5,
+                            paddingLeft: 5,
+                            paddingTop: 5,
                         }}>
                         BARANGAY EXTENSIONIST</Typography>
 
