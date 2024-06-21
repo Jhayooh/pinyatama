@@ -12,6 +12,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Container from '@mui/material/Container';
+import Heatmap from './Heatmap.js'
 import Fade from '@mui/material/Fade';
 import Grid from '@mui/material/Grid';
 import Menu from '@mui/material/Menu';
@@ -2287,6 +2288,7 @@ function SiteMap() {
             </div>
             <Typography variant='caption' > 2nd Floor Provincial Capitol Annex Building
               Brgy. III, Daet Camarines Norte</Typography>
+            <Heatmap/>
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
