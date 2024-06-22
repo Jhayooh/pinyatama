@@ -4,6 +4,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 import emailjs from "emailjs-com";
+import Heatmap from './Heatmap.js'
 import React, { useState } from "react";
 
 // const initialState = {
@@ -112,14 +113,15 @@ export const Contact = () => {
                                     2nd Floor Provincial Capitol Annex Building <br />
                                     Brgy. III, Daet Camarines Norte
                                 </p>
+                                <Heatmap />
+                                </div>
+                                <div className="col-md-6">
                                 <p style={{ color: 'black' }}>
                                     <span style={{ color: 'green' }}>
                                     <PhoneIcon /> Telephone Number: <br />
                                     </span>
                                     054 721-0291
                                 </p>
-                                </div>
-                                <div className="col-md-6">
                                 <p style={{ color: 'black' }}>
                                     <span style={{ color: 'green' }}>
                                     <EmailIcon /> Email Address:<br />
