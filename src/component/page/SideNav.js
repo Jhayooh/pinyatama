@@ -74,17 +74,18 @@ export default function SideNav() {
   const [users] = useCollectionData(userQuery)
 
   const particularsRef = collection(db, '/particulars')
-  const [particularRow, particularLoading, particularError] = useCollectionData(particularsRef)
+  const [particularRow, particularLoading] = useCollectionData(particularsRef)
+
+  const pineappleRef = collection(db, '/pineapple')
+  const [pineappleData, pineappleLoading, pineappleError] = useCollectionData(pineappleRef)
 
   const usersRef = collection(db, '/users')
-  // const usersQuery = query(usersRef, where("isRegistered", "==", false))
   const [usersRow, usersLoading, usersError] = useCollectionData(usersRef)
-  console.log("usersRow", usersRow);
   const [modalIdle, setModalIdle] = useState(false)
   const [remainingTime, setRemainingTime] = useState(0)
 
   const handleClose = (event, reason) => {
-    if (reason && reason === "backdropClick") 
+    if (reason && reason === "backdropClick")
       return;
     setModalIdle(false)
   }
@@ -93,6 +94,8 @@ export default function SideNav() {
     setModalIdle(true); //show modal
     setRemainingTime(30); //set 15 seconds as time remaining
   };
+
+  console.log("pineapple errrrrrooorrrr: ", pineappleError)
 
   const { isIdle } = useIdle({ onIdle: handleIdle, idleTime: 30 });
 
@@ -127,57 +130,6 @@ export default function SideNav() {
     const month = date[1]
     const newDate = day + "-" + month + "-" + year
     return newDate
-  }
-
-  const uploadPineapple = async () => {
-    try {
-      for (const fdetail of pineapple) {
-        const fRef = await addDoc(farmsRef, { ...fdetail, title: fdetail.farmerName });
-        await updateDoc(fRef, { id: fRef.id });
-        const eventsRef = collection(fRef, 'events')
-        console.log("startDate:", fdetail.start_date);
-
-        const vegetativeDate = new Date(Date.parse(fdetail.start_date));
-        const floweringDate = new Date(vegetativeDate);
-        floweringDate.setMonth(vegetativeDate.getMonth() + 10);
-        const fruitingDate = new Date(floweringDate);
-        fruitingDate.setMonth(floweringDate.getMonth() + 2);
-
-        const harvestDate = new Date(Date.parse(parseDate(fdetail.harvest_date, floweringDate.getDate())));
-        console.log('End Date:', harvestDate); // Log the end date
-
-        const eRef_vegetative = await addDoc(eventsRef, {
-          group: fRef.id,
-          title: "Vegetative",
-          className: "vegetative",
-          start_time: Timestamp.fromDate(vegetativeDate),
-          end_time: Timestamp.fromDate(floweringDate)
-        });
-        await updateDoc(eRef_vegetative, { id: eRef_vegetative.id })
-
-        const eRef_flowering = await addDoc(eventsRef, {
-          group: fRef.id,
-          title: "Flowering",
-          className: "flowering",
-          start_time: Timestamp.fromDate(floweringDate),
-          end_time: Timestamp.fromDate(fruitingDate)
-        })
-        await updateDoc(eRef_flowering, { id: eRef_flowering.id })
-
-        const eRef_fruiting = await addDoc(eventsRef, {
-          group: fRef.id,
-          title: "Fruiting",
-          className: "fruiting",
-          start_time: Timestamp.fromDate(fruitingDate),
-          end_time: Timestamp.fromDate(harvestDate)
-        })
-        await updateDoc(eRef_fruiting, { id: eRef_fruiting.id })
-
-      }
-      alert('SUCCESSFUL ANG PAGUPLOAD PADI')
-    } catch (error) {
-      console.error("Error uploading pineapple: ", error);
-    }
   }
 
   useEffect(() => {
@@ -348,58 +300,59 @@ export default function SideNav() {
                 onClick={() => closeLogoutMdal(false)}>
                 <CloseIcon />
               </Button>
-            
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
 
-            }}>
-              <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
-              <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
-            </Box>
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-              <Button
-                variant="contained" color='success'
-                style={{ flexDirection: 'column' }}
-                onClick={handleSignOut}
-              >
-                Proceed
-              </Button>
-              <Button
-                variant="outlined"
-                style={{ flexDirection: 'column', marginLeft: 5 }}
-                onClick={closeLogoutMdal}
-              >
-                Cancel
-              </Button>
-            </Box>
-          </Box>
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
 
-        </Modal>
-        {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
+              }}>
+                <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
+                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
+              </Box>
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
+                <Button
+                  variant="contained" color='success'
+                  style={{ flexDirection: 'column' }}
+                  onClick={handleSignOut}
+                >
+                  Proceed
+                </Button>
+                <Button
+                  variant="outlined"
+                  style={{ flexDirection: 'column', marginLeft: 5 }}
+                  onClick={closeLogoutMdal}
+                >
+                  Cancel
+                </Button>
+              </Box>
+            </Box>
+
+          </Modal>
+          {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
             <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
           </Box> */}
-      </Drawer>
-      {loading && particularLoading && usersLoading
-        ?
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
-            <CircularProgress />
-          </Box>
-        </Box>
-        :
-        <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-          {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
-          {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
-          {selected === 'particular' && particularRow ? <ProductPrices particularData={particularRow} /> : <></>}
-          {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
-          {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-          {selected === 'Geo' && <Geoloc />}
-        </Box>
-      }
-    </Box >
+        </Drawer>
+        {
+          loading && particularLoading && usersLoading && pineappleLoading
+            ?
+            <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden', alignItems: 'center', justifyContent: 'center' }}>
+              <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', alignItems: 'center', justifyContent: 'center', display: 'flex' }}>
+                <CircularProgress />
+              </Box>
+            </Box>
+            :
+            <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
+              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
+              {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
+              {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
+              {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
+              {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
+              {selected === 'Geo' && <Geoloc />}
+            </Box>
+        }
+      </Box >
       <Dialog
         open={modalIdle}
         onClose={handleClose}

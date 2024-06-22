@@ -35,25 +35,26 @@ import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
 import moment from 'moment';
 
-export default function ProductPrices({ particularData }) {
-  console.log(particularData);
+export default function ProductPrices({ particularData, pineappleData }) {
   const [rowModesModel, setRowModesModel] = useState({});
-  const [rows, setRows] = useState([])
-
-
 
   const [saving, setSaving] = useState(false)
 
-  // State variables for modal
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isAdd, setIsAdd] = useState(false)
+  const [pineModal, setPineModal] = useState(false)
 
   const [selectedRow, setSelectedRow] = useState({});
+  const [pineData, setPineData] = useState({})
 
   const handleEditClick = (id, row) => () => {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
+
+  const handleEditPine = (pine) => {
+    setPineData(pine)
+    setPineModal(true)
+  }
 
   const handleRowEditStop = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -63,7 +64,93 @@ export default function ProductPrices({ particularData }) {
 
   const handleModalClose = () => {
     setIsModalOpen(false);
+    setPineModal(false)
   };
+
+  const EditPinePrice = () => {
+    const [editedPineData, setEditedPineData] = useState(pineData)
+    console.log("pineDataaaaaaa:", editedPineData);
+
+    const handleSavePine = async () => {
+      setSaving(true)
+      try {
+        const docRef = doc(db, 'pineapple', pineData.id)
+        await updateDoc(docRef, editedPineData)
+      } catch (error) {
+        console.error("error updating document", error);
+      }
+      setPineModal(false)
+      setSaving(false)
+    }
+
+    const handleInputChange = (event) => {
+      const { name, value } = event.target;
+      setEditedPineData(prevData => ({
+        ...prevData,
+        [name]: value
+      }));
+    };
+
+    return (
+      <Modal
+        open={pineModal}
+        onClose={handleModalClose}
+        aria-labelledby="edit-row-modal"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          borderRadius: '5px',
+          boxShadow: 24,
+          p: 4,
+          width: 380
+        }}>
+          {saving
+            ?
+            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+              <CircularProgress color="success" />
+            </Box>
+            :
+            <>
+              <h2 id="edit-row-modal">Edit {editedPineData.name} price</h2>
+              <TextField
+                label="Name"
+                name="name"
+                value={editedPineData.name}
+                onChange={handleInputChange}
+                fullWidth
+                disabled
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Price"
+                name="price"
+                type='number'
+                value={editedPineData.price}
+                onChange={handleInputChange}
+                fullWidth
+                sx={{ mb: 2 }}
+              />
+              <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+                <button className='btn-view-all'
+                  onClick={handleSavePine}
+                >
+                  Save
+                </button>
+                <button className='btn-view-all'
+                  onClick={handleModalClose}
+                >
+                  Cancel
+                </button>
+              </Box>
+            </>
+          }
+        </Box>
+      </Modal>
+    )
+  }
 
   // Modal component for editing row
   const EditRowModal = () => {
@@ -182,8 +269,8 @@ export default function ProductPrices({ particularData }) {
     return particular.name.toLowerCase().includes(searchInput.toLowerCase());
   });
 
-  const [columns, setColumns] = useState([
-   
+  const [columnsOne, setColumnsOne] = useState([
+
     {
       field: 'name',
       headerName: 'Particular',
@@ -202,16 +289,6 @@ export default function ProductPrices({ particularData }) {
           currency: 'PHP'
         })
       },
-    },
-    {
-      field: 'unit',
-      headerName: 'Unit',
-      flex: 1,
-    },
-    {
-      field: 'particular',
-      headerName: 'Particular',
-      flex: 1,
     },
     {
       field: 'actions',
@@ -240,11 +317,82 @@ export default function ProductPrices({ particularData }) {
     },
   ]);
 
+  const [columns, setColumns] = useState([
+    {
+      field: 'name',
+      headerName: 'Particular',
+      flex: 2,
+    },
+    {
+      field: 'price',
+      headerName: 'Price',
+      flex: 1,
+      type: 'number',
+      editable: true,
+      align: 'right',
+      valueFormatter: (params) => {
+        return params.value && params.value.toLocaleString('en-PH', {
+          style: 'currency',
+          currency: 'PHP'
+        })
+      },
+    },
+    {
+      field: 'unit',
+      headerName: 'Unit',
+      flex: 1,
+    },
+    {
+      field: 'particular',
+      headerName: 'Particular',
+      flex: 1,
+      valueGetter: (value) => {
+        const { row } = value
+        if (row.parent.toLowerCase() === 'fertilizer') {
+          return row.parent
+        }
+        return row.particular
+      },
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      flex: 1,
+      cellClassName: 'actions',
+      getActions: ({ id, row }) => {
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label="Edit"
+            className="textPrimary"
+            onClick={handleEditClick(id, row)}
+            color="inherit"
+          />,
+          // <GridActionsCellItem
+          //   icon={<DeleteIcon />}
+          //   label="Delete"
+          //   className="textPrimary"
+          //   onClick={() => (null)}
+          //   color="inherit"
+          // />
+        ];
+      },
+    },
+  ]);
+
+  const boxStyle = {
+    height: `calc(100% - 62px)`,
+    borderRadius: 3,
+  }
+
+  console.log("pineData: ", pineappleData)
+
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%' }}>
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', width: 1, height: '100%', overflowY: 'hidden' }} >
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', height: 'auto', pt: 2, pr: 2 }}>
+      <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%' }}>
+        <Box sx={{ borderRadius: 3, width: 1, height: '100%' }} >
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 2, marginX: 2 }}>
             <Box
               component='form'
               sx={{
@@ -268,26 +416,50 @@ export default function ProductPrices({ particularData }) {
               />
             </Box>
           </Box>
-          <Box sx={{ overflowY: 'auto', height: 'calc(100% - 48px)' }}>
-            <DataGrid
-              rows={filteredParticularData.map((partiData, index) => { return { index: index + 1, ...partiData } })}
-              columns={columns}
-              initialState={{
-                sorting: {
-                  sortModel: [{ field: 'index', sort: 'asc' }],
-                },
-              }}
-              editMode='row'
-              rowModesModel={rowModesModel}
-              onRowEditStop={handleRowEditStop}
-              pageSizeOptions={[25, 50, 100]}
-              disableRowSelectionOnClick
-              sx={{ border: 'none', p: 2 }}
-            />
+          <Box sx={{ display: 'flex', flex: 1, height: '100%', overflowY: 'hidden' }}>
+            {/* <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1 }}> */}
+            {/* <Box sx={{ backgroundColor: '#FFF', flex: 1, borderRadius: 3, padding: 4, boxShadow: 1, marginRight: 1, marginBottom: 2, marginTop: 2}}> */}
+            <Box sx={{ ...boxStyle, flex: 2, overflowY: 'hidden' }}>
+              <Box sx={{ ...boxStyle, height: `calc(100% - 32px)`, backgroundColor: '#FFF', overflowY: 'auto', boxShadow: 1, marginLeft: 2, marginY: 2, marginRight: 1 }}>
+                <DataGrid
+                  rows={filteredParticularData.map((partiData, index) => { return { index: index + 1, ...partiData } })}
+                  columns={columns}
+                  initialState={{
+                    sorting: {
+                      sortModel: [{ field: 'index', sort: 'asc' }],
+                    },
+                  }}
+                  editMode='row'
+                  rowModesModel={rowModesModel}
+                  onRowEditStop={handleRowEditStop}
+                  pageSizeOptions={[25, 50, 100]}
+                  disableRowSelectionOnClick
+                  sx={{ border: 'none', p: 2 }}
+                  hideFooter
+                />
+              </Box>
+            </Box>
+            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1 }}>
+              {
+                pineappleData.map((pineData, index) => (
+                  <Box sx={{ backgroundColor: index === 0 ? '#FFA500' : '#008000', flex: 1, borderRadius: 3, padding: 4, boxShadow: 1, marginLeft: 1, marginRight: 2, marginY: 2, marginTop: index === 1 ? 0 : 2 }}>
+                    <h3 style={{ color: '#FFF' }}>{pineData.name}</h3>
+                    <h1 style={{ color: '#FFF' }}>{`₱${pineData.price}.00`}</h1>
+                    <h5 style={{ color: '#FFF' }}>Price</h5>
+                    <Button variant='contained' onClick={() => {
+                      handleEditPine(pineData)
+                    }}>
+                      Edit price
+                    </Button>
+                  </Box>
+                ))
+              }
+            </Box>
           </Box>
         </Box>
       </Box>
       <EditRowModal />
+      <EditPinePrice />
     </>
   )
 };
