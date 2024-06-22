@@ -2288,7 +2288,7 @@ function SiteMap() {
             </div>
             <Typography variant='caption' > 2nd Floor Provincial Capitol Annex Building
               Brgy. III, Daet Camarines Norte</Typography>
-            <Heatmap/>
+            {/* <Heatmap/> */}
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
