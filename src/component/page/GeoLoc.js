@@ -35,10 +35,7 @@ const customIcon = new L.Icon({
 const App = () => {
   const farmsRef = collection(db, '/farms')
   const [farms, loading, error] = useCollectionData(farmsRef)
-  const [state, setState] = useState({
-    isPaneOpen: false,
-    selectedMarker: null,
-  });
+
 
   const [markers1, setMarkers1] = useState([]);
   const bounds = [
@@ -188,14 +185,14 @@ const App = () => {
     // ... (existing code)
   };
 
-  const handleMapClick = () => {
-    setState({ isPaneOpen: false, selectedMarker: null });
-  };
+  // const handleMapClick = () => {
+  //   setState({ isPaneOpen: false, selectedMarker: null });
+  // };
 
-  const handleMarkerClick = (marker) => {
-    setState({ isPaneOpen: true, selectedMarker: marker });
-    setSelectedMarker(marker);
-  };
+  // const handleMarkerClick = (marker) => {
+  //   setState({ isPaneOpen: true, selectedMarker: marker });
+  //   setSelectedMarker(marker);
+  // };
 
   // Custom icon
   const navigate = useNavigate();
@@ -16185,7 +16182,7 @@ const polygonCoordsBAS = [
 
   return (
     <div>
-    {markers.map((Name) => (
+    {/* {markers.map((Name) => (
       <SlidingPane
         key={Name.id}
         className="some-custom-class"
@@ -16205,7 +16202,7 @@ const polygonCoordsBAS = [
         </div>
         <br />
       </SlidingPane>
-    ))}
+    ))} */}
     <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       
         <div className={`map-container ${selectedMarker ? 'map-container-open' : ''}`}>
@@ -16231,9 +16228,9 @@ const polygonCoordsBAS = [
                 key={marker.id}
                 position={marker.position}
                 icon={customIcon}
-                eventHandlers={{
-                  click: () => handleMarkerClick(marker),
-              }}
+              //   eventHandlers={{
+              //     click: () => handleMarkerClick(marker),
+              // }}
             />
           ))}
 

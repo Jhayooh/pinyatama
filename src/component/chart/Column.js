@@ -1,41 +1,51 @@
-  import React from 'react';
-  import Chart from 'react-apexcharts';
+import React from 'react';
+import Chart from 'react-apexcharts';
 
-  function ExampleBarChart({ labels, data }) {
-    const options = {
-      chart: {
-        type: 'bar',
-       
-      },
-      title: {
-        text: 'Pineapple Price',
-        align: 'left'
-      },
-      legend: {
-        position: 'bottom',
-      },
-      plotOptions: {
-        bar: {
-          horizontal: false,
-          columnWidth: '40%', // Adjust the percentage to control the bar thickness
+const ExampleBarChart = ({ name, data, name1, data1 }) => {
+  const options = {
+    chart: {
+      type: 'bar',
+      stacked: true,
+    },
+    responsive: [{
+      breakpoint: 480,
+      options: {
+        legend: {
+          position: 'bottom',
+          offsetX: -10,
+          offsetY: 0
         }
-      },
-      xaxis: {
-        categories: labels || ["Default Label"],
-      },
-      dataLabels: {
-        enabled: true,
       }
-    };
+    }],
+    xaxis: {
+      categories: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+    },
+    fill: {
+      opacity: 1
+    },
+    legend: {
+      position: 'right',
+      offsetX: 0,
+      offsetY: 50
+    },
+  };
 
-    const series = [{
-      name: 'Production',
-      data: data || [44, 45]
-    }];
+  const series = [
+    {
+      name: name,
+      data: data
+    },
+    {
+      name: 'Series 2',
+      data: data1 
+    }
+  ];
 
-    return (
-      <Chart options={options} series={series} type="bar" />
-    );
-  }
+  return (
+    <div className="stacked-bar-chart">
+      <Chart options={options} series={series} type="bar" height={350} />
+    </div>
+  );
+};
 
-  export default ExampleBarChart;
+export default ExampleBarChart;
