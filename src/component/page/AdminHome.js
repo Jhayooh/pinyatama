@@ -218,7 +218,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
           </Box>
         </Grid>
         <Grid item lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }}>
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }}  onDoubleClick={() => setSelected('Farms')}>
             <GeoLoc />
           </Box>
         </Grid>
