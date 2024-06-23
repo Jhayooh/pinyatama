@@ -64,11 +64,11 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
     const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
     const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
 
-    const totalBats = totalBat / 2
-    const totalPines = totalPine / 8
+    const totalBats = totalBat 
+    const totalPines = totalPine 
     const totalPines1 = totalPines + totalBats
-    const priceBat = (totalBat / 2);
-    const pricePine = (totalPine / 8);
+    const priceBat = (totalBat * 2);
+    const pricePine = (totalPine * 8);
     const totalSale = (priceBat + pricePine);
     const numRoi1 = roundToTwoDecimals(numRoi);
     const numRoi2 = (numRoi1 + "%")

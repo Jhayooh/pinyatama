@@ -180,23 +180,22 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
               />
             </Col>
             <Col xs={12} md={6} lg={4}>
-              <SplineArea data={[marker.numpine, marker.numbut]} />
-            </Col>
-          </Row>
-        ))}
-
-        {markers.map((marker, index) => (
-          <Row key={index} className="mb-4">
-            <Col xs={12} md={6} lg={4}>
               <Doughnut
+                title={['ROI']}
                 labels={["Return on Investment", "Potential Return"]}
                 data={[newRoi.roi, 100 - newRoi.roi]}
                 width="100%"
                 height="100%"
               />
             </Col>
-            <Col xs={12} md={6} lg={8}>
-              <Column data={[marker.totalPines, marker.totalBats]} />
+          </Row>
+        ))}
+
+        {markers.map((marker, index) => (
+          <Row key={index} className="mb-4">
+            
+            <Col xs={12} md={6} lg={11}>
+              <Column data={[marker.totalPines]} data1= {[marker.totalBats]} labels={["Pineapple"]} />
             </Col>
           </Row>
         ))}
