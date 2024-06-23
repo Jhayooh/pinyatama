@@ -20,7 +20,7 @@ import GridView from './GridView.js';
 import ListView from './ListView.js';
 
 
-function Farms({ events, farms, users }) {
+function Farms({ events, farms, users, particularData }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
   const [filteredUsers, setFilteredUsers] = useState(users);
   const [newUser, setNewUser] = useState([{
@@ -126,7 +126,7 @@ function Farms({ events, farms, users }) {
     <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh' }}>
       {showFarmTabs ?
         <Box sx={{ height: '100%', overflowY: 'auto' }}>
-          <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} />
+          <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} particularData={particularData} />
         </Box >
         :
         <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
@@ -191,12 +191,12 @@ function Farms({ events, farms, users }) {
               <Exporter farms={farms} />
             </Box>
           </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2}}>
-            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewListIcon />} onClick={() => {
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
+            <Button variant="contained" sx={{ backgroundColor: 'orange' }} startIcon={<ViewListIcon />} onClick={() => {
               setGrid(false)
             }}>
             </Button>
-            <Button variant="contained" sx={{backgroundColor:'orange'}} startIcon={<ViewModuleIcon />} onClick={() => {
+            <Button variant="contained" sx={{ backgroundColor: 'orange' }} startIcon={<ViewModuleIcon />} onClick={() => {
               setGrid(true)
             }}>
               Grid
