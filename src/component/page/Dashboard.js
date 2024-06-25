@@ -292,10 +292,10 @@ function Dashboard() {
                     variant="contained"
                     sx={{
                       color: 'white',
-                      backgroundColor: 'orange',
+                      backgroundColor: 'green',
                       borderColor: 'green',
                       '&:hover': {
-                        backgroundColor: 'green',
+                        backgroundColor: 'orange',
                         color: 'white',
                       },
                     }}
@@ -754,7 +754,7 @@ const About = () => {
                   <b>Ayon pa rin sa Food and Nutrition Research Institute ito ay nagtataglay ng mga sumusunod:</b>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <TableContainer component={Paper} sx={{ width: '100%', height: '50%' }}>
+                  <TableContainer component={Paper} sx={{ width: '100%', height: '50%', backgroundColor:'#fdff72' }}>
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>

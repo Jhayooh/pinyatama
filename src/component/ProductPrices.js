@@ -394,18 +394,19 @@ export default function ProductPrices({ particularData, pineappleData }) {
             <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1 }}>
               {
                 pineappleData.map((pineData, index) => (
-                  <Box sx={{ backgroundColor: index === 0 ? '#FFA500' : '#008000', flex: 1, borderRadius: 3, padding: 4, boxShadow: 1, marginLeft: 1, marginRight: 2, marginY: 2, marginTop: index === 1 ? 0 : 2 }}>
+                  <Box sx={{ backgroundColor: index === 0 ? '#fdff72' : '#008000', flex: 1, borderRadius: 3, padding: 4, boxShadow: 1, marginLeft: 1, marginRight: 2, marginY: 2, marginTop: index === 1 ? 0 : 2 }}>
                     <h3 style={{ color: '#FFF' }}>{pineData.name}</h3>
                     <h1 style={{ color: '#FFF' }}>{`₱${pineData.price}.00`}</h1>
                     <h5 style={{ color: '#FFF' }}>Price</h5>
-                    <Button variant='contained' onClick={() => {
+                    <button className='btn-view-all' style={{marginTop:10}} onClick={() => {
                       handleEditPine(pineData)
                     }}>
                       Edit price
-                    </Button>
+                    </button>
                   </Box>
                 ))
               }
+              
             </Box>
           </Box>
         </Box>

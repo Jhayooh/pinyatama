@@ -13,7 +13,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser , ima
     const d = new Date(date.toMillis())
     return d.toLocaleDateString()
   }
-  
+
   return (
     <Box key={index} sx={{ width: 'calc(30% - 8px)', boxShadow: 3, borderRadius: 0 }}>
       <Box sx={{ paddingY: 2, paddingTop: 0 }}>
@@ -22,6 +22,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser , ima
             <img className='img' src={imageUrls[marker.id]} alt={marker.title} />
           ) : (
             <CircularProgress color='success' />
+            
           )}
         </div>
         <div >

@@ -190,3 +190,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
         </>
     );
 }
+<<<<<<< Updated upstream
+=======
+
+
+>>>>>>> Stashed changes
