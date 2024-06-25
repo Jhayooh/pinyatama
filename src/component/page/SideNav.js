@@ -345,9 +345,9 @@ export default function SideNav() {
             :
             <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
               {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
-              {selected === 'Farms' && <Farms farms={farms} events={events} roi={roi} users={users} />}
+              {selected === 'Farms' && particularRow ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} /> : <></>}
               {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-              {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
+              {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} /> }
               {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
               {selected === 'Geo' && <Geoloc />}
             </Box>

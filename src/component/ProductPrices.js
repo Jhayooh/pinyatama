@@ -269,54 +269,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
     return particular.name.toLowerCase().includes(searchInput.toLowerCase());
   });
 
-  const [columnsOne, setColumnsOne] = useState([
-
-    {
-      field: 'name',
-      headerName: 'Particular',
-      flex: 2,
-    },
-    {
-      field: 'price',
-      headerName: 'Price',
-      flex: 1,
-      type: 'number',
-      editable: true,
-      align: 'right',
-      valueFormatter: (params) => {
-        return params.value && params.value.toLocaleString('en-PH', {
-          style: 'currency',
-          currency: 'PHP'
-        })
-      },
-    },
-    {
-      field: 'actions',
-      type: 'actions',
-      headerName: 'Actions',
-      flex: 1,
-      cellClassName: 'actions',
-      getActions: ({ id, row }) => {
-        return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id, row)}
-            color="inherit"
-          />,
-          // <GridActionsCellItem
-          //   icon={<DeleteIcon />}
-          //   label="Delete"
-          //   className="textPrimary"
-          //   onClick={() => (null)}
-          //   color="inherit"
-          // />
-        ];
-      },
-    },
-  ]);
-
   const [columns, setColumns] = useState([
     {
       field: 'name',

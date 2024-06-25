@@ -15,7 +15,7 @@ import { db } from '../firebase/Config';
 import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { NetworkWifi } from '@mui/icons-material';
 
-function CostAndReturn({ markers, parts, farm, roi }) {
+function CostAndReturn({ markers, parts, farm, particularData, roi }) {
   const [selectedTab, setSelectedTab] = useState(0);
   const [show, setShow] = useState(false);
   const [localParts, setLocalParts] = useState([]);
@@ -57,7 +57,7 @@ function CostAndReturn({ markers, parts, farm, roi }) {
   // materialTotal: 42559
   // netReturn: 81710
   // roi: 55.20945945945947
-  
+
   useEffect(() => {
     setLocalParts(parts);
     setLaborMaterial([markers[0].totalPriceMaterial, markers[0].totalPriceLabor])
@@ -128,13 +128,8 @@ function CostAndReturn({ markers, parts, farm, roi }) {
     if (params.value == null || isNaN(params.value)) {
       return '';
     }
-    return parseFloat(params.value);
+    return parseFloat(params.value).toFixed(0);
   };
-
-  useEffect(() => {
-
-  }, [editedRowData])
-
 
   const handleSaveChanges = async () => {
     if (!editedRowData) {
@@ -160,6 +155,8 @@ function CostAndReturn({ markers, parts, farm, roi }) {
       setSaving(false);
     }
   };
+
+  console.log('particular data:', particularData)
 
   return (
     <>
@@ -210,19 +207,37 @@ function CostAndReturn({ markers, parts, farm, roi }) {
         </DialogTitle>
         <DialogContent dividers>
           <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider', overflowY: 'auto', flex: 1 }}>
+            <Box sx={{ overflowY: 'auto', flex: 1 }}>
               <Tabs value={selectedTab} onChange={handleTabChange}>
                 <Tab label="Labor" />
                 <Tab label="Material" />
+                <Tab label="Fertilizer" />
               </Tabs>
               {selectedTab === 0 && (
                 <Box sx={{ overflowY: 'auto', height: 380 }}>
                   <DataGrid
-                    rows={localParts.filter(part => part.particular === 'Labor')}
+                    rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
                     columns={[
                       { field: 'name', headerName: 'Labor', flex: 1, },
-                      { field: 'qntyPrice', headerName: 'Quantity', flex: 1, editable: true, valueFormatter },
-                      { field: 'totalPrice', headerName: 'Price', flex: 1, valueFormatter },
+                      {
+                        field: 'qntyPrice',
+                        headerName: 'Quantity',
+                        flex: 1,
+                        type: 'number',
+                        editable: true,
+                        valueFormatter
+                      },
+                      {
+                        field: 'totalPrice',
+                        headerName: 'Price',
+                        flex: 1,
+                        valueFormatter: (params) => {
+                          return params.value && params.value.toLocaleString('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP'
+                          })
+                        },
+                      },
                     ]}
                     // autoHeight
                     hideFooter={true}
@@ -233,11 +248,60 @@ function CostAndReturn({ markers, parts, farm, roi }) {
               {selectedTab === 1 && (
                 <Box sx={{ overflowY: 'auto', height: 380 }}>
                   <DataGrid
-                    rows={localParts.filter(part => part.particular === 'Material')}
+                    rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() != 'fertilizer')}
                     columns={[
                       { field: 'name', headerName: 'Material', flex: 1 },
-                      { field: 'qntyPrice', headerName: 'Quantity', flex: 1, editable: true, valueFormatter },
-                      { field: 'totalPrice', headerName: 'Price', flex: 1, valueFormatter },
+                      {
+                        field: 'qntyPrice',
+                        headerName: 'Quantity',
+                        flex: 1,
+                        type: 'number',
+                        editable: true,
+                        valueFormatter
+                      },
+                      {
+                        field: 'totalPrice',
+                        headerName: 'Price',
+                        flex: 1,
+                        valueFormatter: (params) => {
+                          return params.value && params.value.toLocaleString('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP'
+                          })
+                        },
+                      },
+                    ]}
+                    // autoHeight
+                    hideFooter={true}
+                    processRowUpdate={processRowUpdate}
+                  />
+                </Box>
+              )}
+              {selectedTab === 2 && (
+                <Box sx={{ overflowY: 'auto', height: 380 }}>
+                  <DataGrid
+                    rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
+                    columns={[
+                      { field: 'name', headerName: 'Fertilizer', flex: 1 },
+                      {
+                        field: 'defQnty',
+                        headerName: 'Quantity',
+                        flex: 1,
+                        type: 'number',
+                        editable: true,
+                        valueFormatter
+                      },
+                      {
+                        field: 'price',
+                        headerName: 'Price',
+                        flex: 1,
+                        valueFormatter: (params) => {
+                          return params.value && params.value.toLocaleString('en-PH', {
+                            style: 'currency',
+                            currency: 'PHP'
+                          })
+                        },
+                      },
                     ]}
                     // autoHeight
                     hideFooter={true}
@@ -246,14 +310,14 @@ function CostAndReturn({ markers, parts, farm, roi }) {
                 </Box>
               )}
             </Box>
-            <Box sx={{  display: 'flex', flexDirection: 'column' }}>
-              <Box sx={{flex:1}}>
+            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ flex: 1 }}>
                 <Pie
                   labels={["Materyales", "Labor"]}
                   data={laborMaterial}
                 />
               </Box>
-              <Box  sx={{flex:1}}>
+              <Box sx={{ flex: 1 }}>
                 <Doughnut
                   labels={["Return on Investment", "Potential Return"]}
                   data={[newRoi.roi, 100 - newRoi.roi]}
