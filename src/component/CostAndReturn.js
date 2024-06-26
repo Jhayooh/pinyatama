@@ -79,15 +79,10 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
   }
 
   function calcNewRoi() {
-    console.log("roi", roi)
     const grossReturnAndBatter = newRoi.grossReturn + newRoi.batterBall
-    console.log("grossAndBatter", grossReturnAndBatter)
     const costTotal = laborMaterial[0] + laborMaterial[1]
-    console.log("costTotal", costTotal)
     const netReturnValue = grossReturnAndBatter - costTotal;
-    console.log("returnValue", netReturnValue)
     const roiValue = (netReturnValue / grossReturnAndBatter) * 100;
-    console.log("roiValue", roiValue)
     setNewRoi((prevItem) => ({
       ...prevItem,
       roi: roiValue,
