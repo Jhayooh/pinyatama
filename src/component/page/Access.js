@@ -173,7 +173,7 @@ export default function Access({ usersRow }) {
       flex: 1,
       editable: false,
       renderCell: (params) => (
-        <span style={{ color: params.row.status === 'active' ? 'green' : params.row.status === 'pending' ? 'yellow' : 'red' }}>
+        <span style={{ color: params.row.status === 'active' ? 'green' : params.row.status === 'pending' ? 'orange' : 'red' }}>
           {params.row.status}
         </span>
       )

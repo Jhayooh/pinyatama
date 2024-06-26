@@ -63,7 +63,7 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="http://queenpineapple.lesterintheclouds.com">
+      <Link color="inherit" href="https://queenpineapple.lesterintheclouds.com/">
         Queen Pineapple Farming
       </Link>{' '}
       {new Date().getFullYear()}
@@ -292,10 +292,10 @@ function Dashboard() {
                     variant="contained"
                     sx={{
                       color: 'white',
-                      backgroundColor: 'orange',
+                      backgroundColor: 'green',
                       borderColor: 'green',
                       '&:hover': {
-                        backgroundColor: 'green',
+                        backgroundColor: 'orange',
                         color: 'white',
                       },
                     }}
@@ -754,7 +754,7 @@ const About = () => {
                   <b>Ayon pa rin sa Food and Nutrition Research Institute ito ay nagtataglay ng mga sumusunod:</b>
                 </AccordionSummary>
                 <AccordionDetails>
-                  <TableContainer component={Paper} sx={{ width: '100%', height: '50%' }}>
+                  <TableContainer component={Paper} sx={{ width: '100%', height: '50%', backgroundColor: '#fdff72' }}>
                     <Table aria-label="simple table">
                       <TableHead>
                         <TableRow>
@@ -2226,7 +2226,7 @@ function ContactSec() {
 }
 function SiteMap() {
   return (
-    <div style={{ padding: 20 }}>
+    <div style={{ padding: 20, backgroundColor:'white' }}>
       {/* <Typography
         variant="overline"
         display="block"
@@ -2234,38 +2234,9 @@ function SiteMap() {
         sx={{ color: 'orange', fontSize: '20px' }}>
         Site Map
       </Typography> */}
-      <Box sx={{ flexDirection: 'row', display: 'flex' }}>
-        <Box sx={{ flexDirection: 'row', display: 'flex' }}>
-          <div>
-            <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
-          </div>
-          <div>
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'green',
-                textDecoration: 'none',
-              }}
-              style={{ marginLeft: '10px' }}
-            >
-              QUEEN PINEAPPLE FARMING
-            </Typography>
-            <Box sx={{ flexDirection: 'column', display: 'flex' }}>
-              <Typography variant='caption'>
-                A Sustainable Pineapple Farming
-              </Typography>
-            </Box>
-          </div>
-        </Box>
-        {/* <Box sx={{ flex: 1 }}>
+      {/* <Box sx={{ flexDirection: 'row', display: 'flex' }}> */}
+
+      {/* <Box sx={{ flex: 1 }}>
           <Typography variant='button'> About Us</Typography>
           <ul>
             <li>
@@ -2279,7 +2250,7 @@ function SiteMap() {
         <Box sx={{ flex: 1 }}>
           <Typography variant='button'> Agencies</Typography>
         </Box> */}
-      </Box>
+      {/* </Box>
       <Box sx={{ flexDirection: 'row', display: 'flex', marginTop: 5 }}>
         <Box sx={{ flex: 1 }}>
           <Box sx={{ flexDirection: 'row', display: 'flex', gap:1 }}>
@@ -2288,7 +2259,7 @@ function SiteMap() {
             </div>
             <Typography variant='caption' > 2nd Floor Provincial Capitol Annex Building
               Brgy. III, Daet Camarines Norte</Typography>
-            {/* <Heatmap/> */}
+            
           </Box>
         </Box>
         <Box sx={{ flex: 1 }}>
@@ -2307,8 +2278,8 @@ function SiteMap() {
             <Typography variant='caption'>opagcamnorte@yahoo.com/opagcamsnorte@gmail.com</Typography>
           </Box>
         </Box>
-      </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column' , marginTop:2}}>
+      </Box> */}
+      {/* <Box sx={{ display: 'flex', flexDirection: 'column' , marginTop:2}}>
         <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Box sx={{ flex: 1 }}>
             <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
@@ -2327,9 +2298,42 @@ function SiteMap() {
             </Box>
           </Box>
         </Box>
-      </Box>
-      <Divider />
-      <Box>
+      </Box> */}
+
+      <Box sx={{}}>
+        <Divider />
+        <Box sx={{ flexDirection: 'row', display: 'flex', justifyContent:'center', alignItems:'center' }}>
+          <div>
+            <img src={require('../image_src/pinyatamap-logo.png')} width={30} height={30} marginLeft />
+          </div>
+          <div>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="#app-bar-with-responsive-menu"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 500,
+                letterSpacing: '.3rem',
+                color: 'green',
+                textDecoration: 'none',
+                marginTop:2
+               
+              }}
+              
+            >
+              QUEEN PINEAPPLE FARMING
+            </Typography>
+            <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+              <Typography variant='caption'>
+                A Sustainable Pineapple Farming
+              </Typography>
+            </Box>
+          </div>
+        </Box>
         <Copyright sx={{ mt: 5 }} />
       </Box>
     </div>

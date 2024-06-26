@@ -174,6 +174,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
             </Box>
           </Button>
         </Grid>
+        
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 1000 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
