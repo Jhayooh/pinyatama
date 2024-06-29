@@ -76,10 +76,12 @@ export default function SideNav() {
         const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
         const farmEventsSnapshot = await getDocs(farmEventsColl);
         const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
+        const farmStage = farm.cropStage
 
         const cropstage = new Date();
-        const farmStage = farmEvents.cropstage
         let newCropstage = '';
+
+        farmStage ? console.log('farmer name', farmStage) : console.log("no farmEvvents", farmStage);
 
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');

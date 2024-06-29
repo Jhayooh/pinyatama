@@ -4,7 +4,7 @@ import Chart from 'react-apexcharts';
 function ExamplePieChart({ labels, data, title }) {
   console.log("data sa donut", data)
   const options = {
-    labels: labels || ["Default Label"],
+    labels: labels,
     title:  {
       text: title || 'Expected QP Production',
       align: 'left'
@@ -18,6 +18,12 @@ function ExamplePieChart({ labels, data, title }) {
     plotOptions: {
       pie: {
         customScale: 1,
+        donut: {
+          labels: {
+            show: true,
+
+          }
+        }
       }
     },
     dataLabels: {
