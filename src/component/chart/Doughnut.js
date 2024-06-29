@@ -2,6 +2,7 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 function ExamplePieChart({ labels, data, title }) {
+  console.log("data sa donut", data)
   const options = {
     labels: labels || ["Default Label"],
     title:  {
@@ -26,7 +27,7 @@ function ExamplePieChart({ labels, data, title }) {
 
   const series = data || [44, 45]
   return (
-    <Chart options={options} series={series} type="donut"  />
+    <Chart options={options} series={data} type="donut"  />
   );
 }
 

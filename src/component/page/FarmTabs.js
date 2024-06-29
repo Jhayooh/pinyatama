@@ -61,7 +61,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
     const totalPriceLabor = roi ? roi.reduce((total, roiItem) => total + roiItem.laborTotal, 0) : 0;
     const totalPriceMaterial = roi ? roi.reduce((total, roiItem) => total + roiItem.materialTotal, 0) : 0;
     const totalPriceAll = roi ? roi.reduce((total, roiItem) => total + roiItem.costTotal, 0) : 0;
-    const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.batterBall, 0) : 0;
+    const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.butterBall, 0) : 0;
     const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
 
     const totalBats = totalBat 
