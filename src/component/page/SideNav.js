@@ -17,6 +17,7 @@ import {
   Timestamp,
   addDoc,
   collection,
+  doc,
   getDocs,
   orderBy,
   query,
@@ -53,10 +54,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 
-import pineapple from '../image_src/pineapple.json';
-import ListView from './ListView';
-
-
 const drawerWidth = 160;
 const bgColor = 'green'
 
@@ -68,6 +65,46 @@ export default function SideNav() {
   const [farms, loading, error] = useCollectionData(farmsQuery)
   const [events, setEvents] = useState([])
   const [roi, setRoi] = useState([])
+
+  useEffect(() => {
+    const fetchAndUpdateFarms = async () => {
+      if (!farms) {
+        return;
+      }
+
+      for (const farm of farms) {
+        const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
+        const farmEventsSnapshot = await getDocs(farmEventsColl);
+        const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
+
+        const cropstage = new Date();
+        const farmStage = farmEvents.cropstage
+        let newCropstage = '';
+
+        const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
+        const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
+        const fruitingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'fruiting');
+
+        if (vegetativePhase && cropstage >= vegetativePhase.start_time.toDate() && cropstage <= vegetativePhase.end_time.toDate()) {
+          newCropstage = 'vegetative';
+        } else if (floweringPhase && cropstage >= floweringPhase.start_time.toDate() && cropstage <= floweringPhase.end_time.toDate()) {
+          newCropstage = 'flowering';
+        } else if (fruitingPhase && cropstage >= fruitingPhase.start_time.toDate() && cropstage <= fruitingPhase.end_time.toDate()) {
+          newCropstage = 'fruiting';
+        } else {
+          newCropstage = 'complete';
+        }
+
+        if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
+          await updateDoc(doc(db, `/farms/${farm.id}`), {
+            cropStage: newCropstage,
+          });
+        }
+      }
+    };
+
+    fetchAndUpdateFarms();
+  }, [farms]);
 
   const userRef = collection(db, '/users')
   const userQuery = query(userRef)
@@ -94,8 +131,6 @@ export default function SideNav() {
     setModalIdle(true); //show modal
     setRemainingTime(30); //set 15 seconds as time remaining
   };
-
-  console.log("pineapple errrrrrooorrrr: ", pineappleError)
 
   const { isIdle } = useIdle({ onIdle: handleIdle, idleTime: 30 });
 
@@ -157,7 +192,6 @@ export default function SideNav() {
         const roiData = roiSnapshot.docs.map((doc) => ({
           ...doc.data()
         }))
-        console.log("roi data", roiData);
         return roiData;
       });
       const allRoi = await Promise.all(roiPromises);
@@ -175,7 +209,6 @@ export default function SideNav() {
       // An error happened.
     });
   }
-  console.log("eventsssss:", events);
 
   //Logout
   const [logoutModalDisplay, setLogoutModalDisplay] = useState(false);
@@ -347,7 +380,7 @@ export default function SideNav() {
               {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
               {selected === 'Farms' && particularRow ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} /> : <></>}
               {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-              {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} /> }
+              {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
               {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
               {selected === 'Geo' && <Geoloc />}
             </Box>

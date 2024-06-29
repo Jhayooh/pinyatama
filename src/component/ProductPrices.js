@@ -28,11 +28,13 @@ import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
-import CancelIcon from '@mui/icons-material/Close';
 import SearchIcon from '@mui/icons-material/Search';
+import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+
 import moment from 'moment';
 
 export default function ProductPrices({ particularData, pineappleData }) {
@@ -62,6 +64,20 @@ export default function ProductPrices({ particularData, pineappleData }) {
     }
   };
 
+  const handleAvailability = async (row) => {
+    console.log('ROWW', row)
+    setSaving(true)
+    try {
+      const docRef = doc(db, '/particulars', row.id)
+      await updateDoc(docRef, {
+        isAvailable: !row.isAvailable
+      })
+    } catch (e) {
+      console.log("error update", e)
+    }
+    setSaving(false)
+  }
+
   const handleModalClose = () => {
     setIsModalOpen(false);
     setPineModal(false)
@@ -69,7 +85,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   const EditPinePrice = () => {
     const [editedPineData, setEditedPineData] = useState(pineData)
-    console.log("pineDataaaaaaa:", editedPineData);
 
     const handleSavePine = async () => {
       setSaving(true)
@@ -107,46 +122,39 @@ export default function ProductPrices({ particularData, pineappleData }) {
           p: 4,
           width: 380
         }}>
-          {saving
-            ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress color="success" />
+          <>
+            <h2 id="edit-row-modal">Edit {editedPineData.name} price</h2>
+            <TextField
+              label="Name"
+              name="name"
+              value={editedPineData.name}
+              onChange={handleInputChange}
+              fullWidth
+              disabled
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Price"
+              name="price"
+              type='number'
+              value={editedPineData.price}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+              <button className='btn-view-all'
+                onClick={handleSavePine}
+              >
+                Save
+              </button>
+              <button className='btn-view-all'
+                onClick={handleModalClose}
+              >
+                Cancel
+              </button>
             </Box>
-            :
-            <>
-              <h2 id="edit-row-modal">Edit {editedPineData.name} price</h2>
-              <TextField
-                label="Name"
-                name="name"
-                value={editedPineData.name}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Price"
-                name="price"
-                type='number'
-                value={editedPineData.price}
-                onChange={handleInputChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                <button className='btn-view-all'
-                  onClick={handleSavePine}
-                >
-                  Save
-                </button>
-                <button className='btn-view-all'
-                  onClick={handleModalClose}
-                >
-                  Cancel
-                </button>
-              </Box>
-            </>
-          }
+          </>
         </Box>
       </Modal>
     )
@@ -157,6 +165,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
 
     const handleSaveChanges = async () => {
+      setIsModalOpen(false)
       setSaving(true)
       try {
         const docRef = doc(db, 'particulars', selectedRow.id)
@@ -164,7 +173,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
       } catch (error) {
         console.error("error updating document", error);
       }
-      setIsModalOpen(false)
       setSaving(false)
     };
 
@@ -172,7 +180,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
       const { name, value } = event.target;
       setEditedRowData(prevData => ({
         ...prevData,
-        [name]: value
+        [name]: parseInt(value)
       }));
     };
 
@@ -193,64 +201,58 @@ export default function ProductPrices({ particularData, pineappleData }) {
           p: 4,
           width: 380
         }}>
-          {saving
-            ?
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-              <CircularProgress color="success" />
+          <>
+            <h2 id="edit-row-modal">Edit Row</h2>
+            <TextField
+              label="ID"
+              name="id"
+              value={editedRowData.id}
+              onChange={handleInputChange}
+              fullWidth
+              disabled
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Name"
+              name="name"
+              value={editedRowData.name}
+              onChange={handleInputChange}
+              fullWidth
+              disabled
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Price"
+              name="price"
+              type='number'
+              value={editedRowData.price}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Unit"
+              name="unit"
+              value={editedRowData.unit}
+              onChange={handleInputChange}
+              disabled
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+              <button className='btn-view-all'
+                onClick={handleSaveChanges}
+              >
+                Save
+              </button>
+              <button className='btn-view-all'
+                onClick={handleModalClose}
+              >
+                Cancel
+              </button>
             </Box>
-            :
-            <>
-              <h2 id="edit-row-modal">Edit Row</h2>
-              <TextField
-                label="ID"
-                name="id"
-                value={editedRowData.id}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Name"
-                name="name"
-                value={editedRowData.name}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Price"
-                name="price"
-                type='number'
-                value={editedRowData.price}
-                onChange={handleInputChange}
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <TextField
-                label="Unit"
-                name="unit"
-                value={editedRowData.unit}
-                onChange={handleInputChange}
-                disabled
-                fullWidth
-                sx={{ mb: 2 }}
-              />
-              <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                <button className='btn-view-all'
-                  onClick={handleSaveChanges}
-                >
-                  Save
-                </button>
-                <button className='btn-view-all'
-                  onClick={handleModalClose}
-                >
-                  Cancel
-                </button>
-              </Box>
-            </>
-          }
+          </>
+
         </Box>
       </Modal>
     );
@@ -313,22 +315,42 @@ export default function ProductPrices({ particularData, pineappleData }) {
       flex: 1,
       cellClassName: 'actions',
       getActions: ({ id, row }) => {
-        return [
+        const editAction = (
           <GridActionsCellItem
-            icon={<EditIcon />}
+            icon={<EditOutlinedIcon />}
             label="Edit"
             className="textPrimary"
             onClick={handleEditClick(id, row)}
             color="inherit"
-          />,
-          // <GridActionsCellItem
-          //   icon={<DeleteIcon />}
-          //   label="Delete"
-          //   className="textPrimary"
-          //   onClick={() => (null)}
-          //   color="inherit"
-          // />
-        ];
+            sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+          />
+        );
+
+        if (row.parent.toLowerCase() === 'fertilizer') {
+          const availabilityAction = row.isAvailable ? (
+            <GridActionsCellItem
+              icon={<CancelOutlinedIcon />}
+              label="Unavailable"
+              className="textPrimary"
+              onClick={() => handleAvailability(row)}
+              color="inherit"
+              sx={{ color: 'inherit', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
+            />
+          ) : (
+            <GridActionsCellItem
+              icon={<CheckCircleOutlineOutlinedIcon />}
+              label="Available"
+              className="textPrimary"
+              onClick={() => handleAvailability(row)}
+              color="inherit"
+              sx={{ color: 'inherit', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
+            />
+          );
+
+          return [availabilityAction, editAction];
+        }
+
+        return [editAction];
       },
     },
   ]);
@@ -337,8 +359,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
     height: `calc(100% - 62px)`,
     borderRadius: 3,
   }
-
-  console.log("pineData: ", pineappleData)
 
   return (
     <>
@@ -378,7 +398,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   columns={columns}
                   initialState={{
                     sorting: {
-                      sortModel: [{ field: 'index', sort: 'asc' }],
+                      sortModel: [{ field: 'particular', sort: 'asc' }],
                     },
                   }}
                   editMode='row'
@@ -413,6 +433,25 @@ export default function ProductPrices({ particularData, pineappleData }) {
       </Box>
       <EditRowModal />
       <EditPinePrice />
+      <Modal
+        open={saving}
+        aria-labelledby="edit-row-modal"
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          borderRadius: '5px',
+          boxShadow: 24,
+          p: 4,
+          width: 380
+        }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <CircularProgress color="success" />
+          </Box>
+        </Box>
+      </Modal>
     </>
   )
 };
