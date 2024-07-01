@@ -52,7 +52,7 @@ function Profile({ user, farm }) {
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
-                                // defaultValue={farm.farmerName}
+                                defaultValue={farm.fieldId}
                                 InputProps={{
                                     readOnly: true,
                                 }}
