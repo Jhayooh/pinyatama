@@ -18,52 +18,27 @@ import { NetworkWifi } from '@mui/icons-material';
 function CostAndReturn({ markers, parts, farm, particularData, roi }) {
   const [selectedTab, setSelectedTab] = useState(0);
   const [show, setShow] = useState(false);
-  const [localParts, setLocalParts] = useState([]);
+  const [localParts, setLocalParts] = useState(parts);
   const [saving, setSaving] = useState(false);
   const [laborMaterial, setLaborMaterial] = useState([])
-  const [newRoi, setNewRoi] = useState(roi[0])
+  const [newRoi, setNewRoi] = useState({
+    ...roi[0]
+  })
   const [editedRowData, setEditedRowData] = useState([]);
-
-  // name:"totalPines"
-  // numIor:45.17
-  // numRoi1:54.83
-  // numRoi2:"54.83%",
-  // numbut:3600
-  // numpine:129600
-  // priceBut:1800
-  // totalBats:1800
-  // totalPine:0
-  // totalPines:16200
-  // totalPriceLabor:21360
-  // totalPriceMaterial:38804
-  // totalSale1:"₱133,200"
-
-
-  // batterBall
-  // : 
-  // 4000
-  // costTotal
-  // : 
-  // 66290
-  // grossReturn
-  // : 
-  // 144000
-  // id
-  // : 
-  // "sfDEGsou9SKyqix3RzOH"
-  // laborTotal
-  // : 
-  // 23731
-  // materialTotal: 42559
-  // netReturn: 81710
-  // roi: 55.20945945945947
-
+  
   useEffect(() => {
-    setLocalParts(parts);
+    if (!parts || !particularData){
+      return
+    }
+    
+    const updatedLocalParts = parts.map(part => ({
+      ...part,
+      isAvailable: particularData.find(data => data.id === part.fkId)?.isAvailable ?? part.isAvailable
+    }));
+    setLocalParts(updatedLocalParts);
     setLaborMaterial([markers[0].totalPriceMaterial, markers[0].totalPriceLabor])
     setNewRoi(roi[0])
-  }, [parts, show]);
-
+  }, [parts, show, particularData, localParts]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -151,8 +126,6 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
     }
   };
 
-  console.log('particular data:', particularData)
-
   return (
     <>
       <Container>
@@ -188,9 +161,9 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
 
         {markers.map((marker, index) => (
           <Row key={index} className="mb-4">
-            
+
             <Col xs={12} md={6} lg={11}>
-              <Column data={[marker.totalPines]} data1= {[marker.totalBats]} labels={["Pineapple"]} />
+              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
             </Col>
           </Row>
         ))}
@@ -279,7 +252,7 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
                     columns={[
                       { field: 'name', headerName: 'Fertilizer', flex: 1 },
                       {
-                        field: 'defQnty',
+                        field: 'qntyPrice',
                         headerName: 'Quantity',
                         flex: 1,
                         type: 'number',
@@ -297,10 +270,20 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
                           })
                         },
                       },
+                      {
+                        field: 'status',
+                        headerName: 'Status',
+                        flex: 1,
+                        valueGetter: (params) => {
+                          console.log('Row data:', params.row);
+                          return params.row.isAvailable ? 'Available' : 'Unavailable';
+                        },
+                      }
                     ]}
                     // autoHeight
                     hideFooter={true}
                     processRowUpdate={processRowUpdate}
+                    getRowClassName={(params) => params.row.status === 'Unavailable' ? 'disabled-row' : ''}
                   />
                 </Box>
               )}

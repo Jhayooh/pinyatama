@@ -109,7 +109,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
                 return marker;
         }
     });
-
+    roi && console.log("the roi:", roi)
     return (
         <>
             <div style={{ backgroundColor: '#fff' }}>
