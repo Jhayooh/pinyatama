@@ -12,10 +12,15 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography } from '@mui/material';
 import { Tabs, Tab, Box } from '@mui/material';
 import { db } from '../firebase/Config';
-import { addDoc, collection, doc, getDoc, setDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { NetworkWifi } from '@mui/icons-material';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-function CostAndReturn({ markers, parts, farm, particularData, roi }) {
+function CostAndReturn({ markers, parts, farm, roi }) {
+  const marker = markers[0]
+  const particularsRef = collection(db, '/particulars')
+  const [particularData, particularLoading] = useCollectionData(particularsRef)
+
   const [selectedTab, setSelectedTab] = useState(0);
   const [show, setShow] = useState(false);
   const [localParts, setLocalParts] = useState(parts);
@@ -25,20 +30,27 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
     ...roi[0]
   })
   const [editedRowData, setEditedRowData] = useState([]);
-  
+
   useEffect(() => {
-    if (!parts || !particularData){
+    if (!parts || !particularData) {
       return
     }
-    
+
+    const queueFarmComp = collection(db, `farms/${farm.id}/components`)
+
     const updatedLocalParts = parts.map(part => ({
       ...part,
-      isAvailable: particularData.find(data => data.id === part.fkId)?.isAvailable ?? part.isAvailable
+      isAvailable: particularData.find(data => data.id === part.foreignId)?.isAvailable ?? part.isAvailable
     }));
+
+    // await updateDoc(queueFarmComp, updatedLocalParts)
+
+    console.log("updatedLocalParts", updatedLocalParts)
+
     setLocalParts(updatedLocalParts);
     setLaborMaterial([markers[0].totalPriceMaterial, markers[0].totalPriceLabor])
     setNewRoi(roi[0])
-  }, [parts, show, particularData, localParts]);
+  }, [particularData]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -98,7 +110,7 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
     if (params.value == null || isNaN(params.value)) {
       return '';
     }
-    return parseFloat(params.value).toFixed(0);
+    return params.value;
   };
 
   const handleSaveChanges = async () => {
@@ -129,44 +141,37 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
   return (
     <>
       <Container>
-        {markers.map((marker, index) => (
-          <Row key={index} className="mb-4">
-            <Col xs={12} md={6} lg={4} onClick={handleShow}>
-              <Pie
-                labels={["Materyales", "Labor"]}
-                data={laborMaterial}
-                width="100%"
-                height="100%"
-              />
-            </Col>
-            <Col xs={12} md={6} lg={4}>
-              <Doughnut
-                labels={["Pineapple", "Butterball"]}
-                data={[marker.totalPines, marker.totalBats]}
-                width="100%"
-                height="100%"
-              />
-            </Col>
-            <Col xs={12} md={6} lg={4}>
-              <Doughnut
-                title={['ROI']}
-                labels={["Return on Investment", "Potential Return"]}
-                data={[newRoi.roi, 100 - newRoi.roi]}
-                width="100%"
-                height="100%"
-              />
-            </Col>
-          </Row>
-        ))}
+        <Row className="mb-4">
+          <Col xs={12} md={6} lg={4} onClick={handleShow}>
+            <Pie
+              labels={["Materyales", "Labor"]}
+              data={laborMaterial}
+              width="100%"
+              height="100%"
+            />
+          </Col>
+          <Col xs={12} md={6} lg={4}>
+            <Doughnut
+              labels={["Pineapple", "Butterball"]}
+              data={[marker.totalPines, marker.totalBats]}
+              width="100%"
+              height="100%"
+            />
+          </Col>
+          <Col xs={12} md={6} lg={4}>
+            <Doughnut
+              title={['ROI']}
+              labels={["Return on Investment", "Potential Return"]}
+              data={[newRoi.roi, 100 - newRoi.roi]}
+              width="100%"
+              height="100%"
+            />
+          </Col>
+          <Col xs={12} md={12} lg={12}>
+            <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
+          </Col>
+        </Row>
 
-        {markers.map((marker, index) => (
-          <Row key={index} className="mb-4">
-
-            <Col xs={12} md={6} lg={11}>
-              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
-            </Col>
-          </Row>
-        ))}
       </Container>
 
       <Dialog open={show} onClose={handleClose} fullWidth={true} maxWidth='lg'>
@@ -216,7 +221,7 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
               {selectedTab === 1 && (
                 <Box sx={{ overflowY: 'auto', height: 380 }}>
                   <DataGrid
-                    rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() != 'fertilizer')}
+                    rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
                     columns={[
                       { field: 'name', headerName: 'Material', flex: 1 },
                       {
@@ -275,7 +280,6 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
                         headerName: 'Status',
                         flex: 1,
                         valueGetter: (params) => {
-                          console.log('Row data:', params.row);
                           return params.row.isAvailable ? 'Available' : 'Unavailable';
                         },
                       }
