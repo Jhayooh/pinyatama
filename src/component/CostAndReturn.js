@@ -301,6 +301,16 @@ function CostAndReturn({ markers, parts, farm, particularData, roi }) {
                   data={[newRoi.roi, 100 - newRoi.roi]}
                 />
               </Box>
+              {markers.map((marker, index) => (
+              <Box sx={{ flex: 1 }}>
+              <Doughnut
+                labels={["Pineapple", "Butterball"]}
+                data={[marker.totalPines, marker.totalBats]}
+                width="100%"
+                height="100%"
+              />
+              </Box>
+              ))}
             </Box>
           </Box>
         </DialogContent>

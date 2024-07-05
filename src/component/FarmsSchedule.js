@@ -7,7 +7,7 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
 import { db } from '../firebase/Config'
 import './ripple.css'
 import Textfield from './Timeline'
-import { Box, Paper, Slide } from '@mui/material'
+import { Box, Paper, Slide, Button } from '@mui/material'
 
 function SideDetails({ farms, eventClicked }) {
   const farmClicked = getObject(farms, "id", eventClicked.group)
@@ -31,6 +31,7 @@ function SideDetails({ farms, eventClicked }) {
       <p></p>
       <h5>Activities: </h5>
       <p>No Activities</p>
+      <Button>Click Here</Button>
     </Box>
   )
 }
