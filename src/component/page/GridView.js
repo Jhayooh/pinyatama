@@ -81,7 +81,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
 
   return (
     <Box key={index} sx={{ width: 'calc(30% - 8px)', paddingBottom:5}}>
-      <Paper elevation={3} sx={{ padding:2 }} onClick={() => {
+      <Paper elevation={3} sx={{ padding:2, backgroundColor:'#fff' }} onClick={() => {
             setShowFarmTabs(true)
             setIndFarm(marker.id)
             setIndUser(marker.brgyUID)
@@ -103,7 +103,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
         </Typography>
         <Typography variant="body2" color="text.secondary">
           Date of Planting: {dateFormatter(marker.start_date)}
-        </Typography>
+        </Typography> 
         <Typography variant="body2" color="text.secondary">
           Date of expected Harvest: {dateFormatter(marker.harvest_date)}
         </Typography>

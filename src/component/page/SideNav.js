@@ -112,6 +112,9 @@ export default function SideNav() {
   const userQuery = query(userRef)
   const [users] = useCollectionData(userQuery)
 
+  const farmerRef = collection(db, '/farmer')
+  const [farmerRow,farmerLoading] = useCollectionData(farmerRef)
+
   const particularsRef = collection(db, '/particulars')
   const [particularRow, particularLoading] = useCollectionData(particularsRef)
 
@@ -379,7 +382,7 @@ export default function SideNav() {
             </Box>
             :
             <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
+              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} farmer={farmerRow}/>}
               {selected === 'Farms' && particularRow ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} /> : <></>}
               {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
               {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}

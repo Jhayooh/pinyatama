@@ -129,7 +129,7 @@ function Farms({ events, farms, users, particularData }) {
           <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} particularData={particularData} />
         </Box >
         :
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
+        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
             <Box sx={{ width: '80%' }}>
               <FormControl fullWidth size="small">

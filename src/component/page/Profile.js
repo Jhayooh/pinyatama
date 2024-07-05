@@ -22,7 +22,7 @@ const Container = styled(Box)({
 
 function Profile({ user, farm }) {
     return (
-        <Container>
+        <Grid container alignItems='stretch'>
             <Paper
                 variant='elevation'
                 elevation={3}
@@ -36,7 +36,7 @@ function Profile({ user, farm }) {
 
                 {/* Farm Info */}
 
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '500px', width: '700px', justifyContent: 'center' }}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center' }}>
                     <Typography variant='h6'
                         sx={{
                             color: 'green',
@@ -159,7 +159,7 @@ function Profile({ user, farm }) {
                 elevation={5}
                 sx={{
                     display: 'flex',
-                    height: '500px',
+                    height: '100%',
                     width: '30%',
                     flexDirection: 'column',
                     boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)'
@@ -252,7 +252,7 @@ function Profile({ user, farm }) {
                     </Box>
                 </Box>
             </Paper>
-        </Container>
+        </Grid>
     );
 };
 
