@@ -102,7 +102,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
       const { name, value } = event.target;
       setEditedPineData(prevData => ({
         ...prevData,
-        [name]: value
+        [name]: parseInt(value)
       }));
     };
 
