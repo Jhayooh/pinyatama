@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { Gallery } from 'react-grid-gallery';
-import { getStorage, ref, listAll, getDownloadURL, uploadBytesResumable } from 'firebase/storage';
+import { getStorage, ref, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage';
 import { storage } from '../firebase/Config';
-import { Button, Box, Input, Modal, TextField } from '@mui/material';
+import { Button, Box, Input, Modal } from '@mui/material';
 
-
-//icon
+// Icons
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import CloseIcon from '@mui/icons-material/CloseOutlined';
-
+import DeleteIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Farm({ farmId }) {
     const [images, setImages] = useState([]);
     const [file, setFile] = useState(null);
     const [uploadProgress, setUploadProgress] = useState(0);
-    const [modal, setModal] = useState(false)
+    const [modal, setModal] = useState(false);
+    const [selectedImages, setSelectedImages] = useState([]);
 
     const handleClose = () => {
-        setModal(false)
-    }
+        setModal(false);
+    };
 
     useEffect(() => {
         const fetchImages = async () => {
@@ -30,6 +30,7 @@ export default function Farm({ farmId }) {
                     const downloadURL = await getDownloadURL(itemRef);
                     return {
                         src: downloadURL,
+                        ref: itemRef // Store the reference to use for deletion
                     };
                 });
                 const imagesData = await Promise.all(imagePromises);
@@ -66,21 +67,64 @@ export default function Farm({ farmId }) {
             async () => {
                 // Handle successful uploads on complete
                 const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                setImages((prevImages) => [...prevImages, { src: downloadURL }]);
+                setImages((prevImages) => [...prevImages, { src: downloadURL, ref: storageRef }]);
                 setUploadProgress(0);
                 setFile(null);
             }
         );
     };
 
+    const handleSelectImage = (imageRef) => {
+        setSelectedImages((prevSelected) => {
+            if (prevSelected.includes(imageRef)) {
+                return prevSelected.filter((ref) => ref !== imageRef);
+            } else {
+                return [...prevSelected, imageRef];
+            }
+        });
+    };
+
+    const handleDeleteSelected = async () => {
+        try {
+            const deletePromises = selectedImages.map((imageRef) => deleteObject(imageRef));
+            await Promise.all(deletePromises);
+            setImages((prevImages) => prevImages.filter((image) => !selectedImages.includes(image.ref)));
+            setSelectedImages([]);
+        } catch (error) {
+            console.error('Error deleting images: ', error);
+        }
+    };
+
     return (
         <>
             <Box>
-                <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant='contained' color='success' onClick={() => { setModal(true) }}>Add Image</Button>
+                <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <Button variant='contained' color='success' onClick={() => setModal(true)}>Add Image</Button>
+                    <Button variant='contained' color='error' onClick={handleDeleteSelected} disabled={selectedImages.length === 0}>
+                        Delete Selected
+                    </Button>
                     {uploadProgress > 0 && <progress value={uploadProgress} max="100" />}
                 </Box>
-                <Gallery images={images} />
+                <Box display="flex" flexWrap="wrap">
+                    {images.map((image, index) => (
+                        <Box 
+                            key={index} 
+                            sx={{ 
+                                position: 'relative', 
+                                margin: 1, 
+                                border: selectedImages.includes(image.ref) ? '2px solid blue' : 'none',
+                                cursor: 'pointer'
+                            }}
+                            onClick={() => handleSelectImage(image.ref)}
+                        >
+                            <img 
+                                src={image.src} 
+                                alt={`image-${index}`} 
+                                style={{ width: '250px', height: '250px', objectFit: 'cover' }} 
+                            />
+                        </Box>
+                    ))}
+                </Box>
             </Box>
             <Modal
                 open={modal}
@@ -126,8 +170,8 @@ export default function Farm({ farmId }) {
                         color='success'
                         sx={{ justifyContent: 'center', alignItems: 'center', mt: 2, }}
                         onClick={() => {
-                            handleUpload()
-                            setModal(false)
+                            handleUpload();
+                            setModal(false);
                         }}>
                         Save
                     </Button>

@@ -4,7 +4,7 @@ import 'react-calendar-timeline/lib/Timeline.css';
 import './FarmSchedule.css';
 import './ripple.css';
 import moment from 'moment';
-import { Box, Paper } from '@mui/material';
+import { Box, Paper, Button } from '@mui/material';
 import Textfield from './Timeline';
 import { db } from '../firebase/Config';
 import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
@@ -31,6 +31,7 @@ function SideDetails({ farms, eventClicked }) {
       <p>End date: {formattedEnd}</p>
       <h5>Activities:</h5>
       <p>No Activities</p>
+      <Button>Click Here</Button>
     </Box>
   );
 }
