@@ -347,7 +347,7 @@ export default function SideNav() {
 
               }}>
                 <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
-                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
+                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to signout from this account?</h5>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
                 <Button
