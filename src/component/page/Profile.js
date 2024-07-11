@@ -22,26 +22,15 @@ const Container = styled(Box)({
 
 function Profile({ user, farm }) {
     return (
-        <Grid container alignItems='stretch'>
-            <Paper
-                variant='elevation'
-                elevation={3}
-                sx={{
-                    display: 'flex',
-                    height: '100%',
-                    width: '70%',
-                    boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)',
-
-                }} >
-
-                {/* Farm Info */}
-
+        <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2 }}>
+            <Grid item xs={12} md={8} lg={8} elavation={3} sx={{ padding: 3, boxShadow: '0px 3px 6px rgba(0, 255, 1, 0.5)' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center' }}>
                     <Typography variant='h6'
-                        sx={{
+                         sx={{
                             color: 'green',
                             fontFamily: 'monospace',
-                            paddingLeft: 5
+                            paddingLeft: 5,
+                            paddingTop: 2,
                         }}>
                         IMPORMASYON NG BUKID</Typography>
                     <Grid container spacing={3} sx={{ padding: 2, }}>
@@ -56,7 +45,7 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{ minWidth: '300px' }}
+                            // sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
 
@@ -75,7 +64,7 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{ minWidth: '300px' }}
+                            // sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
                         <FormGrid item xs={12} md={6}>
@@ -104,7 +93,7 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{ minWidth: '800' }}
+                            //  sx={{ minWidth: '800' }}
 
                             />
                         </FormGrid>
@@ -133,7 +122,7 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{ minWidth: '800' }}
+                            //sx={{ minWidth: '800' }}
 
                             />
                         </FormGrid>
@@ -147,37 +136,24 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{ minWidth: '800' }}
+                            // sx={{ minWidth: '800' }}
                             />
                         </FormGrid>
                     </Grid>
                 </Box>
-            </Paper>
-
-            <Paper
-                variant='elevation'
-                elevation={5}
-                sx={{
-                    display: 'flex',
-                    height: '100%',
-                    width: '30%',
-                    flexDirection: 'column',
-                    boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)'
-                }}>
-                {/* Profile Info */}
+            </Grid>
+            <Grid item xs={12} md={4} lg={4} elavation={3} sx={{ padding: 3, boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)' }}>
                 <Box>
                     <Typography
                         sx={{
                             color: 'green',
                             fontFamily: 'monospace',
                             paddingLeft: 5,
-                            paddingTop: 5,
+                            paddingTop: 2,
                         }}>
                         BARANGAY EXTENSIONIST</Typography>
 
                     <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: 2, marginLeft: 5 }}>
-
-
                         <Avatar
                             src={user.photoURL}
                             alt="Profile"
@@ -197,11 +173,11 @@ function Profile({ user, farm }) {
                             {user.displayName}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex',flexDirection:'row' , gap:2}}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            sx={{ marginLeft: 3,fontWeight: 'bold' }}>
                             Barangay:
                         </Typography>
                         <Typography
@@ -210,11 +186,11 @@ function Profile({ user, farm }) {
                             {user.brgy}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', paddingRight: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}
+                            sx={{ marginLeft: 3,fontWeight: 'bold' }}
                         >
                             Municipality:
                         </Typography>
@@ -224,12 +200,11 @@ function Profile({ user, farm }) {
                             {user.mun}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', alignItems: 'center', paddingRight: 2 }}>
-                        {/* <EmailIcon sx={{ color: 'blue', marginRight: 1 }} /> */}
+                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            sx={{ marginLeft: 3, fontWeight: 'bold' }}>
                             Email:
                         </Typography>
                         <Typography variant="subtitle2" gutterBottom>
@@ -237,21 +212,23 @@ function Profile({ user, farm }) {
                         </Typography>
                     </Box>
 
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3, marginRight: 2, fontWeight: 'bold' }}>
+                            xs={12}
+                            sx={{ marginLeft: 3, fontWeight: 'bold' }}>
                             Phone Number:
                         </Typography>
                         <Typography
                             variant="subtitle2"
-                            gutterBottom>
+                            gutterBottom
+                            xs={12}>
                             {user.phoneNumber}
                         </Typography>
                     </Box>
                 </Box>
-            </Paper>
+            </Grid>
         </Grid>
     );
 };

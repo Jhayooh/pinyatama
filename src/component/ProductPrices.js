@@ -329,7 +329,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
         if (row.parent.toLowerCase() === 'fertilizer') {
           const availabilityAction = row.isAvailable ? (
-            <Tooltip title='Unavailable'>
+            <Tooltip title='Set to Available'  placement="top-start">
             <GridActionsCellItem
               icon={<CancelOutlinedIcon />}
               label="Unavailable"
@@ -340,7 +340,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
             />
             </Tooltip>
           ) : (
-            <Tooltip title='Available'>
+            <Tooltip title='Set to Unavailable'  placement="top-start">
             <GridActionsCellItem
               icon={<CheckCircleOutlineOutlinedIcon />}
               label="Available"
