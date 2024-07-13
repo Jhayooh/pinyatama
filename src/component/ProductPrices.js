@@ -65,7 +65,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
   };
 
   const handleAvailability = async (row) => {
-    console.log('ROWW', row)
     setSaving(true)
     try {
       const docRef = doc(db, '/particulars', row.id)

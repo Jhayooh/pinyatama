@@ -20,7 +20,7 @@ import GridView from './GridView.js';
 import ListView from './ListView.js';
 
 
-function Farms({ events, farms, users, particularData }) {
+function Farms({ events, farms, users, particularData, pineapple }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
   const [filteredUsers, setFilteredUsers] = useState(users);
   const [newUser, setNewUser] = useState([{
@@ -123,13 +123,19 @@ function Farms({ events, farms, users, particularData }) {
   }
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
       {showFarmTabs ?
-        <Box sx={{ height: '100%', overflowY: 'auto' }}>
-          <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} particularData={particularData} />
+        <Box sx={{ height: '100%', overflowY: 'auto', borderRadius: 4 }}>
+          <FarmTabs
+            farms={filteredFarms.filter(marker => marker.id === indFarm)}
+            setShow={setShowFarmTabs}
+            user={users.filter(user => user.id === indUser)}
+            event={events.filter(event => event.id === indFarm)}
+            particularData={particularData}
+            pineapple={pineapple} />
         </Box >
         :
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
+        <Box sx={{ boxShadow: 1, borderRadius: 4, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
             <Box sx={{ width: '80%' }}>
               <FormControl fullWidth size="small">

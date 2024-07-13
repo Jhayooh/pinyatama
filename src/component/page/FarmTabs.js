@@ -23,7 +23,7 @@ function CustomTabPanel({ children, value, index }) {
             aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && (
-                <Box >
+                <Box sx={{ paddingX: 2, paddingY: 6 }}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -44,7 +44,7 @@ function a11yProps(index) {
     };
 }
 
-export default function FarmTabs({ farms, setShow, user, event, particularData }) {
+export default function FarmTabs({ farms, setShow, user, event, particularData, pineapple }) {
     var farm = farms[0]
     var user = user[0]
     const roundToTwoDecimals = (num) => {
@@ -64,8 +64,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
     const totalBat = roi ? roi.reduce((total, roiItem) => total + roiItem.butterBall, 0) : 0;
     const numRoi = roi ? roi.reduce((total, roiItem) => total + roiItem.roi, 0) : 0;
 
-    const totalBats = totalBat 
-    const totalPines = totalPine 
+    const totalBats = totalBat
+    const totalPines = totalPine
     const totalPines1 = totalPines + totalBats
     const priceBat = (totalBat * 2);
     const pricePine = (totalPine * 8);
@@ -114,9 +114,9 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
         <>
             <div style={{ backgroundColor: '#fff' }}>
                 <div>
-                    <Box sx={{display:'flex', flexDirection:'row', alignItems:'center'}}>
-                        <Button onClick={() => { setShow(false) }} sx={{color: 'green'}}><BackIcon /></Button>
-                        <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px' , flex:1}}>{farm.title}</h2>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
+                        <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
                     </Box>
                     <Box style={{ width: '100%', backgroundColor: '#fff', padding: '10px' }}>
                         <div style={{ display: 'flex', justifyContent: 'center' }}>
@@ -177,7 +177,14 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
                             <Farm farmId={farm.id} />
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={2}>
-                            {roi && <CostAndReturn markers={markers} parts={parts} farm={farm} roi={roi} particularData={particularData}/>}
+                            {roi && <CostAndReturn
+                                markers={markers}
+                                parts={parts}
+                                farm={farm}
+                                roi={roi}
+                                particularData={particularData}
+                                pineapple={pineapple} />
+                            }
                         </CustomTabPanel>
                         <CustomTabPanel value={value} index={3}>
 
