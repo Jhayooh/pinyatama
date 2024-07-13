@@ -109,89 +109,86 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                 return marker;
         }
     });
-    roi && console.log("the roi:", roi)
     return (
         <>
-            <div style={{ backgroundColor: '#fff' }}>
-                <div>
-                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                        <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
-                        <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
-                    </Box>
-                    <Box style={{ width: '100%', backgroundColor: '#fff', padding: '10px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'center' }}>
-                            <Tabs
-                                value={value}
-                                onChange={handleChange}
-                                aria-label="basic tabs example"
-                                TabIndicatorProps={{ style: { background: 'orange' } }}
-                            >
-                                <Tab
-                                    label="Farm Profile"
-                                    {...a11yProps(0)}
-                                    sx={{
-                                        color: value === 0 ? 'orange' : 'green',
-                                        '&:hover': {
-                                            color: 'orange',
-                                        },
-                                    }}
-                                />
-                                <Tab
-                                    label="Gallery of Farm"
-                                    {...a11yProps(1)}
-                                    sx={{
-                                        color: value === 1 ? 'orange' : 'green',
-                                        '&:hover': {
-                                            color: 'orange',
-                                        },
-                                    }}
-                                />
-                                <Tab
-                                    label="Cost and Return Analysis"
-                                    {...a11yProps(2)}
-                                    sx={{
-                                        color: value === 2 ? 'orange' : 'green',
-                                        '&:hover': {
-                                            color: 'orange',
-                                        },
-                                    }}
-                                />
-                                <Tab
-                                    label='Archive'
-                                    {...a11yProps(3)}
-                                    sx={{
-                                        color: value === 3 ? 'orange' : 'green',
-                                        '&:hover': {
-                                            color: 'orange',
-                                        },
-                                    }}
-                                />
+            <div>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
+                    <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
+                </Box>
+                <Box style={{ width: '100%', padding: '10px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            aria-label="basic tabs example"
+                            TabIndicatorProps={{ style: { background: 'orange' } }}
+                        >
+                            <Tab
+                                label="Farm Profile"
+                                {...a11yProps(0)}
+                                sx={{
+                                    color: value === 0 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            />
+                            <Tab
+                                label="Gallery of Farm"
+                                {...a11yProps(1)}
+                                sx={{
+                                    color: value === 1 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            />
+                            <Tab
+                                label="Cost and Return Analysis"
+                                {...a11yProps(2)}
+                                sx={{
+                                    color: value === 2 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            />
+                            <Tab
+                                label='Archive'
+                                {...a11yProps(3)}
+                                sx={{
+                                    color: value === 3 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            />
 
-                            </Tabs>
+                        </Tabs>
 
-                        </div>
-                        <CustomTabPanel value={value} index={0}>
-                            <Profile user={user} farm={farm} />
-                        </CustomTabPanel>
-                        <CustomTabPanel value={value} index={1}>
-                            <Farm farmId={farm.id} />
-                        </CustomTabPanel>
-                        <CustomTabPanel value={value} index={2}>
-                            {roi && <CostAndReturn
-                                markers={markers}
-                                parts={parts}
-                                farm={farm}
-                                roi={roi}
-                                particularData={particularData}
-                                pineapple={pineapple} />
-                            }
-                        </CustomTabPanel>
-                        <CustomTabPanel value={value} index={3}>
+                    </div>
+                    <CustomTabPanel value={value} index={0}>
+                        <Profile user={user} farm={farm} />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={1}>
+                        <Farm farmId={farm.id} />
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={2}>
+                        {roi && <CostAndReturn
+                            markers={markers}
+                            parts={parts}
+                            farm={farm}
+                            roi={roi}
+                            particularData={particularData}
+                            pineapple={pineapple} />
+                        }
+                    </CustomTabPanel>
+                    <CustomTabPanel value={value} index={3}>
 
-                        </CustomTabPanel>
+                    </CustomTabPanel>
 
-                    </Box>
-                </div>
+                </Box>
             </div>
         </>
     );

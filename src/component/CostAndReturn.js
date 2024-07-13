@@ -220,9 +220,8 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const getSelectedHoverBackgroundColor = (color, mode) =>
     mode === 'dark' ? darken(color, 0.4) : lighten(color, 0.4);
   const shapeStyle = {
-    width: 20,
-    height: 20,
-    borderRadius: '50%',
+    width: 30,
+    height: 10,
     display: 'inline-block'
   }
   const EditRowModal = () => {
@@ -333,18 +332,40 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     );
   };
 
+  const datagridStyle = {
+    border: 'none',
+    overflow: 'auto',
+    maxHeight: 424,
+    p: 1,
+    paddingBottom: 0,
+    '& .even': {
+      backgroundColor: '#FFFFFF',
+    },
+    '& .odd': {
+      backgroundColor: '#DFEFDF',
+    },
+    '& .MuiDataGrid-columnHeaders': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: '#80C080'
+    },
+  }
+
   return (
     <>
       <Box>
         <Grid
           container
-          spacing={4}
+          spacing={2}
         >
           <Grid xs={5} sx={{ overflow: 'hidden' }}>
             <Box sx={{
               overflowY: 'hidden',
-              boxShadow: 1,
-              borderRadius: 3,
+              boxShadow: 2,
+              borderRadius: 2,
+              backgroundColor: '#fff',
+              height: '100%'
             }}>
               <Tabs value={selectedTab} onChange={handleTabChange}>
                 <Tab label="Labor" />
@@ -353,6 +374,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               </Tabs>
               <Box sx={{
                 overflow: 'hidden',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column'
               }}>
                 {
                   (() => {
@@ -417,25 +441,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             getRowClassName={(params) =>
                               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                             }
-                            sx={{
-                              border: 'none',
-                              maxHeight: 400,
-                              overflow: 'auto',
-                              p: 1,
-                              paddingBottom: 0,
-                              '& .even': {
-                                backgroundColor: 'aliceblue',
-                              },
-                              '& .odd': {
-                                backgroundColor: '#fff',
-                              },
-                              '& .MuiDataGrid-columnHeaders': {
-                                position: 'sticky',
-                                top: 0,
-                                zIndex: 1,
-                                backgroundColor: 'rgba(255, 7, 0, 0.55)'
-                              },
-                            }}
+                            sx={datagridStyle}
                           />
                         )
                       case 1:
@@ -498,25 +504,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             getRowClassName={(params) =>
                               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                             }
-                            sx={{
-                              border: 'none',
-                              maxHeight: 460,
-                              overflow: 'auto',
-                              p: 1,
-                              paddingBottom: 0,
-                              '& .even': {
-                                backgroundColor: 'aliceblue',
-                              },
-                              '& .odd': {
-                                backgroundColor: '#fff',
-                              },
-                              '& .MuiDataGrid-columnHeaders': {
-                                position: 'sticky',
-                                top: 0,
-                                zIndex: 1,
-                                backgroundColor: 'rgba(255, 7, 0, 0.55)'
-                              },
-                            }}
+                            sx={datagridStyle}
                           />
                         )
                       case 2:
@@ -568,7 +556,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       component="span"
                                       sx={{
                                         ...shapeStyle,
-                                        backgroundColor: params.value ? 'green' : 'red',
+                                        backgroundColor: params.value ? '#28B463' : '#CB4335',
                                       }}
                                     />
                                   </Tooltip>
@@ -600,25 +588,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             getRowClassName={(params) =>
                               params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                             }
-                            sx={{
-                              border: 'none',
-                              maxHeight: 460,
-                              overflow: 'auto',
-                              p: 1,
-                              paddingBottom: 0,
-                              '& .even': {
-                                backgroundColor: 'aliceblue',
-                              },
-                              '& .odd': {
-                                backgroundColor: '#fff',
-                              },
-                              '& .MuiDataGrid-columnHeaders': {
-                                position: 'sticky',
-                                top: 0,
-                                zIndex: 1,
-                                backgroundColor: 'rgba(255, 7, 0, 0.55)'
-                              },
-                            }}
+                            sx={datagridStyle}
                           />
                         )
                       default:
@@ -631,7 +601,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   gap: 2,
                   justifyContent: 'flex-end',
                   padding: 1,
-                  // backgroundColor: 'GrayText'
                 }}
                 >
                   <Button variant="text" onClick={handleReset}>Reset</Button>
@@ -649,7 +618,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
             display='flex'
           >
             <Grid xs={6}>
-              <Box>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+              }}>
                 <Doughnut
                   labels={["ROI", "Potential Return"]}
                   data={[newRoi.roi, Math.round((100 - newRoi.roi) * 100) / 100]}
@@ -658,7 +631,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               </Box>
             </Grid>
             <Grid xs={6}>
-              <Box>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+              }}>
                 <Doughnut
                   labels={["Materyales", "Labor"]}
                   data={laborMaterial}
@@ -667,7 +644,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               </Box>
             </Grid>
             <Grid xs={6}>
-              <Box>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+              }}>
                 <Doughnut
                   labels={["Pineapple", "Butterball"]}
                   data={[marker.totalPines, marker.totalBats]}
@@ -677,7 +658,12 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
             </Grid>
           </Grid>
           <Grid xs={12}>
-            <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
+            <Box sx={{
+              boxShadow: 2,
+              borderRadius: 2,
+              backgroundColor: '#fff'
+            }}>              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
+            </Box>
           </Grid>
         </Grid>
       </Box>

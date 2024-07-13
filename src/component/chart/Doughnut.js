@@ -10,7 +10,12 @@ function ExamplePieChart({ labels, data, title }) {
     labels: labels,
     title: {
       text: title,
-      align: 'left'
+      align: 'left',
+      margin: 18,
+      style: {
+        fontWeight: 600,
+
+      }
     },
     stroke: {
       show: false
@@ -19,20 +24,17 @@ function ExamplePieChart({ labels, data, title }) {
       show: false,
     },
     colors: [
-      '#2E93fA',
-      '#66DA26',
-      '#546E7A',
-      '#E91E63',
-      '#FF9800'
+      "#F7BF0B",
+      "#40A040"
     ],
     chart: {
       animations: {
         enabled: true,
         easing: 'easeinout',
-        speed: 600,
+        speed: 1000,
         animateGradually: {
           enabled: true,
-          delay: 150
+          delay: 200
         },
         dynamicAnimation: {
           enabled: true,
@@ -44,6 +46,7 @@ function ExamplePieChart({ labels, data, title }) {
       pie: {
         customScale: 1,
         donut: {
+          size: '80%',
           labels: {
             show: true,
             name: {
@@ -70,7 +73,7 @@ function ExamplePieChart({ labels, data, title }) {
                   case 'labor and material cost':
                     return formatter.format(val)
                   default:
-                    console.log("value", typeof(val))
+                    console.log("value", typeof (val))
                     return parseInt(val).toLocaleString()
                 }
               }
@@ -100,7 +103,7 @@ function ExamplePieChart({ labels, data, title }) {
       }
     },
     dataLabels: {
-      enabled: true,
+      enabled: false,
       formatter: function (val) {
         return val.toFixed(0) + '%'
       },
