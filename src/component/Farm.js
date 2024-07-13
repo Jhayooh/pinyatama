@@ -2,7 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Gallery } from 'react-grid-gallery';
 import { getStorage, ref, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage';
 import { storage } from '../firebase/Config';
-import { Button, Box, Input, Modal } from '@mui/material';
+import { Button, Box, Input, Modal, Divider } from '@mui/material';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 // Icons
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
@@ -15,9 +20,18 @@ export default function Farm({ farmId }) {
     const [uploadProgress, setUploadProgress] = useState(0);
     const [modal, setModal] = useState(false);
     const [selectedImages, setSelectedImages] = useState([]);
+    const [open, setOpen] = React.useState(false);
 
     const handleClose = () => {
         setModal(false);
+    };
+
+    const handleDialogOpen = () => {
+        setOpen(true);
+    };
+
+    const handleDialogClose = () => {
+        setOpen(false);
     };
 
     useEffect(() => {
@@ -90,6 +104,7 @@ export default function Farm({ farmId }) {
             await Promise.all(deletePromises);
             setImages((prevImages) => prevImages.filter((image) => !selectedImages.includes(image.ref)));
             setSelectedImages([]);
+            handleDialogClose()
         } catch (error) {
             console.error('Error deleting images: ', error);
         }
@@ -100,32 +115,105 @@ export default function Farm({ farmId }) {
             <Box>
                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
                     <Button variant='contained' color='success' onClick={() => setModal(true)}>Add Image</Button>
-                    <Button variant='contained' color='error' onClick={handleDeleteSelected} disabled={selectedImages.length === 0}>
+                    <Button variant='contained' color='error' onClick={handleDialogOpen} disabled={selectedImages.length === 0}>
                         Delete Selected
                     </Button>
+                    <Dialog
+                        open={open}
+                        onClose={handleDialogClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
+                    >
+                        <DialogTitle id="alert-dialog-title" >
+                            {"Delete Selected Image"}
+                        </DialogTitle>
+                        <Divider/>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description">
+                                Are your sure you want to delete this image?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={handleDialogClose}>Disagree</Button>
+                            <Button onClick={handleDeleteSelected} autoFocus>
+                                Agree
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     {uploadProgress > 0 && <progress value={uploadProgress} max="100" />}
                 </Box>
                 <Box display="flex" flexWrap="wrap">
                     {images.map((image, index) => (
-                        <Box 
-                            key={index} 
-                            sx={{ 
-                                position: 'relative', 
-                                margin: 1, 
+                        <Box
+                            key={index}
+                            sx={{
+                                position: 'relative',
+                                margin: 1,
                                 border: selectedImages.includes(image.ref) ? '2px solid blue' : 'none',
                                 cursor: 'pointer'
                             }}
                             onClick={() => handleSelectImage(image.ref)}
                         >
-                            <img 
-                                src={image.src} 
-                                alt={`image-${index}`} 
-                                style={{ width: '250px', height: '250px', objectFit: 'cover' }} 
+                            <img
+                                src={image.src}
+                                alt={`image-${index}`}
+                                style={{ width: '250px', height: '250px', objectFit: 'cover' }}
                             />
                         </Box>
                     ))}
                 </Box>
             </Box>
+            <Modal
+                open={modal}
+                close={handleClose}>
+
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        maxHeight: '92%',
+                        overflowX: 'auto',
+                        width: 400,
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}>
+                    <Button
+                        variant='text'
+                        sx={{
+                            position: 'absolute',
+                            top: 0,
+                            right: 0,
+                            zIndex: 1,
+                            color: 'grey'
+                        }}
+                        onClick={() => setModal(false)}>
+                        <CloseIcon />
+                    </Button>
+                    <Box
+                        sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }} >
+                        <FileIcon />
+                        <Input type="file" onChange={handleFileChange} />
+                    </Box>
+
+                    <Button
+                        fullWidth
+                        variant='contained'
+                        color='success'
+                        sx={{ justifyContent: 'center', alignItems: 'center', mt: 2, }}
+                        onClick={() => {
+                            handleUpload();
+                            setModal(false);
+                        }}>
+                        Save
+                    </Button>
+                </Box>
+            </Modal>
             <Modal
                 open={modal}
                 close={handleClose}>

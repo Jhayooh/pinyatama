@@ -11,7 +11,7 @@ import Heatmap from './Heatmap';
 
 
 // icons
-import farmer from '../image_src/farmer.png';
+import farmerImg from '../image_src/farmer.png';
 import farm from '../image_src/seedling.png';
 import production from '../image_src/production.png';
 import accounts from '../image_src/account.png'
@@ -35,7 +35,7 @@ function Legend({ legends }) {
   );
 }
 
-export default function AdminHome({ setSelected, farms, users, events, roi }) {
+export default function AdminHome({ setSelected, farms, users, events, roi,farmer }) {
   const navigate = useNavigate();
  
 
@@ -154,11 +154,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi }) {
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #c17a05', borderRadius: 3, backgroundColor: '#af7f35', display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
-              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
               <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmer} alt="Farmer icon" style={{width:'100%', height:'100%', display:'flex'}}/>
+              <img src={farmerImg} alt="Farmer icon" style={{width:'100%', height:'100%', display:'flex'}}/>
             </Box>
           </Box>
         </Grid>

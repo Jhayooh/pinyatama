@@ -1,68 +1,52 @@
 import React from 'react'
-import { Box, Button, CircularProgress, Typography, Paper, Grid, Card, CardActionArea, CardMedia, CardContent } from '@mui/material';
-
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import { Button } from '@mui/material';
 // icon
 import farm from '../image_src/pinyatamap-logo.png';
 
 function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imageUrls }) {
 
   function dateFormatter(date) {
-    const d = new Date(date.toMillis())
-    return d.toLocaleDateString()
+    const d = new Date(date.toMillis());
+    const options = { year: 'numeric', month: 'long', day: '2-digit' };
+    return d.toLocaleDateString('en-US', options);
   }
   return (
-    <Button
+    <>
+      <Button
       key={index}
       sx={{
-        height: 120,
-        width: 1,
-        backgroundColor: '#fff',
-        borderColor: 'green',
-        display: 'flex',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        '&:hover': {
-          backgroundColor: '#f0f0f0',
-        },
-      }}
-      onClick={() => {
-        setShowFarmTabs(true)
-        setIndFarm(marker.id)
-        setIndUser(marker.brgyUID)
-      }} >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          height: '100%',
-          width: '100%'
-
-        }}>
+        color:'black'
         
-        <CardActionArea component="a" href="#">
-          <Card sx={{ display: 'flex' }}>
-            <CardContent sx={{ display: 'flex', height: '100%', alignItems: 'center' }}>
-              <img src={farm} alt="Farms icon" style={{ width: '5%', height: '5%' }} />
-              <Typography variant='subtitle1' component='h6' sx={{ paddingLeft: 3, color: 'orange', marginBottom: 1 }}>{marker.title}</Typography>
-              <Typography variant='subtitle2' component='h2' sx={{ paddingLeft: 3, marginBottom: 1 }}>{marker.brgy}, {marker.mun}</Typography>
-              <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, marginBottom: 1, color:'green' }}>Date of Planting: {dateFormatter(marker.start_date)}</Typography>
-              <Typography variant='subtitle2' component='h4' sx={{ paddingLeft: 3, marginBottom: 1, color: 'red' }}>Date of expected Harvest: {dateFormatter(marker.harvest_date)}</Typography>
-
-            </CardContent>
-            <CardMedia>
+      }}
+        onClick={() => {
+          setShowFarmTabs(true)
+          setIndFarm(marker.id)
+          setIndUser(marker.brgyUID)
+        }} >
+        <ListItem disablePadding >
+          <ListItemAvatar sx={{ textAlign: 'center'}}>
+            <Avatar sx={{ backgroundColor: 'white' }}>
               {imageUrls[marker.id] ? (
-                <img className='img' src={imageUrls[marker.id]} alt={marker.title} style={{width:100, height:100}}/>
+                <img className='img' src={imageUrls[marker.id]} alt={marker.title} style={{ width: '100%', height: '100% ' }} />
               ) : (
-                <CircularProgress color='success' />
+                <img src={require('../image_src/pinyatamap-logo.png')} className='img' style={{ width: '80%', height: '80% ' }} />
               )}
-            </CardMedia>
-
-           
-          </Card>
-        </CardActionArea>
-       
-      </Box >
-    </Button >
+            </Avatar>
+          </ListItemAvatar>
+          <ListItemText primary={marker.title} />
+          <ListItemText secondary={marker.brgy + ', ' + marker.mun}  sx={{ textAlign: 'right'}}/>
+          <ListItemText secondary={dateFormatter(marker.start_date)} sx={{ textAlign: 'right'}}/>
+          <ListItemText secondary={dateFormatter(marker.harvest_date)} sx={{ textAlign: 'right'}}/>
+        </ListItem>
+        <Divider />
+      </Button>
+    </>
   )
 }
 

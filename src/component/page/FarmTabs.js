@@ -157,7 +157,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData }
                                     }}
                                 />
                                 <Tab
-                                    label='Archive'
+                                    label='Previous Harvest'
                                     {...a11yProps(3)}
                                     sx={{
                                         color: value === 3 ? 'orange' : 'green',

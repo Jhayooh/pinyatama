@@ -8,6 +8,9 @@ import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
@@ -129,7 +132,7 @@ function Farms({ events, farms, users, particularData }) {
           <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} particularData={particularData} />
         </Box >
         :
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
+        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
             <Box sx={{ width: '80%' }}>
               <FormControl fullWidth size="small">
@@ -210,7 +213,16 @@ function Farms({ events, farms, users, particularData }) {
                 ))}
               </Box>
               :
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', paddingLeft: 2, overflow: 'auto', height: '100%', width: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', paddingLeft: 2, paddingRight:2, overflow: 'auto', height: '100%', width: 1 }}>
+               <List sx={{ bgcolor: 'background.paper', padding:1}}>
+                <ListItem disablePadding >
+                {/* <ListItemText primary='' /> */}
+                  <ListItemText primary='Name of Farm' />
+                  <ListItemText primary='Location' sx={{ textAlign: 'right'}}/>
+                  <ListItemText primary='Date of Planting' sx={{ textAlign: 'right'}}/>
+                  <ListItemText primary='Date  of Harvest' sx={{ textAlign: 'right'}}/>
+                </ListItem>
+               </List>
                 {filteredFarms.map((marker, index) => (
                   <ListView marker={marker} index={index} setShowFarmTabs={setShowFarmTabs} setIndFarm={setIndFarm} setIndUser={setIndUser} imageUrls={imageUrls} />
                 ))}
