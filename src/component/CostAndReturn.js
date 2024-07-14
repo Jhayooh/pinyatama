@@ -358,14 +358,30 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       backgroundColor: '#FFFFFF',
     },
     '& .odd': {
-      backgroundColor: '#DFEFDF',
+      backgroundColor: '#F6FAF6',
     },
     '& .MuiDataGrid-columnHeaders': {
       position: 'sticky',
       top: 0,
       zIndex: 1,
-      backgroundColor: '#80C080'
+      backgroundColor: '#88C488'
     },
+  }
+
+  const actionBtnStyle = {
+    backgroundColor: '#CFE7CF',
+    height: '40px',
+    width: '40px',
+    borderRadius: 3,
+    color: '#58AC58',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#FFF',
+      backgroundColor: '#88C488'
+    }
   }
 
   return (
@@ -446,7 +462,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       className="textPrimary"
                                       onClick={handleEditClick(id, row)}
                                       color="inherit"
-                                      sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+                                      sx={actionBtnStyle}
                                     />
                                   );
                                   return [editAction];
@@ -509,7 +525,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       className="textPrimary"
                                       onClick={handleEditClick(id, row)}
                                       color="inherit"
-                                      sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+                                      sx={actionBtnStyle}
                                     />
                                   );
                                   return [editAction];
@@ -572,7 +588,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       component="span"
                                       sx={{
                                         ...shapeStyle,
-                                        backgroundColor: params.value ? '#28B463' : '#CB4335',
+                                        backgroundColor: params.value ? '#28B463' : '#E74C3C',
                                       }}
                                     />
                                   </Tooltip>
@@ -593,7 +609,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       onClick={handleEditClick(id, row)}
                                       color="inherit"
                                       disabled={!row.isAvailable}
-                                      sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+                                      sx={actionBtnStyle}
                                     />
                                   );
                                   return [editAction];
@@ -641,7 +657,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               }}>
                 <Doughnut
                   labels={["ROI", "???"]}
-                  data={[newRoi.roi, Math.round((100-newRoi.roi)*100)/100]}
+                  data={[newRoi.roi, Math.round((100 - newRoi.roi) * 100) / 100]}
                   title={"Expected QP Production"}
                 />
               </Box>
