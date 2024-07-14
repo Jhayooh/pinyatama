@@ -369,7 +369,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }
 
   const actionBtnStyle = {
-    backgroundColor: '#CFE7CF',
+    backgroundColor: '#E7F3E7',
     height: '40px',
     width: '40px',
     borderRadius: 3,
