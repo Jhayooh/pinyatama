@@ -603,8 +603,8 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   padding: 1,
                 }}
                 >
-                  <Button variant="text" onClick={handleReset}>Reset</Button>
-                  <Button variant="contained" onClick={handleSaveAnalysis}>Save</Button>
+                  <Button variant="text" color='error' onClick={handleReset}>Reset</Button>
+                  <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button>
                 </Box>
               </Box>
             </Box>

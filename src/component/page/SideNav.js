@@ -324,9 +324,9 @@ export default function SideNav() {
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button onClick={ closeLogoutMdal}>Disagree</Button>
-              <Button onClick={handleSignOut} autoFocus>
-                Agree
+              <Button variant='text' color='error' onClick={ closeLogoutMdal}>Cancel</Button>
+              <Button  variant='contained' color='success' onClick={handleSignOut} autoFocus>
+                Ok
               </Button>
             </DialogActions>
           </Dialog>
@@ -345,7 +345,7 @@ export default function SideNav() {
             </Box>
             :
             <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
+              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} farmer={farmerRow}/>}
               {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
               {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
               {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}

@@ -35,7 +35,7 @@ function Legend({ legends }) {
   );
 }
 
-export default function AdminHome({ setSelected, farms, users, events, roi,farmer }) {
+export default function AdminHome({ setSelected, farms, users, events, roi, farmer }) {
   const navigate = useNavigate();
  
 
@@ -202,16 +202,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi,farme
           </Box>
         </Grid>
         <Grid item lg={6}>
-        
-         
-        
-         
-          
-            <Pie labels={labels1} data={series1} title="Municipalties" />
-           
-            
-            
-
+        <Pie labels={labels1} data={series1} title="Municipalties" />
         </Grid>
         <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
