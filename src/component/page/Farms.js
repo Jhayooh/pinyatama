@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Divider } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -223,6 +223,7 @@ function Farms({ events, farms, users, particularData }) {
                   <ListItemText primary='Date  of Harvest' sx={{ textAlign: 'right'}}/>
                 </ListItem>
                </List>
+               <Divider/>
                 {filteredFarms.map((marker, index) => (
                   <ListView marker={marker} index={index} setShowFarmTabs={setShowFarmTabs} setIndFarm={setIndFarm} setIndUser={setIndUser} imageUrls={imageUrls} />
                 ))}
