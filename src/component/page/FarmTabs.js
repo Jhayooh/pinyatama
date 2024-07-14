@@ -163,7 +163,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                         color: 'orange',
                                     },
                                 }}
-                            />
+                              />
 
                         </Tabs>
 
