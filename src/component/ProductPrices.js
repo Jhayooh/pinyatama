@@ -15,6 +15,8 @@ import {
   FormControl,
   Tabs,
   Tab,
+  Typography,
+  Paper,
 } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import {
@@ -40,6 +42,9 @@ import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 
 import moment from 'moment';
 
+import Pine from './image_src/p.jpg';
+import Butt from './image_src/p1.jpg'
+
 export default function ProductPrices({ particularData, pineappleData }) {
   const [rowModesModel, setRowModesModel] = useState({});
 
@@ -51,7 +56,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
   const [selectedRow, setSelectedRow] = useState({});
   const [pineData, setPineData] = useState({});
 
-  const [activeTab, setActiveTab] = useState('materials'); 
+  const [activeTab, setActiveTab] = useState('materials');
 
   const handleTabChange = (event, newTab) => {
     setActiveTab(newTab);
@@ -266,11 +271,15 @@ export default function ProductPrices({ particularData, pineappleData }) {
   // Filtered particularData based on search input and active tab
   const filteredParticularData = particularData.filter((part) => {
     if (activeTab === 'materials') {
-      return part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer';
+      return part.particular.toLowerCase() === 'material' &&
+        part.parent.toLowerCase() !== 'fertilizer' &&
+        part.name.toLowerCase().includes(searchInput.toLowerCase());
     } else if (activeTab === 'fertilizers') {
-      return part.parent.toLowerCase() === 'fertilizer';
+      return part.parent.toLowerCase() === 'fertilizer' &&
+        part.name.toLowerCase().includes(searchInput.toLowerCase());
     } else if (activeTab === 'labors') {
-      return part.particular.toLowerCase() === 'labor';
+      return part.particular.toLowerCase() === 'labor' &&
+        part.name.toLowerCase().includes(searchInput.toLowerCase());
     }
     return true; // Default case: return all
   });
@@ -358,51 +367,50 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%' }}>
-        <Box sx={{ borderRadius: 3, width: 1, height: '100%' }}>
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', paddingTop: 2, marginX: 2 }}>
-            <Box
-              component="form"
-              sx={{
-                p: '2px 4px',
-                display: 'flex',
-                alignItems: 'center',
-                width: 400,
-                borderRadius: 2.5,
-                border: '2px solid #dcdcdc',
-              }}
-            >
-              <IconButton sx={{ p: '7px' }} aria-label="menu">
-                <SearchIcon />
-              </IconButton>
-              <InputBase
-                sx={{ ml: 1, flex: 1 }}
-                placeholder="Search particulars"
-                inputProps={{ 'aria-label': 'search particulars' }}
-                value={searchInput}
-                onChange={handleSearchInputChange}
-              />
-            </Box>
-          </Box>
-          <Box sx={{ display: 'flex', gap: 2, padding: 2 }}>
-            <Tabs value={activeTab} onChange={handleTabChange}>
-              <Tab label="Material" value="materials" />
-              <Tab label="Fertilizer" value="fertilizers" />
-              <Tab label="Labor" value="labors" />
-            </Tabs>
-          </Box>
-          <Box sx={{ display: 'flex', flex: 1, height: '100%', overflowY: 'hidden' }}>
-            <Box sx={{ ...boxStyle, flex: 2, overflowY: 'hidden' }}>
+      <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
+        <Grid container spacing={2} sx={{ height: '100%' }}>
+          <Grid item xs={8} sx={{ height: '100%' }}>
+            <Box sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              height: '100%',
+              backgroundColor: '#fff',
+              p: 1,
+              borderRadius: 2,
+              boxShadow: 2
+            }}>
+              <Tabs value={activeTab} onChange={handleTabChange}>
+                <Tab label="Material" value="materials" />
+                <Tab label="Fertilizer" value="fertilizers" />
+                <Tab label="Labor" value="labors" />
+                <Box
+                  component="form"
+                  sx={{
+                    p: '2px ',
+                    display: 'flex',
+                    alignItems: 'center',
+                    marginLeft: 25,
+                    width: '100%',
+                    borderRadius: 2.5,
+                    border: '2px solid #dcdcdc',
+                  }}
+                >
+                  <IconButton sx={{ p: '7px' }} aria-label="menu">
+                    <SearchIcon />
+                  </IconButton>
+                  <InputBase
+                    sx={{ ml: 1, flex: 1 }}
+                    placeholder="Search particulars"
+                    inputProps={{ 'aria-label': 'search particulars' }}
+                    value={searchInput}
+                    onChange={handleSearchInputChange}
+                  />
+                </Box>
+              </Tabs>
               <Box
                 sx={{
-                  ...boxStyle,
-                  height: `calc(100% - 32px)`,
-                  backgroundColor: '#FFF',
-                  overflowY: 'auto',
-                  boxShadow: 1,
-                  marginLeft: 2,
-                  marginY: 2,
-                  marginRight: 1,
+                  height: '100%',
+                  overflowX: 'hidden',
                 }}
               >
                 <DataGrid
@@ -418,37 +426,48 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                  sx={{ border: 'none', p: 2 }}
+                  sx={{ border: 'none', paddingX: 2, overflowX: 'auto', height: `calc(100% - 8px)` }}
                   hideFooter
                 />
               </Box>
             </Box>
-            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1 }}>
+          </Grid>
+          <Grid item xs={4}>
+            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
               {pineappleData.map((pineData, index) => (
-                <Box
+                <Paper elevation={3}
                   sx={{
-                    backgroundColor: index === 0 ? '#fdff72' : '#008000',
+                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
+                    padding: 2,
                     flex: 1,
-                    borderRadius: 3,
-                    padding: 4,
-                    boxShadow: 1,
-                    marginLeft: 1,
-                    marginRight: 2,
-                    marginY: 2,
-                    marginTop: index === 1 ? 0 : 2,
-                  }}
-                >
-                  <h3 style={{ color: '#FFF' }}>{pineData.name}</h3>
-                  <h1 style={{ color: '#FFF' }}>{`₱${pineData.price}.00`}</h1>
-                  <h5 style={{ color: '#FFF' }}>Price</h5>
-                  <button className="btn-view-all" style={{ marginTop: 10 }} onClick={() => handleEditPine(pineData)}>
-                    Edit price
-                  </button>
-                </Box>
+                    height: '100%'
+                  }}>
+                  {index === 0 ? (
+                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  ) : (
+                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  )}
+                  <Divider sx={{ marginTop: 2 }} />
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white' , fontSize:20}}>
+                      {pineData.name}
+                    </Typography>
+                    <Typography variant="h6" gutterBottom>
+                      {`₱${pineData.price}.00`}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
+                      Edit Price
+                    </Button>
+                  </Box>
+                </Paper>
               ))}
             </Box>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
+
       </Box>
       <EditRowModal />
       <EditPinePrice />
