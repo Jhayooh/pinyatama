@@ -3,35 +3,81 @@ import Chart from 'react-apexcharts';
 
 function ExamplePieChart({ labels, data, colors, title }) {
   const options = {
-    labels: labels || ["Default Label"],
-    stroke: {
-      show: false
-    },
+    labels: labels,
+    heigth: '100%',
     title: {
-      text: title || 'Labor and Material Cost',
-      align: 'left'
-    },
-    legend: {
-      position: 'bottom',
-    },
-    chart: {
-      height:'100%',
-      width:'100%' 
-    },
-    plotOptions: {
-      pie: {
-        customScale: 1,
+      text: title,
+      align: 'left',
+      margin: 18,
+      style: {
+        fontWeight: 600,
+
       }
     },
-    dataLabels: {
-      padding: 12
+    // stroke: {
+    //   show: false
+    // },
+    legend: {
+      show: true,
+      position: 'right',
+      fontSize: '12px',
+      floating: true,
+      itemMargin: {
+        vertical: 2
+      }
     },
-      colors: ['#ffd700', '#065535', '#ffff00', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#800080', '#cc0000']
-    
-  };
+    colors: [
+      "#F7BF0B", //yilo
+      "#40A040", //grin
+      "#E74C3C", //rid
+    ],
+    // chart: {
+    //   animations: {
+    //     enabled: true,
+    //     easing: 'easeinout',
+    //     speed: 1000,
+    //     animateGradually: {
+    //       enabled: true,
+    //       delay: 200
+    //     },
+    //     dynamicAnimation: {
+    //       enabled: true,
+    //       speed: 350
+    //     }
+    //   }
+    // },
+    plotOptions: {
+      radialBar: {
+        offsetX: -32,
+        hollow: {
+          margin: 0,
+          size: "70%"
+        },
+        dataLabels: {
+          showOn: "always",
+          name: {
+            fontSize: '12px',
+            fontFamily: 'roboto',
+            fontWeight: 600,
+            color: undefined,
+            offsetY: -8,
+          },
+          value: {
+            show: true,
+            fontSize: '20px',
+            fontFamily: 'roboto',
+            fontWeight: 600,
+            color: undefined,
+            offsetY: 10,
+          },
+        }
+      },
+
+    }
+  }
   return (
     data &&
-    <Chart options={options} series={data} type="pie"  />
+    <Chart options={options} series={data} type="radialBar" />
   );
 }
 

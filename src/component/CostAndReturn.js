@@ -99,10 +99,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       ...part,
       isAvailable: particularData.find(data => data.id === part.foreignId)?.isAvailable ?? part.isAvailable
     }));
-
+    console.log("partss", parts)
     setLocalParts(updatedLocalParts);
-    setLaborMaterial([markers[0].totalPriceMaterial, markers[0].totalPriceLabor])
+    setLaborMaterial([roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
     setNewRoi(roi[0])
+    console.log("laborMaterial", [roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
   }, [particularData, isClicked]);
 
   const handleShow = () => setShow(true);
@@ -117,7 +118,10 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   function calcTotalParts(upPart) {
     const totalLabor = upPart.filter(item => item.particular.toLowerCase() === 'labor').reduce((sum, item) => sum + item.totalPrice, 0);
     const totalMaterial = upPart.filter(item => item.particular.toLowerCase() === 'material').reduce((sum, item) => sum + item.totalPrice, 0);
-    setLaborMaterial([totalMaterial, totalLabor])
+    const totalFertilizer = upPart
+      .filter(item => item.parent.toLowerCase() === "fertilizer")
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+    setLaborMaterial([totalMaterial - totalFertilizer, totalLabor, totalFertilizer])
     console.log("material labor:", laborMaterial)
   }
 
@@ -128,7 +132,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
 
   function calcNewRoi() {
     const grossReturnAndBatter = (newRoi.grossReturn * getPinePrice('pineapple')) + (newRoi.butterBall * getPinePrice('butterball'))
-    const costTotal = laborMaterial[0] + laborMaterial[1]
+    const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
     const netReturnValue = grossReturnAndBatter - costTotal;
     const roiValue = (netReturnValue / grossReturnAndBatter) * 100;
     setNewRoi((prevItem) => ({
@@ -246,8 +250,8 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       const { name, value } = event.target;
       setEditedRowData(prevData => ({
         ...prevData,
-        [name]: parseInt(value),
-        totalPrice: parseInt(value) * editedRowData.price
+        [name]: parseFloat(value),
+        totalPrice: parseFloat(value) * editedRowData.price
       }));
     };
 
@@ -269,7 +273,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
         }}>
           <>
             <h2 id="edit-row-modal" style={{ marginBottom: 12 }}>Edit Row</h2>
-            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
               <TextField
                 label="Name"
                 name="name"
@@ -285,12 +289,24 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 value={editedRowData.price?.toLocaleString('en-PH', {
                   style: 'currency',
                   currency: 'PHP'
-                })}
+                }) + '/' + editedRowData.unit}
                 onChange={handleInputChange}
                 fullWidth
                 disabled
+                inputProps={{
+                  step: "0.01"
+                }}
                 sx={{ mb: 2 }}
               />
+              {/* <TextField
+                label="Unit"
+                name="unit"
+                value={editedRowData.unit}
+                onChange={handleInputChange}
+                fullWidth
+                disabled
+                sx={{ mb: 2, flex: 1 }}
+              /> */}
             </Box>
             <TextField
               label="Quantity"
@@ -529,7 +545,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                 valueFormatter
                               },
                               {
-                                field: 'price',
+                                field: 'totalPrice',
                                 headerName: 'Price',
                                 flex: 2,
                                 editable: false,
@@ -617,15 +633,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
             spacing={2}
             display='flex'
           >
-            <Grid xs={6}>
+            <Grid xs={6} >
               <Box sx={{
                 boxShadow: 2,
                 borderRadius: 2,
                 backgroundColor: '#fff',
               }}>
                 <Doughnut
-                  labels={["ROI", "Potential Return"]}
-                  data={[newRoi.roi, Math.round((100 - newRoi.roi) * 100) / 100]}
+                  labels={["ROI", "???"]}
+                  data={[newRoi.roi, Math.round((100-newRoi.roi)*100)/100]}
                   title={"Expected QP Production"}
                 />
               </Box>
@@ -637,9 +653,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 backgroundColor: '#fff',
               }}>
                 <Doughnut
-                  labels={["Materyales", "Labor"]}
+                  labels={["Materyales", "Labor", "Fertilizer"]}
                   data={laborMaterial}
-                  title={'Labor and Material Cost'}
+                  title={'Production Cost'}
                 />
               </Box>
             </Grid>
@@ -662,7 +678,8 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               boxShadow: 2,
               borderRadius: 2,
               backgroundColor: '#fff'
-            }}>              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
+            }}>
+              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
             </Box>
           </Grid>
         </Grid>

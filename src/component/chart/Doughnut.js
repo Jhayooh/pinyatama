@@ -2,6 +2,7 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 function ExamplePieChart({ labels, data, title }) {
+  console.log("dataaa", data)
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP'
@@ -21,11 +22,18 @@ function ExamplePieChart({ labels, data, title }) {
       show: false
     },
     legend: {
-      show: false,
+      show: true,
+      position: 'right',
+      fontSize: '12px',
+      floating: true,
+      itemMargin: {
+        vertical: 2
+      }
     },
     colors: [
-      "#F7BF0B",
-      "#40A040"
+      "#F7BF0B", //yilo
+      "#40A040", //grin
+      "#E74C3C", //rid
     ],
     chart: {
       animations: {
@@ -45,8 +53,9 @@ function ExamplePieChart({ labels, data, title }) {
     plotOptions: {
       pie: {
         customScale: 1,
+        offsetX: -32,
         donut: {
-          size: '80%',
+          size: '75%',
           labels: {
             show: true,
             name: {
@@ -70,10 +79,9 @@ function ExamplePieChart({ labels, data, title }) {
                 switch (title.toLowerCase()) {
                   case 'expected qp production':
                     return val + '%'
-                  case 'labor and material cost':
+                  case 'production cost':
                     return formatter.format(val)
                   default:
-                    console.log("value", typeof (val))
                     return parseInt(val).toLocaleString()
                 }
               }
@@ -91,7 +99,7 @@ function ExamplePieChart({ labels, data, title }) {
                 switch (title.toLowerCase()) {
                   case 'expected qp production':
                     return total + '%'
-                  case 'labor and material cost':
+                  case 'production cost':
                     return formatter.format(total)
                   default:
                     return total.toLocaleString()
