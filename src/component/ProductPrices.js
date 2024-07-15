@@ -56,7 +56,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
   const [selectedRow, setSelectedRow] = useState({});
   const [pineData, setPineData] = useState({});
 
-  const [activeTab, setActiveTab] = useState('materials');
+  const [activeTab, setActiveTab] = useState(0);
 
   const handleTabChange = (event, newTab) => {
     setActiveTab(newTab);
@@ -368,8 +368,42 @@ export default function ProductPrices({ particularData, pineappleData }) {
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={2} sx={{ height: '100%' }}>
-          <Grid item xs={8} sx={{ height: '100%' }}>
+        <Grid container spacing={1} sx={{ height: '100%' }}>
+          <Grid item xs={3}>
+            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
+              {pineappleData.map((pineData, index) => (
+                <Paper elevation={3}
+                  sx={{
+                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
+                    padding: 2,
+                    flex: 1,
+                    height: '100%'
+                  }}>
+                  {index === 0 ? (
+                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  ) : (
+                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  )}
+                  <Divider sx={{ marginTop: 2 }} />
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
+                      {pineData.name}
+                    </Typography>
+                    <Typography variant="h6" gutterBottom>
+                      {`₱${pineData.price}.00`}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
+                      Edit Price
+                    </Button>
+                  </Box>
+                </Paper>
+              ))}
+            </Box>
+          </Grid>
+          <Grid item xs={9} sx={{ height: '100%' }}>
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -426,46 +460,19 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                  sx={{ border: 'none', paddingX: 2, overflowX: 'auto', height: `calc(100% - 8px)` }}
+                  sx={{
+                    border: 'none',
+                    paddingX: 2,
+                    overflowX: 'auto',
+                    height: `calc(100% - 8px)`,
+                    backgroundColor:'#fff'
+                  }}
                   hideFooter
                 />
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={4}>
-            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
-              {pineappleData.map((pineData, index) => (
-                <Paper elevation={3}
-                  sx={{
-                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
-                    padding: 2,
-                    flex: 1,
-                    height: '100%'
-                  }}>
-                  {index === 0 ? (
-                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  ) : (
-                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  )}
-                  <Divider sx={{ marginTop: 2 }} />
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white' , fontSize:20}}>
-                      {pineData.name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                      {`₱${pineData.price}.00`}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
-                      Edit Price
-                    </Button>
-                  </Box>
-                </Paper>
-              ))}
-            </Box>
-          </Grid>
         </Grid>
 
       </Box>
