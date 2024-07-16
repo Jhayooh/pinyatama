@@ -399,9 +399,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               height: '100%'
             }}>
               <Tabs value={selectedTab} onChange={handleTabChange}>
-                <Tab label="Labor" />
                 <Tab label="Material" />
                 <Tab label="Fertilizer" />
+                <Tab label="Labor" />
               </Tabs>
               <Box sx={{
                 overflow: 'hidden',
@@ -413,6 +413,154 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   (() => {
                     switch (selectedTab) {
                       case 0:
+                        return (
+                          <DataGrid
+                          rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Material',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'qntyPrice',
+                              headerName: 'Qnty',
+                              flex: 1,
+                              type: 'number',
+                              editable: true,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter
+                            },
+                            {
+                              field: 'totalPrice',
+                              headerName: 'Price',
+                              flex: 2,
+                              type: 'number',
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            },
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                            
+                          />
+                        )
+                      case 1:
+                        return (
+                          <DataGrid
+                          rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Fertilizer',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'qntyPrice',
+                              headerName: 'Qnty',
+                              flex: 1,
+                              type: 'number',
+                              editable: true,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter
+                            },
+                            {
+                              field: 'totalPrice',
+                              headerName: 'Price',
+                              flex: 2,
+                              editable: false,
+                              type: 'number',
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'status',
+                              headerName: 'Status',
+                              flex: 1,
+                              editable: false,
+                              align: 'center',
+                              headerClassName: 'super-app-theme--header',
+                              valueGetter: (params) => params.row.isAvailable,
+                              renderCell: (params) => (
+                                <Tooltip title={params.value ? 'Available' : 'Not Available'}>
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      ...shapeStyle,
+                                      backgroundColor: params.value ? '#28B463' : '#E74C3C',
+                                    }}
+                                  />
+                                </Tooltip>
+                              ),
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    disabled={!row.isAvailable}
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            }
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                          />
+                        )
+                      case 2:
                         return (
                           <DataGrid
                             rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
@@ -461,153 +609,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                                       className="textPrimary"
                                       onClick={handleEditClick(id, row)}
                                       color="inherit"
-                                      sx={actionBtnStyle}
-                                    />
-                                  );
-                                  return [editAction];
-                                }
-                              }
-                            ]}
-                            hideFooter
-                            getRowClassName={(params) =>
-                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                            }
-                            sx={datagridStyle}
-                          />
-                        )
-                      case 1:
-                        return (
-                          <DataGrid
-                            rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
-                            columns={[
-                              {
-                                field: 'name',
-                                headerName: 'Material',
-                                flex: 2,
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                              },
-                              {
-                                field: 'qntyPrice',
-                                headerName: 'Qnty',
-                                flex: 1,
-                                type: 'number',
-                                editable: true,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter
-                              },
-                              {
-                                field: 'totalPrice',
-                                headerName: 'Price',
-                                flex: 2,
-                                type: 'number',
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter: (params) => {
-                                  return params.value && params.value.toLocaleString('en-PH', {
-                                    style: 'currency',
-                                    currency: 'PHP'
-                                  })
-                                },
-                              },
-                              {
-                                field: 'actions',
-                                type: 'actions',
-                                headerName: 'Action',
-                                flex: 1,
-                                cellClassName: 'actions',
-                                getActions: ({ id, row }) => {
-                                  const editAction = (
-                                    <GridActionsCellItem
-                                      icon={<EditOutlinedIcon />}
-                                      label="Edit"
-                                      className="textPrimary"
-                                      onClick={handleEditClick(id, row)}
-                                      color="inherit"
-                                      sx={actionBtnStyle}
-                                    />
-                                  );
-                                  return [editAction];
-                                }
-                              },
-                            ]}
-                            hideFooter
-                            getRowClassName={(params) =>
-                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                            }
-                            sx={datagridStyle}
-                          />
-                        )
-                      case 2:
-                        return (
-                          <DataGrid
-                            rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
-                            columns={[
-                              {
-                                field: 'name',
-                                headerName: 'Fertilizer',
-                                flex: 2,
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                              },
-                              {
-                                field: 'qntyPrice',
-                                headerName: 'Qnty',
-                                flex: 1,
-                                type: 'number',
-                                editable: true,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter
-                              },
-                              {
-                                field: 'totalPrice',
-                                headerName: 'Price',
-                                flex: 2,
-                                editable: false,
-                                type: 'number',
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter: (params) => {
-                                  return params.value && params.value.toLocaleString('en-PH', {
-                                    style: 'currency',
-                                    currency: 'PHP'
-                                  })
-                                },
-                              },
-                              {
-                                field: 'status',
-                                headerName: 'Status',
-                                flex: 1,
-                                editable: false,
-                                align: 'center',
-                                headerClassName: 'super-app-theme--header',
-                                valueGetter: (params) => params.row.isAvailable,
-                                renderCell: (params) => (
-                                  <Tooltip title={params.value ? 'Available' : 'Not Available'}>
-                                    <Box
-                                      component="span"
-                                      sx={{
-                                        ...shapeStyle,
-                                        backgroundColor: params.value ? '#28B463' : '#E74C3C',
-                                      }}
-                                    />
-                                  </Tooltip>
-                                ),
-                              },
-                              {
-                                field: 'actions',
-                                type: 'actions',
-                                headerName: 'Action',
-                                flex: 1,
-                                cellClassName: 'actions',
-                                getActions: ({ id, row }) => {
-                                  const editAction = (
-                                    <GridActionsCellItem
-                                      icon={<EditOutlinedIcon />}
-                                      label="Edit"
-                                      className="textPrimary"
-                                      onClick={handleEditClick(id, row)}
-                                      color="inherit"
-                                      disabled={!row.isAvailable}
                                       sx={actionBtnStyle}
                                     />
                                   );
