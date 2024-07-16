@@ -19,7 +19,6 @@ import Column from './chart/Column';
 
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
-///////////////////
 function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const marker = markers[0]
   const particularsRef = collection(db, '/particulars')

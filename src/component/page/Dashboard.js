@@ -1185,7 +1185,7 @@ const rows = [
   createData('', 'Muriate of Potash (0-0-60)', 5, 3.5),
   createData('3 buwan pagkatanim', 'Urea (46-0-0)', 5, 3.5),
   createData('5 buwan pagkatanim', 'Urea (46-0-0)', 5, 3.5),
-  createData('7 buwan ppagkatanim', 5, 3.5),
+  createData('7 buwan ppagkatanim','', 5, 3.5),
   createData('1 buwan pagkatanim', 'Muriate of Potash (0-0-60)', 5, 3.5),
   createData('Total', '', 35, 24.5),
 ];

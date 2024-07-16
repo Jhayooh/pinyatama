@@ -18,6 +18,7 @@ import {
   Typography,
   Paper,
 } from '@mui/material';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import {
   GridRowModes,
@@ -56,7 +57,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
   const [selectedRow, setSelectedRow] = useState({});
   const [pineData, setPineData] = useState({});
 
-  const [activeTab, setActiveTab] = useState(0);
+  const [activeTab, setActiveTab] = useState('materials');
 
   const handleTabChange = (event, newTab) => {
     setActiveTab(newTab);
@@ -136,7 +137,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
           }}
         >
           <>
-            <h2 id="edit-row-modal">Edit {editedPineData.name} price</h2>
+            <Typography variant='h5' gutterBottom id="edit-row-modal">Edit {editedPineData.name} Price</Typography>
             <TextField
               label="Name"
               name="name"
@@ -284,11 +285,29 @@ export default function ProductPrices({ particularData, pineappleData }) {
     return true; // Default case: return all
   });
 
+
+  const datagridStyle = {
+   
+    paddingBottom: 0,
+    '& .even': {
+      backgroundColor: '#FFFFFF',
+    },
+    '& .odd': {
+      backgroundColor: '#F6FAF6',
+    },
+    '& .MuiDataGrid-columnHeaders': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: '#88C488'
+    },
+  }
   const [columns, setColumns] = useState([
     {
       field: 'name',
       headerName: 'Particular',
       flex: 2,
+     
     },
     {
       field: 'price',
@@ -323,7 +342,21 @@ export default function ProductPrices({ particularData, pineappleData }) {
             className="textPrimary"
             onClick={handleEditClick(id, row)}
             color="inherit"
-            sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+            sx={{
+              backgroundColor: '#E7F3E7',
+              height: '40px',
+              width: '40px',
+              borderRadius: 3,
+              color: '#58AC58',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              '&:hover': {
+                color: '#FFF',
+                backgroundColor: '#88C488'
+              }
+            }}
           />
         );
 
@@ -336,7 +369,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 className="textPrimary"
                 onClick={() => handleAvailability(row)}
                 color="inherit"
-                sx={{ color: 'inherit', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
+                sx={{ color: 'red', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
               />
             </Tooltip>
           ) : (
@@ -347,7 +380,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 className="textPrimary"
                 onClick={() => handleAvailability(row)}
                 color="inherit"
-                sx={{ color: 'inherit', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
+                sx={{ color: 'green', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
               />
             </Tooltip>
           );
@@ -362,7 +395,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   const boxStyle = {
     height: `calc(100% - 62px)`,
-    borderRadius: 3,
+    borderRadius: 2,
   };
 
   return (
@@ -404,6 +437,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
             </Box>
           </Grid>
           <Grid item xs={9} sx={{ height: '100%' }}>
+
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -413,7 +447,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               borderRadius: 2,
               boxShadow: 2
             }}>
-              <Tabs value={activeTab} onChange={handleTabChange}>
+              <Tabs value={activeTab} onChange={handleTabChange}  >
                 <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
@@ -422,8 +456,9 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   sx={{
                     p: '2px ',
                     display: 'flex',
-                    alignItems: 'center',
-                    marginLeft: 25,
+                    // alignItems: 'center',
+                    marginLeft: 20,
+                    marginRight:2,
                     width: '100%',
                     borderRadius: 2.5,
                     border: '2px solid #dcdcdc',
@@ -460,14 +495,19 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                  sx={{
+                  sx={{...datagridStyle,
                     border: 'none',
                     paddingX: 2,
                     overflowX: 'auto',
                     height: `calc(100% - 8px)`,
-                    backgroundColor:'#fff'
+                    backgroundColor: '#fff',
+                    paddingTop:1
                   }}
+                  getRowClassName={(rows) =>
+                    rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
                   hideFooter
+                  
                 />
               </Box>
             </Box>
