@@ -658,7 +658,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 <Doughnut
                   labels={["ROI", "???"]}
                   data={[newRoi.roi, Math.round((100 - newRoi.roi) * 100) / 100]}
-                  title={"Expected QP Production"}
+                  title={"Return On Investment"}
                 />
               </Box>
             </Grid>
