@@ -14,7 +14,6 @@ function ExamplePieChart({ labels, data, title }) {
       margin: 18,
       style: {
         fontWeight: 600,
-
       }
     },
     stroke: {
@@ -52,7 +51,7 @@ function ExamplePieChart({ labels, data, title }) {
     plotOptions: {
       pie: {
         customScale: 1,
-        offsetX: -32,
+        offsetX: -38,
         donut: {
           size: '75%',
           labels: {
@@ -75,14 +74,7 @@ function ExamplePieChart({ labels, data, title }) {
               color: undefined,
               offsetY: 10,
               formatter: function (val) {
-                switch (title.toLowerCase()) {
-                  case 'expected qp production':
-                    return val + '%'
-                  case 'production cost':
-                    return formatter.format(val)
-                  default:
-                    return parseInt(val).toLocaleString()
-                }
+                return formatter.format(val)
               }
             },
             total: {
@@ -95,14 +87,7 @@ function ExamplePieChart({ labels, data, title }) {
                 const total = w.globals.seriesTotals.reduce((a, b) => {
                   return a + b
                 })
-                switch (title.toLowerCase()) {
-                  case 'expected qp production':
-                    return total + '%'
-                  case 'production cost':
-                    return formatter.format(total)
-                  default:
-                    return total.toLocaleString()
-                }
+                return formatter.format(total)
               }
             }
           }
