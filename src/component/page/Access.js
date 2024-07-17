@@ -214,7 +214,7 @@ export default function Access({ usersRow }) {
                 blockAccount(row)
               }}
                 sx={{ color: 'red' }}>
-                Blocked
+                Block
               </Button>
             </Tooltip>
           ]

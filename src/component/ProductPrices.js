@@ -18,6 +18,7 @@ import {
   Typography,
   Paper,
 } from '@mui/material';
+
 import Grid from '@mui/material/Unstable_Grid2';
 import {
   GridRowModes,
@@ -136,7 +137,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
           }}
         >
           <>
-            <h2 id="edit-row-modal">Edit {editedPineData.name} price</h2>
+            <Typography variant='h5' gutterBottom id="edit-row-modal">Edit {editedPineData.name} Price</Typography>
             <TextField
               label="Name"
               name="name"
@@ -284,11 +285,29 @@ export default function ProductPrices({ particularData, pineappleData }) {
     return true; // Default case: return all
   });
 
+
+  const datagridStyle = {
+   
+    paddingBottom: 0,
+    '& .even': {
+      backgroundColor: '#FFFFFF',
+    },
+    '& .odd': {
+      backgroundColor: '#F6FAF6',
+    },
+    '& .MuiDataGrid-columnHeaders': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: '#88C488'
+    },
+  }
   const [columns, setColumns] = useState([
     {
       field: 'name',
       headerName: 'Particular',
       flex: 2,
+     
     },
     {
       field: 'price',
@@ -323,7 +342,21 @@ export default function ProductPrices({ particularData, pineappleData }) {
             className="textPrimary"
             onClick={handleEditClick(id, row)}
             color="inherit"
-            sx={{ color: 'inherit', '&:hover': { color: '#008000', backgroundColor: '#DFEFDF' } }}
+            sx={{
+              backgroundColor: '#E7F3E7',
+              height: '40px',
+              width: '40px',
+              borderRadius: 3,
+              color: '#58AC58',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer',
+              '&:hover': {
+                color: '#FFF',
+                backgroundColor: '#88C488'
+              }
+            }}
           />
         );
 
@@ -336,7 +369,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 className="textPrimary"
                 onClick={() => handleAvailability(row)}
                 color="inherit"
-                sx={{ color: 'inherit', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
+                sx={{ color: 'red', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
               />
             </Tooltip>
           ) : (
@@ -347,7 +380,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 className="textPrimary"
                 onClick={() => handleAvailability(row)}
                 color="inherit"
-                sx={{ color: 'inherit', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
+                sx={{ color: 'green', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
               />
             </Tooltip>
           );
@@ -362,14 +395,49 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   const boxStyle = {
     height: `calc(100% - 62px)`,
-    borderRadius: 3,
+    borderRadius: 2,
   };
 
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={2} sx={{ height: '100%' }}>
-          <Grid item xs={8} sx={{ height: '100%' }}>
+        <Grid container spacing={1} sx={{ height: '100%' }}>
+          <Grid item xs={3}>
+            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
+              {pineappleData.map((pineData, index) => (
+                <Paper elevation={3}
+                  sx={{
+                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
+                    padding: 2,
+                    flex: 1,
+                    height: '100%'
+                  }}>
+                  {index === 0 ? (
+                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  ) : (
+                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  )}
+                  <Divider sx={{ marginTop: 2 }} />
+                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
+                      {pineData.name}
+                    </Typography>
+                    <Typography variant="h6" gutterBottom>
+                      {`₱${pineData.price}.00`}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
+                      Edit Price
+                    </Button>
+                  </Box>
+                </Paper>
+              ))}
+            </Box>
+          </Grid>
+          <Grid item xs={9} sx={{ height: '100%' }}>
+
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',
@@ -379,7 +447,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               borderRadius: 2,
               boxShadow: 2
             }}>
-              <Tabs value={activeTab} onChange={handleTabChange}>
+              <Tabs value={activeTab} onChange={handleTabChange}  >
                 <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
@@ -388,8 +456,9 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   sx={{
                     p: '2px ',
                     display: 'flex',
-                    alignItems: 'center',
-                    marginLeft: 25,
+                    // alignItems: 'center',
+                    marginLeft: 20,
+                    marginRight:2,
                     width: '100%',
                     borderRadius: 2.5,
                     border: '2px solid #dcdcdc',
@@ -426,46 +495,24 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                  sx={{ border: 'none', paddingX: 2, overflowX: 'auto', height: `calc(100% - 8px)` }}
+                  sx={{...datagridStyle,
+                    border: 'none',
+                    paddingX: 2,
+                    overflowX: 'auto',
+                    height: `calc(100% - 8px)`,
+                    backgroundColor: '#fff',
+                    paddingTop:1
+                  }}
+                  getRowClassName={(rows) =>
+                    rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
                   hideFooter
+                  
                 />
               </Box>
             </Box>
           </Grid>
-          <Grid item xs={4}>
-            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
-              {pineappleData.map((pineData, index) => (
-                <Paper elevation={3}
-                  sx={{
-                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
-                    padding: 2,
-                    flex: 1,
-                    height: '100%'
-                  }}>
-                  {index === 0 ? (
-                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  ) : (
-                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  )}
-                  <Divider sx={{ marginTop: 2 }} />
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white' , fontSize:20}}>
-                      {pineData.name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                      {`₱${pineData.price}.00`}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
-                      Edit Price
-                    </Button>
-                  </Box>
-                </Paper>
-              ))}
-            </Box>
-          </Grid>
         </Grid>
 
       </Box>

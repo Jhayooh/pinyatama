@@ -23,13 +23,13 @@ const Container = styled(Box)({
 function Profile({ user, farm }) {
     return (
         <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2 }}>
-            <Grid item xs={12} md={8} lg={8} elavation={3} sx={{ padding: 3, boxShadow: '0px 3px 6px rgba(0, 255, 1, 0.5)' }}>
+            <Grid item xs={12} md={8} lg={8} elavation={3} sx={{ padding: 3, boxShadow:1 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center' }}>
                     <Typography variant='h6'
                          sx={{
                             color: 'green',
                             fontFamily: 'monospace',
-                            paddingLeft: 5,
+                            paddingLeft: 2,
                             paddingTop: 2,
                         }}>
                         IMPORMASYON NG BUKID</Typography>
@@ -142,7 +142,7 @@ function Profile({ user, farm }) {
                     </Grid>
                 </Box>
             </Grid>
-            <Grid item xs={12} md={4} lg={4} elavation={3} sx={{ padding: 3, boxShadow: '0px 3px 6px rgba(0, 255, 0, 0.5)' }}>
+            <Grid item xs={12} md={4} lg={4} elavation={3} sx={{ padding: 3, boxShadow: 2 }}>
                 <Box>
                     <Typography
                         sx={{
