@@ -127,7 +127,7 @@ export default function Farm({ farmId }) {
                         <DialogTitle id="alert-dialog-title" >
                             {"Delete Selected Image"}
                         </DialogTitle>
-                        <Divider/>
+                        <Divider />
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
                                 Are your sure you want to delete this image?

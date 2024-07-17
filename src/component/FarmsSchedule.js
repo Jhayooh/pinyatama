@@ -26,12 +26,12 @@ function SideDetails({ farms, eventClicked }) {
       {/* lagay closing */}
       <h2>{farmClicked.farmerName}</h2>
       <h5>Phase:{eventClicked.title}</h5>
-      <p>start date: {formattedStart}</p>
-      <p>end date: {formattedEnd}</p>
+      <p>Planting Date: {formattedStart}</p>
+      <p>Expected Harvest Date: {formattedEnd}</p>
       <p></p>
       <h5>Activities: </h5>
       <p>No Activities</p>
-      <Button>Click Here</Button>
+      <Button variant='contained' color='success'>View Details</Button>
     </Box>
   )
 }

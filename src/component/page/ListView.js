@@ -19,33 +19,39 @@ function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
   return (
     <>
       <Button
-      key={index}
-      sx={{
-        color:'black'
-        
-      }}
+        key={index}
+        sx={{
+          color: 'black',
+          backgroundColor: '#FFF'
+
+
+        }}
         onClick={() => {
           setShowFarmTabs(true)
           setIndFarm(marker.id)
           setIndUser(marker.brgyUID)
         }} >
         <ListItem disablePadding >
-          <ListItemAvatar sx={{ textAlign: 'center'}}>
+          <ListItemAvatar sx={{ textAlign: 'center' }}>
             <Avatar sx={{ backgroundColor: 'white' }}>
               {imageUrls[marker.id] ? (
                 <img className='img' src={imageUrls[marker.id]} alt={marker.title} style={{ width: '100%', height: '100% ' }} />
               ) : (
-                <img src={require('../image_src/pinyatamap-logo.png')} className='img' style={{ width: '80%', height: '80% ' }} />
+                <img src={require('../image_src/p1.jpg')} className='img' style={{ width: '80%', height: '80% ' }} />
               )}
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={marker.title} />
-          <ListItemText secondary={marker.brgy + ', ' + marker.mun}  sx={{ textAlign: 'right'}}/>
-          <ListItemText secondary={dateFormatter(marker.start_date)} sx={{ textAlign: 'right'}}/>
-          <ListItemText secondary={dateFormatter(marker.harvest_date)} sx={{ textAlign: 'right'}}/>
+          <ListItemText secondary={marker.brgy + ', ' + marker.mun} sx={{ textAlign: 'right' }} />
+          <ListItemText secondary={dateFormatter(marker.start_date)} sx={{ textAlign: 'right' }} />
+          <ListItemText secondary={dateFormatter(marker.harvest_date)} sx={{ textAlign: 'right' }} />
         </ListItem>
+
+        
         <Divider />
       </Button>
+
+      
     </>
   )
 }
