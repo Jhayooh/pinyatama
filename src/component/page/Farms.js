@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Divider } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -8,6 +8,9 @@ import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
 
 import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
@@ -20,7 +23,7 @@ import GridView from './GridView.js';
 import ListView from './ListView.js';
 
 
-function Farms({ events, farms, users, particularData }) {
+function Farms({ events, farms, users, particularData, pineapple }) {
   const [filteredFarms, setFilteredFarms] = useState(farms)
   const [filteredUsers, setFilteredUsers] = useState(users);
   const [newUser, setNewUser] = useState([{
@@ -123,13 +126,19 @@ function Farms({ events, farms, users, particularData }) {
   }
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100vh' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
       {showFarmTabs ?
-        <Box sx={{ height: '100%', overflowY: 'auto' }}>
-          <FarmTabs farms={filteredFarms.filter(marker => marker.id === indFarm)} setShow={setShowFarmTabs} user={users.filter(user => user.id === indUser)} event={events.filter(event => event.id === indFarm)} particularData={particularData} />
+        <Box sx={{ height: '100%', overflowY: 'auto', borderRadius: 4 }}>
+          <FarmTabs
+            farms={filteredFarms.filter(marker => marker.id === indFarm)}
+            setShow={setShowFarmTabs}
+            user={users.filter(user => user.id === indUser)}
+            event={events.filter(event => event.id === indFarm)}
+            particularData={particularData}
+            pineapple={pineapple} />
         </Box >
         :
-        <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
+        <Box sx={{ boxShadow: 1, borderRadius: 4, backgroundColor: '#ffffe0', height: '100%', overflow: 'hidden' }}>
           <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
             <Box sx={{ width: '80%' }}>
               <FormControl fullWidth size="small">
@@ -210,7 +219,17 @@ function Farms({ events, farms, users, particularData }) {
                 ))}
               </Box>
               :
-              <Box sx={{ display: 'flex', flexWrap: 'wrap', paddingLeft: 2, overflow: 'auto', height: '100%', width: 1 }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', paddingLeft: 2, paddingRight:2, overflow: 'auto', height: '100%', width: 1 }}>
+               <List sx={{ bgcolor: 'background.paper', padding:1}}>
+                <ListItem disablePadding >
+                {/* <ListItemText primary='' /> */}
+                  <ListItemText primary='Name of Farm' />
+                  <ListItemText primary='Location' sx={{ textAlign: 'right'}}/>
+                  <ListItemText primary='Date of Planting' sx={{ textAlign: 'right'}}/>
+                  <ListItemText primary='Date  of Harvest' sx={{ textAlign: 'right'}}/>
+                </ListItem>
+               </List>
+               <Divider/>
                 {filteredFarms.map((marker, index) => (
                   <ListView marker={marker} index={index} setShowFarmTabs={setShowFarmTabs} setIndFarm={setIndFarm} setIndUser={setIndUser} imageUrls={imageUrls} />
                 ))}

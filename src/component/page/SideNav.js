@@ -112,6 +112,9 @@ export default function SideNav() {
   const userQuery = query(userRef)
   const [users] = useCollectionData(userQuery)
 
+  const farmerRef = collection(db, '/farmer')
+  const [farmerRow, farmerLoading] = useCollectionData(farmerRef)
+
   const particularsRef = collection(db, '/particulars')
   const [particularRow, particularLoading] = useCollectionData(particularsRef)
 
@@ -306,65 +309,28 @@ export default function SideNav() {
               </ListItem>
             </div>
           </List>
-          <Modal
+          <Dialog
             open={logoutModalDisplay}
             onClose={closeLogoutMdal}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
           >
-            <Box sx={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              zIndex: '9999',
-              backgroundColor: 'white',
-              padding: '20px',
-              borderRadius: '10px',
-              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-
-
-            }}>
-              <Button
-                variant='text'
-                sx={{
-                  position: 'absolute',
-                  top: 0,
-                  right: 0,
-                  zIndex: 1,
-                  color: 'grey'
-                }}
-                onClick={() => closeLogoutMdal(false)}>
-                <CloseIcon />
+            <DialogTitle id="alert-dialog-title">
+              {"Logout"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+               Are you sure you want to signout from this account?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button variant='text' color='error' onClick={ closeLogoutMdal}>Cancel</Button>
+              <Button  variant='contained' color='success' onClick={handleSignOut} autoFocus>
+                Ok
               </Button>
-
-              <Box sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                justifyContent: 'center',
-
-              }}>
-                <InfoIcon sx={{ color: 'red', width: '25%', height: '25%', alignItems: 'center' }} />
-                <h5 style={{ alignItems: 'center', padding: 5 }}>Are you sure you want to Logout?</h5>
-              </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', width: '100%' }}>
-                <Button
-                  variant="contained" color='success'
-                  style={{ flexDirection: 'column' }}
-                  onClick={handleSignOut}
-                >
-                  Proceed
-                </Button>
-                <Button
-                  variant="outlined"
-                  style={{ flexDirection: 'column', marginLeft: 5 }}
-                  onClick={closeLogoutMdal}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </Box>
-
-          </Modal>
+            </DialogActions>
+          </Dialog>
+         
           {/* <Box sx={{ alignItems: 'center', display: 'flex', flex: 1, pb: 1.5, justifyContent: 'center', flexDirection: 'column', }}>
             <Button variant="contained" onClick={handleSignOut} sx={{ backgroundColor: 'orange' }}>Log out </Button>
           </Box> */}
@@ -379,8 +345,8 @@ export default function SideNav() {
             </Box>
             :
             <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, backgroundColor: bgColor, width: 1, overflow: 'hidden' }}>
-              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} />}
-              {selected === 'Farms' && particularRow ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} /> : <></>}
+              {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} farmer={farmerRow}/>}
+              {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
               {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
               {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
               {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
