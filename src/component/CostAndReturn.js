@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DataGrid, GridCellModes, GridActionsCellItem, } from '@mui/x-data-grid';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip, InputAdornment, IconButton } from '@mui/material';
 import { Tabs, Tab, Box, TextField, Modal, Button } from '@mui/material';
 import { NetworkWifi } from '@mui/icons-material';
 import { darken, lighten, styled } from '@mui/material/styles';
@@ -10,6 +10,9 @@ import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 import { db } from '../firebase/Config';
 import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
+
+// icon
+import pesoCoin from './image_src/peso.png'
 
 // charts
 import Pie from './chart/Pie';
@@ -20,13 +23,14 @@ import Column from './chart/Column';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 
 function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
-  const marker = markers[0]
+  // const marker = markers[0]
   const particularsRef = collection(db, '/particulars')
   const [particularData, particularLoading] = useCollectionData(particularsRef)
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [show, setShow] = useState(false);
   const [localParts, setLocalParts] = useState(parts);
+  const [localPine, setLocalPine] = useState(pineapple)
   const [saving, setSaving] = useState(false);
   const [laborMaterial, setLaborMaterial] = useState([])
   const [newRoi, setNewRoi] = useState({
@@ -62,6 +66,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   useEffect(() => {
     newRoi && console.log("new roi sa useEFffect", newRoi)
   }, [newRoi])
+
+  const formatter = new Intl.NumberFormat('en-PH', {
+    style: 'currency',
+    currency: 'PHP'
+  })
 
   const cellMode = React.useMemo(() => {
     if (!selectedCellParams) {
@@ -100,10 +109,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }));
     console.log("partss", parts)
     setLocalParts(updatedLocalParts);
+    setLocalPine(pineapple)
     setLaborMaterial([roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
     setNewRoi(roi[0])
     console.log("laborMaterial", [roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
-  }, [particularData, isClicked]);
+  }, [particularData, isClicked, pineapple]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -222,11 +232,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
 
   const getSelectedHoverBackgroundColor = (color, mode) =>
     mode === 'dark' ? darken(color, 0.4) : lighten(color, 0.4);
-  const shapeStyle = {
-    width: 30,
-    height: 10,
-    display: 'inline-block'
-  }
+
   const EditRowModal = () => {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
 
@@ -383,10 +389,589 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }
   }
 
+  const shapeStyle = {
+    width: 20,
+    height: 12,
+    borderRadius: '50%',
+    display: 'inline-block',
+  }
+
   return (
     <>
-      <Box>
-        <Grid
+      <Box sx={{
+        width: '100%',
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 1.5
+      }}>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'row',
+          flex: 1,
+          gap: 3,
+        }}>
+          <Box className='tabsBox' sx={{
+            overflowY: 'hidden',
+            boxShadow: 2,
+            borderRadius: 2,
+            backgroundColor: '#fff',
+            flex: 2,
+          }}>
+            <Tabs value={selectedTab} onChange={handleTabChange}>
+              <Tab label="Labor" />
+              <Tab label="Material" />
+              <Tab label="Fertilizer" />
+              <Tab label="Pineapple" />
+            </Tabs>
+            <Box sx={{
+              overflow: 'hidden',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column'
+            }}>
+              {
+                (() => {
+                  switch (selectedTab) {
+                    case 0:
+                      return (
+                        <DataGrid
+                          rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Labor',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'qntyPrice',
+                              headerName: 'Qnty',
+                              flex: 1,
+                              type: 'number',
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter
+                            },
+                            {
+                              field: 'totalPrice',
+                              headerName: 'Price',
+                              flex: 2,
+                              type: 'number',
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            }
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                        />
+                      )
+                    case 1:
+                      return (
+                        <DataGrid
+                          rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Material',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'qntyPrice',
+                              headerName: 'Qnty',
+                              flex: 1,
+                              type: 'number',
+                              editable: true,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter
+                            },
+                            {
+                              field: 'totalPrice',
+                              headerName: 'Price',
+                              flex: 2,
+                              type: 'number',
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            },
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                        />
+                      )
+                    case 2:
+                      return (
+                        <DataGrid
+                          rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Fertilizer',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'qntyPrice',
+                              headerName: 'Qnty',
+                              flex: 1,
+                              type: 'number',
+                              editable: true,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter
+                            },
+                            {
+                              field: 'totalPrice',
+                              headerName: 'Price',
+                              flex: 2,
+                              editable: false,
+                              type: 'number',
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'status',
+                              headerName: 'Status',
+                              flex: 1,
+                              editable: false,
+                              align: 'center',
+                              headerClassName: 'super-app-theme--header',
+                              valueGetter: (params) => params.row.isAvailable,
+                              renderCell: (params) => (
+                                <Tooltip title={params.value ? 'Available' : 'Not Available'}>
+                                  <Box
+                                    component="span"
+                                    sx={{
+                                      ...shapeStyle,
+                                      backgroundColor: params.value ? '#28B463' : '#E74C3C',
+                                      '&:hover': {
+                                        boxShadow: params.value ? '0 0 12px #28B463' : '0 0 18px #E74C3C',
+                                        transition: 'box-shadow 0.3s ease',
+                                      }
+                                    }}
+                                  />
+                                </Tooltip>
+                              ),
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    disabled={!row.isAvailable}
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            }
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                        />
+                      )
+                    case 3:
+                      return (
+                        <DataGrid
+                          rows={localPine}
+                          columns={[
+                            {
+                              field: 'name',
+                              headerName: 'Name',
+                              flex: 2,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                            },
+                            {
+                              field: 'price',
+                              headerName: 'Price',
+                              flex: 2,
+                              editable: false,
+                              type: 'number',
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => {
+                                return params.value && params.value.toLocaleString('en-PH', {
+                                  style: 'currency',
+                                  currency: 'PHP'
+                                })
+                              },
+                            },
+                            {
+                              field: 'actions',
+                              type: 'actions',
+                              headerName: 'Action',
+                              flex: 1,
+                              cellClassName: 'actions',
+                              getActions: ({ id, row }) => {
+                                const editAction = (
+                                  <GridActionsCellItem
+                                    icon={<EditOutlinedIcon />}
+                                    label="Edit"
+                                    className="textPrimary"
+                                    onClick={handleEditClick(id, row)}
+                                    color="inherit"
+                                    sx={actionBtnStyle}
+                                  />
+                                );
+                                return [editAction];
+                              }
+                            }
+                          ]}
+                          hideFooter
+                          getRowClassName={(params) =>
+                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                          }
+                          sx={datagridStyle}
+                        />
+                      )
+                    default:
+                      break;
+                  }
+                })()
+              }
+              <Box sx={{
+                display: 'flex',
+                gap: 2,
+                justifyContent: 'flex-end',
+                padding: 1,
+              }}
+              >
+                <Button variant="text" color='error' onClick={handleReset}>Reset</Button>
+                <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button>
+              </Box>
+            </Box>
+          </Box>
+          <Box className='chartsBox' sx={{
+            flex: 3,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 1.5
+          }}>
+            <Box className='topChartsBox' sx={{
+              display: 'flex',
+              gap: 1.5,
+              flex: 1
+            }}>
+              <Box className='roiBox' sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+                flex: 1
+              }}>
+                <Doughnut
+                  labels={["Net return", "Production cost"]}
+                  data={[newRoi.netReturn, newRoi.costTotal]}
+                  title={"Expected QP Production"}
+                />
+              </Box>
+              <Box className='productionBox' sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+                flex: 1
+              }}>
+                <Doughnut
+                  labels={["Materyales", "Labor", "Fertilizer"]}
+                  data={laborMaterial}
+                  title={'Production Cost'}
+                />
+              </Box>
+            </Box>
+            <Box className='botChartsBox' sx={{
+              display: 'flex',
+              flex: 1,
+              gap: 1.5
+            }}>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#fff',
+                flex: 1
+              }}>
+                <Doughnut
+                  labels={["Pineapple", "Butterball"]}
+                  data={[newRoi.grossReturn*getPinePrice('pineapple'), newRoi.butterBall*getPinePrice('butterball')]}
+                  title={"Pineapple cost"}
+                />
+              </Box>
+              <Box className='pricesBox' sx={{
+                display: 'flex',
+                flex: 1,
+                gap: 1.5,
+                flexDirection: 'column',
+              }}>
+                <Box sx={{
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: '#FFF',
+                  // backgroundColor: '#E7F3E7',
+                  flex: 1,
+                  display: 'flex',
+                }}>
+                  <Box className='column-one' sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flex: 1,
+                    paddingY: 1.5,
+                    paddingLeft: 2,
+                    paddingRight: 1
+                  }}>
+                    <Typography>
+                      Pineapple price
+                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      color: '#88C488',
+                      // border: .6,
+                      // borderColor: '#88C488',
+                      borderRadius: 2,
+                      // backgroundColor: '#E7F3E7',
+                      paddingX: 1.5,
+                      paddingTop: .5
+                    }}>
+                      <Typography variant='h3' sx={{
+                        fontWeight: 200
+                      }}>
+                        ₱
+                      </Typography>
+                      <Typography
+                        variant='h3'
+                        sx={{
+                          fontWeight: 700,
+                        }}
+                      >
+                        {parseFloat(getPinePrice('pineapple')).toFixed(2)}
+                      </Typography>
+                      <Typography align='center'>
+                        /pc
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box className='column-two' sx={{
+                    paddingY: 1.5,
+                    paddingRight: 2,
+                    paddingLeft: 1,
+                    backgroundColor: '#88C488',
+                    // borderRadius: 2,
+                    borderTopRightRadius: '8px',
+                    borderBottomRightRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#FFF'
+                  }}>
+                    <Typography align='center' variant='caption'>
+                      Market price
+                    </Typography>
+                    <Typography align='center' variant='h6' sx={{
+                      fontWeight: 600
+                    }}>
+                      {formatter.format(getPinePrice('pineapple'))}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Box sx={{
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: '#FFF',
+                  // backgroundColor: '#E7F3E7',
+                  flex: 1,
+                  display: 'flex',
+                }}>
+                  <Box className='column-one' sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    flex: 3,
+                    paddingY: 1.5,
+                    paddingLeft: 2,
+                    paddingRight: 1
+                  }}>
+                    <Typography>
+                      Butterball price
+                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      color: '#88C488',
+                      // border: .6,
+                      // borderColor: '#88C488',
+                      borderRadius: 2,
+                      // backgroundColor: '#E7F3E7',
+                      paddingX: 1.5,
+                      paddingTop: .5
+                    }}>
+                      <Typography variant='h3' sx={{
+                        fontWeight: 200
+                      }}>
+                        ₱
+                      </Typography>
+                      <Typography
+                        variant='h3'
+                        sx={{
+                          fontWeight: 700,
+                        }}
+                      >
+                        {parseFloat(getPinePrice('butterball')).toFixed(2)}
+                      </Typography>
+                      <Typography align='center'>
+                        /pc
+                      </Typography>
+                    </Box>
+                  </Box>
+                  <Box className='column-two' sx={{
+                    flex: 1,
+                    paddingY: 1.5,
+                    paddingRight: 2,
+                    paddingLeft: 1,
+                    backgroundColor: '#88C488',
+                    // borderRadius: 2,
+                    borderTopRightRadius: '8px',
+                    borderBottomRightRadius: '8px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    color: '#FFF'
+                  }}>
+                    <Typography align='center' variant='caption'>
+                      Market price
+                    </Typography>
+                    <Typography align='center' variant='h6' sx={{
+                      fontWeight: 600
+                    }}>
+                      {formatter.format(getPinePrice('butterball'))}
+                    </Typography>
+                  </Box>
+                </Box>
+                <Button
+                  variant='contained'
+                  color='success'
+                  size='large'
+                // startIcon={<PesoCoin />}
+                >
+                  <Typography sx={{
+                    fontWeight: 500
+                  }}>
+                    Harvest now
+                  </Typography>
+                </Button>
+              </Box>
+            </Box>
+          </Box>
+        </Box>
+        <Box sx={{
+          flex: 1
+        }}>
+          <Box sx={{
+            boxShadow: 2,
+            borderRadius: 2,
+            backgroundColor: '#fff'
+          }}>
+            <Column
+              data={[markers[0].totalPines]}
+              data1={[markers[0].totalBats]}
+              labels={["Pineapple"]} />
+          </Box>
+        </Box>
+      </Box >
+      {!!snackbar && (
+        <Snackbar
+          open
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+          onClose={handleCloseSnackbar}
+          autoHideDuration={6000}
+        >
+          <Alert {...snackbar} onClose={handleCloseSnackbar} />
+        </Snackbar>
+      )
+      }
+      <EditRowModal />
+    </>
+  );
+}
+
+CostAndReturn.propTypes = {
+  markers: PropTypes.array.isRequired,
+  parts: PropTypes.array.isRequired,
+  farm: PropTypes.object.isRequired, // Add this prop type
+};
+
+export default CostAndReturn;
+
+{/* <Grid
           container
           spacing={2}
         >
@@ -623,6 +1208,157 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             sx={datagridStyle}
                           />
                         )
+                      case 1:
+                        return (
+                          <DataGrid
+                            rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
+                            columns={[
+                              {
+                                field: 'name',
+                                headerName: 'Material',
+                                flex: 2,
+                                editable: false,
+                                headerClassName: 'super-app-theme--header',
+                              },
+                              {
+                                field: 'qntyPrice',
+                                headerName: 'Qnty',
+                                flex: 1,
+                                type: 'number',
+                                editable: true,
+                                headerClassName: 'super-app-theme--header',
+                                valueFormatter
+                              },
+                              {
+                                field: 'totalPrice',
+                                headerName: 'Price',
+                                flex: 2,
+                                type: 'number',
+                                editable: false,
+                                headerClassName: 'super-app-theme--header',
+                                valueFormatter: (params) => {
+                                  return params.value && params.value.toLocaleString('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP'
+                                  })
+                                },
+                              },
+                              {
+                                field: 'actions',
+                                type: 'actions',
+                                headerName: 'Action',
+                                flex: 1,
+                                cellClassName: 'actions',
+                                getActions: ({ id, row }) => {
+                                  const editAction = (
+                                    <GridActionsCellItem
+                                      icon={<EditOutlinedIcon />}
+                                      label="Edit"
+                                      className="textPrimary"
+                                      onClick={handleEditClick(id, row)}
+                                      color="inherit"
+                                      sx={actionBtnStyle}
+                                    />
+                                  );
+                                  return [editAction];
+                                }
+                              },
+                            ]}
+                            hideFooter
+                            getRowClassName={(params) =>
+                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                            }
+                            sx={datagridStyle}
+                          />
+                        )
+                      case 2:
+                        return (
+                          <DataGrid
+                            rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
+                            columns={[
+                              {
+                                field: 'name',
+                                headerName: 'Fertilizer',
+                                flex: 2,
+                                editable: false,
+                                headerClassName: 'super-app-theme--header',
+                              },
+                              {
+                                field: 'qntyPrice',
+                                headerName: 'Qnty',
+                                flex: 1,
+                                type: 'number',
+                                editable: true,
+                                headerClassName: 'super-app-theme--header',
+                                valueFormatter
+                              },
+                              {
+                                field: 'totalPrice',
+                                headerName: 'Price',
+                                flex: 2,
+                                editable: false,
+                                type: 'number',
+                                headerClassName: 'super-app-theme--header',
+                                valueFormatter: (params) => {
+                                  return params.value && params.value.toLocaleString('en-PH', {
+                                    style: 'currency',
+                                    currency: 'PHP'
+                                  })
+                                },
+                              },
+                              {
+                                field: 'status',
+                                headerName: 'Status',
+                                flex: 1,
+                                editable: false,
+                                align: 'center',
+                                headerClassName: 'super-app-theme--header',
+                                valueGetter: (params) => params.row.isAvailable,
+                                renderCell: (params) => (
+                                  <Tooltip title={params.value ? 'Available' : 'Not Available'}>
+                                    <Box
+                                      component="span"
+                                      sx={{
+                                        ...shapeStyle,
+                                        backgroundColor: params.value ? '#28B463' : '#E74C3C',
+                                        '&:hover': {
+                                          boxShadow: params.value ? '0 0 12px #28B463' : '0 0 18px #E74C3C',
+                                          transition: 'box-shadow 0.3s ease',
+                                        }
+                                      }}
+                                    />
+                                  </Tooltip>
+                                ),
+                              },
+                              {
+                                field: 'actions',
+                                type: 'actions',
+                                headerName: 'Action',
+                                flex: 1,
+                                cellClassName: 'actions',
+                                getActions: ({ id, row }) => {
+                                  const editAction = (
+                                    <GridActionsCellItem
+                                      icon={<EditOutlinedIcon />}
+                                      label="Edit"
+                                      className="textPrimary"
+                                      onClick={handleEditClick(id, row)}
+                                      color="inherit"
+                                      disabled={!row.isAvailable}
+                                      sx={actionBtnStyle}
+                                    />
+                                  );
+                                  return [editAction];
+                                }
+                              }
+                            ]}
+                            hideFooter
+                            getRowClassName={(params) =>
+                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                            }
+                            sx={datagridStyle}
+                          />
+                        )
                       default:
                         break;
                     }
@@ -662,6 +1398,30 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 />
               </Box>
             </Grid>
+            <Grid container xs={6} spacing={2} >
+              <Grid xs={12} sx={{height: '100%'}}>
+                <Box sx={{
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: '#fff',
+                  height: '100%'
+                }}>
+                  <span>Pineapple</span>
+                  <h1>P12.00</h1>
+                </Box>
+              </Grid>
+              <Grid xs={12} sx={{height: '100%'}}>
+                <Box sx={{
+                  boxShadow: 2,
+                  borderRadius: 2,
+                  backgroundColor: '#fff',
+                  height: '100%'
+                }}>
+                  <span>Butterball</span>
+                  <h1>P3.00</h1>
+                </Box>
+              </Grid>
+            </Grid>
             <Grid xs={6}>
               <Box sx={{
                 boxShadow: 2,
@@ -683,7 +1443,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Pineapple", "Butterball"]}
-                  data={[marker.totalPines, marker.totalBats]}
+                  data={[roi.totalPines, marker.totalBats]}
                   title={"Pineapple"}
                 />
               </Box>
@@ -698,27 +1458,4 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
             </Box>
           </Grid>
-        </Grid>
-      </Box>
-      {!!snackbar && (
-        <Snackbar
-          open
-          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-          onClose={handleCloseSnackbar}
-          autoHideDuration={6000}
-        >
-          <Alert {...snackbar} onClose={handleCloseSnackbar} />
-        </Snackbar>
-      )}
-      <EditRowModal />
-    </>
-  );
-}
-
-CostAndReturn.propTypes = {
-  markers: PropTypes.array.isRequired,
-  parts: PropTypes.array.isRequired,
-  farm: PropTypes.object.isRequired, // Add this prop type
-};
-
-export default CostAndReturn;
+        </Grid> */}

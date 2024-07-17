@@ -8,6 +8,7 @@ import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
 import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
+import Archive from './Archive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
 import ProductPrices from '../ProductPrices';
 
@@ -23,7 +24,7 @@ function CustomTabPanel({ children, value, index }) {
             aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && (
-                <Box sx={{ paddingX: 2, paddingY: 6 }}>
+                <Box sx={{ paddingX: 2, paddingY: 2, height: '100%' }}>
                     <Typography>{children}</Typography>
                 </Box>
             )}
@@ -117,12 +118,21 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                     <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
                 </Box>
                 <Box style={{ width: '100%', padding: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
                             aria-label="basic tabs example"
+                            centered
+                            // variant='fullWidth'
                             TabIndicatorProps={{ style: { background: 'orange' } }}
+                            sx={{
+                                backgroundColor: '#fff',
+                                boxShadow: 2,
+                                borderRadius: 2,
+                                // width: '100%'
+                                position: 'sticky'
+                            }}
                         >
                             <Tab
                                 label="Farm Profile"
@@ -166,7 +176,6 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                               />
 
                         </Tabs>
-
                     </div>
                     <CustomTabPanel value={value} index={0}>
                         <Profile user={user} farm={farm} />
@@ -185,7 +194,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         }
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={3}>
-
+                        <Archive fieldId={farm.fieldId} />
                     </CustomTabPanel>
 
                 </Box>
