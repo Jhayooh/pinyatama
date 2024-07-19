@@ -167,7 +167,7 @@ const Access = ({ usersRow }) => {
   }));
   const [columns, setColumns] = useState([
     {
-      field: 'displayName',
+      field: 'fullname',
       headerName: 'Pangalan',
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -183,14 +183,9 @@ const Access = ({ usersRow }) => {
             <Avatar src={params.row.photoURL} alt="Profile" sx={{}} />
           )}
 
-          {params.row.displayName}
+          {`${params.row.firstname}, ${params.row.lastname}`}
         </Box>
       ),
-      flex: 1,
-    },
-    {
-      field: 'phoneNumber',
-      headerName: 'Phone Number',
       flex: 1,
     },
     {
@@ -258,7 +253,7 @@ const Access = ({ usersRow }) => {
               onClick={() => {
                 setViewedUser(row);
                 setViewModalOpen(true);
-                // setClicked(row);
+                
               }}
             >
               View
@@ -438,7 +433,7 @@ const Access = ({ usersRow }) => {
                   <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                     <Typography variant='button'>Status:</Typography>
                     {viewedUser.status === 'pending' && (
-                      <Typography variant='button' sx={{ color: 'yellow' }}>Pending</Typography>
+                      <Typography variant='button' sx={{ color: 'orange' }}>Pending</Typography>
                     )}
                     {viewedUser.status === 'active' && (
                       <Typography variant='button' sx={{ color: 'green' }}>Active</Typography>
@@ -493,16 +488,29 @@ const Access = ({ usersRow }) => {
             </Grid>
             <Grid item xs={8}>
               <Typography variant='h6' gutterBottom sx={{ color: '#58AC58', }}>Extensionist Details</Typography>
-              <Box sx={{ flexDirection: 'column', display: 'flex' }}>
-                <Typography variant='button'>Name:</Typography>
-                <TextField
-                  id="filled-read-only-input"
-                  defaultValue={viewedUser.displayName}
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                  variant="filled"
-                />
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 1 }}>
+                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                  <Typography variant='button'>Firstname:</Typography>
+                  <TextField
+                    id="filled-read-only-input"
+                    defaultValue={viewedUser.firstname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="filled"
+                  />
+                </Box>
+                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                  <Typography variant='button'>Lastname:</Typography>
+                  <TextField
+                    id="filled-read-only-input"
+                    defaultValue={viewedUser.lastname}
+                    InputProps={{
+                      readOnly: true,
+                    }}
+                    variant="filled"
+                  />
+                </Box>
               </Box>
               <Box sx={{ flexDirection: 'column', display: 'flex' }}>
                 <Typography variant='button'>Address:</Typography>
@@ -550,7 +558,7 @@ const Access = ({ usersRow }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {viewedUser.displayName}
+          {`${viewedUser.firstname}, ${viewedUser.lastname}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
@@ -572,7 +580,7 @@ const Access = ({ usersRow }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {viewedUser.displayName}
+          {`${viewedUser.firstname}, ${viewedUser.lastname}`}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
