@@ -2,7 +2,7 @@ import React, {useState}from 'react';
 import { Box, Button, Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import FarmsSchedule1 from '../FarmsSchedule1';
-import Pie from '../chart/Pie';
+import Pie from '../chart/Pie1';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
 import { Modal } from 'react-bootstrap';
@@ -35,7 +35,7 @@ function Legend({ legends }) {
   );
 }
 
-export default function AdminHome({ setSelected, farms, users, events, roi, farmer }) {
+export default function AdminHome({ setSelected, farms, users, events, roi, farmer, pineappleData }) {
   const navigate = useNavigate();
  
 
@@ -45,7 +45,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
     { color: 'green', label: 'Safe' }
   ];
 
-  // Group the roi data by farm title
+
+const pineapple = pineappleData.price
 
   // Group the roi data by farm title 
   const groupedByTitle = roi.reduce((acc, roiItem) => {
@@ -57,6 +58,10 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
     return acc;
   }, {});
 
+
+
+  // Group the roi data by farm mun 
+
   const groupedByMun= roi.reduce((acc, roiItem) => {
     const mun = farms.mun;
     if (!acc[mun]) {
@@ -64,19 +69,19 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
     }
     acc[mun].push(roiItem.grossReturn);
     return acc;
-  }, {});
+  }, {}); 
 
 
 
   // Create combinedData array with separated grossReturn values by farm title
   const combinedData = Object.keys(groupedByTitle).map(title => ({
     title,
-    data: groupedByTitle[title].map(grossReturn => grossReturn / 8),
+    data: groupedByTitle[title].map(grossReturn => grossReturn),
   }));
 
   const combinedData1 = Object.keys(groupedByMun).map(mun => ({
     mun,
-    data: groupedByTitle[mun].map(grossReturn => grossReturn / 8),
+    data: groupedByTitle[mun].map(grossReturn => grossReturn),
   }));
   // Flatten the data for pie chart
   const pieData = combinedData.flatMap(item => item.data);
@@ -125,7 +130,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
         <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }}>
-          <h1 style={{ color: '#000' }}>Dashboard</h1>
+          <h1 style={{ color: '#000' }}>Dashboard </h1>
           <Divider sx={{ borderBottomWidth: 2 }} />
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
@@ -143,7 +148,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #e1ad67', borderRadius: 3, backgroundColor: '#df6d29', display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
-              <h1 style={{ fontWeight: 'bold' }}>12</h1>
+              <h1 style={{ fontWeight: 'bold' }}>{series1}</h1>
               <h5 style={{ margin: 0 }}>Production</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
