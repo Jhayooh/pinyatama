@@ -139,8 +139,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
               pineapple={pineapple} />
           </Box >
           :
-          <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5,}}>
-            <Box sx={{ boxShadow: 2, borderRadius: 2 }}>
+          <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5}}>
+            <Box sx={{ boxShadow: 2, borderRadius: 2,backgroundColor:'#fff' }}>
               <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
                 <Box sx={{ width: '80%' }}>
                   <FormControl fullWidth size="small">
@@ -228,7 +228,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       <ListItem disablePadding >
                         {/* <ListItemText primary='' /> */}
                         <ListItemText primary='Name of Farm' />
-                        <ListItemText primary='Location' sx={{ textAlign: 'right' }} />
+                        <ListItemText primary='Barangay' sx={{ textAlign: 'right' }} />
+                        <ListItemText primary='Municipality' sx={{ textAlign: 'right' }} />
                         <ListItemText primary='Date of Planting' sx={{ textAlign: 'right' }} />
                         <ListItemText primary='Date  of Harvest' sx={{ textAlign: 'right' }} />
                       </ListItem>
