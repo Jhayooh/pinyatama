@@ -48,6 +48,14 @@ function ExamplePieChart({ labels, data, title }) {
         }
       }
     },
+    tooltip: {
+      y: {
+        formatter: function (value, opts) {
+          const percent = opts.globals.seriesPercent[opts.seriesIndex]
+          return `${formatter.format(value)} (${Math.round(percent)}%)`
+        },
+      },
+    },
     plotOptions: {
       pie: {
         customScale: 1,

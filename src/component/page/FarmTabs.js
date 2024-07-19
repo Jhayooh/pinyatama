@@ -131,7 +131,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 boxShadow: 2,
                                 borderRadius: 2,
                                 // width: '100%'
-                                position: 'sticky'
+                                position: 'sticky',
+                                zIndex: 9
                             }}
                         >
                             <Tab
