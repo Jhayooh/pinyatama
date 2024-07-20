@@ -113,9 +113,6 @@ const pineapple = pineappleData.price
 
   }
 
-  
-
-
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
   const events1 = pieChartData.map(item => item.event);
