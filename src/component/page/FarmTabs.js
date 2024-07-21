@@ -118,7 +118,15 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                     <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
                 </Box>
                 <Box style={{ width: '100%', padding: '10px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <Box style={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        width: '100%',
+                        position: 'sticky', 
+                        top: 0,
+                        padding: '10px',
+                        zIndex:9999,
+                    }}>
                         <Tabs
                             value={value}
                             onChange={handleChange}
@@ -131,7 +139,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 boxShadow: 2,
                                 borderRadius: 2,
                                 // width: '100%'
-                                position: 'sticky'
+                                position: 'sticky',
+                                zIndex: 9
                             }}
                         >
                             <Tab
@@ -173,10 +182,10 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                         color: 'orange',
                                     },
                                 }}
-                              />
+                            />
 
                         </Tabs>
-                    </div>
+                    </Box>
                     <CustomTabPanel value={value} index={0}>
                         <Profile user={user} farm={farm} />
                     </CustomTabPanel>

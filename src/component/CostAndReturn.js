@@ -63,10 +63,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     setSelectedCellParams({ id, field });
   }, []);
 
-  useEffect(() => {
-    newRoi && console.log("new roi sa useEFffect", newRoi)
-  }, [newRoi])
-
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP'
@@ -100,20 +96,18 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }, []);
 
   useEffect(() => {
-    if (!parts || !particularData) {
+    if (!parts || !particularData || !pineapple) {
       return
     }
     const updatedLocalParts = parts.map(part => ({
       ...part,
       isAvailable: particularData.find(data => data.id === part.foreignId)?.isAvailable ?? part.isAvailable
     }));
-    console.log("partss", parts)
     setLocalParts(updatedLocalParts);
-    setLocalPine(pineapple)
     setLaborMaterial([roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
     setNewRoi(roi[0])
-    console.log("laborMaterial", [roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
-  }, [particularData, isClicked, pineapple]);
+    setLocalPine(pineapple)
+  }, [particularData, isClicked]);
 
   const handleShow = () => setShow(true);
   const handleClose = () => setShow(false);
@@ -131,16 +125,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       .filter(item => item.parent.toLowerCase() === "fertilizer")
       .reduce((sum, item) => sum + item.totalPrice, 0);
     setLaborMaterial([totalMaterial - totalFertilizer, totalLabor, totalFertilizer])
-    console.log("material labor:", laborMaterial)
   }
 
-  function getPinePrice(pine) {
-    const newPine = pineapple.filter(thePine => thePine.name.toLowerCase() === pine.toLowerCase())[0]
+  function getPinePrice(pine, pineObject) {
+    const newPine = pineObject.filter(thePine => thePine.name.toLowerCase() === pine.toLowerCase())[0]
     return newPine.price
   }
 
-  function calcNewRoi() {
-    const grossReturnAndBatter = (newRoi.grossReturn * getPinePrice('pineapple')) + (newRoi.butterBall * getPinePrice('butterball'))
+  useEffect(() => {
+    const grossReturnAndBatter = (newRoi.grossReturn * getPinePrice('pineapple', localPine)) + (newRoi.butterBall * getPinePrice('butterball', localPine))
     const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
     const netReturnValue = grossReturnAndBatter - costTotal;
     const roiValue = (netReturnValue / grossReturnAndBatter) * 100;
@@ -152,8 +145,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       laborMaterial: laborMaterial[0],
       netReturn: netReturnValue
     }))
-    console.log("roi", newRoi)
-  }
+  }, [localParts, localPine, pineapple])
 
   function addEditedData(newItem) {
     setEditedRowData((prevItems) => {
@@ -204,7 +196,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }
 
     setSaving(true);
-    console.log("Saving data to Firebase:", editedRowData);
     try {
       const promises = editedRowData.map(doc => {
         const docRef = doc(db, `farms/${farm.id}/components`, doc.id);
@@ -246,7 +237,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       const updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
       setLocalParts(updatedParts);
       calcTotalParts(updatedParts)
-      calcNewRoi()
       handleModalClose()
       // setSaving(false)
     };
@@ -422,7 +412,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               <Tab label="Labor" />
               <Tab label="Material" />
               <Tab label="Fertilizer" />
-              <Tab label="Pineapple" />
             </Tabs>
             <Box sx={{
               overflow: 'hidden',
@@ -647,60 +636,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           sx={datagridStyle}
                         />
                       )
-                    case 3:
-                      return (
-                        <DataGrid
-                          rows={localPine}
-                          columns={[
-                            {
-                              field: 'name',
-                              headerName: 'Name',
-                              flex: 2,
-                              editable: false,
-                              headerClassName: 'super-app-theme--header',
-                            },
-                            {
-                              field: 'price',
-                              headerName: 'Price',
-                              flex: 2,
-                              editable: false,
-                              type: 'number',
-                              headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => {
-                                return params.value && params.value.toLocaleString('en-PH', {
-                                  style: 'currency',
-                                  currency: 'PHP'
-                                })
-                              },
-                            },
-                            {
-                              field: 'actions',
-                              type: 'actions',
-                              headerName: 'Action',
-                              flex: 1,
-                              cellClassName: 'actions',
-                              getActions: ({ id, row }) => {
-                                const editAction = (
-                                  <GridActionsCellItem
-                                    icon={<EditOutlinedIcon />}
-                                    label="Edit"
-                                    className="textPrimary"
-                                    onClick={handleEditClick(id, row)}
-                                    color="inherit"
-                                    sx={actionBtnStyle}
-                                  />
-                                );
-                                return [editAction];
-                              }
-                            }
-                          ]}
-                          hideFooter
-                          getRowClassName={(params) =>
-                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                          }
-                          sx={datagridStyle}
-                        />
-                      )
                     default:
                       break;
                   }
@@ -767,7 +702,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Pineapple", "Butterball"]}
-                  data={[newRoi.grossReturn*getPinePrice('pineapple'), newRoi.butterBall*getPinePrice('butterball')]}
+                  data={[newRoi.grossReturn * getPinePrice('pineapple', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
                   title={"Pineapple cost"}
                 />
               </Box>
@@ -788,7 +723,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   <Box className='column-one' sx={{
                     display: 'flex',
                     flexDirection: 'column',
-                    flex: 1,
+                    flex: 3,
                     paddingY: 1.5,
                     paddingLeft: 2,
                     paddingRight: 1
@@ -798,7 +733,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     </Typography>
                     <Box sx={{
                       display: 'flex',
-                      color: '#88C488',
+                      color: '#58AC58',
                       // border: .6,
                       // borderColor: '#88C488',
                       borderRadius: 2,
@@ -817,14 +752,18 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           fontWeight: 700,
                         }}
                       >
-                        {parseFloat(getPinePrice('pineapple')).toFixed(2)}
+                        {parseFloat(getPinePrice('pineapple', localPine)).toFixed(2)}
                       </Typography>
                       <Typography align='center'>
                         /pc
                       </Typography>
                     </Box>
+                    {/* <Button variant='contained' color='success' size='small'>
+                      Edit
+                    </Button> */}
                   </Box>
                   <Box className='column-two' sx={{
+                    flex: 1,
                     paddingY: 1.5,
                     paddingRight: 2,
                     paddingLeft: 1,
@@ -842,7 +781,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600
                     }}>
-                      {formatter.format(getPinePrice('pineapple'))}
+                      {formatter.format(getPinePrice('pineapple', pineapple))}
                     </Typography>
                   </Box>
                 </Box>
@@ -867,7 +806,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     </Typography>
                     <Box sx={{
                       display: 'flex',
-                      color: '#88C488',
+                      color: '#58AC58',
                       // border: .6,
                       // borderColor: '#88C488',
                       borderRadius: 2,
@@ -886,12 +825,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           fontWeight: 700,
                         }}
                       >
-                        {parseFloat(getPinePrice('butterball')).toFixed(2)}
+                        {parseFloat(getPinePrice('butterball', localPine)).toFixed(2)}
                       </Typography>
                       <Typography align='center'>
                         /pc
                       </Typography>
                     </Box>
+                    {/* <Button variant='contained' color='success' size='small'>
+                      Edit
+                    </Button> */}
                   </Box>
                   <Box className='column-two' sx={{
                     flex: 1,
@@ -912,11 +854,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600
                     }}>
-                      {formatter.format(getPinePrice('butterball'))}
+                      {formatter.format(getPinePrice('butterball', pineapple))}
                     </Typography>
                   </Box>
                 </Box>
-                <Button
+                {/* <Button
                   variant='contained'
                   color='success'
                   size='large'
@@ -927,7 +869,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   }}>
                     Harvest now
                   </Typography>
-                </Button>
+                </Button> */}
               </Box>
             </Box>
           </Box>

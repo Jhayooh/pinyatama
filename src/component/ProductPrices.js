@@ -137,7 +137,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
           }}
         >
           <>
-            <Typography variant='h5' gutterBottom id="edit-row-modal">Edit {editedPineData.name} Price</Typography>
             <TextField
               label="Name"
               name="name"
@@ -210,7 +209,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
           }}
         >
           <>
-            <h2 id="edit-row-modal">Edit Row</h2>
             <TextField
               label="ID"
               name="id"
@@ -395,7 +393,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   const boxStyle = {
     height: `calc(100% - 62px)`,
-    borderRadius: 2,
+    borderRadius: 4,
   };
 
   return (
@@ -407,7 +405,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               {pineappleData.map((pineData, index) => (
                 <Paper elevation={3}
                   sx={{
-                    backgroundColor: index === 0 ? '#40A040' : '#F7BF0B',
+                    backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
                     padding: 2,
                     flex: 1,
                     height: '100%'
@@ -444,7 +442,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               height: '100%',
               backgroundColor: '#fff',
               p: 1,
-              borderRadius: 2,
+              borderRadius: 4,
               boxShadow: 2
             }}>
               <Tabs value={activeTab} onChange={handleTabChange}  >
