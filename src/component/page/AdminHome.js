@@ -1,4 +1,4 @@
-import React, {useState}from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Button, Divider, Grid } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import FarmsSchedule1 from '../FarmsSchedule1';
@@ -37,7 +37,7 @@ function Legend({ legends }) {
 
 export default function AdminHome({ setSelected, farms, users, events, roi, farmer, pineappleData }) {
   const navigate = useNavigate();
- 
+
 
   const legendItems = [
     { color: 'red', label: 'Danger' },
@@ -46,7 +46,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   ];
 
 
-const pineapple = pineappleData.price
+  const pineapple = pineappleData.price
 
   // Group the roi data by farm title 
   const groupedByTitle = roi.reduce((acc, roiItem) => {
@@ -62,14 +62,14 @@ const pineapple = pineappleData.price
 
   // Group the roi data by farm mun 
 
-  const groupedByMun= roi.reduce((acc, roiItem) => {
+  const groupedByMun = roi.reduce((acc, roiItem) => {
     const mun = farms.mun;
     if (!acc[mun]) {
       acc[mun] = [];
     }
     acc[mun].push(roiItem.grossReturn);
     return acc;
-  }, {}); 
+  }, {});
 
 
 
@@ -109,9 +109,35 @@ const pineapple = pineappleData.price
     return acc;
   }, []);
 
-  function getFarmMun(){
+  const [productionData, setProductionData] = useState([]);
+  const [totalProduction, setTotalProduction] = useState(0);
 
-  }
+  useEffect(() => {
+    const totalProduction = { sum: 0 }; // Initialize a sum object to keep track of the total value
+
+    const data = farms.reduce((acc, farm, index) => {
+      const existing = acc.find(item => item.label === farm.mun);
+      const pieValue = parseFloat(pieData1[index]) || 0; // Convert to float
+
+      totalProduction.sum += pieValue; // Add pieValue to the total sum
+
+      if (existing) {
+        existing.value += pieValue; // Update existing value by adding pieValue
+        console.log('adding production', existing.value);
+      } else {
+        acc.push({
+          label: farm.mun,
+          value: pieValue, // Use pieValue directly if no existing item is found
+        });
+      }
+
+      return acc; // Don't forget to return the accumulator
+    }, []);
+
+    setProductionData(data);
+    setTotalProduction(totalProduction.sum);
+  }, [farms, pieData1]);
+
 
   const series = pieChartData.map(item => item.value);
   const labels = pieChartData.map(item => item.label);
@@ -120,9 +146,10 @@ const pineapple = pineappleData.price
   const labels2 = pieChartData1.map(item => item.label);
   const series1 = combinedData2.map(item => item.value);
   const labels1 = combinedData2.map(item => item.label);
+  const prod = productionData.map(item => item.value)
 
-  
- 
+
+
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       <Grid container spacing={4} alignItems='stretch'>
@@ -131,25 +158,25 @@ const pineapple = pineappleData.price
           <Divider sx={{ borderBottomWidth: 2 }} />
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #789e4f', borderRadius: 3, backgroundColor: 'green', display: 'flex', flexDirection: 'row', color:'black' }}
-           onClick={() => setSelected('Farms')}>
+          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #789e4f', borderRadius: 3, backgroundColor: 'green', display: 'flex', flexDirection: 'row', color: 'black' }}
+            onClick={() => setSelected('Farms')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
               <h5 style={{ margin: 0 }}>Farms</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farm} alt="Farms icon" style={{width:'100%', height:'100%'}}/>
+              <img src={farm} alt="Farms icon" style={{ width: '100%', height: '100%' }} />
             </Box>
           </Box>
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #e1ad67', borderRadius: 3, backgroundColor: '#df6d29', display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
-              <h1 style={{ fontWeight: 'bold' }}>{series1}</h1>
+              <h1 style={{ fontWeight: 'bold' }}>{totalProduction}</h1>
               <h5 style={{ margin: 0 }}>Production</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={production} alt="Production icon" style={{width:'100%', height:'100%'}}/>
+              <img src={production} alt="Production icon" style={{ width: '100%', height: '100%', display:'flex' }} />
             </Box>
           </Box>
         </Grid>
@@ -160,23 +187,23 @@ const pineapple = pineappleData.price
               <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmerImg} alt="Farmer icon" style={{width:'100%', height:'100%', display:'flex'}}/>
+              <img src={farmerImg} alt="Farmer icon" style={{ width: '100%', height: '100%', display: 'flex' }} />
             </Box>
           </Box>
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row', color:'black' }}
+          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row', color: 'black' }}
             onClick={() => setSelected('access')}>
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
             </Box>
             <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={accounts} alt="Accounts icon" style={{width:'100%', height:'100%'}}/>
+              <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
             </Box>
           </Button>
         </Grid>
-        
+
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 1000 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
@@ -185,40 +212,40 @@ const pineapple = pineappleData.price
             </section>
             <FarmsSchedule1 farms={farms.slice(0, 12)} events={events} setSelected={setSelected} />
             <Box>
-<div className="legend">
-    
-      
-<div className="legend-item">
-  <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
-  <span className="legend-label"> Vegetative</span>
-  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 5px" }}></span>
-  <span className="legend-label">Flowering</span>
-  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
-  <span className="legend-label">Fruiting</span>
-</div>
+              <div className="legend">
 
-        
-     
-    </div>
-    </Box>
+
+                <div className="legend-item">
+                  <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
+                  <span className="legend-label"> Vegetative</span>
+                  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 5px" }}></span>
+                  <span className="legend-label">Flowering</span>
+                  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
+                  <span className="legend-label">Fruiting</span>
+                </div>
+
+
+
+              </div>
+            </Box>
           </Box>
         </Grid>
         <Grid item lg={6}>
-        <Pie labels={labels1} data={series1} title="Municipalties" />
+          <Pie labels={labels1} data={series1} title="Municipalties" />
         </Grid>
         <Grid item lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
-          <Pie labels={labels} data={series}  title="Farms"/>
+            <Pie labels={labels} data={series} title="Farms" />
           </Box>
         </Grid>
         <Grid item lg={12}>
-          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }}  onDoubleClick={() => setSelected('Farms')}>
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onDoubleClick={() => setSelected('Farms')}>
             <GeoLoc />
           </Box>
         </Grid>
-        
+
       </Grid>
-      
+
     </Box>
   );
 } 
