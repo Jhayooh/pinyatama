@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Divider } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Avatar } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -8,9 +8,7 @@ import './Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import { DataGrid } from '@mui/x-data-grid';
 
 import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
@@ -22,15 +20,10 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import GridView from './GridView.js';
 import ListView from './ListView.js';
 
-
 function Farms({ events, farms, users, particularData, pineapple }) {
-  const [filteredFarms, setFilteredFarms] = useState(farms)
+  const [filteredFarms, setFilteredFarms] = useState(farms);
   const [filteredUsers, setFilteredUsers] = useState(users);
-  const [newUser, setNewUser] = useState([{
-    uid: '1',
-    id: '',
-    displayName: 'Lahat',
-  }, ...users])
+  const [newUser, setNewUser] = useState([{ uid: '1', id: '', displayName: 'Lahat' }, ...users]);
   const [showFarmTabs, setShowFarmTabs] = useState(false);
   const [indFarm, setIndFarm] = useState('');
   const [indUser, setIndUser] = useState('');
@@ -40,7 +33,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
 
-  const [grid, setGrid] = useState(true)
+  const [grid, setGrid] = useState(true);
 
   const theme = createTheme({
     palette: {
@@ -58,11 +51,11 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   };
 
   const handleSearch = (event) => {
-    setSearch(event.target.value)
+    setSearch(event.target.value);
   };
 
   const handleUser = (event) => {
-    setUserFilter(event.target.value)
+    setUserFilter(event.target.value);
   };
 
   useEffect(() => {
@@ -83,8 +76,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     try {
       const listRef = ref(storage, `FarmImages/${id}`);
       const result = await listAll(listRef);
-      const downloadUrl = await getDownloadURL(result.items[0])
-      return downloadUrl
+      const downloadUrl = await getDownloadURL(result.items[0]);
+      return downloadUrl;
     } catch (error) {
       console.error('Error fetching images: ', error);
     }
@@ -102,96 +95,171 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       setImageUrls(urls);
     }
     fetchImageUrls();
-  }, []);
+  }, [farms]);
 
   const municipalities = [
-    { name: "Lahat", value: "" },
-    { name: "Basud", value: "BASUD" },
-    { name: "Capalonga", value: "CAPALONGA" },
-    { name: "Daet", value: "DAET (Capital)" },
-    { name: "Jose Panganiban", value: "JOSE PANGANIBAN" },
-    { name: "Labo", value: "LABO" },
-    { name: "Mercedes", value: "MERCEDES" },
-    { name: "Paracale", value: "PARACALE" },
-    { name: "San Lorenzo Ruiz", value: "SAN LORENZO RUIZ" },
-    { name: "San Vicente", value: "SAN VICENTE" },
-    { name: "Santa Elena", value: "SANTA ELENA" },
-    { name: "Talisay", value: "TALISAY" },
-    { name: "Vinzons", value: "VINZONS" }
+    { name: 'Lahat', value: '' },
+    { name: 'Basud', value: 'BASUD' },
+    { name: 'Capalonga', value: 'CAPALONGA' },
+    { name: 'Daet', value: 'DAET (Capital)' },
+    { name: 'Jose Panganiban', value: 'JOSE PANGANIBAN' },
+    { name: 'Labo', value: 'LABO' },
+    { name: 'Mercedes', value: 'MERCEDES' },
+    { name: 'Paracale', value: 'PARACALE' },
+    { name: 'San Lorenzo Ruiz', value: 'SAN LORENZO RUIZ' },
+    { name: 'San Vicente', value: 'SAN VICENTE' },
+    { name: 'Santa Elena', value: 'SANTA ELENA' },
+    { name: 'Talisay', value: 'TALISAY' },
+    { name: 'Vinzons', value: 'VINZONS' },
   ];
 
   function dateFormatter(date) {
-    const d = new Date(date.toMillis())
-    return d.toLocaleDateString()
+    let d;
+    if (date && typeof date.toMillis === 'function') {
+      d = new Date(date.toMillis());
+    } else if (date instanceof Date) {
+      d = date;
+    } else if (typeof date === 'string' || typeof date === 'number') {
+      d = new Date(date);
+    } else {
+      console.error('Invalid date object:', date);
+      return 'Invalid date';
+    }
+
+    const options = { year: 'numeric', month: 'long', day: '2-digit' };
+    return d.toLocaleDateString('en-US', options);
+  }
+
+  const columns = [
+    {
+      field: 'title',
+      headerName: 'Pangalan ng Bukid',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => (
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Avatar sx={{ backgroundColor: 'white' }}>
+            {imageUrls[params.row.id] ? (
+              <img className='img' src={imageUrls[params.row.id]} alt={params.row.title} style={{ width: '100%', height: '100%' }} />
+            ) : (
+              <img src={require('../image_src/p1.jpg')} className='img' style={{ width: '80%', height: '80%' }} />
+            )}
+          </Avatar>
+          {params.row.title}
+        </Box>
+      ),
+    },
+    {
+      field: 'brgy',
+      headerName: 'Baranggay',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => <Typography variant='overline'> {params.row.brgy}</Typography>,
+    },
+    {
+      field: 'mun',
+      headerName: 'Munisipalidad',
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => <Typography variant='overline'> {params.row.mun}</Typography>,
+    },
+    {
+      field: 'start_date',
+      headerName: 'Petsa ng Pagtanim',
+      flex: 1,
+      sortable: true,
+      valueGetter: (params) => dateFormatter(params.row.start_date),
+    },
+    {
+      field: 'harvest_date',
+      headerName: 'Petsa ng inaasahang ani',
+      flex: 1,
+      sortable: true,
+      valueGetter: (params) => dateFormatter(params.row.harvest_date),
+    },
+  ];
+
+  const datagridStyle = {
+
+    paddingBottom: 0,
+    '& .even': {
+      backgroundColor: '#FFFFFF',
+    },
+    '& .odd': {
+      backgroundColor: '#F6FAF6',
+    },
+    '& .MuiDataGrid-columnHeaders': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: '#88C488'
+    },
   }
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
-      <Box sx={{height: '100%', overflowY: 'hidden' }}>
-        {showFarmTabs ?
+      <Box sx={{ height: '100%', overflowY: 'hidden' }}>
+        {showFarmTabs ? (
           <Box sx={{ height: '100%', overflowY: 'auto', borderRadius: 4 }}>
             <FarmTabs
-              farms={filteredFarms.filter(marker => marker.id === indFarm)}
+              farms={filteredFarms.filter((marker) => marker.id === indFarm)}
               setShow={setShowFarmTabs}
-              user={users.filter(user => user.id === indUser)}
-              event={events.filter(event => event.id === indFarm)}
+              user={users.filter((user) => user.id === indUser)}
+              event={events.filter((event) => event.id === indFarm)}
               particularData={particularData}
-              pineapple={pineapple} />
-          </Box >
-          :
-          <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5}}>
-            <Box sx={{ boxShadow: 2, borderRadius: 2,backgroundColor:'#fff' }}>
+              pineapple={pineapple}
+            />
+          </Box>
+        ) : (
+          <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5 }}>
+            <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
               <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
                 <Box sx={{ width: '80%' }}>
-                  <FormControl fullWidth size="small">
+                  <FormControl fullWidth size='small'>
                     <OutlinedInput
-                      id="outlined-adornment-amount"
-                      placeholder="Maghanap..."
-                      startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                      id='outlined-adornment-amount'
+                      placeholder='Maghanap...'
+                      startAdornment={<InputAdornment position='start'><SearchIcon /></InputAdornment>}
                       value={search}
                       onChange={handleSearch}
                     />
                   </FormControl>
                 </Box>
                 <Box sx={{ minWidth: 300 }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
+                  <FormControl fullWidth size='small'>
+                    <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
                     <Select
-                      sx={{ border: "none" }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      sx={{ border: 'none' }}
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={userFilter}
-                      label="Extensionist"
+                      label='Extensionist'
                       onChange={handleUser}
                     >
-                      {
-                        newUser.map((user) => (
-                          <MenuItem key={user.uid} value={user.id}>
-                            {user.displayName}
-                          </MenuItem>
-                        ))
-                      }
+                      {newUser.map((user) => (
+                        <MenuItem key={user.uid} value={user.id}>
+                          {user.displayName}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>
                 <Box sx={{ minWidth: 300 }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
+                  <FormControl fullWidth size='small'>
+                    <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
                     <Select
-                      sx={{ border: "none" }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
+                      sx={{ border: 'none' }}
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
                       value={mun}
-                      label="Municipality"
+                      label='Municipality'
                       onChange={handleMun}
                     >
-                      {
-                        municipalities.map((municipality) => (
-                          <MenuItem key={municipality.value} value={municipality.value}>
-                            {municipality.name}
-                          </MenuItem>
-                        ))
-                      }
+                      {municipalities.map((municipality) => (
+                        <MenuItem key={municipality.value} value={municipality.value}>
+                          {municipality.name}
+                        </MenuItem>
+                      ))}
                     </Select>
                   </FormControl>
                 </Box>
@@ -203,46 +271,61 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
-                <Button variant="contained" sx={{ backgroundColor: 'orange', '&:hover': {backgroundColor:'green'}}} startIcon={<ViewListIcon />} onClick={() => {
-                  setGrid(false)
-                }}>
+                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
+                  List
                 </Button>
-                <Button variant="contained" sx={{ backgroundColor: 'orange', '&:hover': {backgroundColor:'green'}}} startIcon={<ViewModuleIcon />} onClick={() => {
-                  setGrid(true)
-                }}>
+                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewModuleIcon />} onClick={() => setGrid(true)}>
                   Grid
                 </Button>
               </Box>
             </Box>
-            <Box sx={{ paddingBottom: 3, height: 1 , overflow:'hidden'}}>
-              {
-                grid ?
-                  <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowY: 'auto', height: '100%', paddingBottom: 12 }}>
-                    {filteredFarms.map((marker, index) => (
-                      <GridView marker={marker} index={index} setShowFarmTabs={setShowFarmTabs} setIndFarm={setIndFarm} setIndUser={setIndUser} imageUrls={imageUrls} user={users.filter(user => user.id === marker.brgyUID)} />
-                    ))}
-                  </Box>
-                  :
-                  <Box sx={{ display: 'flex', flexDirection: 'column', paddingLeft: 2, paddingTop:2, paddingRight: 2, overflow: 'auto', height: '100%', width: 1 }}>
-                    <List sx={{ bgcolor: 'background.paper', padding: 1 }}>
-                      <ListItem disablePadding >
-                        {/* <ListItemText primary='' /> */}
-                        <ListItemText primary='Name of Farm' />
-                        <ListItemText primary='Barangay' sx={{ textAlign: 'right' }} />
-                        <ListItemText primary='Municipality' sx={{ textAlign: 'right' }} />
-                        <ListItemText primary='Date of Planting' sx={{ textAlign: 'right' }} />
-                        <ListItemText primary='Date  of Harvest' sx={{ textAlign: 'right' }} />
-                      </ListItem>
-                    </List>
-                    <Divider />
-                    {filteredFarms.map((marker, index) => (
-                      <ListView marker={marker} index={index} setShowFarmTabs={setShowFarmTabs} setIndFarm={setIndFarm} setIndUser={setIndUser} imageUrls={imageUrls} user={users.filter(user => user.id === marker.brgyUID)} />
-                    ))}
-                  </Box>
-              }
+            <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
+              {grid ? (
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowY: 'auto', height: '100%', paddingBottom: 12 }}>
+                  {filteredFarms.map((marker, index) => (
+                    <GridView
+                      key={marker.id}
+                      marker={marker}
+                      index={index}
+                      setShowFarmTabs={setShowFarmTabs}
+                      setIndFarm={setIndFarm}
+                      setIndUser={setIndUser}
+                      imageUrls={imageUrls}
+                      user={users.filter((user) => user.id === marker.brgyUID)}
+                    />
+                  ))}
+                </Box>
+              ) : (
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowY: 'auto', height: '100%', paddingBottom: 10, marginTop: 2 }}>
+                  <DataGrid
+                    columns={columns}
+                    rows={filteredFarms}
+                    pageSize={5}
+                    rowsPerPageOptions={[5, 10, 20]}
+                    onRowClick={(params) => {
+                      setShowFarmTabs(true);
+                      setIndFarm(params.row.id);
+                      setIndUser(params.row.brgyUID);
+                    }}
+                    sx={{
+                      ...datagridStyle,
+                      border: 'none',
+                      paddingX: 2,
+                      overflowX: 'auto',
+                      height: `calc(100% - 8px)`,
+                      backgroundColor: '#fff',
+                      paddingTop: 1
+                    }}
+                    getRowClassName={(filteredFarms) =>
+                      filteredFarms.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    hideFooter
+                  />
+                </Box>
+              )}
             </Box>
           </Box>
-        }
+        )}
       </Box>
     </Box>
   );
