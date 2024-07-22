@@ -158,51 +158,107 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           <Divider sx={{ borderBottomWidth: 2 }} />
         </Grid>
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #789e4f', borderRadius: 3, backgroundColor: 'green', display: 'flex', flexDirection: 'row', color: 'black' }}
-            onClick={() => setSelected('Farms')}>
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+          <Box
+            sx={{
+              flex: 1,
+              paddingX: 3,
+              paddingY: 2,
+              boxShadow: '0px 5px 5px -3px #789e4f',
+              borderRadius: 3,
+              backgroundColor: 'green',
+              display: 'flex',
+              flexDirection: 'row',
+              color: 'black',
+              cursor: 'pointer',
+            }}
+            onClick={() => setSelected('Farms')}
+          >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
               <h5 style={{ margin: 0 }}>Farms</h5>
             </Box>
-            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={farm} alt="Farms icon" style={{ width: '100%', height: '100%' }} />
             </Box>
           </Box>
         </Grid>
+
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #e1ad67', borderRadius: 3, backgroundColor: '#df6d29', display: 'flex', flexDirection: 'row' }}>
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+          <Box
+            sx={{
+              flex: 1,
+              paddingX: 3,
+              paddingY: 2,
+              boxShadow: '0px 5px 5px -3px #e1ad67',
+              borderRadius: 3,
+              backgroundColor: '#df6d29',
+              display: 'flex',
+              flexDirection: 'row',
+              color: 'black',
+              cursor: 'pointer',
+            }}
+            onClick={() => setSelected('particular')}
+          >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{totalProduction}</h1>
               <h5 style={{ margin: 0 }}>Production</h5>
             </Box>
-            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={production} alt="Production icon" style={{ width: '100%', height: '100%', display:'flex' }} />
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={production} alt="Production icon" style={{ width: '100%', height: '100%' }} />
             </Box>
           </Box>
         </Grid>
+
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Box sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #c17a05', borderRadius: 3, backgroundColor: '#af7f35', display: 'flex', flexDirection: 'row' }}>
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+          <Box
+            sx={{
+              flex: 1,
+              paddingX: 3,
+              paddingY: 2,
+              boxShadow: '0px 5px 5px -3px #c17a05',
+              borderRadius: 3,
+              backgroundColor: '#af7f35',
+              display: 'flex',
+              flexDirection: 'row',
+              color: 'black',
+            }}
+          >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
               <h5 style={{ margin: 0 }}>Farmers</h5>
             </Box>
-            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
-              <img src={farmerImg} alt="Farmer icon" style={{ width: '100%', height: '100%', display: 'flex' }} />
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <img src={farmerImg} alt="Farmer icon" style={{ width: '100%', height: '100%' }} />
             </Box>
           </Box>
         </Grid>
+
         <Grid item lg={3} md={6} sm={6} xs={12}>
-          <Button sx={{ flex: 1, paddingX: 3, paddingY: 2, boxShadow: '0px 5px 5px -3px #foa30a ', borderRadius: 3, backgroundColor: '#f8da5b', display: 'flex', flexDirection: 'row', color: 'black' }}
-            onClick={() => setSelected('access')}>
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'left', m: 0 }}>
+          <Box
+            sx={{
+              flex: 1,
+              paddingX: 3,
+              paddingY: 2,
+              boxShadow: '0px 5px 5px -3px #foa30a',
+              borderRadius: 3,
+              backgroundColor: '#f8da5b',
+              display: 'flex',
+              flexDirection: 'row',
+              color: 'black',
+              cursor: 'pointer',
+            }}
+            onClick={() => setSelected('access')}
+          >
+            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
               <h5 style={{ margin: 0 }}>Accounts</h5>
             </Box>
-            <Box sx={{ flex: 1, alignItems: 'center', justifyContent: 'center', p: 2 }}>
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
             </Box>
-          </Button>
+          </Box>
         </Grid>
+
 
         <Grid item lg={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 1000 }}>
@@ -214,7 +270,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             <Box>
               <div className="legend">
 
-
                 <div className="legend-item">
                   <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
                   <span className="legend-label"> Vegetative</span>
@@ -223,9 +278,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                   <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
                   <span className="legend-label">Fruiting</span>
                 </div>
-
-
-
               </div>
             </Box>
           </Box>
@@ -246,6 +298,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
 
       </Grid>
 
-    </Box>
+    </Box >
   );
 } 
