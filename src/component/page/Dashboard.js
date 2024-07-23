@@ -51,7 +51,7 @@ import LanguageIcon from '@mui/icons-material/Language';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIcon from '@mui/icons-material/Phone';
 
-
+import { useMediaQuery } from 'react-responsive';
 
 
 //Images
@@ -187,7 +187,6 @@ function Dashboard() {
   const galleryRef = useRef(null);
   const agenciesRef = useRef(null);
   const contactsRef = useRef(null);
-
   const abonoRef = useRef(null);
   const uriRef = useState(null);
   const piliRef = useState(null);
@@ -204,6 +203,11 @@ function Dashboard() {
   const bentaRef = useRef(null);
 
   const [logged, setLogged] = useState(false)
+
+
+  const isDesktopOrLaptop = useMediaQuery({ query: '(min-width: 1224px)' });
+  const isBigScreen = useMediaQuery({ query: '(min-width: 1824px)' });
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' });
   return (
     <>
       {logged ?
