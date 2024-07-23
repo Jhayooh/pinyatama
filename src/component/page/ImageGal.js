@@ -22,7 +22,7 @@ const ImageGal = () => {
 
                 const imagePromises = randomItems.map(async (itemRef) => {
                     const downloadURL = await getDownloadURL(itemRef);
-                    return { src: downloadURL, width: '100%', height: '100%' };
+                    return { src: downloadURL, width: '100%', height: 'auto' };
                 });
 
                 const subdirectoryPromises = result.prefixes.map((folderRef) => {
@@ -53,7 +53,7 @@ const ImageGal = () => {
     }, [storage]);
 
     return (
-        <Gallery images={images} margin={8} />
+        <Gallery images={images} margin={8}  />
     );
 }
 
