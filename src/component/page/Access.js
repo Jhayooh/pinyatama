@@ -172,7 +172,7 @@ const Access = ({ usersRow }) => {
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <Avatar src={params.row.photoURL} alt="Profile" sx={{}} />
-          {`${params.row.firstname}, ${params.row.lastname}`}
+          {`${params.row.lastname}, ${params.row.firstname} `}
         </Box>
       ),
       flex: 1,
