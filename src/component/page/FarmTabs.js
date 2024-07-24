@@ -215,7 +215,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         <Farm farmId={farm.id} />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
-                        <Weather/>
+                        <Weather  farm={farm}/>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={3}>
                         <Activities />

@@ -1322,7 +1322,7 @@ const Bulaklak = () => {
 }
 const Peste = () => {
   return (
-    <div style={{ padding: 20, justifyContent: 'center', alignItems: 'center', display: 'flex' }}>
+    <div style={{ padding: 20 }}>
       <Box>
         <Typography
           variant="overline"
@@ -1331,9 +1331,9 @@ const Peste = () => {
           sx={{ color: 'green', fontSize: '20px', alignItems: 'center' }}>
           Mga Peste ng Pinya
         </Typography>
-        <Grid container columns={15}>
+        <Grid container columns={15} spacing={2}>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ maxWidth: 360 }}>
+            <Card variant="outlined" sx={{ height:'100%'}}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1363,7 +1363,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ maxWidth: 360 }}>
+            <Card variant="outlined" sx={{  height:'100%'}}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1388,7 +1388,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ maxWidth: 360 }}>
+            <Card variant="outlined" sx={{height:'100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1415,7 +1415,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ maxWidth: 360 }}>
+            <Card variant="outlined" sx={{height:'100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1447,7 +1447,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ maxWidth: 360 }}>
+            <Card variant="outlined" sx={{height:'100%'}}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
