@@ -729,7 +729,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     paddingRight: 1
                   }}>
                     <Typography>
-                      Pineapple price
+                      Good Size
                     </Typography>
                     <Box sx={{
                       display: 'flex',
@@ -802,7 +802,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     paddingRight: 1
                   }}>
                     <Typography>
-                      Butterball price
+                      Butterball Size
                     </Typography>
                     <Box sx={{
                       display: 'flex',

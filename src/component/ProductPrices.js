@@ -360,17 +360,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
         if (row.parent.toLowerCase() === 'fertilizer') {
           const availabilityAction = row.isAvailable ? (
-            <Tooltip title="Set to Available" placement="top-start">
-              <GridActionsCellItem
-                icon={<CancelOutlinedIcon />}
-                label="Unavailable"
-                className="textPrimary"
-                onClick={() => handleAvailability(row)}
-                color="inherit"
-                sx={{ color: 'red', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
-              />
-            </Tooltip>
-          ) : (
             <Tooltip title="Set to Unavailable" placement="top-start">
               <GridActionsCellItem
                 icon={<CheckCircleOutlineOutlinedIcon />}
@@ -379,6 +368,17 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 onClick={() => handleAvailability(row)}
                 color="inherit"
                 sx={{ color: 'green', '&:hover': { color: 'green', backgroundColor: '#DFEFDF' } }}
+              />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Set to Available" placement="top-start">
+              <GridActionsCellItem
+                icon={<CancelOutlinedIcon />}
+                label="Unavailable"
+                className="textPrimary"
+                onClick={() => handleAvailability(row)}
+                color="inherit"
+                sx={{ color: 'red', '&:hover': { color: 'red', backgroundColor: '#DFEFDF' } }}
               />
             </Tooltip>
           );
