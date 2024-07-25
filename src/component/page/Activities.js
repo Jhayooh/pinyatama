@@ -13,7 +13,7 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
-import { addDoc, collection, updateDoc } from "firebase/firestore";
+import { addDoc, collection, orderBy, query, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase/Config";
 
 // chart
@@ -24,10 +24,13 @@ const Activities = ({ roi, farm, particularData }) => {
     const [isAdd, setIsAdd] = useState(false)
 
     const activityColl = collection(db, `farms/${farm.id}/activities`)
-    const [activities] = useCollectionData(activityColl)
+    const activityQuery = query(activityColl, orderBy('createdAt'))
+    const [activities] = useCollectionData(activityQuery)
 
     const [newActivities, setNewActivities] = useState([])
     const [fertilizer, setFertilizer] = useState(null)
+
+    const [stepIndex, setStepIndex] = useState(-1)
 
     const formatDate = (date) => {
         return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
@@ -46,14 +49,13 @@ const Activities = ({ roi, farm, particularData }) => {
 
     useEffect(() => {
         if (!activities) return
+        // const revAct = activities.slice().reverse()
         setNewActivities(prev => [{
-            date: formatDate(farm.start_date.toDate()),
-            time: formatTime(farm.start_date.toDate()),
+            createdAt: farm.start_date,
             label: 'The pine has been planted.',
             compId: '',
             qnty: 0
         }, ...activities])
-        console.log('activities', newActivities)
     }, [activities])
 
     const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -77,7 +79,7 @@ const Activities = ({ roi, farm, particularData }) => {
             borderTopWidth: 3,
             borderRadius: 1,
             marginLeft: 42,
-            height: 32
+            height: 22
         },
     }));
 
@@ -128,8 +130,7 @@ const Activities = ({ roi, farm, particularData }) => {
                 const currDate = new Date()
                 const theLabel = fertilizer.find(obj => obj.id === fert)
                 await addDoc(activityColl, {
-                    date: formatDate(currDate),
-                    time: formatTime(currDate),
+                    createdAt: currDate,
                     label: theLabel.name,
                     compId: fert,
                     qnty: qnty
@@ -215,18 +216,20 @@ const Activities = ({ roi, farm, particularData }) => {
                         }}>
                             <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                 {newActivities.map((act, index) => (
-                                    <Step key={act.id} sx={{
+                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(index)} key={act.id} sx={{
                                         display: 'flex',
-                                        width: '100%',
                                         flexDirection: 'column',
-                                        paddingLeft: index === 0 ? 0 : 4,
+                                        marginLeft: index === 0 ? 0 : 4,
+                                        backgroundColor: '#FFF',
+                                        borderRadius: 2,
+                                        paddingX: 2,
+                                        boxShadow: 2,
+                                        height: index === 0 && 62,
+                                        '&:hover': {
+                                            cursor: 'pointer'
+                                        }
                                     }}>
                                         <StepLabel StepIconComponent={QontoStepIcon} sx={{
-                                            backgroundColor: index === 0 ? '#88C488' : '#FFF',
-                                            borderRadius: 2,
-                                            paddingX: 2,
-                                            boxShadow: 2,
-                                            height: index === 0 && 72
                                         }}>
                                             <Box sx={{
                                                 display: 'flex',
@@ -237,16 +240,28 @@ const Activities = ({ roi, farm, particularData }) => {
                                                     gap: 2,
                                                     alignItems: 'center'
                                                 }}>
-                                                    <div style={{ fontWidth: '200' }}>{act.date}</div>
-                                                    <h6 >{act.label}</h6>
+                                                    <Typography variant='caption' sx={{
+                                                        color: '#4E4E4E'
+                                                    }}>
+                                                        {formatDate(act.createdAt.toDate())}
+                                                    </Typography>
+                                                    <Typography variant="subtitle1">{act.label}</Typography>
                                                 </Box>
-                                                <div>{act.time}</div>
+                                                <Typography variant='caption' sx={{
+                                                    color: '#4E4E4E'
+                                                }} >
+                                                    {formatTime(act.createdAt.toDate())}
+                                                </Typography>
                                             </Box>
                                         </StepLabel>
                                         <StepContent sx={{
-
+                                            borderLeft: 0,
                                         }}>
-                                            {act.label}
+                                            <Box sx={{ paddingY: 2 }}>
+                                                <Typography variant='body2'>
+                                                    Ikaw ay naglagay ng <span style={{ fontWeight: 'bold' }}>{act.qnty}kg</span> ng fertilizer na <span style={{ fontWeight: 'bold' }}>{act.label}</span>
+                                                </Typography>
+                                            </Box>
                                         </StepContent>
                                     </Step>
                                 ))}
@@ -274,11 +289,18 @@ const Activities = ({ roi, farm, particularData }) => {
                                     Add
                                 </Button>
                             </Box>
-                            <Box>
+                            <Box className='roi'>
                                 <Doughnut
                                     labels={["Net return", "Production cost"]}
                                     data={[roi[0].netReturn, roi[0].costTotal]}
-                                    title={"Expected QP Production"}
+                                    title={"QP Production"}
+                                />
+                            </Box>
+                            <Box className='parti'>
+                                <Doughnut
+                                    labels={["Materyales", "Labor", "Fertilizer"]}
+                                    data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
+                                    title={'Production Cost'}
                                 />
                             </Box>
                         </Box>

@@ -172,9 +172,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     setIsModalOpen(false)
     setSaving(true)
     try {
-      const compRef = doc(db, `farms/${farm.id}/components`, selectedRow.id)
+      // const compRef = doc(db, `farms/${farm.id}/components`, selectedRow.id)
+      // await updateDoc(compRef, localParts)
       const roiRef = collection(db, `farms/${farm.id}/roi`)
-      await updateDoc(compRef, localParts)
       await setDoc(doc(roiRef, newRoi.id), newRoi);
     } catch (error) {
       console.error("error updating document", error);
