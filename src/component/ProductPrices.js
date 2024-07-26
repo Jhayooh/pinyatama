@@ -269,23 +269,32 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
   // Filtered particularData based on search input and active tab
   const filteredParticularData = particularData.filter((part) => {
+    const lowercasedName = part.name.toLowerCase();
+    const lowercasedSearchInput = searchInput.toLowerCase();
+
     if (activeTab === 'materials') {
-      return part.particular.toLowerCase() === 'material' &&
+      return (
+        part.particular.toLowerCase() === 'material' &&
         part.parent.toLowerCase() !== 'fertilizer' &&
-        part.name.toLowerCase().includes(searchInput.toLowerCase());
+        lowercasedName.includes(lowercasedSearchInput)
+      );
     } else if (activeTab === 'fertilizers') {
-      return part.parent.toLowerCase() === 'fertilizer' &&
-        part.name.toLowerCase().includes(searchInput.toLowerCase());
+      return (
+        part.parent.toLowerCase() === 'fertilizer' &&
+        lowercasedName.includes(lowercasedSearchInput)
+      );
     } else if (activeTab === 'labors') {
-      return part.particular.toLowerCase() === 'labor' &&
-        part.name.toLowerCase().includes(searchInput.toLowerCase());
+      return (
+        part.particular.toLowerCase() === 'labor' &&
+        lowercasedName.includes(lowercasedSearchInput)
+      );
     }
     return true; // Default case: return all
   });
 
 
   const datagridStyle = {
-   
+
     paddingBottom: 0,
     '& .even': {
       backgroundColor: '#FFFFFF',
@@ -305,7 +314,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
       field: 'name',
       headerName: 'Particular',
       flex: 2,
-     
+
     },
     {
       field: 'price',
@@ -456,7 +465,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                     display: 'flex',
                     // alignItems: 'center',
                     marginLeft: 20,
-                    marginRight:2,
+                    marginRight: 2,
                     width: '100%',
                     borderRadius: 2.5,
                     border: '2px solid #dcdcdc',
@@ -467,7 +476,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   </IconButton>
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Search particulars"
+                    placeholder="Maganap..."
                     inputProps={{ 'aria-label': 'search particulars' }}
                     value={searchInput}
                     onChange={handleSearchInputChange}
@@ -493,19 +502,20 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   onRowEditStop={handleRowEditStop}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                  sx={{...datagridStyle,
+                  sx={{
+                    ...datagridStyle,
                     border: 'none',
                     paddingX: 2,
                     overflowX: 'auto',
                     height: `calc(100% - 8px)`,
                     backgroundColor: '#fff',
-                    paddingTop:1
+                    paddingTop: 1
                   }}
                   getRowClassName={(rows) =>
                     rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                   }
                   hideFooter
-                  
+
                 />
               </Box>
             </Box>

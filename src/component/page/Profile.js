@@ -33,8 +33,7 @@ function Profile({ user, farm }) {
                             paddingTop: 2,
                         }}>
                         IMPORMASYON NG BUKID</Typography>
-                    <Grid container spacing={3} sx={{ padding: 2, }}>
-
+                    <Grid item  sx={{ padding: 2, }}>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
                                 Field ID
@@ -49,8 +48,6 @@ function Profile({ user, farm }) {
                             // sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
-
-
                     </Grid>
 
                     <Grid container spacing={3} sx={{ padding: 2, }}>
@@ -100,7 +97,7 @@ function Profile({ user, farm }) {
                         </FormGrid>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="mun" sx={{ fontWeight: 'bold' }} >
-                                Municipality
+                                Munisipalidad
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
@@ -158,7 +155,7 @@ function Profile({ user, farm }) {
                         </FormGrid>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="area" sx={{ fontWeight: 'bold' }} >
-                                Soil Type
+                                Klase ng Lupa
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
