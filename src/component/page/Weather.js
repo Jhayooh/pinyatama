@@ -152,7 +152,6 @@ const Weather = ({ farm }) => {
                                         Wind Speed: {weather.current.wind.speed} m/s
                                     </Typography>
                                 </Box>
-
                             </Box>
                         </Box>
                     </Grid>

@@ -269,7 +269,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             <FarmsSchedule1 farms={farms.slice(0, 12)} events={events} setSelected={setSelected} />
             <Box>
               <div className="legend">
-
                 <div className="legend-item">
                   <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
                   <span className="legend-label"> Vegetative</span>
