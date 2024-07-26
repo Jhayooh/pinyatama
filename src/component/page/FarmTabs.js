@@ -124,10 +124,10 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         display: 'flex',
                         justifyContent: 'center',
                         width: '100%',
-                        position: 'sticky', 
+                        position: 'sticky',
                         top: 0,
                         padding: '10px',
-                        zIndex:9999,
+                        zIndex: 9999,
                     }}>
                         <Tabs
                             value={value}
@@ -165,7 +165,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                     },
                                 }}
                             />
-                             <Tab
+                            <Tab
                                 label="Panahon"
                                 {...a11yProps(1)}
                                 sx={{
@@ -175,7 +175,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                     },
                                 }}
                             />
-                             <Tab
+                            <Tab
                                 label="AKtibidades"
                                 {...a11yProps(1)}
                                 sx={{
@@ -215,10 +215,14 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         <Farm farmId={farm.id} />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
-                        <Weather/>
+                        <Weather />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={3}>
-                        <Activities />
+                        {roi && <Activities
+                            roi={roi}
+                            farm={farm}
+                            particularData={particularData}
+                        />}
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={4}>
                         {roi && <CostAndReturn
