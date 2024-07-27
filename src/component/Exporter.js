@@ -76,8 +76,8 @@ function Exporter({ farms }) {
 
     return (
         <>
-            <Button variant='outlined' color='error' onClick={() => { setExportModal(true) }}><DownloadIcon /> Download</Button>
-
+            <Button variant='text' color='error' onClick={() => { setExportModal(true) }}><DownloadIcon /> Download</Button>
+            {/* <Button onClick={() => { setExportModal(true) }}>Download</Button> */}
             <Modal
                 open={exportModal}
                 onClose={handleClose}
