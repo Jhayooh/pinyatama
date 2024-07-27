@@ -408,8 +408,8 @@ export default function ProductPrices({ particularData, pineappleData }) {
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={1} sx={{ height: '100%' }}>
-          <Grid item xs={3}>
+        <Grid container spacing={1} sx={{ height: '100%' , overflowY:'auto'}}>
+          <Grid item xs={12} md={4} lg={3}>
             <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
               {pineappleData.map((pineData, index) => (
                 <Paper elevation={3}
@@ -443,7 +443,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               ))}
             </Box>
           </Grid>
-          <Grid item xs={9} sx={{ height: '100%' }}>
+          <Grid  xs={12} md={8} lg={9} sx={{ height: '100%' }}>
 
             <Box sx={{
               display: 'flex',
@@ -452,7 +452,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               backgroundColor: '#fff',
               p: 1,
               borderRadius: 4,
-              boxShadow: 2
+              boxShadow: 2,
             }}>
               <Tabs value={activeTab} onChange={handleTabChange}  >
                 <Tab label="Material" value="materials" />
