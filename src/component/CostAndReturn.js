@@ -57,13 +57,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     setIsModalOpen(true);
   };
 
-  const handleCellFocus = React.useCallback((event) => {
-    const row = event.currentTarget.parentElement;
-    const id = row.dataset.id;
-    const field = event.currentTarget.dataset.field;
-    setSelectedCellParams({ id, field });
-  }, []);
-
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP'
@@ -371,10 +364,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   };
 
   const EditPinePrice = () => {
-    const [newPrice, setNewPrice] = useState(newPine.price)
+    const [newPrice, setNewPrice] = useState(0)
 
-    if (!newPine) return null
+    useEffect(() => {
+      if (!newPine) return
+      setNewPrice(newPine.price)
+    }, [newPine])
 
+    if (!newPine) return
+    
     const handleSaveChanges = () => {
       setLocalPine((prev) => prev.map((pine) =>
         pine.name.toLowerCase() === newPine.name.toLowerCase() ? { ...pine, 'price': newPrice } : pine
