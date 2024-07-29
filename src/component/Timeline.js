@@ -130,15 +130,18 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </FormControl>
                     </Box>
                 </Box>
+                <Box sx={{display:'flex', justifyContent:'flex-end', marginRight:2, marginBottom:2}}>
+                    <span className="bullet" style={{ backgroundColor: "green", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
+                    <span className="legend-label"> Vegetative</span>
+                    <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
+                    <span className="legend-label">Flowering</span>
+                    <span className="bullet" style={{ backgroundColor: "orange", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
+                    <span className="legend-label">Fruiting</span>
+                </Box>
                 <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
                 <div className="legend-item" style={{ fontSize: '1.5em' }}>
-  <span className="bullet" style={{ backgroundColor: "green", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-  <span className="legend-label"> Vegetative</span>
-  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-  <span className="legend-label">Flowering</span>
-  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-  <span className="legend-label">Fruiting</span>
-</div>
+
+                </div>
 
 
             </Box>

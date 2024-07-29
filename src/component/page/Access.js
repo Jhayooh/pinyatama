@@ -171,19 +171,8 @@ const Access = ({ usersRow }) => {
       headerName: 'Pangalan',
       renderCell: (params) => (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          {params.row.status === 'active' ? (
-            <StyledBadge
-              overlap="circular"
-              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-              variant="dot"
-            >
-              <Avatar src={params.row.photoURL} alt="Profile" sx={{}} />
-            </StyledBadge>
-          ) : (
-            <Avatar src={params.row.photoURL} alt="Profile" sx={{}} />
-          )}
-
-          {`${params.row.firstname}, ${params.row.lastname}`}
+          <Avatar src={params.row.photoURL} alt="Profile" sx={{}} />
+          {`${params.row.lastname}, ${params.row.firstname} `}
         </Box>
       ),
       flex: 1,
@@ -253,7 +242,7 @@ const Access = ({ usersRow }) => {
               onClick={() => {
                 setViewedUser(row);
                 setViewModalOpen(true);
-                
+
               }}
             >
               View

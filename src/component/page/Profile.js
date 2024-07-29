@@ -23,7 +23,7 @@ const Container = styled(Box)({
 function Profile({ user, farm }) {
     return (
         <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2 }}>
-            <Grid item xs={12} md={8} lg={8} elavation={3} sx={{ padding: 3, boxShadow:1 }}>
+            <Grid item xs={12} md={8} lg={8} elevation={3} sx={{ padding: 3, boxShadow:1 }}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center' }}>
                     <Typography variant='h6'
                          sx={{
@@ -33,8 +33,7 @@ function Profile({ user, farm }) {
                             paddingTop: 2,
                         }}>
                         IMPORMASYON NG BUKID</Typography>
-                    <Grid container spacing={3} sx={{ padding: 2, }}>
-
+                    <Grid item  sx={{ padding: 2, }}>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
                                 Field ID
@@ -45,11 +44,10 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
+                                sx={{display:'flex'}}
                             // sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
-
-
                     </Grid>
 
                     <Grid container spacing={3} sx={{ padding: 2, }}>
@@ -99,7 +97,7 @@ function Profile({ user, farm }) {
                         </FormGrid>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="mun" sx={{ fontWeight: 'bold' }} >
-                                Municipality
+                                Munisipalidad
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
@@ -129,6 +127,35 @@ function Profile({ user, farm }) {
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="area" sx={{ fontWeight: 'bold' }} >
                                 Land Area
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.area}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            // sx={{ minWidth: '800' }}
+                            />
+                        </FormGrid>
+                    </Grid>
+                    <Grid container spacing={3} sx={{ padding: 2 }}>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="plants" sx={{ fontWeight: 'bold' }} >
+                                NPK
+                            </FormLabel>
+                            <TextField
+                                id="outlined-read-only-input"
+                                defaultValue={farm.plantNumber}
+                                InputProps={{
+                                    readOnly: true,
+                                }}
+                            //sx={{ minWidth: '800' }}
+
+                            />
+                        </FormGrid>
+                        <FormGrid item xs={12} md={6}>
+                            <FormLabel htmlFor="area" sx={{ fontWeight: 'bold' }} >
+                                Klase ng Lupa
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
