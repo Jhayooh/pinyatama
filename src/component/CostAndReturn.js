@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DataGrid, GridCellModes, GridActionsCellItem, } from '@mui/x-data-grid';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip, InputAdornment, IconButton } from '@mui/material';
 import { Tabs, Tab, Box, TextField, Modal, Button } from '@mui/material';
-import { NetworkWifi } from '@mui/icons-material';
+import { GetApp, NetworkWifi } from '@mui/icons-material';
 import { darken, lighten, styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
@@ -43,11 +43,12 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const [cellModesModel, setCellModesModel] = useState({});
   const [rowModesModel, setRowModesModel] = useState({})
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pineModal, setPineModal] = useState(false)
-
   const [selectedRow, setSelectedRow] = useState({});
   const [pineData, setPineData] = useState({})
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pineModal, setPineModal] = useState(false)
+  const [newPine, setNewPine] = useState(null)
 
   const [isClicked, setIsClicked] = useState(false)
 
@@ -212,6 +213,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }
   };
 
+  const getMult = (numOne, numTwo) => {
+    const num = numOne * numTwo
+    return Math.round(num * 10) / 10
+  }
+
   const getBackgroundColor = (color, mode) =>
     mode === 'dark' ? darken(color, 0.7) : lighten(color, 0.7);
 
@@ -227,14 +233,35 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const EditRowModal = () => {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
 
-    const handleSaveChanges = async () => {
+    const getPercentage = (pirsint, nambir) => {
+      return Math.round((nambir / 100) * pirsint)
+    }
 
-      if (!editedRowData) {
-        return
-      }
+    const handleSaveChanges = () => {
+
+      if (!editedRowData) return
+      console.log("edited data", editedRowData)
+
+      let updatedParts = []
 
       // setSaving(true)
-      const updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
+      if (editedRowData.name.toLowerCase() === 'planting materials') {
+        const newArea = editedRowData.qntyPrice / 30000
+        // calculate the components again
+        updatedParts = localParts.map((part) => {
+          const newQnty = getMult(newArea, part.defQnty)
+          return { ...part, qntyPrice: newQnty, totalPrice: getMult(newQnty, part.price), price: parseInt(part.price) }
+        });
+        setNewRoi((prev) => ({
+          ...prev,
+          grossReturn: getPercentage(90, editedRowData.qntyPrice),
+          butterBall: getPercentage(10, editedRowData.qntyPrice)
+        }))
+
+      } else {
+        updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
+      }
+      console.log("updatedPartsss", updatedParts)
       setLocalParts(updatedParts);
       calcTotalParts(updatedParts)
       handleModalClose()
@@ -342,6 +369,87 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       </Modal>
     );
   };
+
+  const EditPinePrice = () => {
+    const [newPrice, setNewPrice] = useState(newPine.price)
+
+    if (!newPine) return null
+
+    const handleSaveChanges = () => {
+      setLocalPine((prev) => prev.map((pine) =>
+        pine.name.toLowerCase() === newPine.name.toLowerCase() ? { ...pine, 'price': newPrice } : pine
+      ));
+      handleModalClose()
+    }
+
+    return (
+      <Modal
+        open={pineModal}
+        onClose={handleModalClose}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          borderRadius: '5px',
+          boxShadow: 24,
+          p: 4,
+          width: 380
+        }}>
+          <>
+            <h2 id="edit-row-modal" style={{ marginBottom: 12 }}>Edit Row</h2>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+              <TextField
+                label="Name"
+                name="name"
+                value={newPine.name}
+                fullWidth
+                disabled
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Market Price"
+                name="marketPrice"
+                value={formatter.format(getPinePrice('pineapple', pineapple))}
+                fullWidth
+                disabled
+                inputProps={{
+                  step: "0.01"
+                }}
+                sx={{ mb: 2 }}
+              />
+            </Box>
+            <TextField
+              label="New Price"
+              name="newPrice"
+              type='number'
+              value={newPrice}
+              onChange={(e) => {
+                setNewPrice(e.target.value)
+                console.log("newPricceeeee", e.target.value)
+              }}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+              <button className='btn-view-all'
+                onClick={handleSaveChanges}
+              >
+                Save
+              </button>
+              <button className='btn-view-all'
+                onClick={handleModalClose}
+              >
+                Cancel
+              </button>
+            </Box>
+          </>
+
+        </Box>
+      </Modal>
+    );
+  }
 
   const datagridStyle = {
     border: 'none',
@@ -728,9 +836,27 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     paddingLeft: 2,
                     paddingRight: 1
                   }}>
-                    <Typography>
-                      Good Size
-                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      gap: 2,
+                      alignItems: 'center',
+                      justifyContent: 'flex-start'
+                    }}>
+                      <Typography sx={{
+                        fontWeight: 400
+                      }}>
+                        Good Size
+                      </Typography>
+                      <IconButton
+                        onClick={() => {
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
+                          console.log("the local pineeee", localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
+                          setPineModal(true)
+                        }}
+                        sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </Box>
                     <Box sx={{
                       display: 'flex',
                       color: '#58AC58',
@@ -742,7 +868,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       paddingTop: .5
                     }}>
                       <Typography variant='h3' sx={{
-                        fontWeight: 200
+                        fontWeight: 200,
                       }}>
                         ₱
                       </Typography>
@@ -801,9 +927,26 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     paddingLeft: 2,
                     paddingRight: 1
                   }}>
-                    <Typography>
-                      Butterball Size
-                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      gap: 2,
+                      alignItems: 'center',
+                      justifyContent: 'flex-start'
+                    }}>
+                      <Typography sx={{
+                        fontWeight: 400
+                      }}>
+                        Butterball
+                      </Typography>
+                      <IconButton
+                        onClick={() => {
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'butterball'))
+                          setPineModal(true)
+                        }}
+                        sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </Box>
                     <Box sx={{
                       display: 'flex',
                       color: '#58AC58',
@@ -901,6 +1044,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       )
       }
       <EditRowModal />
+      <EditPinePrice />
     </>
   );
 }
@@ -912,492 +1056,3 @@ CostAndReturn.propTypes = {
 };
 
 export default CostAndReturn;
-
-{/* <Grid
-          container
-          spacing={2}
-        >
-          <Grid xs={5} sx={{ overflow: 'hidden' }}>
-            <Box sx={{
-              overflowY: 'hidden',
-              boxShadow: 2,
-              borderRadius: 2,
-              backgroundColor: '#fff',
-              height: '100%'
-            }}>
-              <Tabs value={selectedTab} onChange={handleTabChange}>
-                <Tab label="Material" />
-                <Tab label="Fertilizer" />
-                <Tab label="Labor" />
-              </Tabs>
-              <Box sx={{
-                overflow: 'hidden',
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column'
-              }}>
-                {
-                  (() => {
-                    switch (selectedTab) {
-                      case 0:
-                        return (
-                          <DataGrid
-                          rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
-                          columns={[
-                            {
-                              field: 'name',
-                              headerName: 'Material',
-                              flex: 2,
-                              editable: false,
-                              headerClassName: 'super-app-theme--header',
-                            },
-                            {
-                              field: 'qntyPrice',
-                              headerName: 'Qnty',
-                              flex: 1,
-                              type: 'number',
-                              editable: true,
-                              headerClassName: 'super-app-theme--header',
-                              valueFormatter
-                            },
-                            {
-                              field: 'totalPrice',
-                              headerName: 'Price',
-                              flex: 2,
-                              type: 'number',
-                              editable: false,
-                              headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => {
-                                return params.value && params.value.toLocaleString('en-PH', {
-                                  style: 'currency',
-                                  currency: 'PHP'
-                                })
-                              },
-                            },
-                            {
-                              field: 'actions',
-                              type: 'actions',
-                              headerName: 'Action',
-                              flex: 1,
-                              cellClassName: 'actions',
-                              getActions: ({ id, row }) => {
-                                const editAction = (
-                                  <GridActionsCellItem
-                                    icon={<EditOutlinedIcon />}
-                                    label="Edit"
-                                    className="textPrimary"
-                                    onClick={handleEditClick(id, row)}
-                                    color="inherit"
-                                    sx={actionBtnStyle}
-                                  />
-                                );
-                                return [editAction];
-                              }
-                            },
-                          ]}
-                          hideFooter
-                          getRowClassName={(params) =>
-                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                          }
-                          sx={datagridStyle}
-                            
-                          />
-                        )
-                      case 1:
-                        return (
-                          <DataGrid
-                          rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
-                          columns={[
-                            {
-                              field: 'name',
-                              headerName: 'Fertilizer',
-                              flex: 2,
-                              editable: false,
-                              headerClassName: 'super-app-theme--header',
-                            },
-                            {
-                              field: 'qntyPrice',
-                              headerName: 'Qnty',
-                              flex: 1,
-                              type: 'number',
-                              editable: true,
-                              headerClassName: 'super-app-theme--header',
-                              valueFormatter
-                            },
-                            {
-                              field: 'totalPrice',
-                              headerName: 'Price',
-                              flex: 2,
-                              editable: false,
-                              type: 'number',
-                              headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => {
-                                return params.value && params.value.toLocaleString('en-PH', {
-                                  style: 'currency',
-                                  currency: 'PHP'
-                                })
-                              },
-                            },
-                            {
-                              field: 'status',
-                              headerName: 'Status',
-                              flex: 1,
-                              editable: false,
-                              align: 'center',
-                              headerClassName: 'super-app-theme--header',
-                              valueGetter: (params) => params.row.isAvailable,
-                              renderCell: (params) => (
-                                <Tooltip title={params.value ? 'Available' : 'Not Available'}>
-                                  <Box
-                                    component="span"
-                                    sx={{
-                                      ...shapeStyle,
-                                      backgroundColor: params.value ? '#28B463' : '#E74C3C',
-                                    }}
-                                  />
-                                </Tooltip>
-                              ),
-                            },
-                            {
-                              field: 'actions',
-                              type: 'actions',
-                              headerName: 'Action',
-                              flex: 1,
-                              cellClassName: 'actions',
-                              getActions: ({ id, row }) => {
-                                const editAction = (
-                                  <GridActionsCellItem
-                                    icon={<EditOutlinedIcon />}
-                                    label="Edit"
-                                    className="textPrimary"
-                                    onClick={handleEditClick(id, row)}
-                                    color="inherit"
-                                    disabled={!row.isAvailable}
-                                    sx={actionBtnStyle}
-                                  />
-                                );
-                                return [editAction];
-                              }
-                            }
-                          ]}
-                          hideFooter
-                          getRowClassName={(params) =>
-                            params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                          }
-                          sx={datagridStyle}
-                          />
-                        )
-                      case 2:
-                        return (
-                          <DataGrid
-                            rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
-                            columns={[
-                              {
-                                field: 'name',
-                                headerName: 'Labor',
-                                flex: 2,
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                              },
-                              {
-                                field: 'qntyPrice',
-                                headerName: 'Qnty',
-                                flex: 1,
-                                type: 'number',
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter
-                              },
-                              {
-                                field: 'totalPrice',
-                                headerName: 'Price',
-                                flex: 2,
-                                type: 'number',
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter: (params) => {
-                                  return params.value && params.value.toLocaleString('en-PH', {
-                                    style: 'currency',
-                                    currency: 'PHP'
-                                  })
-                                },
-                              },
-                              {
-                                field: 'actions',
-                                type: 'actions',
-                                headerName: 'Action',
-                                flex: 1,
-                                cellClassName: 'actions',
-                                getActions: ({ id, row }) => {
-                                  const editAction = (
-                                    <GridActionsCellItem
-                                      icon={<EditOutlinedIcon />}
-                                      label="Edit"
-                                      className="textPrimary"
-                                      onClick={handleEditClick(id, row)}
-                                      color="inherit"
-                                      sx={actionBtnStyle}
-                                    />
-                                  );
-                                  return [editAction];
-                                }
-                              }
-                            ]}
-                            hideFooter
-                            getRowClassName={(params) =>
-                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                            }
-                            sx={datagridStyle}
-                          />
-                        )
-                      case 1:
-                        return (
-                          <DataGrid
-                            rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
-                            columns={[
-                              {
-                                field: 'name',
-                                headerName: 'Material',
-                                flex: 2,
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                              },
-                              {
-                                field: 'qntyPrice',
-                                headerName: 'Qnty',
-                                flex: 1,
-                                type: 'number',
-                                editable: true,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter
-                              },
-                              {
-                                field: 'totalPrice',
-                                headerName: 'Price',
-                                flex: 2,
-                                type: 'number',
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter: (params) => {
-                                  return params.value && params.value.toLocaleString('en-PH', {
-                                    style: 'currency',
-                                    currency: 'PHP'
-                                  })
-                                },
-                              },
-                              {
-                                field: 'actions',
-                                type: 'actions',
-                                headerName: 'Action',
-                                flex: 1,
-                                cellClassName: 'actions',
-                                getActions: ({ id, row }) => {
-                                  const editAction = (
-                                    <GridActionsCellItem
-                                      icon={<EditOutlinedIcon />}
-                                      label="Edit"
-                                      className="textPrimary"
-                                      onClick={handleEditClick(id, row)}
-                                      color="inherit"
-                                      sx={actionBtnStyle}
-                                    />
-                                  );
-                                  return [editAction];
-                                }
-                              },
-                            ]}
-                            hideFooter
-                            getRowClassName={(params) =>
-                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                            }
-                            sx={datagridStyle}
-                          />
-                        )
-                      case 2:
-                        return (
-                          <DataGrid
-                            rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
-                            columns={[
-                              {
-                                field: 'name',
-                                headerName: 'Fertilizer',
-                                flex: 2,
-                                editable: false,
-                                headerClassName: 'super-app-theme--header',
-                              },
-                              {
-                                field: 'qntyPrice',
-                                headerName: 'Qnty',
-                                flex: 1,
-                                type: 'number',
-                                editable: true,
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter
-                              },
-                              {
-                                field: 'totalPrice',
-                                headerName: 'Price',
-                                flex: 2,
-                                editable: false,
-                                type: 'number',
-                                headerClassName: 'super-app-theme--header',
-                                valueFormatter: (params) => {
-                                  return params.value && params.value.toLocaleString('en-PH', {
-                                    style: 'currency',
-                                    currency: 'PHP'
-                                  })
-                                },
-                              },
-                              {
-                                field: 'status',
-                                headerName: 'Status',
-                                flex: 1,
-                                editable: false,
-                                align: 'center',
-                                headerClassName: 'super-app-theme--header',
-                                valueGetter: (params) => params.row.isAvailable,
-                                renderCell: (params) => (
-                                  <Tooltip title={params.value ? 'Available' : 'Not Available'}>
-                                    <Box
-                                      component="span"
-                                      sx={{
-                                        ...shapeStyle,
-                                        backgroundColor: params.value ? '#28B463' : '#E74C3C',
-                                        '&:hover': {
-                                          boxShadow: params.value ? '0 0 12px #28B463' : '0 0 18px #E74C3C',
-                                          transition: 'box-shadow 0.3s ease',
-                                        }
-                                      }}
-                                    />
-                                  </Tooltip>
-                                ),
-                              },
-                              {
-                                field: 'actions',
-                                type: 'actions',
-                                headerName: 'Action',
-                                flex: 1,
-                                cellClassName: 'actions',
-                                getActions: ({ id, row }) => {
-                                  const editAction = (
-                                    <GridActionsCellItem
-                                      icon={<EditOutlinedIcon />}
-                                      label="Edit"
-                                      className="textPrimary"
-                                      onClick={handleEditClick(id, row)}
-                                      color="inherit"
-                                      disabled={!row.isAvailable}
-                                      sx={actionBtnStyle}
-                                    />
-                                  );
-                                  return [editAction];
-                                }
-                              }
-                            ]}
-                            hideFooter
-                            getRowClassName={(params) =>
-                              params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                            }
-                            sx={datagridStyle}
-                          />
-                        )
-                      default:
-                        break;
-                    }
-                  })()
-                }
-                <Box sx={{
-                  display: 'flex',
-                  gap: 2,
-                  justifyContent: 'flex-end',
-                  padding: 1,
-                }}
-                >
-                  <Button variant="text" color='error' onClick={handleReset}>Reset</Button>
-                  <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button>
-                </Box>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid
-            container
-            xs={7}
-            alignItems="center"
-            justifyContent="center"
-            spacing={2}
-            display='flex'
-          >
-            <Grid xs={6} >
-              <Box sx={{
-                boxShadow: 2,
-                borderRadius: 2,
-                backgroundColor: '#fff',
-              }}>
-                <Doughnut
-                  labels={["ROI", "???"]}
-                  data={[newRoi.roi, Math.round((100 - newRoi.roi) * 100) / 100]}
-                  title={"Return On Investment"}
-                />
-              </Box>
-            </Grid>
-            <Grid container xs={6} spacing={2} >
-              <Grid xs={12} sx={{height: '100%'}}>
-                <Box sx={{
-                  boxShadow: 2,
-                  borderRadius: 2,
-                  backgroundColor: '#fff',
-                  height: '100%'
-                }}>
-                  <span>Pineapple</span>
-                  <h1>P12.00</h1>
-                </Box>
-              </Grid>
-              <Grid xs={12} sx={{height: '100%'}}>
-                <Box sx={{
-                  boxShadow: 2,
-                  borderRadius: 2,
-                  backgroundColor: '#fff',
-                  height: '100%'
-                }}>
-                  <span>Butterball</span>
-                  <h1>P3.00</h1>
-                </Box>
-              </Grid>
-            </Grid>
-            <Grid xs={6}>
-              <Box sx={{
-                boxShadow: 2,
-                borderRadius: 2,
-                backgroundColor: '#fff',
-              }}>
-                <Doughnut
-                  labels={["Materyales", "Labor", "Fertilizer"]}
-                  data={laborMaterial}
-                  title={'Production Cost'}
-                />
-              </Box>
-            </Grid>
-            <Grid xs={6}>
-              <Box sx={{
-                boxShadow: 2,
-                borderRadius: 2,
-                backgroundColor: '#fff',
-              }}>
-                <Doughnut
-                  labels={["Pineapple", "Butterball"]}
-                  data={[roi.totalPines, marker.totalBats]}
-                  title={"Pineapple"}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-          <Grid xs={12}>
-            <Box sx={{
-              boxShadow: 2,
-              borderRadius: 2,
-              backgroundColor: '#fff'
-            }}>
-              <Column data={[marker.totalPines]} data1={[marker.totalBats]} labels={["Pineapple"]} />
-            </Box>
-          </Grid>
-        </Grid> */}

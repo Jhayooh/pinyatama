@@ -216,7 +216,7 @@ const Activities = ({ roi, farm, particularData }) => {
                         }}>
                             <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                 {newActivities.map((act, index) => (
-                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(index)} key={act.id} sx={{
+                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(stepIndex === index ? 0 : index)} key={act.id} sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
                                         marginLeft: index === 0 ? 0 : 4,
