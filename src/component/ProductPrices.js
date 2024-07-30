@@ -28,6 +28,8 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
+import Backdrop from '@mui/material/Backdrop';
+
 // firebase
 import { db } from '../firebase/Config';
 import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
@@ -408,8 +410,8 @@ export default function ProductPrices({ particularData, pineappleData }) {
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={1} sx={{ height: '100%' }}>
-          <Grid item xs={3}>
+        <Grid container spacing={1} sx={{ height: '100%', overflowY: 'auto' }}>
+          <Grid item xs={12} md={4} lg={3}>
             <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
               {pineappleData.map((pineData, index) => (
                 <Paper elevation={3}
@@ -443,7 +445,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
               ))}
             </Box>
           </Grid>
-          <Grid item xs={9} sx={{ height: '100%' }}>
+          <Grid xs={12} md={8} lg={9} sx={{ height: '100%' }}>
 
             <Box sx={{
               display: 'flex',
@@ -452,9 +454,15 @@ export default function ProductPrices({ particularData, pineappleData }) {
               backgroundColor: '#fff',
               p: 1,
               borderRadius: 4,
-              boxShadow: 2
+              boxShadow: 2,
             }}>
-              <Tabs value={activeTab} onChange={handleTabChange}  >
+              <Tabs
+                value={activeTab}
+                onChange={handleTabChange}
+                variant="scrollable"
+                scrollButtons="auto"
+                >
+
                 <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
@@ -464,7 +472,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                     p: '2px ',
                     display: 'flex',
                     // alignItems: 'center',
-                    marginLeft: 20,
+                    width:'100%',
                     marginRight: 2,
                     width: '100%',
                     borderRadius: 2.5,
@@ -476,7 +484,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   </IconButton>
                   <InputBase
                     sx={{ ml: 1, flex: 1 }}
-                    placeholder="Maganap..."
+                    placeholder="Maghanap..."
                     inputProps={{ 'aria-label': 'search particulars' }}
                     value={searchInput}
                     onChange={handleSearchInputChange}
@@ -527,23 +535,13 @@ export default function ProductPrices({ particularData, pineappleData }) {
       <EditRowModal />
       <EditPinePrice />
       <Modal open={saving} aria-labelledby="edit-row-modal">
-        <Box
-          sx={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            bgcolor: 'background.paper',
-            borderRadius: '5px',
-            boxShadow: 24,
-            p: 4,
-            width: 380,
-          }}
+        <Backdrop
+          sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+          open={saving}
+        // onClick={handleClose}
         >
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <CircularProgress color="success" />
-          </Box>
-        </Box>
+          <CircularProgress color="inherit" />
+        </Backdrop>
       </Modal>
     </>
   );

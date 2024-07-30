@@ -234,26 +234,29 @@ function Dashboard() {
               }}
             /> */}
 
-            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} sx={{ alignItems: 'center', zIndex: 1, height: '80%', marginTop: 10 }} square>
+            <Grid item xs={12} md={12} lg={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
               <Box
                 sx={{
-                  mt: 5,
+                  // mt: 5,
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
-                  position: 'relative',
-                  borderRadius: 1
+                  // alignItems: 'center',
+                  // justifyContent: 'center',
+                  borderRadius: 2,
+                  padding: 4,
+                  boxShadow: 2,
+                  width: '50%'
                 }}
               >
-                <Button style={{ position: 'absolute', top: 0, right: 0 }}>
+                <Button sx={{justifyContent: 'flex-end'}}>
                   <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
                 </Button>
-
-                <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
-
+                <Box sx={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
+                  <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
                 <Typography component="h1" variant="h5">
                   Sign in
                 </Typography>
+                </Box>
                 <Box sx={{ mt: 1 }}>
                   <TextField
                     margin="normal"
@@ -1333,7 +1336,7 @@ const Peste = () => {
         </Typography>
         <Grid container columns={15} spacing={2}>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1363,7 +1366,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{  height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1388,7 +1391,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%' }}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1415,7 +1418,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%' }}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1447,7 +1450,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -2048,20 +2051,20 @@ function Agencies({ agencyList }) {
               display: 'flex',
               width: 1,
               justifyContent: 'center',
-              flexDirection:'column',
+              flexDirection: 'column',
               alignItems: 'center',
               '&:hover': {
                 cursor: 'pointer',
               }
 
             }}
-            onClick={() => handleClick(agency.url)}
+              onClick={() => handleClick(agency.url)}
             >
               <img
                 src={require(`../image_src/${agency.logo}`)}
                 alt={agency.name}
                 className="logo-image"
-                style={{width:200, height:200}}
+                style={{ width: 200, height: 200 }}
               />
               <span style={{ marginTop: 5 }}>{agency.name}</span>
             </Box>

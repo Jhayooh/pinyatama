@@ -281,10 +281,10 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Pie labels={labels1} data={series1} title="Municipalties" />
         </Grid>
-        <Grid item lg={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
             <Pie labels={labels} data={series} title="Farms" />
           </Box>

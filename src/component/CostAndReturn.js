@@ -501,20 +501,32 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
         flexDirection: 'column',
         gap: 1.5
       }}>
-        <Box sx={{
-          display: 'flex',
-          flexDirection: 'row',
-          flex: 1,
-          gap: 3,
-        }}>
-          <Box className='tabsBox' sx={{
-            overflowY: 'hidden',
-            boxShadow: 2,
-            borderRadius: 2,
-            backgroundColor: '#fff',
-            flex: 2,
+        <Grid
+          container
+          spacing={2}
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', md: 'row' }
           }}>
-            <Tabs value={selectedTab} onChange={handleTabChange}>
+
+          {/* Labor/ Material / Fertilizer */}
+          <Grid item
+            md={5}
+            xs={12}
+            className='tabsBox' sx={{
+              overflowY: 'hidden',
+              boxShadow: 2,
+              borderRadius: 2,
+              backgroundColor: '#fff',
+              flex: 2,
+
+            }}>
+            <Tabs
+              value={selectedTab}
+              onChange={handleTabChange}
+              variant="scrollable"
+              scrollButtons="auto">
+                
               <Tab label="Labor" />
               <Tab label="Material" />
               <Tab label="Fertilizer" />
@@ -755,21 +767,26 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               }}
               >
                 <Button variant="text" color='error' onClick={handleReset}>Reset</Button>
-                <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button>
+                {/* <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button> */}
               </Box>
             </Box>
-          </Box>
-          <Box className='chartsBox' sx={{
-            flex: 3,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: 1.5
-          }}>
-            <Box className='topChartsBox' sx={{
+          </Grid>
+
+          <Grid item xs={12} md={7}
+            className='chartsBox' sx={{
+              flex: 3,
               display: 'flex',
-              gap: 1.5,
-              flex: 1
+              flexDirection: 'column',
+              gap: 1.5
             }}>
+            <Box
+              // className='topChartsBox'
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                gap: 1.5,
+                flex: 1
+              }}>
               <Box className='roiBox' sx={{
                 boxShadow: 2,
                 borderRadius: 2,
@@ -795,11 +812,14 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 />
               </Box>
             </Box>
-            <Box className='botChartsBox' sx={{
-              display: 'flex',
-              flex: 1,
-              gap: 1.5
-            }}>
+            <Box
+              //className='botChartsBox' 
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                flex: 1,
+                gap: 1.5
+              }}>
               <Box sx={{
                 boxShadow: 2,
                 borderRadius: 2,
@@ -818,6 +838,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 gap: 1.5,
                 flexDirection: 'column',
               }}>
+                {/* GoodSize */}
                 <Box sx={{
                   boxShadow: 2,
                   borderRadius: 2,
@@ -825,36 +846,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   // backgroundColor: '#E7F3E7',
                   flex: 1,
                   display: 'flex',
+                  flexDirection: { xs: 'column', md: 'row' }
                 }}>
-                  <Box className='column-one' sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    flex: 3,
-                    paddingY: 1.5,
-                    paddingLeft: 2,
-                    paddingRight: 1
-                  }}>
-                    <Box sx={{
+                  <Box xs={12}
+                    className='column-one' sx={{
                       display: 'flex',
-                      gap: 2,
-                      alignItems: 'center',
-                      justifyContent: 'flex-start'
+                      flexDirection: 'column',
+                      flex: 3,
+                      paddingY: 1.5,
+                      paddingLeft: 2,
+                      paddingRight: 1
                     }}>
-                      <Typography sx={{
-                        fontWeight: 400
-                      }}>
-                        Good Size
-                      </Typography>
-                      <IconButton
-                        onClick={() => {
-                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
-                          console.log("the local pineeee", localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
-                          setPineModal(true)
-                        }}
-                        sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
-                        <EditOutlinedIcon />
-                      </IconButton>
-                    </Box>
+                    <Typography>
+                      Good Size
+                    </Typography>
                     <Box sx={{
                       display: 'flex',
                       color: '#58AC58',
@@ -886,19 +891,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       Edit
                     </Button> */}
                   </Box>
-                  <Box className='column-two' sx={{
-                    flex: 1,
-                    paddingY: 1.5,
-                    paddingRight: 2,
-                    paddingLeft: 1,
-                    backgroundColor: '#88C488',
-                    // borderRadius: 2,
-                    borderTopRightRadius: '8px',
-                    borderBottomRightRadius: '8px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    color: '#FFF'
-                  }}>
+                  <Box xs={12}
+                    className='column-two' sx={{
+                      flex: 1,
+                      paddingY: 1.5,
+                      paddingRight: 2,
+                      paddingLeft: 1,
+                      backgroundColor: '#88C488',
+                      // borderRadius: 2,
+                      borderTopRightRadius: '8px',
+                      borderBottomRightRadius: '8px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      color: '#FFF'
+                    }}>
                     <Typography align='center' variant='caption'>
                       Market price
                     </Typography>
@@ -909,6 +915,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     </Typography>
                   </Box>
                 </Box>
+                {/* ButterballSize */}
                 <Box sx={{
                   boxShadow: 2,
                   borderRadius: 2,
@@ -916,6 +923,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   // backgroundColor: '#E7F3E7',
                   flex: 1,
                   display: 'flex',
+                  flexDirection: { xs: 'column', md: 'row' }
                 }}>
                   <Box className='column-one' sx={{
                     display: 'flex',
@@ -1013,15 +1021,16 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 </Button> */}
               </Box>
             </Box>
-          </Box>
-        </Box>
+          </Grid>
+        </Grid>
         <Box sx={{
           flex: 1
         }}>
           <Box sx={{
             boxShadow: 2,
             borderRadius: 2,
-            backgroundColor: '#fff'
+            backgroundColor: '#fff',
+
           }}>
             <Column
               data={[markers[0].totalPines]}
