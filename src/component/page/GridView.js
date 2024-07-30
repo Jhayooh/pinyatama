@@ -22,8 +22,8 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
   }
 
   return (
-    <Grid sx={{ width: 'calc(40% - 90px)'}}>
-      <Grid item xs={12} sm={6} md={4} lg={3} sx={{ paddingLeft: 2, paddingTop: 2 }}>
+    <Grid container sx={{ width: { xs: '100%', sm: 'calc(80% - 90px)', md: 'calc(60% - 90px)', lg: 'calc(40% - 90px)' } }}>
+      <Grid item xs={12} sm={12} md={12} lg={12} sx={{ paddingLeft: 2, paddingTop: 2 }}>
         <Box
           sx={{
             borderRadius: '20px',
@@ -60,7 +60,6 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
                   {dateFormatter(marker.start_date)} - {dateFormatter(marker.harvest_date)}
                 </Typography>
               </Box>
-
             </Box>
           </Box>
         </Box>

@@ -1,5 +1,5 @@
 import SearchIcon from '@mui/icons-material/Search';
-import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Avatar } from '@mui/material';
+import { Box, FormControl, InputLabel, InputAdornment, MenuItem, OutlinedInput, Select, Typography, Avatar, Menu, Grid } from '@mui/material';
 import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
@@ -10,12 +10,15 @@ import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 
+
 import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
 
 // icon
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
+import More from '@mui/icons-material/MoreVert';
+import IconButton from '@mui/material/IconButton';
 
 import GridView from './GridView.js';
 import ListView from './ListView.js';
@@ -196,6 +199,30 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     },
   }
 
+  const [anchorEl, setAnchorEl] = useState('');
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const currentYear = new Date().getFullYear();
+  const years = Array.from(new Array(55), (val, index) => currentYear + 5 - index);
+  
+  const [startYear, setStartYear] = useState('');
+  const [endYear, setEndYear] = useState('');
+
+  const handleStartYearChange = (event) => {
+    setStartYear(event.target.value);
+  };
+
+  const handleEndYearChange = (event) => {
+    setEndYear(event.target.value);
+  };
+
+
   return (
     <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
       <Box sx={{ height: '100%', overflowY: 'hidden' }}>
@@ -213,8 +240,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
         ) : (
           <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5 }}>
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
-              <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-end', gap: 2, paddingTop: 2, paddingX: 2 }}>
-                <Box sx={{ width: '80%' }}>
+              <Grid container spacing={1} sx={{ paddingTop: 2, paddingLeft: 2, justifyContent: 'space-evenly' }}>
+                {/* SearchBox */}
+                <Grid item xs={4} lg={3}>
                   <FormControl fullWidth size='small'>
                     <OutlinedInput
                       id='outlined-adornment-amount'
@@ -224,27 +252,46 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       onChange={handleSearch}
                     />
                   </FormControl>
-                </Box>
-                <Box sx={{ minWidth: 300 }}>
-                  <FormControl fullWidth size='small'>
-                    <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
+                </Grid>
+                {/* DateSorting */}
+                <Grid item xs={4} lg={2}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="start-year-label">Start Year</InputLabel>
                     <Select
-                      sx={{ border: 'none' }}
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={userFilter}
-                      label='Extensionist'
-                      onChange={handleUser}
+                      labelId="start-year-label"
+                      id="start-year-select"
+                      value={startYear}
+                      label="Start Year"
+                      onChange={handleStartYearChange}
                     >
-                      {newUser.map((user) => (
-                        <MenuItem key={user.uid} value={user.id}>
-                          {user.displayName}
+                      {years.map((year) => (
+                        <MenuItem key={year} value={year}>
+                          {year}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
-                </Box>
-                <Box sx={{ minWidth: 300 }}>
+                </Grid>
+                <Grid item xs={4} lg={2}>
+                  <FormControl fullWidth size="small">
+                    <InputLabel id="end-year-label">End Year</InputLabel>
+                    <Select
+                      labelId="end-year-label"
+                      id="end-year-select"
+                      value={endYear}
+                      label="End Year"
+                      onChange={handleEndYearChange}
+                    >
+                      {years.map((year) => (
+                        <MenuItem key={year} value={year}>
+                          {year}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                {/* MunicipalitySelection */}
+                <Grid item xs={4} lg={2}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
                     <Select
@@ -262,14 +309,64 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       ))}
                     </Select>
                   </FormControl>
-                </Box>
-                <Box>
-                  <Importer />
-                </Box>
-                <Box>
-                  <Exporter farms={farms} />
-                </Box>
-              </Box>
+                </Grid>
+                {/* ExtensionistSorting */}
+                <Grid item xs={4} lg={2}>
+                  <FormControl fullWidth size='small'>
+                    <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
+                    <Select
+                      sx={{ border: 'none' }}
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
+                      value={userFilter}
+                      label='Extensionist'
+                      onChange={handleUser}
+                    >
+                      {newUser.map((user) => (
+                        <MenuItem key={user.uid} value={user.id}>
+                          {user.displayName}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                {/* MenuIcon */}
+                <Grid item >
+                  <IconButton
+                    aria-label="more"
+                    id="long-button"
+                    aria-controls={open ? 'long-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleClick}
+                  >
+                    <More />
+                  </IconButton>
+                  <Menu
+                    id="demo-positioned-menu"
+                    aria-labelledby="demo-positioned-button"
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                    transformOrigin={{
+                      vertical: 'top',
+                      horizontal: 'left',
+                    }}
+                  >
+                    <MenuItem >
+                      <Importer sx={{ width: '100%' }} />
+                    </MenuItem>
+                    <MenuItem >
+                      <Exporter sx={{ width: '100%' }} />
+                    </MenuItem>
+
+                  </Menu>
+                </Grid>
+              </Grid>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
                 <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
                   List
@@ -281,7 +378,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             </Box>
             <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
               {grid ? (
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowY: 'auto', height: '100%', paddingBottom: 12 }}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: 10, marginTop: 2 }}>
                   {filteredFarms.map((marker, index) => (
                     <GridView
                       key={marker.id}

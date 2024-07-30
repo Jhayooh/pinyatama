@@ -329,10 +329,10 @@ const Access = ({ usersRow }) => {
                     />
                   </FormControl>
                 </Box>
-                <Box sx={{ minWidth: 300 }}>
+                <Box sx={{ width:'30%'}}>
                   <FormControl fullWidth size="small">
                     <InputLabel id="demo-simple-select-label">
-                      Municipality
+                      Munisipalidad
                     </InputLabel>
                     <Select
                       sx={{ border: 'none' }}

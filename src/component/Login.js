@@ -86,6 +86,7 @@ export default function Login() {
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
+              padding:4
             }}
           >
             <img src={require('./image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
