@@ -242,7 +242,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
               <Grid container spacing={1} sx={{ paddingTop: 2, paddingLeft: 2, justifyContent: 'space-evenly' }}>
                 {/* SearchBox */}
-                <Grid item xs={4} lg={3}>
+                <Grid item xs={5} lg={5}>
                   <FormControl fullWidth size='small'>
                     <OutlinedInput
                       id='outlined-adornment-amount'
@@ -254,7 +254,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </FormControl>
                 </Grid>
                 {/* DateSorting */}
-                <Grid item xs={4} lg={2}>
+                {/* <Grid item xs={4} lg={2}>
                   <FormControl fullWidth size="small">
                     <InputLabel id="start-year-label">Start Year</InputLabel>
                     <Select
@@ -289,9 +289,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       ))}
                     </Select>
                   </FormControl>
-                </Grid>
+                </Grid> */}
                 {/* MunicipalitySelection */}
-                <Grid item xs={4} lg={2}>
+                <Grid item xs={5} lg={3}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
                     <Select
@@ -311,7 +311,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </FormControl>
                 </Grid>
                 {/* ExtensionistSorting */}
-                <Grid item xs={4} lg={2}>
+                <Grid item xs={5} lg={3}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
                     <Select
