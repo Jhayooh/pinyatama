@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { DataGrid, GridCellModes, GridActionsCellItem, } from '@mui/x-data-grid';
 import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip, InputAdornment, IconButton } from '@mui/material';
 import { Tabs, Tab, Box, TextField, Modal, Button } from '@mui/material';
-import { NetworkWifi } from '@mui/icons-material';
+import { GetApp, NetworkWifi } from '@mui/icons-material';
 import { darken, lighten, styled } from '@mui/material/styles';
 import Grid from '@mui/material/Unstable_Grid2'; // Grid version 2
 
@@ -43,11 +43,12 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const [cellModesModel, setCellModesModel] = useState({});
   const [rowModesModel, setRowModesModel] = useState({})
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pineModal, setPineModal] = useState(false)
-
   const [selectedRow, setSelectedRow] = useState({});
   const [pineData, setPineData] = useState({})
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pineModal, setPineModal] = useState(false)
+  const [newPine, setNewPine] = useState(null)
 
   const [isClicked, setIsClicked] = useState(false)
 
@@ -55,13 +56,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     setSelectedRow(row);
     setIsModalOpen(true);
   };
-
-  const handleCellFocus = React.useCallback((event) => {
-    const row = event.currentTarget.parentElement;
-    const id = row.dataset.id;
-    const field = event.currentTarget.dataset.field;
-    setSelectedCellParams({ id, field });
-  }, []);
 
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
@@ -212,6 +206,11 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }
   };
 
+  const getMult = (numOne, numTwo) => {
+    const num = numOne * numTwo
+    return Math.round(num * 10) / 10
+  }
+
   const getBackgroundColor = (color, mode) =>
     mode === 'dark' ? darken(color, 0.7) : lighten(color, 0.7);
 
@@ -227,14 +226,35 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   const EditRowModal = () => {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
 
-    const handleSaveChanges = async () => {
+    const getPercentage = (pirsint, nambir) => {
+      return Math.round((nambir / 100) * pirsint)
+    }
 
-      if (!editedRowData) {
-        return
-      }
+    const handleSaveChanges = () => {
+
+      if (!editedRowData) return
+      console.log("edited data", editedRowData)
+
+      let updatedParts = []
 
       // setSaving(true)
-      const updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
+      if (editedRowData.name.toLowerCase() === 'planting materials') {
+        const newArea = editedRowData.qntyPrice / 30000
+        // calculate the components again
+        updatedParts = localParts.map((part) => {
+          const newQnty = getMult(newArea, part.defQnty)
+          return { ...part, qntyPrice: newQnty, totalPrice: getMult(newQnty, part.price), price: parseInt(part.price) }
+        });
+        setNewRoi((prev) => ({
+          ...prev,
+          grossReturn: getPercentage(90, editedRowData.qntyPrice),
+          butterBall: getPercentage(10, editedRowData.qntyPrice)
+        }))
+
+      } else {
+        updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
+      }
+      console.log("updatedPartsss", updatedParts)
       setLocalParts(updatedParts);
       calcTotalParts(updatedParts)
       handleModalClose()
@@ -342,6 +362,92 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       </Modal>
     );
   };
+
+  const EditPinePrice = () => {
+    const [newPrice, setNewPrice] = useState(0)
+
+    useEffect(() => {
+      if (!newPine) return
+      setNewPrice(newPine.price)
+    }, [newPine])
+
+    if (!newPine) return
+    
+    const handleSaveChanges = () => {
+      setLocalPine((prev) => prev.map((pine) =>
+        pine.name.toLowerCase() === newPine.name.toLowerCase() ? { ...pine, 'price': newPrice } : pine
+      ));
+      handleModalClose()
+    }
+
+    return (
+      <Modal
+        open={pineModal}
+        onClose={handleModalClose}
+      >
+        <Box sx={{
+          position: 'absolute',
+          top: '50%', left: '50%',
+          transform: 'translate(-50%, -50%)',
+          bgcolor: 'background.paper',
+          borderRadius: '5px',
+          boxShadow: 24,
+          p: 4,
+          width: 380
+        }}>
+          <>
+            <h2 id="edit-row-modal" style={{ marginBottom: 12 }}>Edit Row</h2>
+            <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+              <TextField
+                label="Name"
+                name="name"
+                value={newPine.name}
+                fullWidth
+                disabled
+                sx={{ mb: 2 }}
+              />
+              <TextField
+                label="Market Price"
+                name="marketPrice"
+                value={formatter.format(getPinePrice('pineapple', pineapple))}
+                fullWidth
+                disabled
+                inputProps={{
+                  step: "0.01"
+                }}
+                sx={{ mb: 2 }}
+              />
+            </Box>
+            <TextField
+              label="New Price"
+              name="newPrice"
+              type='number'
+              value={newPrice}
+              onChange={(e) => {
+                setNewPrice(e.target.value)
+                console.log("newPricceeeee", e.target.value)
+              }}
+              fullWidth
+              sx={{ mb: 2 }}
+            />
+            <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+              <button className='btn-view-all'
+                onClick={handleSaveChanges}
+              >
+                Save
+              </button>
+              <button className='btn-view-all'
+                onClick={handleModalClose}
+              >
+                Cancel
+              </button>
+            </Box>
+          </>
+
+        </Box>
+      </Modal>
+    );
+  }
 
   const datagridStyle = {
     border: 'none',
@@ -765,7 +871,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       paddingTop: .5
                     }}>
                       <Typography variant='h3' sx={{
-                        fontWeight: 200
+                        fontWeight: 200,
                       }}>
                         ₱
                       </Typography>
@@ -827,9 +933,26 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     paddingLeft: 2,
                     paddingRight: 1
                   }}>
-                    <Typography>
-                      Butterball Size
-                    </Typography>
+                    <Box sx={{
+                      display: 'flex',
+                      gap: 2,
+                      alignItems: 'center',
+                      justifyContent: 'flex-start'
+                    }}>
+                      <Typography sx={{
+                        fontWeight: 400
+                      }}>
+                        Butterball
+                      </Typography>
+                      <IconButton
+                        onClick={() => {
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'butterball'))
+                          setPineModal(true)
+                        }}
+                        sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </Box>
                     <Box sx={{
                       display: 'flex',
                       color: '#58AC58',
@@ -928,6 +1051,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       )
       }
       <EditRowModal />
+      <EditPinePrice />
     </>
   );
 }
