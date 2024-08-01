@@ -146,7 +146,7 @@ function Profile({ user, farm }) {
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
-                                defaultValue={farm.plantNumber}
+                                defaultValue={farm.npk}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -160,7 +160,7 @@ function Profile({ user, farm }) {
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
-                                defaultValue={farm.area}
+                                defaultValue={farm.soil}
                                 InputProps={{
                                     readOnly: true,
                                 }}

@@ -245,7 +245,7 @@ function Dashboard() {
                   borderRadius: 2,
                   padding: 4,
                   boxShadow: 2,
-                  width: '50%'
+                  width: {xs:'90%', md:'50%'}
                 }}
               >
                 <Button sx={{justifyContent: 'flex-end'}}>
