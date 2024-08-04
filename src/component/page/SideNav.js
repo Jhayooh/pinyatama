@@ -870,6 +870,7 @@ export default function SideNav() {
                 <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
+            <Divider sx={{color:'orange', border:1, marginTop: open ? 10 : 27}}/>
             <Box sx={{ flexGrow: 0 , 
               //marginTop: open ? '50%' : '100%', display: open ? 'flex' : 'none', justifyContent:'flex-end', alignItems:'flex-end'
               }}>
