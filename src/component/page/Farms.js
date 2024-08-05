@@ -210,7 +210,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
 
   const currentYear = new Date().getFullYear();
   const years = Array.from(new Array(55), (val, index) => currentYear + 5 - index);
-  
+
   const [startYear, setStartYear] = useState('');
   const [endYear, setEndYear] = useState('');
 
@@ -242,7 +242,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
               <Grid container spacing={1} sx={{ paddingTop: 2, paddingLeft: 2, justifyContent: 'space-evenly' }}>
                 {/* SearchBox */}
-                <Grid item xs={4} lg={3}>
+                <Grid item xs={5} lg={5}>
                   <FormControl fullWidth size='small'>
                     <OutlinedInput
                       id='outlined-adornment-amount'
@@ -254,7 +254,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </FormControl>
                 </Grid>
                 {/* DateSorting */}
-                <Grid item xs={4} lg={2}>
+                {/* <Grid item xs={4} lg={2}>
                   <FormControl fullWidth size="small">
                     <InputLabel id="start-year-label">Start Year</InputLabel>
                     <Select
@@ -289,9 +289,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       ))}
                     </Select>
                   </FormControl>
-                </Grid>
+                </Grid> */}
                 {/* MunicipalitySelection */}
-                <Grid item xs={4} lg={2}>
+                <Grid item xs={5} lg={3}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
                     <Select
@@ -311,7 +311,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </FormControl>
                 </Grid>
                 {/* ExtensionistSorting */}
-                <Grid item xs={4} lg={2}>
+                <Grid item xs={5} lg={3}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
                     <Select
@@ -322,7 +322,10 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       label='Extensionist'
                       onChange={handleUser}
                     >
-                      {newUser.map((user) => (
+                      {[
+                        { uid: '1', id: '', displayName: 'Lahat' }, // Default user
+                        ...newUser.filter(user => user.status === 'active') // Filtered active users
+                      ].map((user) => (
                         <MenuItem key={user.uid} value={user.id}>
                           {user.displayName}
                         </MenuItem>
@@ -330,6 +333,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     </Select>
                   </FormControl>
                 </Grid>
+
                 {/* MenuIcon */}
                 <Grid item >
                   <IconButton
@@ -378,7 +382,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             </Box>
             <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
               {grid ? (
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: 10, marginTop: 2 }}>
+                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: {xs: 18, lg:10}, marginTop: 2 }}>
                   {filteredFarms.map((marker, index) => (
                     <GridView
                       key={marker.id}

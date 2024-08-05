@@ -16203,7 +16203,7 @@ const polygonCoordsBAS = [
         <br />
       </SlidingPane>
     ))} */}
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+    <Box xs={12} lg={12} sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
       
         <div className={`map-container ${selectedMarker ? 'map-container-open' : ''}`}>
           <MapContainer
