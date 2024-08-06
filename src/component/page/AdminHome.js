@@ -260,7 +260,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         </Grid>
 
 
-        <Grid item lg={12}>
+        <Grid item lg={12} xs={12}>
           <Box sx={{ boxShadow: 1, p: 2, borderRadius: 3, backgroundColor: '#fff', overflow: 'hidden', maxHeight: 1000 }}>
             <section style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: 12 }}>
               <h4>Timeline</h4>
@@ -281,15 +281,15 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             </Box>
           </Box>
         </Grid>
-        <Grid item lg={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Pie labels={labels1} data={series1} title="Municipalties" />
         </Grid>
-        <Grid item lg={6}>
+        <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
-            <Pie labels={labels} data={series} title="Farms" />
+            <Pie labels={labels} data={series} title="Farms" sx={{ height: '100%', width: '100%'}}/>
           </Box>
         </Grid>
-        <Grid item lg={12}>
+        <Grid item lg={12} xs={12} md={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onDoubleClick={() => setSelected('Farms')}>
             <GeoLoc />
           </Box>

@@ -4,7 +4,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AppBar from '@mui/material/AppBar';
-import { Box, Avatar, Divider, Stack, Tab, Tabs } from '@mui/material';
+import { Box, Avatar, Divider, Stack, Tab, Tabs, } from '@mui/material';
 import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
@@ -154,7 +154,15 @@ function Dashboard() {
       .catch((error) => {
         const errorCode = error.code;
         const errorMessage = error.message;
+
+        if (errorCode === 'auth/user-not-found') {
+          alert('User not found. Please check your email or sign up.');
+        } else {
+          // Handle other types of errors
+          alert(`Login failed: ${errorMessage}`);
+        }
       });
+
   }
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -207,54 +215,62 @@ function Dashboard() {
   return (
     <>
       {logged ?
-        <ThemeProvider theme={defaultTheme}>
-          <Grid container component="main" sx={{ height: '100%', justifyContent: 'center', position: 'absolute', width: '100%' }}>
-            <CssBaseline />
-            {/* <Box
-              item
-              xs={false}
-              sm={4}
-              md={7}
-              sx={{
-                backgroundImage: `url(${BgImage})`,
-                backgroundRepeat: 'no-repeat',
-                backgroundColor: (t) =>
-                  t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                position: 'absolute',
-                zIndex: -1,
-                top: 0,
-                left: 0,
-                width:'100%',
-                height:'100%',
-                boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-                filter: 'brightness(50%)', 
-                
-              }}
-            /> */}
-
-            <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} sx={{ alignItems: 'center', zIndex: 1, height: '80%', marginTop: 10 }} square>
+        <Box sx={{ backgroundColor: 'green', height: '100vh', padding: 5, display: 'flex' }}>
+          {/* <img scr={require('../image_src/bg.jpg')} style={{opacity:.5}}/> */}
+          <Grid
+            container
+            spacing={2}
+            sx={{
+              borderRadius: 4,
+              backgroundColor: '#fff',
+              padding: 2,
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Grid item lg={7} md={6} xs={12}>
               <Box
                 sx={{
-                  mt: 5,
+                  display: { xs: 'none', md: 'flex', lg: 'flex' },
+                  width: '100%',
+                  height: 'auto',
+                  overflow: 'hidden',
+                  backgroundColor: 'red',
+                  borderRadius: 4,
+                  '& img': {
+                    width: '100%',
+                    height: 'auto',
+                    objectFit: 'cover',
+                  },
+                }}
+              >
+                <img src={require('../image_src/p1.jpg')} alt='Image' />
+              </Box>
+            </Grid>
+            <Grid item lg={5} md={6} xs={12}>
+              <Box
+                sx={{
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  position: 'relative',
-                  borderRadius: 1
+                  justifyContent: 'center',
+                  height: { lg: '100%', xs: '100%', md: '80%' },
+                  padding: 2,
                 }}
               >
-                <Button style={{ position: 'absolute', top: 0, right: 0 }}>
-                  <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
+                <Button
+                  sx={{ alignSelf: 'flex-end' }}
+                  onClick={handleClose}
+                >
+                  <CloseIcon sx={{ color: 'gray' }} />
                 </Button>
-
-                <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
-
-                <Typography component="h1" variant="h5">
-                  Sign in
-                </Typography>
-                <Box sx={{ mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
+                  <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: 'auto' }} alt='Logo' />
+                  <Typography variant="h1" sx={{ fontSize: 30, color: 'green', fontFamily: 'monospace', mt: 2 }}>
+                    Welcome Back!
+                  </Typography>
+                </Box>
+                <Box sx={{ mt: 1, width: '100%' }}>
                   <TextField
                     margin="normal"
                     required
@@ -264,9 +280,9 @@ function Dashboard() {
                     autoComplete="email"
                     autoFocus
                     label="Email"
-                    color="secondary"
+                    color="success"
                     value={email}
-                    onChange={(event) => { setEmail(event.target.value) }}
+                    onChange={(event) => setEmail(event.target.value)}
                     InputProps={{ style: { borderColor: 'green' } }}
                   />
                   <TextField
@@ -278,12 +294,9 @@ function Dashboard() {
                     id="password"
                     autoComplete="current-password"
                     label="Password"
-                    color="secondary"
+                    color="success"
                     value={password}
-                    onChange={(event) => {
-                      setPassword(event.target.value)
-                      console.log('pass')
-                    }}
+                    onChange={(event) => setPassword(event.target.value)}
                     InputProps={{ style: { borderColor: 'green' } }}
                   />
                   <Button
@@ -303,12 +316,118 @@ function Dashboard() {
                   >
                     Login
                   </Button>
-                  <Copyright sx={{ mt: 5 }} />
+                  <Copyright sx={{ mt: { xs: 2, lg: 5 } }} />
                 </Box>
               </Box>
             </Grid>
           </Grid>
-        </ThemeProvider > :
+        </Box >
+        // <ThemeProvider theme={defaultTheme}>
+        //</ThemeProvider> <Grid container component="main" sx={{ height: '100%', justifyContent: 'center', position: 'absolute', width: '100%' }}>
+        //     <CssBaseline />
+        //     {/* <Box
+        //       item
+        //       xs={false}
+        //       sm={4}
+        //       md={7}
+        //       sx={{
+        //         backgroundImage: `url(${BgImage})`,
+        //         backgroundRepeat: 'no-repeat',
+        //         backgroundColor: (t) =>
+        //           t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+        //         backgroundSize: 'cover',
+        //         backgroundPosition: 'center',
+        //         position: 'absolute',
+        //         zIndex: -1,
+        //         top: 0,
+        //         left: 0,
+        //         width:'100%',
+        //         height:'100%',
+        //         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+        //         filter: 'brightness(50%)', 
+
+        //       }}
+        //     /> */}
+
+        //     <Grid item xs={12} md={12} lg={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        //       <Box
+        //         sx={{
+        //           // mt: 5,
+        //           display: 'flex',
+        //           flexDirection: 'column',
+        //           // alignItems: 'center',
+        //           // justifyContent: 'center',
+        //           borderRadius: 2,
+        //           padding: 4,
+        //           boxShadow: 2,
+        //           width: {xs:'90%', md:'50%'}
+        //         }}
+        //       >
+        //         <Button sx={{justifyContent: 'flex-end'}}>
+        //           <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
+        //         </Button>
+        //         <Box sx={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
+        //           <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
+        //         <Typography component="h1" variant="h5">
+        //           Sign in
+        //         </Typography>
+        //         </Box>
+        //         <Box sx={{ mt: 1 }}>
+        //           <TextField
+        //             margin="normal"
+        //             required
+        //             fullWidth
+        //             id="email"
+        //             name="email"
+        //             autoComplete="email"
+        //             autoFocus
+        //             label="Email"
+        //             color="secondary"
+        //             value={email}
+        //             onChange={(event) => { setEmail(event.target.value) }}
+        //             InputProps={{ style: { borderColor: 'green' } }}
+        //           />
+        //           <TextField
+        //             margin="normal"
+        //             required
+        //             fullWidth
+        //             name="password"
+        //             type="password"
+        //             id="password"
+        //             autoComplete="current-password"
+        //             label="Password"
+        //             color="secondary"
+        //             value={password}
+        //             onChange={(event) => {
+        //               setPassword(event.target.value)
+        //               console.log('pass')
+        //             }}
+        //             InputProps={{ style: { borderColor: 'green' } }}
+        //           />
+        //           <Button
+        //             type="submit"
+        //             fullWidth
+        //             variant="contained"
+        //             sx={{
+        //               color: 'white',
+        //               backgroundColor: 'green',
+        //               borderColor: 'green',
+        //               '&:hover': {
+        //                 backgroundColor: 'orange',
+        //                 color: 'white',
+        //               },
+        //             }}
+        //             onClick={handleLogin}
+        //           >
+        //             Login
+        //           </Button>
+        //           <Copyright sx={{ mt: 5 }} />
+        //         </Box>
+        //       </Box>
+        //     </Grid>
+        //   </Grid>
+        // </ThemeProvider > 
+        :
 
         <div >
           <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }}>
@@ -1333,7 +1452,7 @@ const Peste = () => {
         </Typography>
         <Grid container columns={15} spacing={2}>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{ height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1363,7 +1482,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{  height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1388,7 +1507,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%' }}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1415,7 +1534,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%' }}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -1447,7 +1566,7 @@ const Peste = () => {
             </Card>
           </Grid>
           <Grid item xs={15} md={5} lg={3}>
-            <Card variant="outlined" sx={{height:'100%'}}>
+            <Card variant="outlined" sx={{ height: '100%' }}>
               <Box sx={{ p: 2 }}>
                 <Stack direction="row" justifyContent="space-between" alignItems="center">
                   <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
@@ -2048,20 +2167,20 @@ function Agencies({ agencyList }) {
               display: 'flex',
               width: 1,
               justifyContent: 'center',
-              flexDirection:'column',
+              flexDirection: 'column',
               alignItems: 'center',
               '&:hover': {
                 cursor: 'pointer',
               }
 
             }}
-            onClick={() => handleClick(agency.url)}
+              onClick={() => handleClick(agency.url)}
             >
               <img
                 src={require(`../image_src/${agency.logo}`)}
                 alt={agency.name}
                 className="logo-image"
-                style={{width:200, height:200}}
+                style={{ width: 200, height: 200 }}
               />
               <span style={{ marginTop: 5 }}>{agency.name}</span>
             </Box>

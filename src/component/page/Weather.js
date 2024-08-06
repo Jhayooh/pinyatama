@@ -31,7 +31,8 @@ const Weather = ({ farm }) => {
         const day = dateObj.getDate();
         const month = months[dateObj.getMonth()];
         const year = dateObj.getFullYear();
-        return `${dayOfWeek}, ${day} ${month} ${year}`;
+
+        return `${dayOfWeek}\n ${month}  ${day} ${year}`;
     };
 
     useEffect(() => {
@@ -75,15 +76,64 @@ const Weather = ({ farm }) => {
         fetchWeather();
     }, [farm]);
 
+    // const weatherConditions = {
+    //     Rain: {
+    //         color: '#005BEA',
+    //         title: 'Raining',
+    //         subtitle: 'Get a cup of coffee',
+    //         icon: 'weather-rainy'
+    //     },
+    //     Clear: {
+    //         color: '#f7b733',
+    //         title: 'So Sunny',
+    //         subtitle: 'It is hurting my eyes',
+    //         icon: 'weather-sunny'
+    //     },
+    //     Thunderstorm: {
+    //         color: '#616161',
+    //         title: 'A Storm is coming',
+    //         subtitle: 'Because Gods are angry',
+    //         icon: 'weather-lightning'
+    //     },
+    //     Clouds: {
+    //         color: '#1F1C2C',
+    //         title: 'Clouds',
+    //         subtitle: 'Everywhere',
+    //         icon: 'weather-cloudy'
+    //     },
+    //     Snow: {
+    //         color: '#00d2ff',
+    //         title: 'Snow',
+    //         subtitle: 'Get out and build a snowman for me',
+    //         icon: 'weather-snowy'
+    //     },
+    //     Drizzle: {
+    //         color: '#076585',
+    //         title: 'Drizzle',
+    //         subtitle: 'Partially raining...',
+    //         icon: 'weather-hail'
+    //     },
+    //     Haze: {
+    //         color: '#66A6FF',
+    //         title: 'Haze',
+    //         subtitle: 'Another name for Partial Raining',
+    //         icon: 'weather-hail'
+    //     },
+    //     Mist: {
+    //         color: '#3CD3AD',
+    //         title: 'Mist',
+    //         subtitle: "Don't roam in forests!",
+    //         icon: 'weather-fog'
+    //     }
+    // };
+
     return (
         <Box sx={{
             width: '100%',
             height: '100%',
             display: 'flex',
-            // boxShadow: 2,
-            // backgroundColor: '#fff',
             padding: 2,
-            // borderRadius: 4
+            flexDirection: 'column',
         }}>
             {weather.loading && (
                 <>
@@ -104,18 +154,19 @@ const Weather = ({ farm }) => {
             )}
             {weather.current.main && (
                 <Grid container >
-
                     <Grid item xs={12} lg={12} >
                         <Box sx={{
                             display: 'flex',
                             alignItems: 'center',
-                            flexDirection: 'row',
+                            flexDirection: { xs: 'column', md: 'row' },
                             boxShadow: 2,
                             backgroundColor: '#28B463',
+                            //backgroundColor: weatherConditions[weather.current.weather[0].main]?.color || '#fff',
                             gap: 5,
-                            justifyContent: 'space-evenly'
+                            justifyContent: 'space-evenly',
+                            padding: 2,
                         }}>
-                            <Box sx={{}}>
+                            <Box>
                                 <img
                                     className=""
                                     src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
@@ -124,12 +175,12 @@ const Weather = ({ farm }) => {
                                     height='200px'
                                 />
                             </Box>
-                            <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
                                 <Typography variant='h3' sx={{ marginLeft: 5, color: 'white' }}>
                                     {Math.round(weather.current.main.temp)}
                                     <sup className="deg">°C</sup>
                                 </Typography>
-                                <Typography variant='h6' sx={{ color: 'white' }}>
+                                <Typography variant='h6' sx={{ color: 'white', textAlign: { xs: 'center', md: 'left' } }}>
                                     {weather.current.weather[0].description.toUpperCase()}
                                 </Typography>
                             </Box>
@@ -155,28 +206,18 @@ const Weather = ({ farm }) => {
                             </Box>
                         </Box>
                     </Grid>
-                    {/* {weather.current.coord && (
-                        <Grid item xs={12} lg={6} sx={{ width: '500px', height: '280px', }}>
-                            <MapContainer center={[weather.current.coord.lat, weather.current.coord.lon]} zoom={10} style={{ width: '100%', height: '100%' }}>
-                                <TileLayer
-                                    url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${apiKey}`}
-                                // attribution='&copy; <a href="https://www.openweathermap.org/">OpenWeatherMap</a>'
-                                />
-                            </MapContainer>
-                        </Grid>
-                    )} */}
 
                     <Grid item xs={12} lg={12} >
-
-                        <Box sx={{ display: 'flex', flexDirection: 'row', }}>
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, }}>
                             {weather.forecast.map((item, index) => (
                                 <Box key={index}
                                     sx={{
                                         textAlign: 'center',
-                                        // minWidth: '15%',
                                         backgroundColor: '#fff',
                                         padding: 3,
-                                        boxShadow: 2
+                                        boxShadow: 2,
+                                        // flex: '1 1 auto',
+                                        // margin: 1,
                                     }}>
                                     <div>{toDateFunction(item.dt)}</div>
                                     <img

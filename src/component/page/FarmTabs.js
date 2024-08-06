@@ -146,6 +146,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 position: 'sticky',
                                 zIndex: 9
                             }}
+                            variant="scrollable"
+                            scrollButtons="auto"
                         >
                             <Tab
                                 label="Farm Profile"
@@ -228,7 +230,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         <Farm farmId={farm.id} />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>
-                        <Weather  farm={farm}/>
+                        <Weather farm={farm} />
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={3}>
                         {roi && <Activities

@@ -210,13 +210,13 @@ const Activities = ({ roi, farm, particularData }) => {
             <Box sx={{
             }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={8}>
+                    <Grid item xs={12} md={8}>
                         <Box sx={{
                             backgroundColor: '#F9FAFB',
                         }}>
                             <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                 {newActivities.map((act, index) => (
-                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(index)} key={act.id} sx={{
+                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(stepIndex === index ? 0 : index)} key={act.id} sx={{
                                         display: 'flex',
                                         flexDirection: 'column',
                                         marginLeft: index === 0 ? 0 : 4,
@@ -231,11 +231,14 @@ const Activities = ({ roi, farm, particularData }) => {
                                     }}>
                                         <StepLabel StepIconComponent={QontoStepIcon} sx={{
                                         }}>
-                                            <Box sx={{
-                                                display: 'flex',
-                                                justifyContent: 'space-between'
-                                            }}>
+                                            <Box
+                                                sx={{
+                                                    flexDirection: { xs: 'column', md: 'row' },
+                                                    display: 'flex',
+                                                    justifyContent: 'space-between'
+                                                }}>
                                                 <Box sx={{
+                                                    flexDirection: { xs: 'column', md: 'row' },
                                                     display: 'flex',
                                                     gap: 2,
                                                     alignItems: 'center'
@@ -269,7 +272,7 @@ const Activities = ({ roi, farm, particularData }) => {
 
                         </Box>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item xs={12} md={4}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -296,7 +299,7 @@ const Activities = ({ roi, farm, particularData }) => {
                                     title={"QP Production"}
                                 />
                             </Box>
-                            <Box className='parti'>
+                            <Box className='parti' >
                                 <Doughnut
                                     labels={["Materyales", "Labor", "Fertilizer"]}
                                     data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}

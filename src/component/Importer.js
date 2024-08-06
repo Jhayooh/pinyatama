@@ -256,8 +256,8 @@ function Importer() {
 
     return (
         <>
-            <Button variant='outlined' color='success' onClick={() => setShowModal(true)}><UploadIcon />Upload</Button>
-
+            <Button variant='text' color='success' onClick={() => setShowModal(true)}><UploadIcon />Upload</Button>
+            {/* <Button color='success' onClick={() => setShowModal(true)}> Upload</Button> */}
             <Modal
                 open={showModal}
                 onClose={handleClose}

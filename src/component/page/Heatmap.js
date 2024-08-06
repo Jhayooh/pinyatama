@@ -16,7 +16,7 @@ const MapExample = () => {
     <MapContainer center={[14.1122898, 122.9539999]} zoom={13} style={{ height: "30vh", width: "100%" }}>
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        // attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
       <Marker position={[14.1122898, 122.9539999]}>
         <Popup>

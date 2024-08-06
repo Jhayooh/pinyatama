@@ -22,18 +22,18 @@ const Container = styled(Box)({
 
 function Profile({ user, farm }) {
     return (
-        <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2 }}>
-            <Grid item xs={12} md={8} lg={8} elevation={3} sx={{ padding: 3, boxShadow:1 }}>
-                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center' }}>
+        <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2, }}>
+            <Grid item xs={12} md={8} lg={8} elevation={3} sx={{ padding: 3, boxShadow: 1, backgroundColor: '#fff'}}>
+                <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center'}}>
                     <Typography variant='h6'
-                         sx={{
+                        sx={{
                             color: 'green',
                             fontFamily: 'monospace',
                             paddingLeft: 2,
                             paddingTop: 2,
                         }}>
                         IMPORMASYON NG BUKID</Typography>
-                    <Grid item  sx={{ padding: 2, }}>
+                    <Grid container spacing={3} sx={{ padding: 2, }}>
                         <FormGrid item xs={12} md={6}>
                             <FormLabel htmlFor="first-name" sx={{ fontWeight: 'bold' }}>
                                 Field ID
@@ -44,7 +44,8 @@ function Profile({ user, farm }) {
                                 InputProps={{
                                     readOnly: true,
                                 }}
-                                sx={{display:'flex'}}
+                                sx={{ display: 'flex' }}
+                                fullWidth
                             // sx={{ minWidth: '300px' }}
                             />
                         </FormGrid>
@@ -145,7 +146,7 @@ function Profile({ user, farm }) {
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
-                                defaultValue={farm.plantNumber}
+                                defaultValue={farm.npk}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -159,7 +160,7 @@ function Profile({ user, farm }) {
                             </FormLabel>
                             <TextField
                                 id="outlined-read-only-input"
-                                defaultValue={farm.area}
+                                defaultValue={farm.soil}
                                 InputProps={{
                                     readOnly: true,
                                 }}
@@ -169,7 +170,7 @@ function Profile({ user, farm }) {
                     </Grid>
                 </Box>
             </Grid>
-            <Grid item xs={12} md={4} lg={4} elavation={3} sx={{ padding: 3, boxShadow: 2 }}>
+            <Grid item xs={12} md={4} lg={4} elavation={3} sx={{ padding: 3, boxShadow: 2, backgroundColor: '#28B463' }}>
                 <Box>
                     <Typography
                         sx={{
@@ -195,51 +196,56 @@ function Profile({ user, farm }) {
                             style={{
                                 textAlign: 'center',
                                 fontWeight: 'bold',
-                                color: 'orange'
+                                color: 'white'
                             }}>
                             {user.displayName}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex',flexDirection:'row' , gap:2}}>
+                    <Box sx={{ display: 'flex', flexDirection:{ xs: 'column', md: 'row' }, gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3,fontWeight: 'bold' }}>
+                            sx={{ marginLeft: 3, fontWeight: 'bold' }}>
                             Barangay:
                         </Typography>
                         <Typography
+                            sx={{ color: 'white' }}
                             variant="subtitle2"
                             gutterBottom>
                             {user.brgy}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection:{ xs: 'column', md: 'row' }, gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            sx={{ marginLeft: 3,fontWeight: 'bold' }}
+                            sx={{ marginLeft: 3, fontWeight: 'bold' }}
                         >
                             Municipality:
                         </Typography>
                         <Typography
+                            sx={{ color: 'white' }}
                             variant="subtitle2"
                             gutterBottom>
                             {user.mun}
                         </Typography>
                     </Box>
-                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
                             sx={{ marginLeft: 3, fontWeight: 'bold' }}>
                             Email:
                         </Typography>
-                        <Typography variant="subtitle2" gutterBottom>
+                        <Typography
+                            variant="subtitle2"
+                            gutterBottom
+                            sx={{ color: 'white' }}>
                             {user.email}
                         </Typography>
                     </Box>
 
-                    <Box sx={{ display: 'flex', flexDirection:'row', gap: 2 }}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
                         <Typography
                             variant="subtitle2"
                             gutterBottom
@@ -250,7 +256,8 @@ function Profile({ user, farm }) {
                         <Typography
                             variant="subtitle2"
                             gutterBottom
-                            xs={12}>
+                            xs={12}
+                            sx={{ color: 'white' }}>
                             {user.phoneNumber}
                         </Typography>
                     </Box>
