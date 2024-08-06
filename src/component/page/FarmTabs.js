@@ -12,7 +12,9 @@ import Archive from './Archive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
 import ProductPrices from '../ProductPrices';
 import Weather from './Weather';
+import Fertilizer from './Fertilizer'
 import Activities from './Activities'
+
 
 import BackIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -206,6 +208,17 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 }}
                             />
 
+                            <Tab
+                                label='Fertilizer'
+                                {...a11yProps(3)}
+                                sx={{
+                                    color: value === 6 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            />
+
                         </Tabs>
                     </Box>
                     <CustomTabPanel value={value} index={0}>
@@ -237,6 +250,11 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                     <CustomTabPanel value={value} index={5}>
                         <Archive fieldId={farm.fieldId} />
                     </CustomTabPanel>
+                    <CustomTabPanel value={value} index={6}>
+                        <Fertilizer  />
+                    </CustomTabPanel>
+                   
+                   
 
                 </Box>
             </div>
