@@ -215,14 +215,14 @@ function Dashboard() {
   return (
     <>
       {logged ?
-        <Box sx={{ backgroundColor: 'green', height: '100vh', padding: 5, display: 'flex' }}>
+        <Box sx={{  height: '100vh', backgroundColor:'#fff', padding:5}}>
           {/* <img scr={require('../image_src/bg.jpg')} style={{opacity:.5}}/> */}
           <Grid
             container
             spacing={2}
             sx={{
-              borderRadius: 4,
-              backgroundColor: '#fff',
+              // borderRadius: 4,
+              // backgroundColor: '#fff',
               padding: 2,
               justifyContent: 'center',
               alignItems: 'center',
