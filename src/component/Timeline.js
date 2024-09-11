@@ -130,7 +130,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </FormControl>
                     </Box>
                 </Box>
-                <Box sx={{display:'flex', justifyContent:'flex-end', marginRight:2, marginBottom:2}}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 2 }}>
                     <span className="bullet" style={{ backgroundColor: "green", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
                     <span className="legend-label"> Vegetative</span>
                     <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
@@ -138,11 +138,9 @@ export default function Timeline({ farms, events, users, setSelected }) {
                     <span className="bullet" style={{ backgroundColor: "orange", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
                     <span className="legend-label">Fruiting</span>
                 </Box>
-                <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
-                <div className="legend-item" style={{ fontSize: '1.5em' }}>
-
-                </div>
-
+                <Box sx={{ overflowY: 'auto', padding: 3, paddingBottom: 10, height: '100%' }}>
+                    <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
+                </Box>
 
             </Box>
         </Box>
