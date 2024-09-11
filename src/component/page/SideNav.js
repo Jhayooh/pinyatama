@@ -434,7 +434,7 @@ import Farms from './Farms';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 import useIdle from '../provider/IdleTimer';
-
+import Distribution from './Distribution'
 const drawerWidth = 240;
 const bgColor = 'green';
 
@@ -870,6 +870,28 @@ export default function SideNav() {
                 <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
+
+            <ListItem disablePadding onClick={() => setSelected('Distribution')} sx={selected === 'Distribution' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <img src={selected === 'Distribution' ? farmSelected : farm} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+
             <Divider sx={{color:'orange', border:1, marginTop: open ? 10 : 27}}/>
             <Box sx={{ flexGrow: 0 , 
               //marginTop: open ? '50%' : '100%', display: open ? 'flex' : 'none', justifyContent:'flex-end', alignItems:'flex-end'
@@ -938,7 +960,7 @@ export default function SideNav() {
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
                   {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-                  {selected === 'Geo' && <Geoloc />}
+                  {selected === 'Distribution' && <Distribution />}
                 </Box>
               </>
             )
