@@ -417,16 +417,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '../../firebase/Config';
 import { collection, doc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
-import access from '../image_src/access.png';
-import accessSelected from '../image_src/accessSelected.png';
-import dashboard from '../image_src/dashboard.png';
-import dashboardSelected from '../image_src/dashboardSelected.png';
-import farm from '../image_src/farm.png';
-import farmSelected from '../image_src/farmSelected.png';
-import particularspng from '../image_src/particulars.png';
-import particularspngSelected from '../image_src/particularsSelected.png';
-import logo from '../image_src/pinyatamap-logo.png';
-import timelinepng from '../image_src/timeline.png';
 import AdminHome from './AdminHome';
 import Timeline from '../Timeline';
 import ProductPrices from '../ProductPrices';
@@ -434,7 +424,23 @@ import Farms from './Farms';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 import useIdle from '../provider/IdleTimer';
-import Distribution from './Distribution'
+import Distribution from './Distribution';
+
+//icons
+import access from '../image_src/access.png';
+import accessSelected from '../image_src/accessSelected.png';
+import dashboard from '../image_src/dashboard.png';
+import dashboardSelected from '../image_src/dashboardSelected.png';
+import logo from '../image_src/pinyatamap-logo.png';
+import timelinepng from '../image_src/timeline.png';
+import distriSelected from '../image_src/boxSel.png';
+import distribution from '../image_src/box.png';
+import land from '../image_src/land.png';
+import landSelected from '../image_src/landSelected.png'
+import parti from '../image_src/parti.png';
+import partiSelected from '../image_src/partiSelected.png'
+
+
 const drawerWidth = 240;
 const bgColor = 'green';
 
@@ -739,7 +745,7 @@ export default function SideNav() {
             </Typography>
           </Toolbar>
         </AppBar> */}
-        <Drawer variant="permanent" open={open} elevation={0} hideBackdrop={true} sx={{ height: '100vh' , "& .MuiDrawer-paper": { borderWidth: 0 }}}>
+        <Drawer variant="permanent" open={open} elevation={0} hideBackdrop={true} sx={{ height: '100vh', "& .MuiDrawer-paper": { borderWidth: 0 } }}>
           <DrawerHeader sx={{ backgroundColor: 'green' }}>
             <IconButton onClick={handleDrawerOpen}>
               <MenuIcon sx={{ color: '#fff' }} />
@@ -825,7 +831,7 @@ export default function SideNav() {
                     justifyContent: 'center',
                   }}
                 >
-                  <img src={selected === 'particular' ? particularspngSelected : particularspng} style={{ width: 24 }} />
+                  <img src={selected === 'particular' ? partiSelected : parti} style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Particulars' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -865,7 +871,7 @@ export default function SideNav() {
                     justifyContent: 'center',
                   }}
                 >
-                  <img src={selected === 'Farms' ? farmSelected : farm} style={{ width: 24 }} />
+                  <img src={selected === 'Farms' ? landSelected : land} style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
@@ -886,38 +892,36 @@ export default function SideNav() {
                     justifyContent: 'center',
                   }}
                 >
-                  <img src={selected === 'Distribution' ? farmSelected : farm} style={{ width: 24 }} />
+                  <img src={selected === 'Distribution' ? distriSelected : distribution} style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
 
-            <Divider sx={{color:'orange', border:1, marginTop: open ? 10 : 27}}/>
-            <Box sx={{ flexGrow: 0 , 
-              //marginTop: open ? '50%' : '100%', display: open ? 'flex' : 'none', justifyContent:'flex-end', alignItems:'flex-end'
-              }}>
-              <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? 'initial' : 'center',
-                    px: 2.5,
+            <Divider sx={{ color: 'orange', border: 1 }} />
 
+            <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : 'auto',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <LogoutIcon style={{ width: 24, color: 'orange' }} />
-                  </ListItemIcon>
-                  <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            </Box>
+                  <LogoutIcon style={{ width: 24, color: 'orange' }} />
+                </ListItemIcon>
+                <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+
           </List>
           <Dialog
             open={logoutModalDisplay}
