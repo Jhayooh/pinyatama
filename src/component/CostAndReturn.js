@@ -857,9 +857,29 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       paddingLeft: 2,
                       paddingRight: 1
                     }}>
-                    <Typography>
+                    {/* <Typography>
                       Good Size
-                    </Typography>
+                    </Typography> */}
+                    <Box sx={{
+                      display: 'flex',
+                      gap: 2,
+                      alignItems: 'center',
+                      justifyContent: 'flex-start'
+                    }}>
+                      <Typography sx={{
+                        fontWeight: 400
+                      }}>
+                        Good Size
+                      </Typography>
+                      <IconButton
+                        onClick={() => {
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
+                          setPineModal(true)
+                        }}
+                        sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                        <EditOutlinedIcon />
+                      </IconButton>
+                    </Box>
                     <Box sx={{
                       display: 'flex',
                       color: '#58AC58',
