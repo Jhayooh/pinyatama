@@ -433,8 +433,8 @@ import ProductPrices from '../ProductPrices';
 import Farms from './Farms';
 import Access from './Access';
 import Geoloc from './GeoLoc';
-import useIdle from '../provider/IdleTimer';
-import Distribution from './Distribution'
+import useIdle from '../provider/IdleTimer'
+import Distribution from './Distribution';
 const drawerWidth = 240;
 const bgColor = 'green';
 
@@ -891,7 +891,6 @@ export default function SideNav() {
                 <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-
             <Divider sx={{color:'orange', border:1, marginTop: open ? 10 : 27}}/>
             <Box sx={{ flexGrow: 0 , 
               //marginTop: open ? '50%' : '100%', display: open ? 'flex' : 'none', justifyContent:'flex-end', alignItems:'flex-end'
@@ -960,7 +959,7 @@ export default function SideNav() {
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
                   {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-                  {selected === 'Distribution' && <Distribution />}
+                  {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>
               </>
             )
