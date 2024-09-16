@@ -964,7 +964,7 @@ export default function SideNav() {
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
                   {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-                  {selected === 'Distribution' && <Distribution />}
+                  {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>
               </>
             )
