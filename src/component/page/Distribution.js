@@ -6,9 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Box } from '@mui/material';
 
 export default function Distribution({ farms, roi }) {
-  
+
 
   const formatDate = (timestamp) => {
     const dateObj = new Date(timestamp.seconds * 1000); // Convert Firebase timestamp
@@ -16,7 +17,7 @@ export default function Distribution({ farms, roi }) {
   };
 
 
-  
+
 
   // Table Component
   const DataTable = ({ data, data1, data2 }) => {
@@ -32,13 +33,13 @@ export default function Distribution({ farms, roi }) {
             </TableRow>
           </TableHead>
           <TableBody>
-          {data.map((row, index) => (
-  <TableRow key={index}>
-    <TableCell>{data2[index]}</TableCell> {/* Assuming 'row' is a string or some value */}
-    <TableCell align="right">{data1[index]}</TableCell> {/* Assuming row.input exists */}
-    <TableCell align="right">{row}</TableCell> {/* Access corresponding value in data1 */}
-  </TableRow>
-))}
+            {data.map((row, index) => (
+              <TableRow key={index}>
+                <TableCell>{data2[index]}</TableCell> {/* Assuming 'row' is a string or some value */}
+                <TableCell align="right">{data1[index]}</TableCell> {/* Assuming row.input exists */}
+                <TableCell align="right">{row}</TableCell> {/* Access corresponding value in data1 */}
+              </TableRow>
+            ))}
 
           </TableBody>
         </Table>
@@ -55,7 +56,7 @@ export default function Distribution({ farms, roi }) {
     { date: '2024-09-13', input: 'test2' },
     { date: '2024-09-14', input: 'test3' }
   ];
-  
+
 
 
   // Group ROI data by farm title
@@ -63,7 +64,7 @@ export default function Distribution({ farms, roi }) {
     // Find the corresponding farm for the current ROI item
     const farm = farms.find(farm => farm.id === roiItem.farmId);
     const title = farm ? farm.title : 'Unknown';
-   
+
 
     if (!acc[title]) {
       acc[title] = [];
@@ -83,7 +84,7 @@ export default function Distribution({ farms, roi }) {
   const pieChartData = farms.map((farm, index) => ({
     label: farm.title,
     value: pieData[index] || 0,
-    date:  formatDate(farm.start_date)
+    date: formatDate(farm.start_date)
   }));
 
   const series = pieChartData.map(item => item.value);
@@ -101,13 +102,20 @@ export default function Distribution({ farms, roi }) {
   };
 
   return (
-    <div>
-      <h1>Distribution Data</h1>
-    <input/>
-    <button>Distrubute</button>
-      <DataTable data={series} data1={labels} data2={date} />
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
+      <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
+        <Box sx={{ padding: 5 }}>
+          {/* <h1>Distribution Data</h1> */}
+          <input />
+          <button>Distribute</button>
+          <DataTable sx={{ overflowY: 'auto', height: '100%', margin: 10 }} data={series} data1={labels} data2={date} />
+        </Box>
+
+      </Box>
+    </Box>
 
 
-    </div>
+
+
   );
 }

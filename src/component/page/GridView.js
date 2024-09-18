@@ -22,7 +22,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
   }
 
   return (
-    <Grid container sx={{ width: { xs: '100%',sm:'calc(80%-90px)', md: 'calc(50% - 90px)' ,lg: 'calc(30% - 50px)'  } }}>
+    <Grid container sx={{ width: { xs: '100%', sm:'calc(80%-90px)', md: 'calc(60% - 90px)',lg: 'calc(40% - 110px)', xl: 'calc(20%-50%}'} }}>
       <Grid item xs={12} sm={12} md={12} lg={12} sx={{ paddingLeft: 2, paddingTop: 2 }}>
         <Box
           sx={{

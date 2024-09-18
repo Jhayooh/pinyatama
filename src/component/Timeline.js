@@ -119,14 +119,15 @@ export default function Timeline({ farms, events, users, setSelected }) {
                                 label="Extensionist"
                                 onChange={handleUser}
                             >
-                                {
-                                    newUser.map((user) => (
+                                {newUser
+                                    .filter((user) => user.status === "active") // Filter users with active status
+                                    .map((user) => (
                                         <MenuItem key={user.uid} value={user.id}>
                                             {user.displayName}
                                         </MenuItem>
-                                    ))
-                                }
+                                    ))}
                             </Select>
+
                         </FormControl>
                     </Box>
                 </Box>
