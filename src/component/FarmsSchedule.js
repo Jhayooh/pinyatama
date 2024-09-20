@@ -22,7 +22,7 @@ function SideDetails({ farms, eventClicked }) {
   const formattedStart = startDate.toLocaleDateString('en-US', options);
   const formattedEnd = endDate.toLocaleDateString('en-US', options);
   return (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1'}}>
+    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1' }}>
       {/* lagay closing */}
       <h2>{farmClicked.farmerName}</h2>
       <h5>Phase:{eventClicked.title}</h5>
@@ -74,9 +74,9 @@ function FarmsSchedule({ farms, events }) {
             borderColor,
             border: itemContext.selected ? 'dashed 1px rgba(0,0,0,0.3)' : 'none',
             borderRadius: 8,
-            boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
-                       0 2px 2px 0 rgba(0, 0, 0, 0.14),
-                       0 3px 1px -2px rgba(0, 0, 0, 0.12)`
+            // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
+            //            0 2px 2px 0 rgba(0, 0, 0, 0.14),
+            //            0 3px 1px -2px rgba(0, 0, 0, 0.12)`
           },
           // onMouseDown: () => {
           //   setClicked(item)
@@ -106,7 +106,7 @@ function FarmsSchedule({ farms, events }) {
   }
 
   const sideDetails = (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)'}}>
+    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)' }}>
       {/* lagay closing */}
       <h2>Phase details</h2>
       <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -117,10 +117,13 @@ function FarmsSchedule({ farms, events }) {
 
   return (
     <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .85)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
-      <Box sx={{ overflowY: 'auto', minHeight: 'calc(100% * .85)', flex: 1 }}>
+      <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100%)', flex: 1 }}>
         <Timeline
           keys={keys}
-          groups={farms}
+          groups={farms.map(f => ({
+            ...f,
+            stackItems: true
+          }))}
           onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
           itemRenderer={itemRender}

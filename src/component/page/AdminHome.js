@@ -9,7 +9,6 @@ import { Modal } from 'react-bootstrap';
 import GeoLoc from './GeoLoc';
 import Heatmap from './Heatmap';
 
-
 // icons
 import farmerImg from '../image_src/farmer.png';
 import farm from '../image_src/seedling.png';

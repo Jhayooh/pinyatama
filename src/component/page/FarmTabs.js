@@ -238,6 +238,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                             roi={roi}
                             farm={farm}
                             particularData={particularData}
+                            parts={parts}
                         />}
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={2}>

@@ -1,14 +1,27 @@
 .vegetative {
-    background-color: green !important;
+    background-color: #93d6b0 !important;
 }
 
 .flowering {
-    background-color: #ebf74d !important;
+    background-color: #68c690 !important;
 }
 
 .fruiting {
-    background-color: orange !important;
+    background-color: #52be80 !important;
 }
+
+.vegetativeActual {
+    background-color: #f9c667;
+}
+
+.floweringActual {
+    background-color: #f8ba48;
+}
+
+.fruitingActual {
+    background-color: #f6a30b;
+}
+
 .activity {
     background-color: #ff7784 !important;
 }
