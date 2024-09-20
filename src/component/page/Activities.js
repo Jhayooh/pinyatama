@@ -13,22 +13,29 @@ import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
 
-import { addDoc, collection, orderBy, query, updateDoc } from "firebase/firestore";
+import { addDoc, collection, doc, orderBy, query, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase/Config";
 
 // chart
 import Doughnut from '../chart/Doughnut'
 import { useCollectionData } from "react-firebase-hooks/firestore";
 
-const Activities = ({ roi, farm, particularData }) => {
+const Activities = ({ roi, farm, particularData, parts }) => {
     const [isAdd, setIsAdd] = useState(false)
 
     const activityColl = collection(db, `farms/${farm.id}/activities`)
     const activityQuery = query(activityColl, orderBy('createdAt'))
     const [activities] = useCollectionData(activityQuery)
 
+    const eventsColl = collection(db, `farms/${farm.id}/events`)
+    const eventsQuery = query(eventsColl, orderBy('createdAt'))
+    const [e] = useCollectionData(eventsQuery)
+
     const [newActivities, setNewActivities] = useState([])
     const [fertilizer, setFertilizer] = useState(null)
+    const [material, setMaterial] = useState(null)
+    const [events, setEvents] = useState(null)
+    const [compAct, setCompAct] = useState(null)
 
     const [stepIndex, setStepIndex] = useState(-1)
 
@@ -41,10 +48,20 @@ const Activities = ({ roi, farm, particularData }) => {
     }
 
     useEffect(() => {
-        if (!particularData) return
-        const ferts = particularData.filter(part => part.parent.toLowerCase() === 'fertilizer');
+        if (!e) return
+
+        setEvents(e)
+    }, [e])
+
+
+    useEffect(() => {
+        if (!parts) return
+        const ferts = parts.filter(part => part.parent.toLowerCase() === 'fertilizer');
+        const mat = parts.filter(part => part.particular.toLowerCase() === 'material');
         setFertilizer(ferts)
-    }, [particularData])
+        setMaterial(mat)
+        setCompAct([...ferts, ...mat])
+    }, [parts])
 
 
     useEffect(() => {
@@ -127,22 +144,55 @@ const Activities = ({ roi, farm, particularData }) => {
 
         const handleSave = async () => {
             try {
+                // eventsssss pleaseeee helpp hahahahha
                 const currDate = new Date()
-                const theLabel = fertilizer.find(obj => obj.id === fert)
-                await addDoc(activityColl, {
-                    createdAt: currDate,
-                    label: theLabel.name,
-                    compId: fert,
-                    qnty: qnty
-                });
-
+                const theLabel = compAct.find(obj => obj.id === fert)
+                if (theLabel.name.toLowerCase() === "flower inducer (ethrel)" && events) {
+                    console.log("eventsss:", events);
+                    console.log("na save si ethrel")
+                    const vege_event = events.find(p => p.className === 'vegetative')
+                    const date_diff = currDate - vege_event.end_time.toDate()
+                    console.log("diff", date_diff);
+                    events.map(async (e) => {
+                        console.log("the eeee:", e);
+                        switch (e.className) {
+                            case 'vegetative':
+                                e.end_time = Timestamp.fromDate(currDate)
+                                console.log("the vege: ", e)
+                                break;
+                            case 'flowering':
+                                e.start_time = Timestamp.fromDate(currDate)
+                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                console.log("the flower: ", e)
+                                break;
+                                case 'fruiting':
+                                e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
+                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                console.log("the fruit: ", e)
+                                break;
+                            default:
+                                break;
+                        }
+                        // return e;                        
+                        const newEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
+                            ...e,
+                            className: e.className+'Actual',
+                            createdAt: currDate
+                        })
+                        await updateDoc(newEvent, { id: newEvent.id })
+                    })
+                }
+                // await addDoc(activityColl, {
+                //     createdAt: currDate,
+                //     label: theLabel.name,
+                //     compId: fert,
+                //     qnty: qnty
+                // });
             } catch (error) {
                 console.error('error updating document', error);
             }
             handleModalClose()
         }
-
-        const [age, setAge] = useState('')
 
         return (
             <Modal open={isAdd} onClose={handleModalClose} aria-labelledby="edit-row-modal">
@@ -167,14 +217,29 @@ const Activities = ({ roi, farm, particularData }) => {
                             width: '100%',
                             mb: 2
                         }}
-                        onChange={(e) => setFert(e.target.value)}
+                        onChange={(e) => {
+                            const obj = parts?.find(obj => obj.id === e.target.value)
+                            setFert(e.target.value)
+                            setQnty(obj['qntyPrice'])
+                            console.log("the parts", compAct)
+                        }}
                     >
-                        {
+                        {/* {
                             fertilizer?.map((f) => {
                                 if (f.isAvailable) {
                                     return <MenuItem value={f.id}>{f.name}</MenuItem>
                                 }
                             })
+                        } */}
+                        {
+                            [
+                                ...compAct?.filter((f) => f.isAvailable) || [],
+                                ...compAct?.filter((m) => m.name.toLowerCase() === "flower inducer (ethrel)") || []
+                            ].map((f) => (
+                                <MenuItem key={f.id} value={f.id}>
+                                    {f.name}
+                                </MenuItem>
+                            ))
                         }
                     </Select>
                     <TextField
@@ -200,6 +265,7 @@ const Activities = ({ roi, farm, particularData }) => {
                             Cancel
                         </button>
                     </Box>
+
                 </Box>
             </Modal>
         )

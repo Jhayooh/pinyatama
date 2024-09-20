@@ -7,7 +7,7 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
-    TextField,
+    Typography
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
@@ -202,13 +202,52 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </FormControl>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 2 }}>
-                    <span className="bullet" style={{ backgroundColor: "green", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-                    <span className="legend-label"> Vegetative</span>
-                    <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-                    <span className="legend-label">Flowering</span>
-                    <span className="bullet" style={{ backgroundColor: "orange", margin: "0 10px", width: "20px", height: "20px", display: "inline-block" }}></span>
-                    <span className="legend-label">Fruiting</span>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4 }}>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start',
+                        mr: 3
+                    }} >
+                        <Box
+                            sx={{
+                                width: 80,
+                                height: 18,
+                                background: 'linear-gradient(to right, #93d6b0, #68c690, #52be80)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 2,  // optional for rounded corners
+                                mr: 1
+                            }}
+                        >
+                        </Box>
+                        <Typography variant="subtitle2">
+                            Projected
+                        </Typography>
+                    </Box>
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-start'
+                    }} >
+                        <Box
+                            sx={{
+                                width: 80,
+                                height: 18,
+                                background: 'linear-gradient(to right, #f9c667, #f8ba48, #f6a30b)',
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                borderRadius: 2,  // optional for rounded corners
+                                mr:1
+                            }}
+                        >
+                        </Box>
+                        <Typography variant="subtitle2">
+                            Actual
+                        </Typography>
+                    </Box>
                 </Box>
                 <Box sx={{ overflowY: 'auto', padding: 3, paddingBottom: 10, height: '100%' }}>
                     <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
