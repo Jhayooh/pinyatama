@@ -6,7 +6,20 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { Box, TextField, MenuItem, Button, Typography } from '@mui/material';
+import {
+  Box,
+  TextField,
+  MenuItem,
+  Button,
+  Typography,
+  OutlinedInput,
+  FormControl,
+  InputAdornment,
+  InputLabel,
+} from '@mui/material';
+
+//icon
+import Enter from '../image_src/enter.png';
 
 export default function Distribution({ farms, roi }) {
 
@@ -31,7 +44,7 @@ export default function Distribution({ farms, roi }) {
     { value: 11, label: 'December' }
   ];
 
-  const years = [2022, 2023, 2024]; // Adjust this range based on your data
+  const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; // Adjust this range based on your data
 
   // State for the selected month and year
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
@@ -55,10 +68,10 @@ export default function Distribution({ farms, roi }) {
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{data2[index]}</TableCell> 
-                <TableCell align="right">{data1[index]}</TableCell> 
+                <TableCell>{data2[index]}</TableCell>
+                <TableCell align="right">{data1[index]}</TableCell>
                 <TableCell align="right">{row}</TableCell>
-                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Display distributed value */} 
+                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Display distributed value */}
               </TableRow>
             ))}
           </TableBody>
@@ -121,12 +134,72 @@ export default function Distribution({ farms, roi }) {
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100vh' }}>
       <Box sx={{ boxShadow: 2, borderRadius: 3, backgroundColor: '#fff', padding: 4 }}>
-        <Typography variant="h5" gutterBottom>
+        {/* <Typography variant="h5" gutterBottom>
           Distribution Data
-        </Typography>
-        
-        {/* Date Filter: Month and Year Selection */}
-        <Box sx={{ display: 'flex', gap: 2, marginBottom: 3 }}>
+        </Typography> */}
+
+        <Box sx={{ marginBottom: 1, display: 'flex',width:{md:'100%', xs:'50%'} , gap: 2, p: 2, borderRadius: 20 }}>
+          <Box sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            gap:1,
+            width:'100%'
+          }}>
+            <TextField
+              label="Enter Distribute Value"
+              variant="outlined"
+              value={inputText}
+              onChange={(e) => setInputText(e.target.value)}
+              fullWidth
+              type="number"
+
+            />
+            <Button variant='contained' color='success' onClick={distributeResources} >
+              {/* <img src={Enter} alt='Enter' /> */}
+              <Typography variant="button" gutterBottom sx={{ display: 'block' }}>
+                Enter
+              </Typography>
+            </Button>
+          </Box>
+
+          <Box sx={{
+            width:'100%',
+            justifyContent: 'flex-end',
+            display: 'flex',
+            alignItems: 'center',
+            gap:2
+          }}>
+            <TextField
+              select
+              label="Month"
+              value={selectedMonth}
+              onChange={(e) => setSelectedMonth(e.target.value)}
+            >
+              {months.map((month) => (
+                <MenuItem key={month.value} value={month.value}>
+                  {month.label}
+                </MenuItem>
+              ))}
+            </TextField>
+
+            <TextField
+              select
+              label="Year"
+              value={selectedYear}
+              onChange={(e) => setSelectedYear(e.target.value)}
+            >
+              {years.map((year) => (
+                <MenuItem key={year} value={year}>
+                  {year}
+                </MenuItem>
+              ))}
+            </TextField>
+          </Box>
+        </Box>
+      </Box>
+      {/* Date Filter: Month and Year Selection */}
+      {/* <Box sx={{ display: 'flex', gap: 2, marginBottom: 3 }}>
           <TextField
             select
             label="Month"
@@ -154,10 +227,10 @@ export default function Distribution({ farms, roi }) {
               </MenuItem>
             ))}
           </TextField>
-        </Box>
+        </Box> */}
 
-        {/* Input field and distribute button */}
-        <Box sx={{ display: 'flex', gap: 2, marginBottom: 3 }}>
+      {/* Input field and distribute button */}
+      {/* <Box sx={{ display: 'flex', gap: 2, marginBottom: 3 }}>
           <TextField 
             label="Distribute Value" 
             variant="outlined" 
@@ -166,14 +239,16 @@ export default function Distribution({ farms, roi }) {
             fullWidth
             type="number"
           />
-          <Button variant="contained" color="secondary" onClick={distributeResources}>
-            Distribute
+          <Button variant="contained" color="success" onClick={distributeResources}>
+            <Typography variant="button" gutterBottom sx={{ display: 'block' }}> 
+               Distribute
+            </Typography>
           </Button>
-        </Box>
+        </Box> */}
 
-        {/* Data Table */}
-        <DataTable data={filteredSeries} data1={filteredLabels} data2={filteredDate} distribution={distributionData} />
-      </Box>
+      {/* Data Table */}
+      <DataTable data={filteredSeries} data1={filteredLabels} data2={filteredDate} distribution={distributionData} />
+
     </Box>
   );
 }

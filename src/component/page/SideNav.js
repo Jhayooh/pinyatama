@@ -796,6 +796,26 @@ export default function SideNav() {
                 <ListItemText primary='Dashboard' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <img src={selected === 'Farms' ? landSelected : land} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
             <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
               <ListItemButton
                 sx={{
@@ -814,6 +834,26 @@ export default function SideNav() {
                   <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
                 </ListItemIcon>
                 <ListItemText primary='Timeline' sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
+            <ListItem disablePadding onClick={() => setSelected('Distribution')} sx={selected === 'Distribution' ? styles.isSelected : styles.notSelected}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : 'auto',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <img src={selected === 'Distribution' ? distriSelected : distribution} style={{ width: 24 }} />
+                </ListItemIcon>
+                <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
             <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
@@ -856,50 +896,7 @@ export default function SideNav() {
                 <ListItemText primary='Accounts' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'Farms' ? landSelected : land} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-
-            <ListItem disablePadding onClick={() => setSelected('Distribution')} sx={selected === 'Distribution' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'Distribution' ? distriSelected : distribution} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-
             <Divider sx={{ color: 'orange', border: 1 }} />
-
             <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
               <ListItemButton
                 sx={{
@@ -921,7 +918,6 @@ export default function SideNav() {
                 <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
-
           </List>
           <Dialog
             open={logoutModalDisplay}
