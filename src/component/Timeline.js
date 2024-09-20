@@ -95,7 +95,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
                 <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
-                    <Box sx={{ minWidth: 300 }}>
+                    <Box sx={{ minWidth: 200 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
@@ -116,7 +116,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box sx={{ minWidth: 300 }}>
+                    <Box sx={{ minWidth: 200 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
                             <Select
@@ -138,17 +138,24 @@ export default function Timeline({ farms, events, users, setSelected }) {
 
                         </FormControl>
                     </Box>
-                    <Box sx={{minWidth:300
-                    }}>
+                    <Box
+                        sx={{
+                            minWidth: 300,
+                            display: 'flex',
+                            flexDirection: 'row',
+                            gap: 1, 
+                        }}
+                    >
                         <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Month</InputLabel>
+                            <InputLabel id="month-select-label">Month</InputLabel>
                             <Select
-                                sx={{ border: "none" }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                sx={{ border: 'none' }}
+                                labelId="month-select-label"
+                                id="month-select"
                                 value={selectedMonth}
                                 label="Month"
-                                onChange={(e) => setSelectedMonth(e.target.value)}>
+                                onChange={(e) => setSelectedMonth(e.target.value)}
+                            >
                                 {months.map((month) => (
                                     <MenuItem key={month.value} value={month.value}>
                                         {month.label}
@@ -156,15 +163,16 @@ export default function Timeline({ farms, events, users, setSelected }) {
                                 ))}
                             </Select>
                         </FormControl>
-                        <FormControl>
-                            <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="year-select-label">Year</InputLabel>
                             <Select
-                                sx={{ border: "none" }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
+                                sx={{ border: 'none' }}
+                                labelId="year-select-label"
+                                id="year-select"
                                 label="Year"
                                 value={selectedYear}
-                                onChange={(e) => setSelectedYear(e.target.value)}>
+                                onChange={(e) => setSelectedYear(e.target.value)}
+                            >
                                 {years.map((year) => (
                                     <MenuItem key={year} value={year}>
                                         {year}
@@ -173,6 +181,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                             </Select>
                         </FormControl>
                     </Box>
+
                     <Box
                         sx={{
                             display: 'flex',
@@ -204,7 +213,6 @@ export default function Timeline({ farms, events, users, setSelected }) {
                 <Box sx={{ overflowY: 'auto', padding: 3, paddingBottom: 10, height: '100%' }}>
                     <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
                 </Box>
-
             </Box>
         </Box>
     )
