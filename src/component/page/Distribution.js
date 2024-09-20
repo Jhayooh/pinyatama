@@ -16,6 +16,7 @@ import {
   FormControl,
   InputAdornment,
   InputLabel,
+  Select,
 } from '@mui/material';
 
 //icon
@@ -138,63 +139,74 @@ export default function Distribution({ farms, roi }) {
           Distribution Data
         </Typography> */}
 
-        <Box sx={{ marginBottom: 1, display: 'flex',width:{md:'100%', xs:'50%'} , gap: 2, p: 2, borderRadius: 20 }}>
+        <Box sx={{ marginBottom: 1, display: 'flex', width: { md: '100%', xs: '50%' }, gap: 2, p: 2, borderRadius: 20 }}>
           <Box sx={{
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-start',
-            gap:1,
-            width:'100%'
+            gap: 1,
+            width: '100%'
           }}>
-            <TextField
-              label="Enter Distribute Value"
-              variant="outlined"
-              value={inputText}
-              onChange={(e) => setInputText(e.target.value)}
-              fullWidth
-              type="number"
-
-            />
+            <FormControl fullWidth size="small" >
+              <OutlinedInput
+                id="outlined-adornment-amount"
+                placeholder="Enter Distribute Value"
+                value={inputText}
+                onChange={(e) => setInputText(e.target.value)}
+                fullWidth
+                type="number"
+              />
+            </FormControl>
             <Button variant='contained' color='success' onClick={distributeResources} >
-              {/* <img src={Enter} alt='Enter' /> */}
               <Typography variant="button" gutterBottom sx={{ display: 'block' }}>
                 Enter
               </Typography>
             </Button>
           </Box>
 
-          <Box sx={{
-            width:'100%',
-            justifyContent: 'flex-end',
-            display: 'flex',
-            alignItems: 'center',
-            gap:2
-          }}>
-            <TextField
-              select
-              label="Month"
-              value={selectedMonth}
-              onChange={(e) => setSelectedMonth(e.target.value)}
-            >
-              {months.map((month) => (
-                <MenuItem key={month.value} value={month.value}>
-                  {month.label}
-                </MenuItem>
-              ))}
-            </TextField>
-
-            <TextField
-              select
-              label="Year"
-              value={selectedYear}
-              onChange={(e) => setSelectedYear(e.target.value)}
-            >
-              {years.map((year) => (
-                <MenuItem key={year} value={year}>
-                  {year}
-                </MenuItem>
-              ))}
-            </TextField>
+          <Box
+            sx={{
+              minWidth: 300,
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'flex-end',
+              gap: 1,
+            }}
+          >
+            <FormControl fullWidth size="small">
+              <InputLabel id="month-select-label">Month</InputLabel>
+              <Select
+                sx={{ border: 'none' }}
+                labelId="month-select-label"
+                id="month-select"
+                value={selectedMonth}
+                label="Month"
+                onChange={(e) => setSelectedMonth(e.target.value)}
+              >
+                {months.map((month) => (
+                  <MenuItem key={month.value} value={month.value}>
+                    {month.label}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            <FormControl fullWidth size="small">
+              <InputLabel id="year-select-label">Year</InputLabel>
+              <Select
+                sx={{ border: 'none' }}
+                labelId="year-select-label"
+                id="year-select"
+                label="Year"
+                value={selectedYear}
+                onChange={(e) => setSelectedYear(e.target.value)}
+              >
+                {years.map((year) => (
+                  <MenuItem key={year} value={year}>
+                    {year}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Box>
         </Box>
       </Box>
