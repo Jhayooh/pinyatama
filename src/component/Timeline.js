@@ -6,7 +6,8 @@ import {
     InputLabel,
     MenuItem,
     OutlinedInput,
-    Select
+    Select,
+    TextField,
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
@@ -70,23 +71,30 @@ export default function Timeline({ farms, events, users, setSelected }) {
     // Filter the municipalities based on the selected mun
     const filteredMunicipalities = municipalities.filter(m => m.value === mun);
 
+    // Month and year selection
+    const months = [
+        { value: 0, label: 'January' },
+        { value: 1, label: 'February' },
+        { value: 2, label: 'March' },
+        { value: 3, label: 'April' },
+        { value: 4, label: 'May' },
+        { value: 5, label: 'June' },
+        { value: 6, label: 'July' },
+        { value: 7, label: 'August' },
+        { value: 8, label: 'September' },
+        { value: 9, label: 'October' },
+        { value: 10, label: 'November' },
+        { value: 11, label: 'December' }
+    ];
+
+    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; // Adjust this range based on your data
+
+    const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
+    const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 2, p: 2, borderRadius: 20 }}>
-                    <Box
-                        sx={{ width: 800 }}
-                    >
-                        <FormControl fullWidth size="small" >
-                            <OutlinedInput
-                                id="outlined-adornment-amount"
-                                placeholder="Maghanap..."
-                                startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
-                                value={search}
-                                onChange={handleSearch}
-                            />
-                        </FormControl>
-                    </Box>
+                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
                     <Box sx={{ minWidth: 300 }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
@@ -128,6 +136,60 @@ export default function Timeline({ farms, events, users, setSelected }) {
                                     ))}
                             </Select>
 
+                        </FormControl>
+                    </Box>
+                    <Box sx={{minWidth:300
+                    }}>
+                        <FormControl fullWidth size="small">
+                            <InputLabel id="demo-simple-select-label">Month</InputLabel>
+                            <Select
+                                sx={{ border: "none" }}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                value={selectedMonth}
+                                label="Month"
+                                onChange={(e) => setSelectedMonth(e.target.value)}>
+                                {months.map((month) => (
+                                    <MenuItem key={month.value} value={month.value}>
+                                        {month.label}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl>
+                            <InputLabel id="demo-simple-select-label">Year</InputLabel>
+                            <Select
+                                sx={{ border: "none" }}
+                                labelId="demo-simple-select-label"
+                                id="demo-simple-select"
+                                label="Year"
+                                value={selectedYear}
+                                onChange={(e) => setSelectedYear(e.target.value)}>
+                                {years.map((year) => (
+                                    <MenuItem key={year} value={year}>
+                                        {year}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-end',
+                            gap: 1,
+                            width: '50%'
+                        }}
+                    >
+                        <FormControl fullWidth size="small" >
+                            <OutlinedInput
+                                id="outlined-adornment-amount"
+                                placeholder="Maghanap..."
+                                startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                                value={search}
+                                onChange={handleSearch}
+                            />
                         </FormControl>
                     </Box>
                 </Box>
