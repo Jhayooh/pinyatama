@@ -35,6 +35,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
+  const [cropFilter, setCropFilter] = useState('');
 
   const [grid, setGrid] = useState(true);
 
@@ -60,6 +61,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const handleUser = (event) => {
     setUserFilter(event.target.value);
   };
+  const handleCrop = (event) => {
+    setCropFilter(event.target.value);
+  }
 
   useEffect(() => {
     const filteredFarms = farms.filter((farm) => {
@@ -237,7 +241,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     { value: 11, label: 'December' }
   ];
 
-  const year2 = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; // Adjust this range based on your data
+  const year2 = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
   const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
@@ -259,8 +263,10 @@ function Farms({ events, farms, users, particularData, pineapple }) {
         ) : (
           <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5 }}>
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
-              <Box sx={{  display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
-                <Box sx={{ minWidth: 200 }}>
+              <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
+              
+                {/* Municipality */}
+                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
                     <Select
@@ -280,7 +286,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </FormControl>
                 </Box>
                 {/* ExtensionistSorting */}
-                <Box sx={{ minWidth: 200 }}>
+                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
                   <FormControl fullWidth size='small'>
                     <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
                     <Select
@@ -302,13 +308,37 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     </Select>
                   </FormControl>
                 </Box>
-                <Box
-                  sx={{
-                    minWidth: 300,
-                    display: 'flex',
-                    flexDirection: 'row',
-                    gap: 1,
-                  }}
+                {/* Crop Stage */}
+                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
+                  <FormControl fullWidth size='small'>
+                    <InputLabel id='demo-simple-select-label'>Crop Stage</InputLabel>
+                    <Select
+                      sx={{ border: 'none' }}
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
+                      value={cropFilter}
+                      label='Crop Stage'
+                      onChange={handleCrop}
+                    >
+                      {
+                        [{ id: '0', cropStage: 'Lahat' },
+                        { id: '1', cropStage: 'Vegetative' },
+                        { id: '2', cropStage: 'Flowering' },
+                        { id: '3', cropStage: 'Fruiting' }].map((farms) => (
+                          <MenuItem key={farms.uid} value={farms.id}>
+                            {farms.cropStage}
+                          </MenuItem>
+                        ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+                {/* Month & Year */}
+                <Box sx={{
+                  width: { xs: '100%', md: '50%', lg: '20%' },
+                  display: 'flex',
+                  flexDirection: 'row',
+                  gap: 1,
+                }}
                 >
                   <FormControl fullWidth size="small">
                     <InputLabel id="month-select-label">Month</InputLabel>
@@ -347,11 +377,13 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                 </Box>
                 {/* SearchBox */}
                 <Box sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'flex-end',
-                  gap: 1,
-                  width: '50%'
+                  width: {
+                    xs: '100%', md: '50%', lg: '20%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    gap: 1,
+                  }
                 }}>
                   <FormControl fullWidth size='small'>
                     <OutlinedInput
@@ -411,7 +443,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             </Box>
             <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
               {grid ? (
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
                   {filteredFarms.map((marker, index) => (
                     <GridView
                       key={marker.id}
