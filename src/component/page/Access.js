@@ -314,21 +314,6 @@ const Access = ({ usersRow }) => {
                   gap: 2,
                 }}
               >
-                <Box sx={{ flex: '1 1 auto' }}>
-                  <FormControl fullWidth size="small">
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      placeholder="Maghanap..."
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                      }
-                      value={search}
-                      onChange={handleSearch}
-                    />
-                  </FormControl>
-                </Box>
                 <Box sx={{ width:'30%'}}>
                   <FormControl fullWidth size="small">
                     <InputLabel id="demo-simple-select-label">
@@ -350,6 +335,22 @@ const Access = ({ usersRow }) => {
                     </Select>
                   </FormControl>
                 </Box>
+                <Box sx={{ flex: '1 1 auto' }}>
+                  <FormControl fullWidth size="small">
+                    <OutlinedInput
+                      id="outlined-adornment-amount"
+                      placeholder="Maghanap..."
+                      startAdornment={
+                        <InputAdornment position="start">
+                          <SearchIcon />
+                        </InputAdornment>
+                      }
+                      value={search}
+                      onChange={handleSearch}
+                    />
+                  </FormControl>
+                </Box>
+                
               </Box>
 
               <Box >

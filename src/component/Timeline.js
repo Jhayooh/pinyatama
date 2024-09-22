@@ -95,7 +95,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
                 <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
-                    <Box sx={{ minWidth: 200 }}>
+                    <Box sx={{ width: { xs: '100%', md: '80%', xl: '20%' } }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                             <Select
@@ -116,7 +116,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                             </Select>
                         </FormControl>
                     </Box>
-                    <Box sx={{ minWidth: 200 }}>
+                    <Box sx={{ width: { xs: '100%', md: '80%', xl: '20%' } }}>
                         <FormControl fullWidth size="small">
                             <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
                             <Select
@@ -140,10 +140,10 @@ export default function Timeline({ farms, events, users, setSelected }) {
                     </Box>
                     <Box
                         sx={{
-                            minWidth: 300,
+                            width: { xs: '100%', md: '80%', xl: '20%' },
                             display: 'flex',
                             flexDirection: 'row',
-                            gap: 1, 
+                            gap: 1,
                         }}
                     >
                         <FormControl fullWidth size="small">
@@ -188,7 +188,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                             alignItems: 'center',
                             justifyContent: 'flex-end',
                             gap: 1,
-                            width: '50%'
+                            width: { xs: '100%', md: '100%', xl: '60%' },
                         }}
                     >
                         <FormControl fullWidth size="small" >
@@ -202,7 +202,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </FormControl>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4 }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: {xs:'column', md:'row'} }}>
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -240,7 +240,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                                 justifyContent: 'center',
                                 alignItems: 'center',
                                 borderRadius: 2,  // optional for rounded corners
-                                mr:1
+                                mr: 1
                             }}
                         >
                         </Box>

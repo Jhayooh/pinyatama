@@ -22,15 +22,16 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
   }
 
   return (
-    <Grid container sx={{ width: { xs: '100%', sm:'calc(80%-90px)', md: 'calc(60% - 90px)',lg: 'calc(40% - 110px)', xl: 'calc(20%-50%}'} }}>
-      <Grid item xs={12} sm={12} md={12} lg={12} sx={{ paddingLeft: 2, paddingTop: 2 }}>
+    <Grid container sx={{ width: { xs: '100%', sm: `calc(100%/2)`, md: `calc(100%/3)`, lg: `calc(100%/4)`, xl: `calc(100%/5)` } }}>
+      <Grid item xs={12} sm={12} md={12} lg={12} sx={{ p: 1.5 }}>
         <Box
           sx={{
             borderRadius: '20px',
             border: 2,
             borderColor: '#f9fafb', '&:hover': { borderColor: '#88c488' },
             cursor: 'pointer',
-            
+            height: '100%',
+
           }}
           onClick={() => {
             setShowFarmTabs(true)
