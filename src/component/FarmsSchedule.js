@@ -15,7 +15,7 @@ function SideDetails({ farms, eventClicked }) {
     month: 'long', // Full month name
     day: 'numeric', // Day of the month
     year: 'numeric' // Full year
-  };
+  };  
 
   const startDate = new Date(eventClicked.start_time)
   const endDate = new Date(eventClicked.end_time)
@@ -45,6 +45,11 @@ function getObject(list, key, value) {
 function FarmsSchedule({ farms, events }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
+
+  
+  console.log("the farmsss:", farms);
+  console.log("the event (not sorted):", events)
+  console.log("the event (sorted):", events.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate()));
 
   const keys = {
     groupIdKey: 'id',
@@ -127,7 +132,7 @@ function FarmsSchedule({ farms, events }) {
           onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
           itemRenderer={itemRender}
-          items={events}
+          items={events.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())}
           lineHeight={35}
           sidebarContent={<div>QP Farms</div>}
           defaultTimeStart={moment().add(-2, 'month')}
