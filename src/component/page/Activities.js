@@ -1,4 +1,24 @@
-import { Box, Button, InputAdornment, MenuItem, Modal, Select, StepContent, TextField, Typography } from "@mui/material";
+import {
+    Alert,
+    Backdrop,
+    Box,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    fabClasses,
+    InputAdornment,
+    MenuItem,
+    Modal,
+    Select,
+    StepContent,
+    TextField,
+    Typography,
+    Snackbar
+} from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
 
@@ -138,23 +158,75 @@ const Activities = ({ roi, farm, particularData, parts }) => {
         setIsAdd(false);
     };
 
+
+    function ethrelValid(currdate, start_date, end_date) {
+        const monthEight = new Date(start_date.setMonth(start_date.getMonth() + 8))
+        const bool = currdate >= monthEight && currdate <= end_date
+        console.log("1", monthEight);
+        console.log("2", currdate);
+        console.log("3", end_date);        
+        console.log('bool', bool)
+        return bool
+    }
+
+    const [alert, setAlert] = useState({
+        visible: false,
+        message: "",
+        severity: "info",
+        vertical: "top",
+        horizontal: 'center'
+    })
+
     const HandleAddMouse = () => {
         const [fert, setFert] = useState('')
         const [qnty, setQnty] = useState(0)
 
+        const delay = ms => new Promise(res => setTimeout(res, ms));
+
+        const [saving, setSaving] = useState(false)
+
         const handleSave = async () => {
+            setSaving(true)
             try {
                 // eventsssss pleaseeee helpp hahahahha
                 const currDate = new Date()
                 const theLabel = compAct.find(obj => obj.id === fert)
                 if (theLabel.name.toLowerCase() === "flower inducer (ethrel)" && events) {
-                    console.log("eventsss:", events);
-                    console.log("na save si ethrel")
                     const vege_event = events.find(p => p.className === 'vegetative')
                     const date_diff = currDate - vege_event.end_time.toDate()
-                    console.log("diff", date_diff);
+                    console.log("the farm ethrel status:", farm);
+                    
+                    if (farm.isEthrel) {
+                        await delay(1000)
+                        setSaving(false)
+                        handleModalClose()
+                        console.log("ikaw ay naglagay na ng ethrel");
+                        setAlert({
+                            visible: true,
+                            message: "Ikaw ay naglagay na ng Ethrel anue ba",
+                            severity: "warning",
+                            vertical: 'top',
+                            horizontal: 'center'
+                        });
+                        return
+                    }
+
+                    if (!ethrelValid(currDate, vege_event.start_time.toDate(), vege_event.end_time.toDate())) {
+                        await delay(1000)
+                        setSaving(false)
+                        handleModalClose()
+                        console.log("hindi pa ikaw pwede maglagay ng ethrel");
+                        setAlert({
+                            visible: true,
+                            message: "Hindi pa ikaw pwede maglagay ng Ethrel.",
+                            severity: "warning",
+                            vertical: 'top',
+                            horizontal: 'center'
+                        });
+                        return
+                    }
+
                     events.map(async (e) => {
-                        console.log("the eeee:", e);
                         switch (e.className) {
                             case 'vegetative':
                                 e.end_time = Timestamp.fromDate(currDate)
@@ -165,7 +237,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
                                 console.log("the flower: ", e)
                                 break;
-                                case 'fruiting':
+                            case 'fruiting':
                                 e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
                                 e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
                                 console.log("the fruit: ", e)
@@ -173,101 +245,135 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             default:
                                 break;
                         }
-                        // return e;                        
+
                         const newEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                             ...e,
-                            className: e.className+'Actual',
+                            className: e.className + 'Actual',
                             createdAt: currDate
-                        })
-                        await updateDoc(newEvent, { id: newEvent.id })
+                        });
+                        await updateDoc(newEvent, { id: newEvent.id });
                     })
+
+                    await addDoc(activityColl, {
+                        createdAt: currDate,
+                        label: theLabel.name,
+                        compId: fert,
+                        qnty: qnty
+                    });
+
+                    // update farm isEthrel
+                    console.log("ikaw ay naglagay ng ethrel ngayong ", currDate);
+                    setSaving(false)
+                    setAlert({
+                        visible: true,
+                        message: "ikaw ay naglagay ng ethrel ngayong",
+                        severity: "success",
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                    });
+                    handleModalClose()
                 }
-                // await addDoc(activityColl, {
-                //     createdAt: currDate,
-                //     label: theLabel.name,
-                //     compId: fert,
-                //     qnty: qnty
-                // });
             } catch (error) {
                 console.error('error updating document', error);
             }
-            handleModalClose()
         }
 
+        const handleClose = () => {
+            setAlert({ ...alert, visible: false });
+        };
+
         return (
-            <Modal open={isAdd} onClose={handleModalClose} aria-labelledby="edit-row-modal">
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        bgcolor: 'background.paper',
-                        borderRadius: '5px',
-                        boxShadow: 24,
-                        p: 4,
-                        width: 380,
-                    }}
+            <>
+                <Snackbar
+                    anchorOrigin={{ vertical: alert.vertical, horizontal: alert.horizontal }}
+                    open={alert.visible}
+                    autoHideDuration={5000}
+                    onClose={handleClose}
                 >
-                    <Select
-                        value={fert}
-                        label="Fertilizer"
-                        fullwidth
+                    <Alert variant='filled' severity={alert.severity}>
+                        {alert.message}
+                    </Alert>
+                </Snackbar>
+                <Modal open={isAdd} onClose={handleModalClose} aria-labelledby="edit-row-modal">
+                    <Box
                         sx={{
-                            width: '100%',
-                            mb: 2
-                        }}
-                        onChange={(e) => {
-                            const obj = parts?.find(obj => obj.id === e.target.value)
-                            setFert(e.target.value)
-                            setQnty(obj['qntyPrice'])
-                            console.log("the parts", compAct)
+                            position: 'absolute',
+                            top: '50%',
+                            left: '50%',
+                            transform: 'translate(-50%, -50%)',
+                            bgcolor: 'background.paper',
+                            borderRadius: '5px',
+                            boxShadow: 24,
+                            paddingX: 2,
+                            paddingY: 4,
+                            width: 340,
                         }}
                     >
-                        {/* {
+                        <Backdrop open={saving} onClick={() => setSaving(false)} sx={{ color: '#fff', zIndex: 9999 }}>
+                            <CircularProgress color="inherit" />
+                        </Backdrop>
+                        <Typography variant="h5" sx={{ marginBottom: 2 }}>
+                            Maglagay ng aktibidad
+                        </Typography>
+                        <Select
+                            value={fert}
+                            label="Fertilizer"
+                            fullwidth
+                            sx={{
+                                width: '100%',
+                                mb: 2
+                            }}
+                            onChange={(e) => {
+                                const obj = parts?.find(obj => obj.id === e.target.value)
+                                setFert(e.target.value)
+                                setQnty(obj['qntyPrice'])
+                                console.log("the parts", compAct)
+                            }}
+                        >
+                            {/* {
                             fertilizer?.map((f) => {
                                 if (f.isAvailable) {
                                     return <MenuItem value={f.id}>{f.name}</MenuItem>
                                 }
                             })
                         } */}
-                        {
-                            [
-                                ...compAct?.filter((f) => f.isAvailable) || [],
-                                ...compAct?.filter((m) => m.name.toLowerCase() === "flower inducer (ethrel)") || []
-                            ].map((f) => (
-                                <MenuItem key={f.id} value={f.id}>
-                                    {f.name}
-                                </MenuItem>
-                            ))
-                        }
-                    </Select>
-                    <TextField
-                        label="ID"
-                        name="id"
-                        value={qnty}
-                        fullWidth
-                        type='number'
-                        sx={{ mb: 2 }}
-                        inputProps={{
-                            step: "0.01",
-                        }}
-                        InputProps={{
-                            startAdornment: <InputAdornment position="start">kg</InputAdornment>
-                        }}
-                        onChange={(e) => setQnty(e.target.value)}
-                    />
-                    <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
-                        <button className="btn-view-all" onClick={handleSave}>
-                            Save
-                        </button>
-                        <button className="btn-view-all" onClick={handleModalClose}>
-                            Cancel
-                        </button>
+                            {
+                                [
+                                    ...compAct?.filter((f) => f.isAvailable) || [],
+                                    ...compAct?.filter((m) => m.name.toLowerCase() === "flower inducer (ethrel)") || []
+                                ].map((f) => (
+                                    <MenuItem key={f.id} value={f.id}>
+                                        {f.name}
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                        <TextField
+                            label="ID"
+                            name="id"
+                            value={qnty}
+                            fullWidth
+                            type='number'
+                            sx={{ mb: 2 }}
+                            inputProps={{
+                                step: "0.01",
+                            }}
+                            InputProps={{
+                                startAdornment: <InputAdornment position="start">kg</InputAdornment>
+                            }}
+                            onChange={(e) => setQnty(e.target.value)}
+                        />
+                        <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
+                            <Button variant='outlined' color='warning' sx={{ flex: 1 }} onClick={handleModalClose}>
+                                Cancel
+                            </Button>
+                            <Button variant='contained' color="warning" sx={{ flex: 1 }} disabled={!fert || !qnty} onClick={handleSave}>
+                                Save
+                            </Button>
+                        </Box>
                     </Box>
-
-                </Box>
-            </Modal>
+                </Modal>
+            </>
         )
     }
     // {name, id, unit, index, parent, particular, defQnty, price}
@@ -377,6 +483,11 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                 </Grid>
             </Box>
             <HandleAddMouse />
+            {/* {alert.visible && (
+                <Alert severity={alert.severity}>
+                    {alert.message}
+                </Alert>
+            )} */}
         </>
 
     )
