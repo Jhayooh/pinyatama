@@ -149,8 +149,8 @@ export default function Distribution({ farms, roi }) {
 
       {view === 'distribution' ? (
         <Box>
-          <Box sx={{ marginBottom: 1, display: 'flex', gap: 2, p: 2 }}>
-            <FormControl fullWidth size="small">
+          <Box sx={{ marginBottom: 1, display: 'flex', gap: 1, p: 2 }}>
+            <FormControl fullWidth size="small" sx={{width:'100%'}}>
               <OutlinedInput
                 id="outlined-adornment-amount"
                 placeholder="Enter Distribute Value"
@@ -163,9 +163,7 @@ export default function Distribution({ farms, roi }) {
             <Button variant="contained" color="success" onClick={distributeResources}>
               Enter
             </Button>
-          </Box>
-
-          <Box sx={{ display: 'flex', gap: 1 }}>
+            <Box sx={{ display: 'flex', gap: 1 , width:'100%'}}>
             <FormControl fullWidth size="small">
               <InputLabel id="month-select-label">Month</InputLabel>
               <Select
@@ -198,6 +196,7 @@ export default function Distribution({ farms, roi }) {
                 ))}
               </Select>
             </FormControl>
+          </Box>
           </Box>
 
           <DataTable
