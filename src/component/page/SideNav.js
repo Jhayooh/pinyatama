@@ -749,7 +749,6 @@ export default function SideNav() {
           <DrawerHeader sx={{ backgroundColor: 'green' }}>
             <IconButton onClick={handleDrawerOpen}>
               <MenuIcon sx={{ color: '#fff' }} />
-
             </IconButton>
             <Typography
               variant="h6"
@@ -773,7 +772,7 @@ export default function SideNav() {
           </DrawerHeader>
           {/* <Divider /> */}
           <List sx={{ backgroundColor: 'green', flexGrow: 1 }}>
-            <Box sx={{ p: 2.4, display: open ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center' }}>
+            <Box onClick = {() => setSelected('dashboard')} sx={{ p: 2.4, display: open ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center' }}>
               <img src={logo} alt='pinyatamap logo' width='50%' />
             </Box>
             <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
