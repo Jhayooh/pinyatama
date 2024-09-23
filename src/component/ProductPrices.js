@@ -414,12 +414,12 @@ export default function ProductPrices({ particularData, pineappleData }) {
           <Grid item xs={12} md={4} lg={3}>
             <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
               {pineappleData.map((pineData, index) => (
-                <Paper elevation={3}
+                <Box elevation={3}
                   sx={{
                     backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
                     padding: 2,
                     flex: 1,
-                    height: '100%'
+                    height: '50%'
                   }}>
                   {index === 0 ? (
                     <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
@@ -441,7 +441,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                       Edit Price
                     </Button>
                   </Box>
-                </Paper>
+                </Box>
               ))}
             </Box>
           </Grid>
