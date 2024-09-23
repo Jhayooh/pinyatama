@@ -20,28 +20,19 @@ import {
   ListItemButton,
   ListItemText,
 } from '@mui/material';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
 export default function Distribution({ farms, roi }) {
-  const months = [
-    { value: 0, label: 'January' },
-    { value: 1, label: 'February' },
-    { value: 2, label: 'March' },
-    { value: 3, label: 'April' },
-    { value: 4, label: 'May' },
-    { value: 5, label: 'June' },
-    { value: 6, label: 'July' },
-    { value: 7, label: 'August' },
-    { value: 8, label: 'September' },
-    { value: 9, label: 'October' },
-    { value: 10, label: 'November' },
-    { value: 11, label: 'December' }
-  ];
-  const years = [2022, 2023, 2024, 2025, 2026]; // Adjust based on your data
 
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [selectedDate, setSelectedDate] = useState(dayjs());
+
   const [inputText, setInputText] = useState('');
   const [distributionData, setDistributionData] = useState([]);
+  const [percentageData, setPercentage] = useState([]);
   const [savedDistributions, setSavedDistributions] = useState([]);
   const [view, setView] = useState('distribution');
   const [selectedSavedDistribution, setSelectedSavedDistribution] = useState(null); // State to track selected saved distribution
@@ -78,9 +69,11 @@ export default function Distribution({ farms, roi }) {
   const totalProduction = pieChartData.reduce((acc, item) => acc + item.value, 0);
 
   const filteredPieChartData = pieChartData.filter(item => {
-    const itemDate = new Date(item.date);
-    return itemDate.getMonth() === selectedMonth && itemDate.getFullYear() === selectedYear;
+    const itemDate = dayjs(item.date);
+    return itemDate.month() === selectedDate.month() && itemDate.year() === selectedDate.year();
   });
+  
+  
 
   const filteredSeries = filteredPieChartData.map(item => item.value);
   const filteredLabels = filteredPieChartData.map(item => item.label);
@@ -90,6 +83,7 @@ export default function Distribution({ farms, roi }) {
     const filteredTotalProduction = filteredSeries.reduce((acc, value) => acc + value, 0);
     const percentages = filteredSeries.map(value => (value / filteredTotalProduction) * 100);
     const distribution = percentages.map(percentage => ((inputText * percentage) / 100).toFixed(1));
+    setPercentage(percentages);
     setDistributionData(distribution);
   };
 
@@ -98,6 +92,7 @@ export default function Distribution({ farms, roi }) {
       label: filteredLabels[index],
       value: value,
       distribution: distributionData[index],
+      percentage: percentageData[index],
       date: filteredDate[index],
     }));
     setSavedDistributions(prev => [...prev, { id: Date.now(), data: saved }]);
@@ -109,7 +104,7 @@ export default function Distribution({ farms, roi }) {
     setSelectedSavedDistribution(selected);
   };
 
-  const DataTable = ({ data, data1, data2, distribution }) => {
+  const DataTable = ({ data, data1, data2, distribution, percentage }) => {
     return (
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>
@@ -118,16 +113,21 @@ export default function Distribution({ farms, roi }) {
               <TableCell>Date</TableCell>
               <TableCell align="right">Farm</TableCell>
               <TableCell align="right">Production</TableCell>
+              <TableCell align="right">Percentage (%)</TableCell>
               <TableCell align="right">Distribution</TableCell>
+              <TableCell align="right">Actual Distribution</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{data2[index]}</TableCell>
-                <TableCell align="right">{data1[index]}</TableCell>
-                <TableCell align="right">{row}</TableCell>
-                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell>
+                <TableCell>{data2[index]}</TableCell> {/* Date */}
+                <TableCell align="right">{data1[index]}</TableCell> {/* Farm */}
+                <TableCell align="right">{row}</TableCell> {/* Production */}
+                <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell> {/* Percentage */}
+                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
+                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
+                
               </TableRow>
             ))}
           </TableBody>
@@ -135,6 +135,7 @@ export default function Distribution({ farms, roi }) {
       </TableContainer>
     );
   };
+
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100vh' }}>
@@ -150,7 +151,7 @@ export default function Distribution({ farms, roi }) {
       {view === 'distribution' ? (
         <Box>
           <Box sx={{ marginBottom: 1, display: 'flex', gap: 1, p: 2 }}>
-            <FormControl fullWidth size="small" sx={{width:'100%'}}>
+            <FormControl fullWidth size="small" sx={{ width: '100%' }}>
               <OutlinedInput
                 id="outlined-adornment-amount"
                 placeholder="Enter Distribute Value"
@@ -163,48 +164,29 @@ export default function Distribution({ farms, roi }) {
             <Button variant="contained" color="success" onClick={distributeResources}>
               Enter
             </Button>
-            <Box sx={{ display: 'flex', gap: 1 , width:'100%'}}>
-            <FormControl fullWidth size="small">
-              <InputLabel id="month-select-label">Month</InputLabel>
-              <Select
-                labelId="month-select-label"
-                id="month-select"
-                value={selectedMonth}
-                label="Month"
-                onChange={(e) => setSelectedMonth(e.target.value)}
-              >
-                {months.map((month) => (
-                  <MenuItem key={month.value} value={month.value}>
-                    {month.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-            <FormControl fullWidth size="small">
-              <InputLabel id="year-select-label">Year</InputLabel>
-              <Select
-                labelId="year-select-label"
-                id="year-select"
-                value={selectedYear}
-                label="Year"
-                onChange={(e) => setSelectedYear(e.target.value)}
-              >
-                {years.map((year) => (
-                  <MenuItem key={year} value={year}>
-                    {year}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Box>
+            <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+                label="Select Date"
+                value={selectedDate}
+                onChange={(newDate) => setSelectedDate(newDate)} // This should already return a Day.js object
+                renderInput={(params) => <TextField {...params} />}
+              />
+
+    </LocalizationProvider>
+            </Box>
           </Box>
 
           <DataTable
-            data={filteredSeries}
-            data1={filteredLabels}
-            data2={filteredDate}
-            distribution={distributionData}
-          />
+            data={filteredSeries}            // Production values
+            data1={filteredLabels}           // Farm names (labels)
+            data2={filteredDate}             // Date strings
+            distribution={distributionData}  // Calculated distribution values
+            percentage={percentageData}      // Calculated percentages
+          >
+
+          </DataTable>
+
 
           <Button variant="contained" color="success" onClick={saveDistribution} sx={{ marginTop: 2 }}>
             Save Distribution
@@ -217,10 +199,10 @@ export default function Distribution({ farms, roi }) {
             {savedDistributions.map((savedItem) => (
               <ListItem key={savedItem.id} disablePadding>
                 <ListItemButton onClick={() => handleSavedItemClick(savedItem.id)}>
-                <ListItemText 
-  primary={`Saved Distribution - ${new Date(savedItem.id).toLocaleString()}`} 
-  secondary={`Distribution Values: ${savedItem.data.map(item => item.distribution).join(', ')}`}
-/>
+                  <ListItemText
+                    primary={`Saved Distribution - ${new Date(savedItem.id).toLocaleString()}`}
+                    secondary={`Distribution Values: ${savedItem.data.map(item => item.distribution).join(', ')}`}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
@@ -234,6 +216,7 @@ export default function Distribution({ farms, roi }) {
                 data1={selectedSavedDistribution.data.map(item => item.label)}
                 data2={selectedSavedDistribution.data.map(item => item.date)}
                 distribution={selectedSavedDistribution.data.map(item => item.distribution)}
+                percentage = {selectedSavedDistribution.data.map(item => item.percentage)}
               />
             </Box>
           )}
