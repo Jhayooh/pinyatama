@@ -35,7 +35,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
-  const [cropFilter, setCropFilter] = useState('');
+  const [cropFilter, setCropFilter] = useState('Lahat');
 
   const [grid, setGrid] = useState(true);
 
