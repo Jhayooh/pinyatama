@@ -164,7 +164,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
         const bool = currdate >= monthEight && currdate <= end_date
         console.log("1", monthEight);
         console.log("2", currdate);
-        console.log("3", end_date);        
+        console.log("3", end_date);
         console.log('bool', bool)
         return bool
     }
@@ -195,7 +195,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     const vege_event = events.find(p => p.className === 'vegetative')
                     const date_diff = currDate - vege_event.end_time.toDate()
                     console.log("the farm ethrel status:", farm);
-                    
+
                     if (farm.isEthrel) {
                         await delay(1000)
                         setSaving(false)
@@ -215,7 +215,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
-                        console.log("hindi pa ikaw pwede maglagay ng ethrel");
                         setAlert({
                             visible: true,
                             message: "Hindi pa ikaw pwede maglagay ng Ethrel.",
@@ -266,7 +265,24 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     setSaving(false)
                     setAlert({
                         visible: true,
-                        message: "ikaw ay naglagay ng ethrel ngayong",
+                        message: `ikaw ay naglagay ng ethrel ngayong ${formatDate(currDate)}`,
+                        severity: "success",
+                        vertical: 'bottom',
+                        horizontal: 'center'
+                    });
+                    handleModalClose()
+                } else {
+                    await addDoc(activityColl, {
+                        createdAt: currDate,
+                        label: theLabel.name,
+                        compId: fert,
+                        qnty: qnty
+                    });
+
+                    setSaving(false)
+                    setAlert({
+                        visible: true,
+                        message: `ikaw ay nakapaglagay ng fertilizer ngayong ${formatDate(currDate)}`,
                         severity: "success",
                         vertical: 'bottom',
                         horizontal: 'center'
