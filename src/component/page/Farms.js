@@ -68,16 +68,19 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   useEffect(() => {
     const filteredFarms = farms.filter((farm) => {
       const matchesMunicipality = mun ? farm.mun === mun : true;
-      const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
-      return matchesMunicipality && matchesSearch && matchesUser;
+      const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
+      const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
+      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage;
     });
+    console.log('the farmm', farms)
+    console.log('the cropFilter', cropFilter)
     const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
     });
     setFilteredFarms(filteredFarms);
     setFilteredUsers(filteredUsers);
-  }, [search, farms, mun, newUser, userFilter]);
+  }, [search, farms, mun, newUser, userFilter, cropFilter]);
 
   async function getImage(id) {
     try {
@@ -321,12 +324,12 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       onChange={handleCrop}
                     >
                       {
-                        [{ id: '0', cropStage: 'Lahat' },
-                        { id: '1', cropStage: 'Vegetative' },
-                        { id: '2', cropStage: 'Flowering' },
-                        { id: '3', cropStage: 'Fruiting' }].map((farms) => (
-                          <MenuItem key={farms.uid} value={farms.id}>
-                            {farms.cropStage}
+                        [{ id: '', cropStage: 'Lahat' },
+                        { id: '0', cropStage: 'Vegetative' },
+                        { id: '1', cropStage: 'Flowering' },
+                        { id: '2', cropStage: 'Fruiting' }].map((farm) => (
+                          <MenuItem key={farm.id} value={farm.cropStage}>
+                            {farm.cropStage}
                           </MenuItem>
                         ))}
                     </Select>

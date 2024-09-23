@@ -1,90 +1,24 @@
 import React, { useState } from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { TextField } from '@mui/material';
+import dayjs from 'dayjs';
 
-function ExpressionCalculator() {
-  // State to handle inputs
-  const [x1, setX1] = useState('');
-  const [x2, setX2] = useState('');
-  const [x3, setX3] = useState('');
-  const [y, setY] = useState('');
-  const [result, setResult] = useState(null);
-
-  // Functions to compute expressions
-  const computeExpression = (x, y) => Math.round(((x / y) / 50) / 2 * 100) / 100;
-
-  const computeExpressionWithX = (x, y, xi) => Math.round((((x - xi) / y) / 50) / 2 * 100) / 100;
-
-  const computeExpressionWithXs = (x, y, xi, xj) => Math.round((((x - xi - xj) / y) / 50) / 2 * 100) / 100;
-
-  const computeExpressionWithXj = (x, y, xj) => Math.round((((x - xj) / y) / 50) / 2 * 100) / 100;
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Convert inputs to numbers
-    const x1Val = parseFloat(x1);
-    const x2Val = parseFloat(x2);
-    const x3Val = parseFloat(x3);
-    const yVal = parseFloat(y);
-
-    // Perform the calculation based on inputs
-    const resultValue = computeExpressionWithXs(x1Val, yVal, x2Val, x3Val);
-
-    setResult(resultValue);
-  };
-
+function Calendar() {
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [value, setValue] = React.useState (dayjs('2022-04-17'));
   return (
-    <div>
-      <h2>Expression Calculator</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>
-            X1:
-            <input
-              type="number"
-              value={x1}
-              onChange={(e) => setX1(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            X2:
-            <input
-              type="number"
-              value={x2}
-              onChange={(e) => setX2(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            X3:
-            <input
-              type="number"
-              value={x3}
-              onChange={(e) => setX3(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <div>
-          <label>
-            Y:
-            <input
-              type="number"
-              value={y}
-              onChange={(e) => setY(e.target.value)}
-              required
-            />
-          </label>
-        </div>
-        <button type="submit">Calculate</button>
-      </form>
-      {result !== null && <h3>Result: {result}</h3>}
-    </div>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <DatePicker
+        label="Select Date"
+        value={selectedDate}
+        onChange={(newDate) => setSelectedDate(newDate)}
+        defaultValue={dayjs('2022-04-17')}
+        renderInput={(params) => <TextField {...params} />}
+      />
+    </LocalizationProvider>
   );
 }
 
-export default ExpressionCalculator;
+export default Calendar;
