@@ -287,7 +287,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
           width: 380
         }}>
           <>
-            <h2 id="edit-row-modal" style={{ marginBottom: 12 }}>Edit Row</h2>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
               <TextField
                 label="Name"
@@ -304,7 +303,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 value={editedRowData.price?.toLocaleString('en-PH', {
                   style: 'currency',
                   currency: 'PHP'
-                }) + '/' + editedRowData.unit}
+                })}
                 onChange={handleInputChange}
                 fullWidth
                 disabled
@@ -313,15 +312,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 }}
                 sx={{ mb: 2 }}
               />
-              {/* <TextField
-                label="Unit"
-                name="unit"
-                value={editedRowData.unit}
-                onChange={handleInputChange}
-                fullWidth
-                disabled
-                sx={{ mb: 2, flex: 1 }}
-              /> */}
             </Box>
             <TextField
               label="Quantity"
@@ -331,6 +321,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               onChange={handleInputChange}
               fullWidth
               sx={{ mb: 2 }}
+            />
+            <TextField
+              label="Unit"
+              name="unit"
+              value={editedRowData.unit}
+              onChange={handleInputChange}
+              fullWidth
+              disabled
+              sx={{ mb: 2, flex: 1 }}
             />
             <TextField
               label="Total Price"
@@ -372,13 +371,14 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     }, [newPine])
 
     if (!newPine) return
-    
+
     const handleSaveChanges = () => {
       setLocalPine((prev) => prev.map((pine) =>
         pine.name.toLowerCase() === newPine.name.toLowerCase() ? { ...pine, 'price': newPrice } : pine
       ));
       handleModalClose()
     }
+
 
     return (
       <Modal
@@ -526,7 +526,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               onChange={handleTabChange}
               variant="scrollable"
               scrollButtons="auto">
-                
+
               <Tab label="Labor" />
               <Tab label="Material" />
               <Tab label="Fertilizer" />
@@ -554,12 +554,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             },
                             {
                               field: 'qntyPrice',
-                              headerName: 'Qnty',
+                              headerName: 'Quantity',
                               flex: 1,
                               type: 'number',
                               editable: false,
                               headerClassName: 'super-app-theme--header',
                               valueFormatter
+                            },
+                            {
+                              field: 'unit',
+                              headerName: 'Unit',
+                              flex: 1,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => params.value || 'N/A', 
                             },
                             {
                               field: 'totalPrice',
@@ -622,7 +630,15 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               type: 'number',
                               editable: true,
                               headerClassName: 'super-app-theme--header',
-                              valueFormatter
+                              valueFormatter: (params) => params.value || 'N/A', 
+                            },
+                            {
+                              field: 'unit',
+                              headerName: 'Unit',
+                              flex: 1,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => params.value || 'N/A', 
                             },
                             {
                               field: 'totalPrice',
@@ -686,6 +702,14 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               editable: true,
                               headerClassName: 'super-app-theme--header',
                               valueFormatter
+                            },
+                            {
+                              field: 'unit',
+                              headerName: 'Unit',
+                              flex: 1,
+                              editable: false,
+                              headerClassName: 'super-app-theme--header',
+                              valueFormatter: (params) => params.value || 'N/A', 
                             },
                             {
                               field: 'totalPrice',

@@ -212,15 +212,6 @@ export default function ProductPrices({ particularData, pineappleData }) {
         >
           <>
             <TextField
-              label="ID"
-              name="id"
-              value={editedRowData.id}
-              onChange={handleInputChange}
-              fullWidth
-              disabled
-              sx={{ mb: 2 }}
-            />
-            <TextField
               label="Name"
               name="name"
               value={editedRowData.name}
@@ -419,7 +410,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                     backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
                     padding: 2,
                     flex: 1,
-                    height: '50%'
+                    height: '100%'
                   }}>
                   {index === 0 ? (
                     <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
@@ -461,22 +452,29 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 onChange={handleTabChange}
                 variant="scrollable"
                 scrollButtons="auto"
-                >
+              >
 
-                <Tab label="Material" value="materials" />
+                <Tab label="Material" value="materials"  />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
+
+              </Tabs>
+              <Box
+                sx={{
+                  height: '100%',
+                  overflowX: 'hidden',
+                }}
+              >
                 <Box
                   component="form"
                   sx={{
-                    p: '2px ',
+                    p: '2px',
+                    m: 2,
                     display: 'flex',
-                    // alignItems: 'center',
-                    width:'100%',
-                    marginRight: 2,
-                    width: '100%',
                     borderRadius: 2.5,
                     border: '2px solid #dcdcdc',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center'
                   }}
                 >
                   <IconButton sx={{ p: '7px' }} aria-label="menu">
@@ -490,13 +488,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                     onChange={handleSearchInputChange}
                   />
                 </Box>
-              </Tabs>
-              <Box
-                sx={{
-                  height: '100%',
-                  overflowX: 'hidden',
-                }}
-              >
+
                 <DataGrid
                   rows={filteredParticularData.map((partiData, index) => ({ index: index + 1, ...partiData }))}
                   columns={columns}
