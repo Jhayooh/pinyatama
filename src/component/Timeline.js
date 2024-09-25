@@ -256,7 +256,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </Typography>
                     </Box>
                 </Box>
-                <Box sx={{ overflowY: 'auto', padding: 3, paddingBottom: 10, height: '100%' }}>
+                <Box sx={{ overflowY: 'auto', padding: 1, paddingBottom: 10, height: '100%' }}>
                     <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
                 </Box>
             </Box>

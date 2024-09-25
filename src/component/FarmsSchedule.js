@@ -121,7 +121,7 @@ function FarmsSchedule({ farms, events }) {
   )
 
   return (
-    <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .85)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
+    <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .92)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
       <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100%)', flex: 1 }}>
         <Timeline
           keys={keys}
