@@ -26,6 +26,10 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 
+//Icons
+
+import BackIcon from '@mui/icons-material/ArrowBackIosNew';
+
 export default function Distribution({ farms, roi }) {
 
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -72,8 +76,8 @@ export default function Distribution({ farms, roi }) {
     const itemDate = dayjs(item.date);
     return itemDate.month() === selectedDate.month() && itemDate.year() === selectedDate.year();
   });
-  
-  
+
+
 
   const filteredSeries = filteredPieChartData.map(item => item.value);
   const filteredLabels = filteredPieChartData.map(item => item.label);
@@ -127,7 +131,7 @@ export default function Distribution({ farms, roi }) {
                 <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell> {/* Percentage */}
                 <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
                 <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
-                
+
               </TableRow>
             ))}
           </TableBody>
@@ -135,93 +139,102 @@ export default function Distribution({ farms, roi }) {
       </TableContainer>
     );
   };
+  const [buttonText, setButtonText] = useState('Saved Data');
 
+  const handleClick = () => {
+    if (view === 'saved') {
+      setView('distribution');
+      setButtonText('Saved Data'); 
+    } else {
+      setView('saved'); 
+      setButtonText(<BackIcon />); 
+    }
+  };
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100vh' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <Button variant="contained" color="success" onClick={() => setView('distribution')}>
-          Distribution
+        <Button variant="contained" color="success" onClick={handleClick}>
+          {buttonText}
         </Button>
-        <Button variant="contained" color="success" onClick={() => setView('saved')}>
-          Saved Data
-        </Button>
+
       </Box>
 
-      {view === 'distribution' ? (
-        <Box>
-          <Box sx={{ marginBottom: 1, display: 'flex', gap: 1, p: 2 }}>
-            <FormControl fullWidth size="small" sx={{ width: '100%' }}>
-              <OutlinedInput
-                id="outlined-adornment-amount"
-                placeholder="Enter Distribute Value"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-                fullWidth
-                type="number"
-              />
-            </FormControl>
-            <Button variant="contained" color="success" onClick={distributeResources}>
-              Enter
-            </Button>
-            <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-                label="Select Date"
-                value={selectedDate}
-                onChange={(newDate) => setSelectedDate(newDate)} // This should already return a Day.js object
-                renderInput={(params) => <TextField {...params} />}
-              />
-
-    </LocalizationProvider>
-            </Box>
-          </Box>
-
-          <DataTable
-            data={filteredSeries}            // Production values
-            data1={filteredLabels}           // Farm names (labels)
-            data2={filteredDate}             // Date strings
-            distribution={distributionData}  // Calculated distribution values
-            percentage={percentageData}      // Calculated percentages
-          >
-
-          </DataTable>
-
-
-          <Button variant="contained" color="success" onClick={saveDistribution} sx={{ marginTop: 2 }}>
-            Save Distribution
-          </Button>
-        </Box>
-      ) : (
-        <Box>
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>Saved Distribution Data</Typography>
-          <List>
-            {savedDistributions.map((savedItem) => (
-              <ListItem key={savedItem.id} disablePadding>
-                <ListItemButton onClick={() => handleSavedItemClick(savedItem.id)}>
-                  <ListItemText
-                    primary={`Saved Distribution - ${new Date(savedItem.id).toLocaleString()}`}
-                    secondary={`Distribution Values: ${savedItem.data.map(item => item.distribution).join(', ')}`}
+      {view === 'distribution'
+        ? (
+          <Box>
+            <Box sx={{ marginBottom: 1, display: 'flex', gap: 1, p: 2 }}>
+              <FormControl fullWidth size="small" sx={{ width: '100%' }}>
+                <OutlinedInput
+                  id="outlined-adornment-amount"
+                  placeholder="Enter Distribute Value"
+                  value={inputText}
+                  onChange={(e) => setInputText(e.target.value)}
+                  fullWidth
+                  type="number"
+                />
+              </FormControl>
+              <Button variant="contained" color="success" onClick={distributeResources}>
+                Enter
+              </Button>
+              <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label="Select Date"
+                    value={selectedDate}
+                    onChange={(newDate) => setSelectedDate(newDate)} // This should already return a Day.js object
+                    renderInput={(params) => <TextField {...params} />}
                   />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
 
-          {selectedSavedDistribution && (
-            <Box>
-              <Typography variant="h6" sx={{ marginTop: 2 }}>Distribution Details</Typography>
-              <DataTable
-                data={selectedSavedDistribution.data.map(item => item.value)}
-                data1={selectedSavedDistribution.data.map(item => item.label)}
-                data2={selectedSavedDistribution.data.map(item => item.date)}
-                distribution={selectedSavedDistribution.data.map(item => item.distribution)}
-                percentage = {selectedSavedDistribution.data.map(item => item.percentage)}
-              />
+                </LocalizationProvider>
+              </Box>
             </Box>
-          )}
-        </Box>
-      )}
+
+            <DataTable
+              data={filteredSeries}            // Production values
+              data1={filteredLabels}           // Farm names (labels)
+              data2={filteredDate}             // Date strings
+              distribution={distributionData}  // Calculated distribution values
+              percentage={percentageData}      // Calculated percentages
+            >
+
+            </DataTable>
+
+            <Button variant="contained" color="success" onClick={saveDistribution} sx={{ marginTop: 2 }}>
+              Save Distribution
+            </Button>
+          </Box>
+        )
+        : (
+          <Box>
+            <Typography variant="h6" sx={{ marginBottom: 2 }}>Saved Distribution Data</Typography>
+            <List>
+              {savedDistributions.map((savedItem) => (
+                <ListItem key={savedItem.id} disablePadding>
+                  <ListItemButton onClick={() => handleSavedItemClick(savedItem.id)}>
+                    <ListItemText
+                      primary={`Saved Distribution - ${new Date(savedItem.id).toLocaleString()}`}
+                      secondary={`Distribution Values: ${savedItem.data.map(item => item.distribution).join(', ')}`}
+                    />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
+
+            {selectedSavedDistribution && (
+              <Box>
+                <Typography variant="h6" sx={{ marginTop: 2 }}>Distribution Details</Typography>
+                <DataTable
+                  data={selectedSavedDistribution.data.map(item => item.value)}
+                  data1={selectedSavedDistribution.data.map(item => item.label)}
+                  data2={selectedSavedDistribution.data.map(item => item.date)}
+                  distribution={selectedSavedDistribution.data.map(item => item.distribution)}
+                  percentage={selectedSavedDistribution.data.map(item => item.percentage)}
+                />
+              </Box>
+            )}
+          </Box>
+        )}
     </Box>
   );
 }
