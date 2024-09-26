@@ -159,13 +159,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     };
 
 
-    function ethrelValid(currdate, start_date, end_date) {
+    function ethrelValid(currdate, start_date) {
         const monthEight = new Date(start_date.setMonth(start_date.getMonth() + 8))
-        const bool = currdate >= monthEight && currdate <= end_date
-        console.log("1", monthEight);
-        console.log("2", currdate);
-        console.log("3", end_date);
-        console.log('bool', bool)
+        const monthTwelve = new Date(start_date.setMonth(start_date.getMonth() + 12))
+        const bool = currdate >= monthEight && currdate <= monthTwelve
         return bool
     }
 
@@ -212,7 +209,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         return
                     }
 
-                    if (!ethrelValid(currDate, vege_event.start_time.toDate(), vege_event.end_time.toDate())) {
+                    if (!ethrelValid(currDate, vege_event.start_time.toDate())) {
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
@@ -263,13 +260,16 @@ const Activities = ({ roi, farm, particularData, parts }) => {
 
                     // update farm isEthrel
                     console.log("ikaw ay naglagay ng ethrel ngayong ", currDate);
+                    await updateDoc(doc(db, `farms/${farm.id}`), {
+                        isEthrel: currDate
+                    })
                     setSaving(false)
                     setAlert({
                         visible: true,
                         message: `ikaw ay naglagay ng ethrel ngayong ${formatDate(currDate)}`,
                         severity: "success",
                         vertical: 'bottom',
-                        horizontal: 'center'
+                        horizontal: 'left'
                     });
                     handleModalClose()
                 } else {

@@ -6,7 +6,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase/Config';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
-import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
 import Archive from './Archive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
