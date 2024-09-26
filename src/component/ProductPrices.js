@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Divider,
   Box,
@@ -32,7 +32,7 @@ import Backdrop from '@mui/material/Backdrop';
 
 // firebase
 import { db } from '../firebase/Config';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc, query, orderBy, limit, arrayUnion } from 'firebase/firestore';
 
 // icons
 import AddIcon from '@mui/icons-material/Add';
@@ -41,12 +41,15 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import SearchIcon from '@mui/icons-material/Search';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import moment from 'moment';
 
 import Pine from './image_src/p.jpg';
 import Butt from './image_src/p1.jpg'
+
 
 export default function ProductPrices({ particularData, pineappleData }) {
   const [rowModesModel, setRowModesModel] = useState({});
@@ -107,13 +110,41 @@ export default function ProductPrices({ particularData, pineappleData }) {
       setSaving(true);
       try {
         const docRef = doc(db, 'pineapple', pineData.id);
-        await updateDoc(docRef, editedPineData);
+
+        // Get the current document to capture the current price
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          const currentData = docSnap.data();
+          const currentPrice = currentData.price; // Assuming `price` is the current price field
+
+          // Debugging log to check the current price
+          console.log('Current Price:', currentPrice);
+
+          // Create a new price history array with the current price
+          const newPriceHistory = [{
+            previousPrice: currentPrice,
+            timestamp: new Date(),
+          }];
+
+          // Update the document with the new price and overwrite the priceHistory
+          await updateDoc(docRef, {
+            priceHistory: newPriceHistory, // Store only the latest price change
+            price: editedPineData.price, // Update the document with the new price
+          });
+
+          console.log('Price history saved, and document updated');
+        } else {
+          console.error('No such document exists!');
+        }
       } catch (error) {
-        console.error('error updating document', error);
+        console.error('Error updating document and price history', error);
       }
       setPineModal(false);
       setSaving(false);
     };
+
+
 
     const handleInputChange = (event) => {
       const { name, value } = event.target;
@@ -398,39 +429,160 @@ export default function ProductPrices({ particularData, pineappleData }) {
     borderRadius: 4,
   };
 
+  const actionBtnStyle = {
+    backgroundColor: '#E7F3E7',
+    height: '40px',
+    width: '40px',
+    borderRadius: 3,
+    color: '#58AC58',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    '&:hover': {
+      color: '#FFF',
+      backgroundColor: '#88C488'
+    }
+  }
+
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={1} sx={{ height: '100%', overflowY: 'auto' }}>
+        <Grid container spacing={2} sx={{ height: '100%', overflow: 'auto' }}>
           <Grid item xs={12} md={4} lg={3}>
             <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
               {pineappleData.map((pineData, index) => (
-                <Box elevation={3}
-                  sx={{
-                    backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
-                    padding: 2,
+                <Box sx={{
+                  display: 'flex',
+                  flex: 1,
+                  gap: 1.5,
+                  flexDirection: 'column',
+                }}>
+                  <Box sx={{
+                    boxShadow: 2,
+                    borderRadius: 4,
+                     background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
                     flex: 1,
-                    height: '100%'
+                    display: 'flex',
+                    flexDirection: 'column',
+                    paddingTop: 5,
+                    paddingRight: 5
                   }}>
-                  {index === 0 ? (
-                    <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  ) : (
-                    <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                  )}
-                  <Divider sx={{ marginTop: 2 }} />
-                  <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                      <Box sx={{
+                        display: 'flex',
+                        color: '#FFF',
+                        borderRadius: 2,
+                        paddingX: 1.5,
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start',
+                        marginBottom: 1,
+                       
 
-                    <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
-                      {pineData.name}
-                    </Typography>
-                    <Typography variant="h6" gutterBottom>
-                      {`₱${pineData.price}.00`}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                    <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
-                      Edit Price
-                    </Button>
+                      }}>
+                        <Typography variant="button" sx={{
+                          fontWeight: 500,
+                          fontSize: { xs: 20, sm: 25, md: 30, lg: 40 },
+                        }}>
+                          {pineData.name}
+                        </Typography>
+                      </Box>
+                      <Box xs={12} sm={6} md={6}
+                        sx={{
+                          display: 'flex',
+                          // gap: { xs: 2, sm: 1, md: 2 },
+                          backgroundColor: '#FFF',
+                          borderTopRightRadius: 30,
+                          borderBottomRightRadius: 30,
+                          boxShadow: 2,
+                          flexDirection: 'column',
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            paddingTop: 3,
+                            paddingLeft: 2,
+                            paddingBottom:3,
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            flexDirection: 'row',
+                          }}
+                        >
+                          <Typography
+                            sx={{
+                              fontWeight: 300,
+                              fontSize: { xs: 20, sm: 20, md: 30, lg: 50, xl: 60 },
+                              color: '#f9c667'
+                            }}
+                          >
+                            ₱
+                          </Typography>
+                          <Typography
+                            onClick={() => handleEditPine(pineData)}
+                            sx={{
+                              fontWeight: 700,
+                              fontSize: { xs: 30, sm: 40, md: 40, lg: 70, xl: 80 },
+                              color: '#f9c667'
+                            }}
+                          >
+                            {`${pineData.price}.00`}
+                          </Typography>
+                        </Box>
+                        {/* <Box sx={{
+                              display:'flex',
+                              justifyContent:'flex-end'}}>
+                        <Typography
+                            sx={{
+                              fontWeight: 100,
+                              fontSize: 20,
+                              color: '#f9c667',
+                            }}
+                          >
+                            /pc
+                          </Typography>
+                        </Box> */}
+                        {/* <Box sx={{
+                          paddingTop: 2,
+                          paddingBottom: 3,
+                        }}>
+                          <IconButton sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                            <EditOutlinedIcon onClick={() => handleEditPine(pineData)} />
+                          </IconButton>
+                        </Box> */}
+                      </Box>
+
+                      {pineData.priceHistory && pineData.priceHistory.length > 0 ? (
+                        pineData.priceHistory.map((entry, index) => (
+                          <Box
+                            key={index}
+                            sx={{
+                              display: 'flex',
+                              color: '#f6f6f6',
+                              borderRadius: 2,
+                              justifyContent: 'center',
+                              alignItems: 'center',
+                              flexDirection: 'row',
+                              gap: 1,
+                              textDecoration: 'line-through',
+                              marginTop: 2
+                            }}
+                          >
+                            <Typography
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: { xs: 20, md: 40, lg: 60 }
+                              }}
+                            >
+                              {`₱${entry.previousPrice}.00`}
+                            </Typography>
+                          </Box>
+                        ))
+                      ) : (
+                        <Typography>No price history available.</Typography>
+                      )}
+
+                    </Box>
                   </Box>
                 </Box>
               ))}
@@ -454,7 +606,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 scrollButtons="auto"
               >
 
-                <Tab label="Material" value="materials"  />
+                <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
 
@@ -462,7 +614,8 @@ export default function ProductPrices({ particularData, pineappleData }) {
               <Box
                 sx={{
                   height: '100%',
-                  overflowX: 'hidden',
+                  overflow: 'hidden',
+                  //overflowY:'auto'
                 }}
               >
                 <Box
@@ -523,7 +676,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
 
         </Grid>
 
-      </Box>
+      </Box >
       <EditRowModal />
       <EditPinePrice />
       <Modal open={saving} aria-labelledby="edit-row-modal">
