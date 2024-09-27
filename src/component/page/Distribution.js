@@ -15,25 +15,28 @@ import {
   InputLabel,
   OutlinedInput,
   Typography,
+  TextField
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import { TextField } from '@mui/material';
 import dayjs from 'dayjs';
 
-//Icons
-
+// Icons
 import BackIcon from '@mui/icons-material/ArrowBackIosNew';
+
+// Import XLSX
+import * as XLSX from 'xlsx';
 
 export default function Distribution({ farms, roi }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [inputText, setInputText] = useState('');
   const [distributionData, setDistributionData] = useState([]);
   const [percentageData, setPercentage] = useState([]);
+  const [actualDistribution, setActualDistribution] = useState([]); // State for actual distribution
   const [savedDistributions, setSavedDistributions] = useState([]);
   const [view, setView] = useState('distribution');
-  const [selectedSavedDistribution, setSelectedSavedDistribution] = useState(null); // State to track selected saved distribution
+  const [selectedSavedDistribution, setSelectedSavedDistribution] = useState(null);
 
   const formatDate = (timestamp) => {
     const dateObj = new Date(timestamp.seconds * 1000);
@@ -81,6 +84,7 @@ export default function Distribution({ farms, roi }) {
     const distribution = percentages.map(percentage => ((inputText * percentage) / 100).toFixed(1));
     setPercentage(percentages);
     setDistributionData(distribution);
+    setActualDistribution(new Array(distribution.length).fill('')); // Reset actual distribution
   };
 
   const saveDistribution = () => {
@@ -88,10 +92,14 @@ export default function Distribution({ farms, roi }) {
       label: filteredLabels[index],
       value: value,
       distribution: distributionData[index],
+      actualDistribution: actualDistribution[index] || 'N/A', // Save actual distribution
       percentage: percentageData[index],
       date: filteredDate[index],
     }));
-    setSavedDistributions(prev => [...prev, { id: Date.now(), data: saved }]);
+
+    const involvedFarms = filteredLabels.join(', ');
+
+    setSavedDistributions(prev => [...prev, { id: Date.now(), data: saved, farmsInvolved: involvedFarms }]);
     setView('saved');
   };
 
@@ -100,7 +108,27 @@ export default function Distribution({ farms, roi }) {
     setSelectedSavedDistribution(selected);
   };
 
-  const DataTable = ({ data, data1, data2, distribution, percentage }) => {
+  const downloadExcel = (distribution) => {
+    const ws = XLSX.utils.json_to_sheet(distribution.data.map((item) => ({
+      Date: item.date,
+      Farm: item.label,
+      Production: item.value,
+      Distribution: item.distribution,
+      Percentage: item.percentage,
+      'Actual Distribution': item.actualDistribution
+    })));
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Distributions");
+    XLSX.writeFile(wb, `distribution_${Date.now()}.xlsx`);
+  };
+
+  const DataTable = ({ data, data1, data2, distribution, percentage, actualDistribution, setActualDistribution }) => {
+    const handleActualDistributionChange = (event, index) => {
+      const updatedActualDistribution = [...actualDistribution];
+      updatedActualDistribution[index] = event.target.value;
+      setActualDistribution(updatedActualDistribution);
+    };
+
     return (
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>
@@ -117,12 +145,17 @@ export default function Distribution({ farms, roi }) {
           <TableBody>
             {data.map((row, index) => (
               <TableRow key={index}>
-                <TableCell>{data2[index]}</TableCell> {/* Date */}
-                <TableCell align="right">{data1[index]}</TableCell> {/* Farm */}
-                <TableCell align="right">{row}</TableCell> {/* Production */}
-                <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell> {/* Percentage */}
-                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
-                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell> {/* Distribution */}
+                <TableCell>{data2[index]}</TableCell>
+                <TableCell align="right">{data1[index]}</TableCell>
+                <TableCell align="right">{row}</TableCell>
+                <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell>
+                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell>
+                <TableCell align="right">
+                  <TextField
+                    value={actualDistribution[index] || ''}
+                    onChange={(event) => handleActualDistributionChange(event, index)}
+                  />
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
@@ -172,7 +205,7 @@ export default function Distribution({ farms, roi }) {
                 <DatePicker
                   label="Select Date"
                   value={selectedDate}
-                  onChange={(newDate) => setSelectedDate(newDate)} // This should already return a Day.js object
+                  onChange={(newDate) => setSelectedDate(newDate)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
@@ -180,52 +213,53 @@ export default function Distribution({ farms, roi }) {
           </Box>
 
           <DataTable
-            data={filteredSeries} // Production values
-            data1={filteredLabels} // Farm names (labels)
-            data2={filteredDate} // Date strings
-            distribution={distributionData} // Calculated distribution values
-            percentage={percentageData} // Calculated percentages
+            data={filteredSeries}
+            data1={filteredLabels}
+            data2={filteredDate}
+            distribution={distributionData}
+            percentage={percentageData}
+            actualDistribution={actualDistribution} // Pass actual distribution state
+            setActualDistribution={setActualDistribution} // Pass the function to update actual distribution
           />
-          <Button variant="contained" color="success" onClick={saveDistribution} sx={{ marginTop: 2 }}>
-            Save Distribution
-          </Button>
+          <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
+            <Button variant="contained" color="success" onClick={saveDistribution}>
+              Save
+            </Button>
+          </Box>
         </Box>
       ) : (
         <Box>
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>
-            Saved Distribution Data
-          </Typography>
-
-          {/* Dropdown to select saved distribution */}
           <FormControl fullWidth>
-            <InputLabel id="saved-distribution-select-label">Select Saved Distribution</InputLabel>
-            <Select
-              labelId="saved-distribution-select-label"
-              value={selectedSavedDistribution ? selectedSavedDistribution.id : ''}
-              onChange={handleSavedChange}
-              label="Select Saved Distribution"
-            >
-              {savedDistributions.map((savedItem) => (
-                <MenuItem key={savedItem.id} value={savedItem.id}>
-                  {`Saved Distribution - ${new Date(savedItem.id).toLocaleString()}`}
+            <InputLabel>Select Distribution</InputLabel>
+            <Select value={selectedSavedDistribution ? selectedSavedDistribution.id : ''} onChange={handleSavedChange}>
+              {savedDistributions.map(distribution => (
+                <MenuItem key={distribution.id} value={distribution.id}>
+                  {distribution.farmsInvolved} - {new Date(distribution.id).toLocaleString()}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
 
           {selectedSavedDistribution && (
-            <Box>
-              <Typography variant="h6" sx={{ marginTop: 2 }}>
-                Distribution Details
-              </Typography>
+            <>
               <DataTable
                 data={selectedSavedDistribution.data.map((item) => item.value)}
                 data1={selectedSavedDistribution.data.map((item) => item.label)}
                 data2={selectedSavedDistribution.data.map((item) => item.date)}
                 distribution={selectedSavedDistribution.data.map((item) => item.distribution)}
                 percentage={selectedSavedDistribution.data.map((item) => item.percentage)}
+                actualDistribution={selectedSavedDistribution.data.map((item) => item.actualDistribution)}
+                setActualDistribution={() => {}} // Disable updating of actual distribution
               />
-            </Box>
+              <Button
+                variant="contained"
+                color="success"
+                sx={{ marginTop: 2 }}
+                onClick={() => downloadExcel(selectedSavedDistribution)}
+              >
+                Download as Excel
+              </Button>
+            </>
           )}
         </Box>
       )}
