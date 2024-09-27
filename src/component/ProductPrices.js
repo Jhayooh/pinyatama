@@ -461,7 +461,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   <Box sx={{
                     boxShadow: 2,
                     borderRadius: 4,
-                     background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
+                    background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
                     flex: 1,
                     display: 'flex',
                     flexDirection: 'column',

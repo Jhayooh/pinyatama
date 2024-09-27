@@ -452,10 +452,10 @@ const App = () => {
     <Box xs={12} lg={12} sx={{ borderRadius: 4, }}>
       <MapContainer
         center={initPosition}
-        zoom={12}
+        zoom={10}
         maxZoom={20}
         scrollWheelZoom={false}
-        style={{ height: '540px' }}
+        style={{ height: '700px' }}
       >
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
