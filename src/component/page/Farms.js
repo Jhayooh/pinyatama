@@ -429,7 +429,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                         <Importer sx={{ width: '100%' }} />
                       </MenuItem>
                       <MenuItem >
-                        <Exporter sx={{ width: '100%' }} />
+                        <Exporter farms={filteredFarms} sx={{ width: '100%' }} />
                       </MenuItem>
 
                     </Menu>

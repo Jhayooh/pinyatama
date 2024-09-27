@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Divider, Grid } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import FarmsSchedule1 from '../FarmsSchedule1';
 import Pie from '../chart/Pie1';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
@@ -14,6 +13,7 @@ import farmerImg from '../image_src/farmer.png';
 import farm from '../image_src/seedling.png';
 import production from '../image_src/production.png';
 import accounts from '../image_src/account.png'
+import FarmsSchedule from '../FarmsSchedule';
 
 const legends = [
   "Pagtatanim",
@@ -146,6 +146,13 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   const labels1 = combinedData2.map(item => item.label);
   const prod = productionData.map(item => item.value)
 
+  const municipalities = [
+    "BASUD", "CAPALONGA", "DAET (Capital)", "JOSE PANGANIBAN",
+    "LABO", "MERCEDES", "PARACALE", "SAN LORENZO RUIZ",
+    "SAN VICENTE", "SANTA ELENA", "TALISAY", "VINZONS"
+  ];
+
+  const filteredFarms = municipalities.map(mun => farms?.find(farm => farm.mun === mun)).filter(Boolean);
 
 
   return (
@@ -264,19 +271,55 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
-            <FarmsSchedule1 farms={farms.slice(0, 12)} events={events} setSelected={setSelected} />
-            <Box>
-              <div className="legend">
-                <div className="legend-item">
-                  <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
-                  <span className="legend-label"> Vegetative</span>
-                  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 5px" }}></span>
-                  <span className="legend-label">Flowering</span>
-                  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
-                  <span className="legend-label">Fruiting</span>
-                </div>
-              </div>
+            <Box sx={{ display: 'flex', justifyContent: 'center', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                mr: 3
+              }} >
+                <Box
+                  sx={{
+                    width: 80,
+                    height: 18,
+                    background: 'linear-gradient(to right, #93d6b0, #68c690, #52be80)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 2,  // optional for rounded corners
+                    mr: 1
+                  }}
+                >
+                </Box>
+                <Typography variant="subtitle2">
+                  Projected
+                </Typography>
+              </Box>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start'
+              }} >
+                <Box
+                  sx={{
+                    width: 80,
+                    height: 18,
+                    background: 'linear-gradient(to right, #f9c667, #f8ba48, #f6a30b)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 2,  // optional for rounded corners
+                    mr: 1
+                  }}
+                >
+                </Box>
+                <Typography variant="subtitle2">
+                  Actual
+                </Typography>
+              </Box>
             </Box>
+            <FarmsSchedule farms={filteredFarms} events={events} />
+
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
