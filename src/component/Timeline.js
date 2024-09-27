@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
 
 
-export default function Timeline({ farms, events, users, setSelected }) {
+export default function Timeline({ farms, events, users, setSelected, farmer }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
     const [timelineEvents, setTimelineEvents] = useState(events)
     const [filteredUsers, setFilteredUsers] = useState(users);
@@ -67,9 +67,6 @@ export default function Timeline({ farms, events, users, setSelected }) {
         { name: "Talisay", value: "TALISAY" },
         { name: "Vinzons", value: "VINZONS" }
     ];
-
-    // Filter the municipalities based on the selected mun
-    const filteredMunicipalities = municipalities.filter(m => m.value === mun);
 
     // Month and year selection
     const months = [
@@ -257,7 +254,7 @@ export default function Timeline({ farms, events, users, setSelected }) {
                     </Box>
                 </Box>
                 <Box sx={{ overflowY: 'auto', padding: 1, paddingBottom: 10, height: '100%' }}>
-                    <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
+                    <FarmsSchedule farms={timelineFarms} events={timelineEvents} farmer={farmer} setSelected={setSelected} />
                 </Box>
             </Box>
         </Box>
