@@ -957,7 +957,7 @@ export default function SideNav() {
                   {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
                   {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} roi={roi} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-                  {selected === 'timeline' && <Timeline farms={farms} events={events} users={users} setSelected={setSelected} />}
+                  {selected === 'timeline' && <Timeline farms={farms} events={events} farmer={farmerRow} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
                   {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>

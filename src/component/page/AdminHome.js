@@ -322,7 +322,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               </Box>
             </Box>
             <FarmsSchedule farms={filteredFarms} events={events} />
-
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>

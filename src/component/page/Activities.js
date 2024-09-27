@@ -176,7 +176,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
 
     const HandleAddMouse = () => {
         const [fert, setFert] = useState('')
-        const [foreign, setForeign] = useState('')
         const [qnty, setQnty] = useState(0)
 
         const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -261,7 +260,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     // update farm isEthrel
                     console.log("ikaw ay naglagay ng ethrel ngayong ", currDate);
                     await updateDoc(doc(db, `farms/${farm.id}`), {
-                        isEthrel: currDate
+                        isEthrel: currDate,
+                        ethrel: qnty
                     })
                     setSaving(false)
                     setAlert({
@@ -344,7 +344,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 const obj = parts?.find(obj => obj.id === e.target.value)
                                 setFert(e.target.value)
                                 setQnty(obj['qntyPrice'])
-                                setForeign(obj['foreignId'])
                                 console.log("id of ethrel", e.target.value);
                                 
                             }}
@@ -367,23 +366,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 ))
                             }
                         </Select>
-                        {foreign === '26nzrfWyeWAPHriACtP4' &&
-                            <TextField
-                                label="numer"
-                                name="number"
-                                value={qnty}
-                                fullWidth
-                                type='number'
-                                sx={{ mb: 2 }}
-                                inputProps={{
-                                    step: "0.01",
-                                }}
-                                InputProps={{
-                                    startAdornment: <InputAdornment position="start">kg</InputAdornment>
-                                }}
-                                onChange={(e) => setQnty(e.target.value)}
-                            />
-                        }
                         <TextField
                             label="ID"
                             name="id"
