@@ -36,6 +36,11 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
   const [cropFilter, setCropFilter] = useState('Lahat');
+  const [month, setMonth] = useState(0)
+  const [year, setYear] = useState(new Date().getFullYear())
+
+  const [selectedMonth, setSelectedMonth] = useState("Lahat");
+  const [selectedYear, setSelectedYear] = useState("Lahat");
 
   const [grid, setGrid] = useState(true);
 
@@ -64,23 +69,31 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const handleCrop = (event) => {
     setCropFilter(event.target.value);
   }
+  const handleMonth = (event) => {
+    setMonth(event.target.value)
+  }
+  const handleYear = (event) => {
+    setYear(event.target.value)
+  }
+
 
   useEffect(() => {
     const filteredFarms = farms.filter((farm) => {
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
+      const matchesMonth = month !== 0 ? (new Date(farm.start_date.toMillis()).getMonth() + 1) === month : true
+      const matchesYear = year ? new Date(farm.start_date.toMillis()).getFullYear() === year : true
+      console.log(`month ${new Date(farm.start_date.toMillis()).getFullYear()} ${year}`);
       const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage;
+      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage && matchesMonth && matchesYear;
     });
-    console.log('the farmm', farms)
-    console.log('the cropFilter', cropFilter)
     const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
     });
     setFilteredFarms(filteredFarms);
     setFilteredUsers(filteredUsers);
-  }, [search, farms, mun, newUser, userFilter, cropFilter]);
+  }, [search, farms, mun, newUser, userFilter, cropFilter, month, year]);
 
   async function getImage(id) {
     try {
@@ -230,24 +243,22 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   };
   // Month and year selection
   const months = [
-    { value: 0, label: 'January' },
-    { value: 1, label: 'February' },
-    { value: 2, label: 'March' },
-    { value: 3, label: 'April' },
-    { value: 4, label: 'May' },
-    { value: 5, label: 'June' },
-    { value: 6, label: 'July' },
-    { value: 7, label: 'August' },
-    { value: 8, label: 'September' },
-    { value: 9, label: 'October' },
-    { value: 10, label: 'November' },
-    { value: 11, label: 'December' }
+    { value: 0, label: 'Lahat' },
+    { value: 1, label: 'January' },
+    { value: 2, label: 'February' },
+    { value: 3, label: 'March' },
+    { value: 4, label: 'April' },
+    { value: 5, label: 'May' },
+    { value: 6, label: 'June' },
+    { value: 7, label: 'July' },
+    { value: 8, label: 'August' },
+    { value: 9, label: 'September' },
+    { value: 10, label: 'October' },
+    { value: 11, label: 'November' },
+    { value: 12, label: 'December' },
   ];
 
   const year2 = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
-
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
@@ -266,8 +277,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
         ) : (
           <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5 }}>
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
-              <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap:1 }}>
-                <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+              <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                   {/* Municipality */}
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
@@ -289,7 +300,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     </FormControl>
                   </Box>
                   {/* ExtensionistSorting */}
-                  <Box sx={{ display: 'flex', width:'100%'}}>
+                  <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
                       <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
                       <Select
@@ -336,7 +347,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     </FormControl>
                   </Box>
                 </Box>
-                <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                   {/* Month & Year */}
                   <Box sx={{
                     width: '100%',
@@ -351,9 +362,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                         sx={{ border: 'none' }}
                         labelId="month-select-label"
                         id="month-select"
-                        value={selectedMonth}
+                        value={month}
                         label="Month"
-                        onChange={(e) => setSelectedMonth(e.target.value)}
+                        onChange={handleMonth}
                       >
                         {months.map((month) => (
                           <MenuItem key={month.value} value={month.value}>
@@ -369,8 +380,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                         labelId="year-select-label"
                         id="year-select"
                         label="Taon"
-                        value={selectedYear}
-                        onChange={(e) => setSelectedYear(e.target.value)}
+                        value={year}
+                        onChange={handleYear}
                       >
                         {year2.map((year) => (
                           <MenuItem key={year} value={year}>
@@ -383,10 +394,10 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   {/* SearchBox */}
                   <Box sx={{
                     width: '100%',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'flex-end',
-                      gap: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                    gap: 1,
                   }}>
                     <FormControl fullWidth size='small'>
                       <OutlinedInput

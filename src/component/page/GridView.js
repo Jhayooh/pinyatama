@@ -14,8 +14,6 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 
 function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imageUrls, user }) {
-  console.log("user sa grid", user);
-
   function dateFormatter(date) {
     const d = new Date(date.toMillis())
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -47,7 +45,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ paddingLeft: .5 }}>
-              <Avatar src={user[0].photoURL} alt='Profile' sx={{ marginTop: 1, marginRight: 1, border: 0.1, borderColor: 'green' }} />
+             {user && <Avatar src={user[0].photoURL} alt='Profile' sx={{ marginTop: 1, marginRight: 1, border: 0.1, borderColor: 'green' }} />}
             </Box>
             <Box>
               <Typography variant="overline" display="block" sx={{ color: 'green', fontSize: 15, fontWeight: 'bold', alignItems: 'center', fontFamily: 'monospace' }}>
