@@ -17,11 +17,6 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
     year: 'numeric' // Full year
   };
 
-  function plantPercent(part, total) {
-    return Math.round((parseInt(part) / total) * 100)
-  }
-  const percent = 0
-
   const startDate = new Date(eventClicked.start_time)
   const endDate = new Date(eventClicked.end_time)
   const formattedStart = startDate.toLocaleDateString('en-US', options);
@@ -36,12 +31,6 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
 
           <h2>{farm.farmerName}</h2>
           <h3>{farm.plantNumber}</h3>
-          {
-            farmer ?
-              <h3>{plantPercent(farm.plantNumber, farmer.totalPlants)}%</h3>
-              :
-              <CircularProgress />
-          }
           <h5>Phase:{eventClicked.title}</h5>
           <p>Planting Date: {formattedStart}</p>
           <p>Expected Harvest Date: {formattedEnd}</p>
@@ -164,7 +153,7 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
           onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
           itemRenderer={itemRender}
-          items={events.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate())}
+          items={events.sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())}
           lineHeight={35}
           sidebarContent={<div>QP Farms</div>}
           defaultTimeStart={moment().add(-2, 'month')}

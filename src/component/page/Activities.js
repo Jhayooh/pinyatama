@@ -177,10 +177,19 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const HandleAddMouse = () => {
         const [fert, setFert] = useState('')
         const [qnty, setQnty] = useState(0)
+        const [bilang, setBilang] = useState(0)
+        const [ethrel, setEthrel] = useState('')
+
+        // error
+        const [bilangError, setBilangError] = useState(false)
 
         const delay = ms => new Promise(res => setTimeout(res, ms));
 
         const [saving, setSaving] = useState(false)
+
+        function plantPercent(part, total) {
+            return Math.round((parseInt(part) / total) * 100)
+        }
 
         const handleSave = async () => {
             setSaving(true)
@@ -193,14 +202,13 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     const date_diff = currDate - vege_event.end_time.toDate()
                     console.log("the farm ethrel status:", farm);
 
-                    if (farm.isEthrel) {
+                    if (farm.plantNumber - farm.ethrel === 0) {
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
-                        console.log("ikaw ay naglagay na ng ethrel");
                         setAlert({
                             visible: true,
-                            message: "Ikaw ay naglagay na ng Ethrel anue ba",
+                            message: "Hindi ka na puwedeng mag dagdag ng Ethrel",
                             severity: "warning",
                             vertical: 'top',
                             horizontal: 'center'
@@ -214,7 +222,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         handleModalClose()
                         setAlert({
                             visible: true,
-                            message: "Hindi pa ikaw pwede maglagay ng Ethrel.",
+                            message: "Hindi ka puwedeng mag lagay ng Ethrel",
                             severity: "warning",
                             vertical: 'top',
                             horizontal: 'center'
@@ -226,28 +234,42 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         switch (e.className) {
                             case 'vegetative':
                                 e.end_time = Timestamp.fromDate(currDate)
+                                e.title = `${e.title} - ${bilang} (${plantPercent(bilang, farm.plantNumber)}%)`
+                                const vegeEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
+                                    ...e,
+                                    className: e.className + 'Actual',
+                                    createdAt: currDate,
+                                });
+                                await updateDoc(vegeEvent, { id: vegeEvent.id });
                                 console.log("the vege: ", e)
                                 break;
                             case 'flowering':
                                 e.start_time = Timestamp.fromDate(currDate)
                                 e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                const flowEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
+                                    ...e,
+                                    className: e.className + 'Actual',
+                                    createdAt: currDate,
+                                });
+                                await updateDoc(flowEvent, { id: flowEvent.id });
                                 console.log("the flower: ", e)
                                 break;
                             case 'fruiting':
                                 e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
                                 e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
+                                    ...e,
+                                    className: e.className + 'Actual',
+                                    createdAt: currDate,
+                                });
+                                await updateDoc(fruEvent, { id: fruEvent.id });
                                 console.log("the fruit: ", e)
                                 break;
                             default:
                                 break;
                         }
 
-                        const newEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
-                            ...e,
-                            className: e.className + 'Actual',
-                            createdAt: currDate
-                        });
-                        await updateDoc(newEvent, { id: newEvent.id });
+
                     })
 
                     await addDoc(activityColl, {
@@ -261,7 +283,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     console.log("ikaw ay naglagay ng ethrel ngayong ", currDate);
                     await updateDoc(doc(db, `farms/${farm.id}`), {
                         isEthrel: currDate,
-                        ethrel: qnty
+                        ethrel: farm.ethrel + bilang
                     })
                     setSaving(false)
                     setAlert({
@@ -344,8 +366,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 const obj = parts?.find(obj => obj.id === e.target.value)
                                 setFert(e.target.value)
                                 setQnty(obj['qntyPrice'])
-                                console.log("id of ethrel", e.target.value);
-                                
+                                setEthrel(obj['foreignId'])
+                                setBilang(parseInt(farm.plantNumber) - parseInt(farm.ethrel))
                             }}
                         >
                             {/* {
@@ -366,8 +388,34 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 ))
                             }
                         </Select>
+                        {
+                            ethrel === "26nzrfWyeWAPHriACtP4" &&
+                            <TextField
+                                error={bilangError}
+                                label="Bilang ng tanim"
+                                name="id"
+                                value={bilang}
+                                fullWidth
+                                type='number'
+                                sx={{ mb: 2 }}
+                                onChange={(e) => {
+                                    const b = parseInt(e.target.value)
+                                    if (isNaN(b) || b > (parseInt(farm.plantNumber) - parseInt(farm.ethrel)) || b <= 0) {
+                                        setBilangError(true)
+                                    } else {
+                                        setBilangError(false)
+                                    }
+                                    setBilang(b)
+                                    console.log(`the bilang is ${b}: ${farm.plantNumber}`)
+                                    console.log(b > farm.plantNumber);
+
+                                }}
+                                inputProps={{ min: 1, max: farm.plantNumber }}
+                                helperText={bilangError && "Sobra sa itinanim"}
+                            />
+                        }
                         <TextField
-                            label="ID"
+                            label="Sukat"
                             name="id"
                             value={qnty}
                             fullWidth
@@ -385,7 +433,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             <Button variant='outlined' color='warning' sx={{ flex: 1 }} onClick={handleModalClose}>
                                 Cancel
                             </Button>
-                            <Button variant='contained' color="warning" sx={{ flex: 1 }} disabled={!fert || !qnty} onClick={handleSave}>
+                            <Button variant='contained' color="warning" sx={{ flex: 1 }} disabled={!fert || !qnty || bilangError} onClick={handleSave}>
                                 Save
                             </Button>
                         </Box>
