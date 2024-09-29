@@ -26,7 +26,20 @@ function ExamplePieChart({ labels, data, colors, title }) {
     dataLabels: {
       padding: 12
     },
-    colors: colors || ['#ffd700', '#065535', '#ffff00', '#00ff00', '#0000ff', '#ffff00', '#ff00ff', '#800080', '#cc0000']
+    colors: colors ||
+      ['#FF6700',
+        '#FFB000',
+        '#FFE600',
+        '#7FDD05',
+        '#00A585',
+        '#22BCF2',
+        '#1256CC',
+        '#803AD0',
+        '#B568F2',
+        ' #CC2782',
+        ' #FF71BF',
+        '#7EE8C7'
+      ]
   };
 
   return (

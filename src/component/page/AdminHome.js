@@ -170,7 +170,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #789e4f',
               borderRadius: 3,
-              backgroundColor: 'green',
+              background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -196,7 +196,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #e1ad67',
               borderRadius: 3,
-              backgroundColor: '#df6d29',
+              background: 'linear-gradient(to right bottom, #FFA652, #FF8D21, #FF7B00)',
+              // backgroundColor: '#df6d29',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -222,7 +223,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #c17a05',
               borderRadius: 3,
-              backgroundColor: '#af7f35',
+              background: 'linear-gradient(to right bottom, #D2B48C, #987554, #664229)',
+              // backgroundColor: '#af7f35',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -246,7 +248,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #foa30a',
               borderRadius: 3,
-              backgroundColor: '#f8da5b',
+              background: 'linear-gradient(to right bottom, #FFE761, #FFDC2E, #FFD500)',
+              // backgroundColor: '#f8da5b',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -319,7 +322,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               </Box>
             </Box>
             <FarmsSchedule farms={filteredFarms} events={events} />
-
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>

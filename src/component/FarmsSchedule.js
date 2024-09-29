@@ -1,38 +1,57 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Timeline, { CursorMarker, CustomMarker, DateHeader, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
 import './FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/Config'
 import './ripple.css'
 import Textfield from './Timeline'
-import { Box, Paper, Slide, Button } from '@mui/material'
+import { Box, Paper, Slide, Button, CircularProgress } from '@mui/material'
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-function SideDetails({ farms, eventClicked }) {
-  const farmClicked = getObject(farms, "id", eventClicked.group)
+function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
   var options = {
     month: 'long', // Full month name
     day: 'numeric', // Day of the month
     year: 'numeric' // Full year
-  };  
+  };
+
+  function plantPercent(part, total) {
+    return Math.round((parseInt(part) / total) * 100)
+  }
+  const percent = 0
 
   const startDate = new Date(eventClicked.start_time)
   const endDate = new Date(eventClicked.end_time)
   const formattedStart = startDate.toLocaleDateString('en-US', options);
   const formattedEnd = endDate.toLocaleDateString('en-US', options);
   return (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1' }}>
-      {/* lagay closing */}
-      <h2>{farmClicked.farmerName}</h2>
-      <h5>Phase:{eventClicked.title}</h5>
-      <p>Planting Date: {formattedStart}</p>
-      <p>Expected Harvest Date: {formattedEnd}</p>
-      <p></p>
-      <h5>Activities: </h5>
-      <p>No Activities</p>
-      <Button variant='contained' color='success'>View Details</Button>
-    </Box>
+    <>
+      {
+        farm &&
+        <Box sx={{ position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1' }}>
+          <Button onClick={() => setClicked({})}>x</Button>
+          {/* lagay closing */}
+
+          <h2>{farm.farmerName}</h2>
+          <h3>{farm.plantNumber}</h3>
+          {
+            farmer ?
+              <h3>{plantPercent(farm.plantNumber, farmer.totalPlants)}%</h3>
+              :
+              <CircularProgress />
+          }
+          <h5>Phase:{eventClicked.title}</h5>
+          <p>Planting Date: {formattedStart}</p>
+          <p>Expected Harvest Date: {formattedEnd}</p>
+          <p></p>
+          <h5>Activities: </h5>
+          <p>No Activities</p>
+          <Button variant='contained' color='success' onClick={() => setSelected('Farms')}>View Details</Button>
+        </Box>
+      }
+    </>
   )
 }
 
@@ -42,14 +61,27 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({ farms, events }) {
+function FarmsSchedule({ farms, events, setSelected, farmer }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
-  
-  console.log("the farmsss:", farms);
-  console.log("the event (not sorted):", events)
-  console.log("the event (sorted):", events.sort((a, b) => b.createdAt.toDate() - a.createdAt.toDate()));
+  const dataFarmColl = collection(db, '/dataFarm')
+  const [dataFarm] = useCollectionData(dataFarmColl)
+  dataFarm && console.log("farmer:", dataFarm);
+  const [farmClicked, setFarmClicked] = useState(null)
+  const [farmerClicked, setFarmerClicked] = useState(null)
+
+  useEffect(() => {
+    if (!dataFarm && !farms) return
+    if (Object.keys(clicked).length === 0) return
+    const fc = farms?.find((f) => f.id === clicked.group)
+    const frc = dataFarm?.find((f) => f.fieldId === fc.fieldId)
+
+    setFarmClicked(fc)
+    setFarmerClicked(frc)
+    console.log("farmClicked", fc)
+    console.log("farmerClicked", frc)
+  }, [dataFarm, farms, clicked])
 
   const keys = {
     groupIdKey: 'id',
@@ -186,7 +218,7 @@ function FarmsSchedule({ farms, events }) {
       {
         Object.keys(clicked).length !== 0 &&
         <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
-          <SideDetails farms={farms} eventClicked={clicked} />
+          <SideDetails farm={farmClicked} setClicked={setClicked} eventClicked={clicked} setSelected={setSelected} farmer={farmerClicked} />
         </Box>
       }
     </Box>
