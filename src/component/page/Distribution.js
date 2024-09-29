@@ -15,7 +15,12 @@ import {
   InputLabel,
   OutlinedInput,
   Typography,
-  TextField
+  TextField,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -37,6 +42,11 @@ export default function Distribution({ farms, roi }) {
   const [savedDistributions, setSavedDistributions] = useState([]);
   const [view, setView] = useState('distribution');
   const [selectedSavedDistribution, setSelectedSavedDistribution] = useState(null);
+
+  // Dialog states
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editingIndex, setEditingIndex] = useState(null); // Track which row is being edited
+  const [editValue, setEditValue] = useState(''); // Value for editing actual distribution
 
   const formatDate = (timestamp) => {
     const dateObj = new Date(timestamp.seconds * 1000);
@@ -81,7 +91,8 @@ export default function Distribution({ farms, roi }) {
   const distributeResources = () => {
     const filteredTotalProduction = filteredSeries.reduce((acc, value) => acc + value, 0);
     const percentages = filteredSeries.map(value => (value / filteredTotalProduction) * 100);
-    const distribution = percentages.map(percentage => ((inputText * percentage) / 100).toFixed(1));
+    const distribution = percentages.map(percentage => Math.round((inputText * percentage) / 100));
+
     setPercentage(percentages);
     setDistributionData(distribution);
     setActualDistribution(new Array(distribution.length).fill('')); // Reset actual distribution
@@ -122,13 +133,25 @@ export default function Distribution({ farms, roi }) {
     XLSX.writeFile(wb, `distribution_${Date.now()}.xlsx`);
   };
 
-  const DataTable = ({ data, data1, data2, distribution, percentage, actualDistribution, setActualDistribution }) => {
-    const handleActualDistributionChange = (event, index) => {
-      const updatedActualDistribution = [...actualDistribution];
-      updatedActualDistribution[index] = event.target.value;
-      setActualDistribution(updatedActualDistribution);
-    };
+  // Open dialog for editing actual distribution
+  const handleEditClick = (index) => {
+    setEditingIndex(index);
+    setEditValue(actualDistribution[index] || '');
+    setOpenDialog(true); // Open modal
+  };
 
+  // Save the edited value
+  const handleSaveEdit = () => {
+    setActualDistribution(prev => {
+      const updated = [...prev];
+      updated[editingIndex] = editValue;
+      return updated;
+    });
+    setOpenDialog(false); // Close modal
+    setEditingIndex(null);
+  };
+
+  const DataTable = ({ data, data1, data2, distribution, percentage, actualDistribution }) => {
     return (
       <TableContainer component={Paper} sx={{ marginTop: 4 }}>
         <Table>
@@ -151,10 +174,15 @@ export default function Distribution({ farms, roi }) {
                 <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell>
                 <TableCell align="right">{distribution[index] || 'N/A'}</TableCell>
                 <TableCell align="right">
-                  <TextField
-                    value={actualDistribution[index] || ''}
-                    onChange={(event) => handleActualDistributionChange(event, index)}
-                  />
+                  {actualDistribution[index] || 'N/A'}
+                  <Button
+                    variant="contained"
+                    color="secondary"
+                    onClick={() => handleEditClick(index)}
+                    sx={{ ml: 1 }}
+                  >
+                    Edit
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -203,14 +231,23 @@ export default function Distribution({ farms, roi }) {
             <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  label="Select Date"
+                  views={['year', 'month']}
+                  minDate={dayjs('2023-01-01')}
+                  maxDate={dayjs('2030-12-31')}
                   value={selectedDate}
-                  onChange={(newDate) => setSelectedDate(newDate)}
+                  onChange={(newValue) => setSelectedDate(newValue)}
                   renderInput={(params) => <TextField {...params} />}
                 />
               </LocalizationProvider>
             </Box>
+            <Button variant="contained" color="info" onClick={saveDistribution}>
+              Save
+            </Button>
           </Box>
+
+          <Typography sx={{ p: 2, fontWeight: 'bold' }}>
+            Total Production: {totalProduction}
+          </Typography>
 
           <DataTable
             data={filteredSeries}
@@ -218,51 +255,67 @@ export default function Distribution({ farms, roi }) {
             data2={filteredDate}
             distribution={distributionData}
             percentage={percentageData}
-            actualDistribution={actualDistribution} // Pass actual distribution state
-            setActualDistribution={setActualDistribution} // Pass the function to update actual distribution
+            actualDistribution={actualDistribution}
           />
-          <Box sx={{ marginTop: 2, display: 'flex', justifyContent: 'space-between' }}>
-            <Button variant="contained" color="success" onClick={saveDistribution}>
-              Save
-            </Button>
-          </Box>
         </Box>
       ) : (
         <Box>
           <FormControl fullWidth>
-            <InputLabel>Select Distribution</InputLabel>
-            <Select value={selectedSavedDistribution ? selectedSavedDistribution.id : ''} onChange={handleSavedChange}>
-              {savedDistributions.map(distribution => (
+            <InputLabel>Select Data</InputLabel>
+            <Select value={selectedSavedDistribution?.id || ''} onChange={handleSavedChange}>
+              {savedDistributions.map((distribution) => (
                 <MenuItem key={distribution.id} value={distribution.id}>
-                  {distribution.farmsInvolved} - {new Date(distribution.id).toLocaleString()}
+                  {distribution.farmsInvolved}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-
           {selectedSavedDistribution && (
-            <>
+            <Box>
               <DataTable
-                data={selectedSavedDistribution.data.map((item) => item.value)}
-                data1={selectedSavedDistribution.data.map((item) => item.label)}
-                data2={selectedSavedDistribution.data.map((item) => item.date)}
-                distribution={selectedSavedDistribution.data.map((item) => item.distribution)}
-                percentage={selectedSavedDistribution.data.map((item) => item.percentage)}
-                actualDistribution={selectedSavedDistribution.data.map((item) => item.actualDistribution)}
-                setActualDistribution={() => {}} // Disable updating of actual distribution
+                data={selectedSavedDistribution.data.map(item => item.value)}
+                data1={selectedSavedDistribution.data.map(item => item.label)}
+                data2={selectedSavedDistribution.data.map(item => item.date)}
+                distribution={selectedSavedDistribution.data.map(item => item.distribution)}
+                percentage={selectedSavedDistribution.data.map(item => item.percentage)}
+                actualDistribution={selectedSavedDistribution.data.map(item => item.actualDistribution)}
               />
               <Button
                 variant="contained"
                 color="success"
-                sx={{ marginTop: 2 }}
                 onClick={() => downloadExcel(selectedSavedDistribution)}
+                sx={{ mt: 2 }}
               >
-                Download as Excel
+                Download Excel
               </Button>
-            </>
+            </Box>
           )}
         </Box>
       )}
+
+      {/* Dialog for editing actual distribution */}
+      <Dialog open={openDialog} onClose={() => setOpenDialog(false)}>
+        <DialogTitle>Edit Actual Distribution</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter the new actual distribution value:
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Actual Distribution"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={editValue}
+            onChange={(e) => setEditValue(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpenDialog(false)}>Cancel</Button>
+          <Button onClick={handleSaveEdit}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
