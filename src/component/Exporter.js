@@ -35,7 +35,9 @@ function Exporter({ farms }) {
         "id",
         "soil",
         "farmerId",
-        "npk"
+        "npk",
+        "ethrel",
+        "fieldId"
     ]
 
     const handleClose = () => {
@@ -60,6 +62,11 @@ function Exporter({ farms }) {
             }
             if (farm.harvest_date) {
                 farm.harvest_date = new Date(farm.harvest_date.toMillis())
+            }
+            if (farm.isEthrel){
+                farm.isEthrel = new Date(farm.isEthrel.toMillis())
+            } else {
+                farm.isEthrel = "N/A"
             }
 
         });
