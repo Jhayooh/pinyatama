@@ -39,6 +39,7 @@ import { db } from "../../firebase/Config";
 // chart
 import Doughnut from '../chart/Doughnut'
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import FarmsSchedule from "../FarmsSchedule";
 
 const Activities = ({ roi, farm, particularData, parts }) => {
     const [isAdd, setIsAdd] = useState(false)
@@ -54,8 +55,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const [newActivities, setNewActivities] = useState([])
     const [fertilizer, setFertilizer] = useState(null)
     const [material, setMaterial] = useState(null)
-    const [events, setEvents] = useState(null)
     const [compAct, setCompAct] = useState(null)
+    const [events, setEvents] = useState(null)
 
     const [stepIndex, setStepIndex] = useState(-1)
 
@@ -71,6 +72,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
         if (!e) return
 
         setEvents(e)
+        console.log("the eeeeeeeeeee", e);
+        
     }, [e])
 
 
@@ -256,7 +259,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 break;
                             case 'fruiting':
                                 e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + 3.5)
                                 const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -448,6 +451,17 @@ const Activities = ({ roi, farm, particularData, parts }) => {
             <Box sx={{
             }}>
                 <Grid container spacing={2}>
+                    <Grid item xs={12} md={12}>
+                        <Box sx={{
+                            backgroundColor: '#fff',
+                            borderRadius: 2,
+                            boxShadow: 2,
+                            padding: 1.5,
+                            gap: 2
+                        }}>
+                            {e && <FarmsSchedule farms={[farm]} events={e} />}
+                        </Box>
+                    </Grid>
                     <Grid item xs={12} md={8}>
                         <Box sx={{
                             backgroundColor: '#F9FAFB',
@@ -507,7 +521,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     </Step>
                                 ))}
                             </Stepper>
-
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={4}>

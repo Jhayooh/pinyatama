@@ -37,7 +37,7 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
           <p></p>
           <h5>Activities: </h5>
           <p>No Activities</p>
-          <Button variant='contained' color='success' onClick={() => setSelected('Farms')}>View Details</Button>
+          <Button variant='contained' color='success' onClick={() => setSelected && setSelected('Farms')}>View Details</Button>
         </Box>
       }
     </>
@@ -56,6 +56,7 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
 
   const dataFarmColl = collection(db, '/dataFarm')
   const [dataFarm] = useCollectionData(dataFarmColl)
+
   dataFarm && console.log("farmer:", dataFarm);
   const [farmClicked, setFarmClicked] = useState(null)
   const [farmerClicked, setFarmerClicked] = useState(null)
@@ -68,8 +69,6 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
 
     setFarmClicked(fc)
     setFarmerClicked(frc)
-    console.log("farmClicked", fc)
-    console.log("farmerClicked", frc)
   }, [dataFarm, farms, clicked])
 
   const keys = {

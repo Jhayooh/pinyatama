@@ -127,7 +127,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         width: '100%',
                         position: 'sticky',
                         top: 0,
-                        padding: '10px',
+                        paddingY: '10px',
+                        paddingBottom: '10px',
                         zIndex: 9999,
                     }}>
                         <Tabs
