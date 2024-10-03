@@ -1067,7 +1067,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
             </Box>
           </Grid>
         </Grid>
-        <Box sx={{
+        {/* <Box sx={{
           flex: 1
         }}>
           <Box sx={{
@@ -1081,7 +1081,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               data1={[markers[0].totalBats]}
               labels={["Pineapple"]} />
           </Box>
-        </Box>
+        </Box> */}
       </Box >
       {!!snackbar && (
         <Snackbar

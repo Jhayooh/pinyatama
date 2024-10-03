@@ -110,7 +110,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
       setSaving(true);
       try {
         const docRef = doc(db, 'pineapple', pineData.id);
-
+           
         // Get the current document to capture the current price
         const docSnap = await getDoc(docRef);
 
@@ -461,7 +461,8 @@ export default function ProductPrices({ particularData, pineappleData }) {
                   <Box sx={{
                     boxShadow: 2,
                     borderRadius: 4,
-                    background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
+                    backgroundColor:'#58AC58',
+                    //background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
                     flex: 1,
                     display: 'flex',
                     flexDirection: 'column',
@@ -507,12 +508,13 @@ export default function ProductPrices({ particularData, pineappleData }) {
                             alignItems: 'center',
                             justifyContent: 'center',
                             flexDirection: 'row',
+                            gap:.5
                           }}
                         >
                           <Typography
                             sx={{
                               fontWeight: 300,
-                              fontSize: { xs: 20, sm: 20, md: 30, lg: 50, xl: 60 },
+                              fontSize: { xs: 40, sm: 50, md: 60, lg: 80, xl: 90 },
                               color: '#f9c667'
                             }}
                           >
@@ -522,7 +524,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                             onClick={() => handleEditPine(pineData)}
                             sx={{
                               fontWeight: 700,
-                              fontSize: { xs: 30, sm: 40, md: 40, lg: 70, xl: 80 },
+                              fontSize: { xs: 20, sm: 30, md: 40, lg: 60, xl: 70 },
                               color: '#f9c667'
                             }}
                           >

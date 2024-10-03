@@ -45,7 +45,7 @@ export default function Distribution({ farms, roi }) {
 
   // Dialog states
   const [openDialog, setOpenDialog] = useState(false);
-  const [editingIndex, setEditingIndex] = useState(null); // Track which row is being edited
+  const [editingIndex, setEditingIndex] = useState(0); // Track which row is being edited
   const [editValue, setEditValue] = useState(''); // Value for editing actual distribution
 
   const formatDate = (timestamp) => {
@@ -74,7 +74,7 @@ export default function Distribution({ farms, roi }) {
   const pieChartData = farms.map((farm, index) => ({
     label: farm.title,
     value: pieData[index] || 0,
-    date: formatDate(farm.start_date)
+    date: formatDate(farm.harvest_date)
   }));
 
   const totalProduction = pieChartData.reduce((acc, item) => acc + item.value, 0);
@@ -92,7 +92,7 @@ export default function Distribution({ farms, roi }) {
     const filteredTotalProduction = filteredSeries.reduce((acc, value) => acc + value, 0);
     const percentages = filteredSeries.map(value => (value / filteredTotalProduction) * 100);
     const distribution = percentages.map(percentage => Math.round((inputText * percentage) / 100));
-
+    setEditingIndex(distribution);  
     setPercentage(percentages);
     setDistributionData(distribution);
     setActualDistribution(new Array(distribution.length).fill('')); // Reset actual distribution
@@ -103,7 +103,7 @@ export default function Distribution({ farms, roi }) {
       label: filteredLabels[index],
       value: value,
       distribution: distributionData[index],
-      actualDistribution: actualDistribution[index] || 'N/A', // Save actual distribution
+      actualDistribution: actualDistribution[index] || 0, // Save actual distribution
       percentage: percentageData[index],
       date: filteredDate[index],
     }));
@@ -137,7 +137,7 @@ export default function Distribution({ farms, roi }) {
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditValue(actualDistribution[index] || '');
-    setOpenDialog(true); // Open modal
+    setOpenDialog(true); 
   };
 
   // Save the edited value
@@ -161,28 +161,33 @@ export default function Distribution({ farms, roi }) {
               <TableCell align="right">Farm</TableCell>
               <TableCell align="right">Production</TableCell>
               <TableCell align="right">Percentage (%)</TableCell>
-              <TableCell align="right">Distribution</TableCell>
+              <TableCell align="right">Suggested Distribution</TableCell>
               <TableCell align="right">Actual Distribution</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
+          <TableBody >
             {data.map((row, index) => (
               <TableRow key={index}>
                 <TableCell>{data2[index]}</TableCell>
                 <TableCell align="right">{data1[index]}</TableCell>
                 <TableCell align="right">{row}</TableCell>
                 <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell>
-                <TableCell align="right">{distribution[index] || 'N/A'}</TableCell>
+                <TableCell align="right">{distribution[index] || 0}</TableCell>
                 <TableCell align="right">
-                  {actualDistribution[index] || 'N/A'}
-                  <Button
+                  <TextField 
+                    variant='outlined'
+                    sx={{display:'flex'}}
+                    value={editingIndex}
+                    onChange={(e)=> setEditingIndex(e)}
+                  />
+                  {/* <Button
                     variant="contained"
                     color="secondary"
                     onClick={() => handleEditClick(index)}
                     sx={{ ml: 1 }}
                   >
                     Edit
-                  </Button>
+                  </Button> */}
                 </TableCell>
               </TableRow>
             ))}
@@ -240,7 +245,7 @@ export default function Distribution({ farms, roi }) {
                 />
               </LocalizationProvider>
             </Box>
-            <Button variant="contained" color="info" onClick={saveDistribution}>
+            <Button variant="contained" color="warning" onClick={saveDistribution}>
               Save
             </Button>
           </Box>
@@ -273,12 +278,13 @@ export default function Distribution({ farms, roi }) {
           {selectedSavedDistribution && (
             <Box>
               <DataTable
-                data={selectedSavedDistribution.data.map(item => item.value)}
-                data1={selectedSavedDistribution.data.map(item => item.label)}
-                data2={selectedSavedDistribution.data.map(item => item.date)}
-                distribution={selectedSavedDistribution.data.map(item => item.distribution)}
-                percentage={selectedSavedDistribution.data.map(item => item.percentage)}
-                actualDistribution={selectedSavedDistribution.data.map(item => item.actualDistribution)}
+                data={selectedSavedDistribution.data.map((item) => item.value)}
+                data1={selectedSavedDistribution.data.map((item) => item.label)}
+                data2={selectedSavedDistribution.data.map((item) => item.date)}
+                distribution={selectedSavedDistribution.data.map((item) => item.distribution)}
+                percentage={selectedSavedDistribution.data.map((item) => item.percentage)}
+                actualDistribution={selectedSavedDistribution.data.map((item) => item.actualDistribution)}
+                setActualDistribution={() => { }} // Disable updating of actual distribution
               />
               <Button
                 variant="contained"
@@ -319,3 +325,33 @@ export default function Distribution({ farms, roi }) {
     </Box>
   );
 }
+
+// import * as React from 'react';
+// import Box from '@mui/material/Box';
+// import { DataGrid, GridColDef } from '@mui/x-data-grid';
+
+// const [columns, setColumns]= useState([
+//   {
+//     field:'date',
+//     headerName:'Date',
+//     flex:1,
+//   },
+//   {
+//     field:'farm',
+//     headerName:'Farm',
+//     flex:1,
+//   },
+//   {
+//     field:'date',
+//     headerName:'Date',
+//     flex:1,
+//   },
+// ])
+
+// export default function Distribution(){
+
+//   return(
+
+
+//   )
+// }

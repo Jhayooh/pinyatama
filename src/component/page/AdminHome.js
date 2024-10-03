@@ -274,7 +274,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
-            <Box sx={{ display: 'flex', justifyContent: 'center', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+            <FarmsSchedule farms={filteredFarms} events={events} />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } , marginTop:3}}>
               <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -321,7 +322,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 </Typography>
               </Box>
             </Box>
-            <FarmsSchedule farms={filteredFarms} events={events} />
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
