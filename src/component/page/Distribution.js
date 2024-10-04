@@ -33,6 +33,8 @@ import BackIcon from '@mui/icons-material/ArrowBackIosNew';
 // Import XLSX
 import * as XLSX from 'xlsx';
 
+import { DataGrid } from '@mui/x-data-grid';
+
 export default function Distribution({ farms, roi }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
   const [inputText, setInputText] = useState('');
@@ -92,7 +94,7 @@ export default function Distribution({ farms, roi }) {
     const filteredTotalProduction = filteredSeries.reduce((acc, value) => acc + value, 0);
     const percentages = filteredSeries.map(value => (value / filteredTotalProduction) * 100);
     const distribution = percentages.map(percentage => Math.round((inputText * percentage) / 100));
-    setEditingIndex(distribution);  
+    setEditingIndex(distribution);
     setPercentage(percentages);
     setDistributionData(distribution);
     setActualDistribution(new Array(distribution.length).fill('')); // Reset actual distribution
@@ -137,7 +139,7 @@ export default function Distribution({ farms, roi }) {
   const handleEditClick = (index) => {
     setEditingIndex(index);
     setEditValue(actualDistribution[index] || '');
-    setOpenDialog(true); 
+    setOpenDialog(true);
   };
 
   // Save the edited value
@@ -151,50 +153,141 @@ export default function Distribution({ farms, roi }) {
     setEditingIndex(null);
   };
 
+  const datagridStyle = {
+
+    paddingBottom: 0,
+    '& .even': {
+      backgroundColor: '#FFFFFF',
+    },
+    '& .odd': {
+      backgroundColor: '#F6FAF6',
+    },
+    '& .MuiDataGrid-columnHeaders': {
+      position: 'sticky',
+      top: 0,
+      zIndex: 1,
+      backgroundColor: '#88C488'
+    },
+  }
   const DataTable = ({ data, data1, data2, distribution, percentage, actualDistribution }) => {
+    const columns = [
+      {
+        field: 'date',
+        headerName: 'Date',
+        flex: 1,
+        align: 'left',
+      },
+      {
+        field: 'farm',
+        headerName: 'Farm',
+        flex: 1,
+        align: 'left',
+      },
+      {
+        field: 'production',
+        headerName: 'Production',
+        flex: 1,
+        align: 'left',
+      },
+      {
+        field: 'percentage',
+        headerName: 'Percentage',
+        flex: 1,
+        align: 'left',
+      },
+      {
+        field: 'suggested',
+        headerName: 'Suggested distribution',
+        flex: 1,
+        align: 'left',
+      },
+      {
+        field: 'actual',
+        headerName: 'Actual distribution',
+        flex: 1,
+        type: 'number',
+        editable: true,
+        align: 'center',
+      },
+    ];
+    const rows = data.map((row, index) => ({
+      id: index,
+      date: data2[index],
+      farm: data1[index],
+      production: row,
+      percentage: percentage[index] ? percentage[index].toFixed(2): 0,
+      suggested: distribution[index] || 0,
+      actual: actualDistribution[index] || 0,
+    }));
+
     return (
-      <TableContainer component={Paper} sx={{ marginTop: 4 }}>
-        <Table>
-          <TableHead sx={{ backgroundColor: '#f0f0f0' }}>
-            <TableRow>
-              <TableCell>Date</TableCell>
-              <TableCell align="right">Farm</TableCell>
-              <TableCell align="right">Production</TableCell>
-              <TableCell align="right">Percentage (%)</TableCell>
-              <TableCell align="right">Suggested Distribution</TableCell>
-              <TableCell align="right">Actual Distribution</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody >
-            {data.map((row, index) => (
-              <TableRow key={index}>
-                <TableCell>{data2[index]}</TableCell>
-                <TableCell align="right">{data1[index]}</TableCell>
-                <TableCell align="right">{row}</TableCell>
-                <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell>
-                <TableCell align="right">{distribution[index] || 0}</TableCell>
-                <TableCell align="right">
-                  <TextField 
-                    variant='outlined'
-                    sx={{display:'flex'}}
-                    value={editingIndex}
-                    onChange={(e)=> setEditingIndex(e)}
-                  />
-                  {/* <Button
-                    variant="contained"
-                    color="secondary"
-                    onClick={() => handleEditClick(index)}
-                    sx={{ ml: 1 }}
-                  >
-                    Edit
-                  </Button> */}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box sx={{ height: 400, width: '100%', marginTop: 4 }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 20]}
+          disableSelectionOnClick
+          sx={{
+            ...datagridStyle,
+            border: 'none',
+            paddingX: 2,
+            overflowX: 'auto',
+            height: `calc(100% - 8px)`,
+            backgroundColor: '#fff',
+            paddingTop: 1,
+            boxShadow: 2
+          }}
+          getRowClassName={(rows) =>
+            rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          }
+          hideFooter
+        />
+      </Box>
     );
+    // return (
+    //   <TableContainer component={Paper} sx={{ marginTop: 4 }}>
+    //     <Table>
+    //       <TableHead sx={{ backgroundColor: '#f0f0f0' }}>
+    //         <TableRow>
+    //           <TableCell>Date</TableCell>
+    //           <TableCell align="right">Farm</TableCell>
+    //           <TableCell align="right">Production</TableCell>
+    //           <TableCell align="right">Percentage (%)</TableCell>
+    //           <TableCell align="right">Suggested Distribution</TableCell>
+    //           <TableCell align="right">Actual Distribution</TableCell>
+    //         </TableRow>
+    //       </TableHead>
+    //       <TableBody >
+    //         {data.map((row, index) => (
+    //           <TableRow key={index}>
+    //             <TableCell>{data2[index]}</TableCell>
+    //             <TableCell align="right">{data1[index]}</TableCell>
+    //             <TableCell align="right">{row}</TableCell>
+    //             <TableCell align="right">{percentage[index] ? percentage[index].toFixed(2) : 0}%</TableCell>
+    //             <TableCell align="right">{distribution[index] || 0}</TableCell>
+    //             <TableCell align="right">
+    //               <TextField 
+    //                 variant='outlined'
+    //                 sx={{display:'flex'}}
+    //                 value={editingIndex}
+    //                 onChange={(e)=> setEditingIndex(e)}
+    //               />
+    //               {/* <Button
+    //                 variant="contained"
+    //                 color="secondary"
+    //                 onClick={() => handleEditClick(index)}
+    //                 sx={{ ml: 1 }}
+    //               >
+    //                 Edit
+    //               </Button> */}
+    //             </TableCell>
+    //           </TableRow>
+    //         ))}
+    //       </TableBody>
+    //     </Table>
+    //   </TableContainer>
+    // );
   };
 
   const [buttonText, setButtonText] = useState('Saved Data');
@@ -202,7 +295,7 @@ export default function Distribution({ farms, roi }) {
   const handleClick = () => {
     if (view === 'saved') {
       setView('distribution');
-      setButtonText('Saved Data');
+      setButtonText('Report');
     } else {
       setView('saved');
       setButtonText(<BackIcon />);
@@ -211,8 +304,8 @@ export default function Distribution({ farms, roi }) {
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100vh' }}>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
-        <Button variant="contained" color="success" onClick={handleClick}>
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 , justifyContent: 'flex-end' }}>
+        <Button variant="outlined" color="success" onClick={handleClick}>
           {buttonText}
         </Button>
       </Box>
@@ -233,10 +326,10 @@ export default function Distribution({ farms, roi }) {
             <Button variant="contained" color="success" onClick={distributeResources}>
               Enter
             </Button>
-            <Box sx={{ display: 'flex', gap: 1, width: '100%' }}>
+            <Box sx={{ display: 'flex', gap: 1, width: '100%', justifyContent: 'flex-end' }}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
                 <DatePicker
-                  views={['year', 'month']}
+                  // views={['year', 'month',]}
                   minDate={dayjs('2023-01-01')}
                   maxDate={dayjs('2030-12-31')}
                   value={selectedDate}
@@ -245,9 +338,7 @@ export default function Distribution({ farms, roi }) {
                 />
               </LocalizationProvider>
             </Box>
-            <Button variant="contained" color="warning" onClick={saveDistribution}>
-              Save
-            </Button>
+
           </Box>
 
           <Typography sx={{ p: 2, fontWeight: 'bold' }}>
@@ -262,6 +353,10 @@ export default function Distribution({ farms, roi }) {
             percentage={percentageData}
             actualDistribution={actualDistribution}
           />
+          <Button variant="contained" color="success" onClick={saveDistribution}
+            sx={{ display: 'flex', justifyContent: 'flex-end',alignItems:'flex-end'}}>
+            Save Data
+          </Button>
         </Box>
       ) : (
         <Box>

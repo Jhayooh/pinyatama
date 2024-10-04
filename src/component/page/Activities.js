@@ -451,7 +451,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     return (
         <>
             <Box sx={{
-                display: 'flex', height: '100%', padding: 5
+                display: 'flex', padding: 5, overflowY:'hidden'
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
@@ -469,9 +469,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            height: '100%',
-                            // backgroundColor:'#fff',
-                            padding: 2
+                            height: '80%',
+                            width: '100%',
+                            overflowY: 'auto',
+                            padding: 2,
                         }}>
                             <Box sx={{
                                 width: '100%',
@@ -493,10 +494,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     </Button>
                                 </Box>
                             </Box>
-
                             <Box sx={{
                                 padding: 2,
-                                flexGrow: 0,
                             }}>
                                 <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                     {newActivities.map((act, index) => (
@@ -567,7 +566,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             borderRadius: 2,
                             boxShadow: 2,
                             padding: 5,
-                            gap: 2
+                            gap: 2,
+                            height:'80%'
                         }}>
 
                             <Carousel
