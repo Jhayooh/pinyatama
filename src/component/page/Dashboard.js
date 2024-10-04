@@ -249,7 +249,7 @@ function Dashboard() {
                     boxShadow: 2
                   }} >
                   <img
-                    src={require('../image_src/p1.jpg')}
+                    src={require('../image_src/pinya1.jpg')}
                     style={{ width: '100%', height: 300, borderRadius: 15 }}
                   />
                 </Paper>
@@ -264,7 +264,7 @@ function Dashboard() {
                     boxShadow: 2
                   }}  >
                   <img
-                    src={require('../image_src/p5.jpg')}
+                    src={require('../image_src/pinya4.jpg')}
                     style={{ width: '100%', height: 300, borderRadius: 15 }}
                   />
                 </Paper>
@@ -279,7 +279,7 @@ function Dashboard() {
                     boxShadow: 2
                   }}  >
                   <img
-                    src={require('../image_src/p2.jpg')}
+                    src={require('../image_src/pinya2.jpg')}
                     style={{ width: '100%', height: 300, borderRadius: 15 }}
                   />
                 </Paper>
@@ -291,14 +291,14 @@ function Dashboard() {
                 sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'flex-end',
-                  justifyContent: 'flex-end',
+                  alignItems: 'center',
+                  justifyContent: 'center',
                   height: { lg: '100%', xs: '100%', md: '80%' },
                   padding: 2,
                   backgroundColor: '#fff',
                   borderRadius: 4,
                   boxShadow: 3,
-                  marginTop: 10
+                  marginTop: 5
                 }}
               >
 
@@ -487,13 +487,12 @@ function Dashboard() {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="#app-bar-with-responsive-menu"
                         sx={{
                           mr: 2,
-                          display: { xs: 'none', md: 'flex' },
+                          display: { xs: 'flex', md: 'flex' },
                           fontFamily: 'monospace',
                           fontWeight: 700,
-                          letterSpacing: '.3rem',
+                          letterSpacing: {xs: '.1rem',md:'.3rem'},
                           color: 'green',
                           textDecoration: 'none',
                           m: 2
@@ -502,7 +501,7 @@ function Dashboard() {
                         QUEEN PINEAPPLE FARMING
                       </Typography>
                     </Box>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'flex' }, gap: { xs: 1, md: 2 } }}>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: { xs: 1, lg: 2 } }}>
                       <Button
                         onClick={scrollToTop}
                         sx={{ my: 2, color: 'green', display: 'block' }}
@@ -793,16 +792,16 @@ function Images({ imagesList }) {
     <Carousel>
       {imagesList.map(image => (
         <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '100%', height: '100%' }} />
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '100%', height: 'auto' }} />
         </Carousel.Item>
       ))}
     </Carousel>
   )
 }
 const imagesList = [
-  "p1.jpg",
-  "p2.jpg",
-  "p3.jpg",
+  "pinya1.jpg",
+  "pinya2.jpg",
+  "pinya3.jpg",
 
 ]
 
@@ -1061,7 +1060,7 @@ const Lupa = () => {
         }}
       >
         <Grid item xs={12} md={6} lg={6}>
-          <img src={require('../image_src/p1.jpg')} style={{ width: '100%', height: '100%' }} />
+          <img src={require('../image_src/pinya1.jpg')} style={{ width: '100%', height: '100%' }} />
         </Grid >
         <Grid xs={12} md={6} lg={6}>
           <Box sx={{
@@ -1139,7 +1138,7 @@ const Tanim = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <img src={require('../image_src/p3.jpg')} style={{ width: '100%', height: '100%' }} />
+          <img src={require('../image_src/pinya4.jpg')} style={{ width: '100%', height: '100%' }} />
         </Grid>
       </Grid>
     </div>
@@ -1357,7 +1356,7 @@ const Bulaklak = () => {
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={6}>
-            <img src={require('../image_src/Flower.jpg')} style={{ width: '100%', height: '100%' }} />
+            <img src={require('../image_src/pinya2.jpg')} style={{ width: '100%', height: '100%' }} />
           </Grid>
           <Grid item xs={12} md={6} lg={6}
           >
@@ -2271,79 +2270,6 @@ function ContactSec() {
 function SiteMap() {
   return (
     <div style={{ padding: 20, backgroundColor: 'white' }}>
-      {/* <Typography
-        variant="overline"
-        display="block"
-        gutterBottom
-        sx={{ color: 'orange', fontSize: '20px' }}>
-        Site Map
-      </Typography> */}
-      {/* <Box sx={{ flexDirection: 'row', display: 'flex' }}> */}
-
-      {/* <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> About Us</Typography>
-          <ul>
-            <li>
-            <a href="/About">Katangian ng Pinyang Queen</a>
-            </li>
-          </ul>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> Gallery</Typography>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> Agencies</Typography>
-        </Box> */}
-      {/* </Box>
-      <Box sx={{ flexDirection: 'row', display: 'flex', marginTop: 5 }}>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1 }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><LocationOnIcon /></Avatar>
-            </div>
-            <Typography variant='caption' > 2nd Floor Provincial Capitol Annex Building
-              Brgy. III, Daet Camarines Norte</Typography>
-            
-          </Box>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><PhoneIcon /></Avatar>
-            </div>
-            <Typography variant='caption'>054 721-0291</Typography>
-          </Box>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}> <EmailIcon/></Avatar>
-            </div>
-            <Typography variant='caption'>opagcamnorte@yahoo.com/opagcamsnorte@gmail.com</Typography>
-          </Box>
-        </Box>
-      </Box> */}
-      {/* <Box sx={{ display: 'flex', flexDirection: 'column' , marginTop:2}}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-              <div>
-                <Avatar sx={{backgroundColor:'#07da63'}}><FacebookIcon /></Avatar>
-              </div>
-              <Typography variant='caption'> OPAg Camarines Norte</Typography>
-            </Box>
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-              <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><LanguageIcon /></Avatar>
-              </div>
-              <Typography variant='caption'> <a href="https://opagcamnorte.com">https://opagcamnorte.com</a></Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box> */}
-
       <Box sx={{}}>
         <Divider />
         <Box sx={{ flexDirection: 'row', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -2355,7 +2281,6 @@ function SiteMap() {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },

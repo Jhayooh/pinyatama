@@ -448,17 +448,17 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                 </Box>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
-                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
-                  List
-                </Button>
                 <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewModuleIcon />} onClick={() => setGrid(true)}>
                   Grid
                 </Button>
+                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
+                  List
+                </Button>
               </Box>
             </Box>
-            <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
+            <Box sx={{ paddingBottom: 3, height: '100%', overflowX: 'auto', }}>
               {grid ? (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
                   {filteredFarms.map((marker, index) => (
                     <GridView
                       key={marker.id}

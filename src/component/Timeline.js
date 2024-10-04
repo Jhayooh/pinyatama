@@ -206,7 +206,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         </Box>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',

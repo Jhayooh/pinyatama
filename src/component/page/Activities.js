@@ -21,7 +21,7 @@ import {
 } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
-
+import Carousel from 'react-bootstrap/Carousel';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Stepper from '@mui/material/Stepper';
@@ -61,19 +61,22 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const [stepIndex, setStepIndex] = useState(-1)
 
     const formatDate = (date) => {
-        return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+        return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
     }
 
     const formatTime = (date) => {
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     }
 
+    const stepStyle = {
+        backgroundColor: '#E7F3E7'
+    }
     useEffect(() => {
         if (!e) return
 
         setEvents(e)
         console.log("the eeeeeeeeeee", e);
-        
+
     }, [e])
 
 
@@ -94,7 +97,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
             createdAt: farm.start_date,
             label: 'The pine has been planted.',
             compId: '',
-            qnty: 0
+            qnty: 0,
         }, ...activities])
     }, [activities])
 
@@ -445,10 +448,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
             </>
         )
     }
-    // {name, id, unit, index, parent, particular, defQnty, price}
     return (
         <>
             <Box sx={{
+                display: 'flex', padding: 5, overflowY:'hidden'
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
@@ -464,64 +467,95 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Box sx={{
-                            backgroundColor: '#F9FAFB',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            height: '80%',
+                            width: '100%',
+                            overflowY: 'auto',
+                            padding: 2,
                         }}>
-                            <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
-                                {newActivities.map((act, index) => (
-                                    <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(stepIndex === index ? 0 : index)} key={act.id} sx={{
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        marginLeft: index === 0 ? 0 : 4,
-                                        backgroundColor: '#FFF',
-                                        borderRadius: 2,
-                                        paddingX: 2,
-                                        boxShadow: 2,
-                                        height: index === 0 && 62,
-                                        '&:hover': {
-                                            cursor: 'pointer'
-                                        }
-                                    }}>
-                                        <StepLabel StepIconComponent={QontoStepIcon} sx={{
+                            <Box sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                paddingRight: 2
+                            }}>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    marginBottom: 1,
+                                }}>
+                                    <Button variant="contained" onClick={() => setIsAdd(true)} color="success" s
+                                        x={{
+                                            width: { xs: '100%', md: '20%' }
                                         }}>
-                                            <Box
-                                                sx={{
+                                        Add Activities
+                                    </Button>
+                                </Box>
+                            </Box>
+                            <Box sx={{
+                                padding: 2,
+                            }}>
+                                <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
+                                    {newActivities.map((act, index) => (
+                                        <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(stepIndex === index ? 0 : index)} key={act.id} sx={{
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            marginLeft: index === 0 ? 0 : 4,
+                                            backgroundColor: '#E7F3E7',
+                                            borderRadius: 2,
+                                            paddingX: 2,
+                                            boxShadow: 2,
+                                            height: index === 0 && 62,
+                                            '&:hover': {
+                                                cursor: 'pointer',
+                                                backgroundColor: '#58AC58',
+                                                // color:'#fff'
+                                            }
+                                        }}>
+                                            <StepLabel StepIconComponent={QontoStepIcon} >
+                                                <Box sx={{
                                                     flexDirection: { xs: 'column', md: 'row' },
                                                     display: 'flex',
                                                     justifyContent: 'space-between'
                                                 }}>
-                                                <Box sx={{
-                                                    flexDirection: { xs: 'column', md: 'row' },
-                                                    display: 'flex',
-                                                    gap: 2,
-                                                    alignItems: 'center'
-                                                }}>
+                                                    <Box sx={{
+                                                        flexDirection: { xs: 'column', md: 'row' },
+                                                        display: 'flex',
+                                                        gap: 2,
+                                                        alignItems: 'center'
+                                                    }}>
+                                                        <Typography variant='caption' sx={{
+                                                            color: '#4E4E4E'
+                                                        }}>
+                                                            {formatDate(act.createdAt.toDate())}
+                                                        </Typography>
+                                                        <Typography variant="subtitle1">{act.label}</Typography>
+                                                    </Box>
                                                     <Typography variant='caption' sx={{
                                                         color: '#4E4E4E'
-                                                    }}>
-                                                        {formatDate(act.createdAt.toDate())}
+                                                    }} >
+                                                        {formatTime(act.createdAt.toDate())}
                                                     </Typography>
-                                                    <Typography variant="subtitle1">{act.label}</Typography>
                                                 </Box>
-                                                <Typography variant='caption' sx={{
-                                                    color: '#4E4E4E'
-                                                }} >
-                                                    {formatTime(act.createdAt.toDate())}
-                                                </Typography>
-                                            </Box>
-                                        </StepLabel>
-                                        <StepContent sx={{
-                                            borderLeft: 0,
-                                        }}>
-                                            <Box sx={{ paddingY: 2 }}>
-                                                <Typography variant='body2'>
-                                                    Ikaw ay naglagay ng <span style={{ fontWeight: 'bold' }}>{act.qnty}kg</span> ng fertilizer na <span style={{ fontWeight: 'bold' }}>{act.label}</span>
-                                                </Typography>
-                                            </Box>
-                                        </StepContent>
-                                    </Step>
-                                ))}
-                            </Stepper>
+                                            </StepLabel>
+                                            <StepContent sx={{
+                                                borderLeft: 0,
+                                            }}>
+                                                <Box sx={{ paddingY: 2 }}>
+                                                    <Typography variant='body2'>
+                                                        Ikaw ay naglagay ng <span style={{ fontWeight: 'bold' }}>{act.qnty}kg</span> ng fertilizer na <span style={{ fontWeight: 'bold' }}>{act.label}</span>
+                                                    </Typography>
+                                                </Box>
+                                            </StepContent>
+                                        </Step>
+                                    ))}
+                                </Stepper>
+                            </Box>
                         </Box>
+
+
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <Box sx={{
@@ -531,32 +565,44 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             backgroundColor: '#fff',
                             borderRadius: 2,
                             boxShadow: 2,
-                            padding: 2,
-                            gap: 2
+                            padding: 5,
+                            gap: 2,
+                            height:'80%'
                         }}>
-                            <Box sx={{
-                                width: 1
-                            }}>
-                                <Button variant="contained" onClick={() => setIsAdd(true)} color='success' sx={{
-                                    width: 1
-                                }}>
-                                    Add
-                                </Button>
-                            </Box>
-                            <Box className='roi'>
-                                <Doughnut
-                                    labels={["Net return", "Production cost"]}
-                                    data={[roi[0].netReturn, roi[0].costTotal]}
-                                    title={"QP Production"}
-                                />
-                            </Box>
-                            <Box className='parti' >
-                                <Doughnut
-                                    labels={["Materyales", "Labor", "Fertilizer"]}
-                                    data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
-                                    title={'Production Cost'}
-                                />
-                            </Box>
+
+                            <Carousel
+                                prevIcon={<span className="carousel-control-prev-icon" aria-hidden="true" style={{ display: 'none' }} />}
+                                nextIcon={<span className="carousel-control-next-icon" aria-hidden="true" style={{ display: 'none' }} />}
+                            >
+                                <Carousel.Item>
+                                    <Box className='roi'>
+                                        <Doughnut
+                                            labels={["Net return", "Production cost"]}
+                                            data={[roi[0].netReturn, roi[0].costTotal]}
+                                            title={"QP Production"}
+                                        />
+                                    </Box>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <Box className='parti' >
+                                        <Doughnut
+                                            labels={["Materyales", "Labor", "Fertilizer"]}
+                                            data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
+                                            title={'Production Cost'}
+                                        />
+                                    </Box>
+                                </Carousel.Item>
+                                <Carousel.Item>
+                                    <Box className='parti' >
+                                        <Doughnut
+                                            labels={["Materyales", "Labor", "Fertilizer"]}
+                                            data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
+                                            title={'Production Cost'}
+                                        />
+                                    </Box>
+                                </Carousel.Item>
+                            </Carousel>
+
                         </Box>
                     </Grid>
                 </Grid>
