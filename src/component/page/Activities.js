@@ -251,7 +251,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 break;
                             case 'flowering':
                                 e.start_time = Timestamp.fromDate(currDate)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                e.end_time = Timestamp.fromMillis(e.end_time.toDate() + date_diff)
                                 const flowEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -262,14 +262,14 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 break;
                             case 'fruiting':
                                 e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + 3.5)
+                                const et = new Date(e.end_time.toMillis())
+                                e.end_time = Timestamp.fromMillis(et.setMonth(et.getMonth() + 3.5))
                                 const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
                                     createdAt: currDate,
                                 });
                                 await updateDoc(fruEvent, { id: fruEvent.id });
-                                console.log("the fruit: ", e)
                                 break;
                             default:
                                 break;

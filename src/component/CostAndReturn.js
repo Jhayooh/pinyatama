@@ -93,13 +93,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     if (!parts || !particularData || !pineapple) {
       return
     }
-    const updatedLocalParts = parts.map(part => ({
-      ...part,
-      isAvailable: particularData.find(data => data.id === part.foreignId)?.isAvailable ?? part.isAvailable
-    }));
+
+    const updatedLocalParts = parts.map(part => {
+      const thePart = particularData.find(data => data.id === part.foreignId)?.isAvailable;
+      console.log("isAvailable:", thePart)
+      return {
+        ...part,
+        isAvailable: thePart ?? part.isAvailable,
+        qntyPrice: thePart || thePart === undefined ? part.qntyPrice : 0,
+        totalPrice: thePart || thePart === undefined ? part.totalPrice : 0
+      };
+    });
+
     setLocalParts(updatedLocalParts);
-    setLaborMaterial([roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal])
-    setNewRoi(roi[0])
+    calcTotalParts(updatedLocalParts)
     setLocalPine(pineapple)
   }, [particularData, isClicked]);
 
@@ -113,6 +120,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   };
 
   function calcTotalParts(upPart) {
+    console.log("uppartsssss:", upPart)
     const totalLabor = upPart.filter(item => item.particular.toLowerCase() === 'labor').reduce((sum, item) => sum + item.totalPrice, 0);
     const totalMaterial = upPart.filter(item => item.particular.toLowerCase() === 'material').reduce((sum, item) => sum + item.totalPrice, 0);
     const totalFertilizer = upPart
@@ -127,10 +135,10 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }
 
   useEffect(() => {
-    const grossReturnAndBatter = (newRoi.grossReturn * getPinePrice('pineapple', localPine)) + (newRoi.butterBall * getPinePrice('butterball', localPine))
+    const grossReturn = newRoi.grossReturn * getPinePrice('pineapple', localPine)
     const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
-    const netReturnValue = grossReturnAndBatter - costTotal;
-    const roiValue = (netReturnValue / grossReturnAndBatter) * 100;
+    const netReturnValue = grossReturn - costTotal;
+    const roiValue = (netReturnValue / grossReturn) * 100;
     setNewRoi((prevItem) => ({
       ...prevItem,
       roi: Math.round(roiValue * 100) / 100,
@@ -183,45 +191,10 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     return params.value;
   };
 
-  const handleSaveChanges = async () => {
-    if (!editedRowData) {
-      console.error('No edited row data to save.');
-      return;
-    }
-
-    setSaving(true);
-    try {
-      const promises = editedRowData.map(doc => {
-        const docRef = doc(db, `farms/${farm.id}/components`, doc.id);
-        return setDoc(docRef, doc, { merge: true });
-      })
-      await Promise.all(promises);
-      const roiRef = doc(db, `farms/${farm.id}/roi`, newRoi.id)
-      await setDoc(roiRef, newRoi, { merge: true });
-    } catch (error) {
-      console.error('Error updating document', error);
-    } finally {
-      setShow(false);
-      setSaving(false);
-    }
-  };
-
   const getMult = (numOne, numTwo) => {
     const num = numOne * numTwo
     return Math.round(num * 10) / 10
   }
-
-  const getBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.7) : lighten(color, 0.7);
-
-  const getHoverBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.6) : lighten(color, 0.6);
-
-  const getSelectedBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.5) : lighten(color, 0.5);
-
-  const getSelectedHoverBackgroundColor = (color, mode) =>
-    mode === 'dark' ? darken(color, 0.4) : lighten(color, 0.4);
 
   const EditRowModal = () => {
     const [editedRowData, setEditedRowData] = useState(selectedRow);
@@ -233,7 +206,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
     const handleSaveChanges = () => {
 
       if (!editedRowData) return
-      console.log("edited data", editedRowData)
 
       let updatedParts = []
 
@@ -254,7 +226,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       } else {
         updatedParts = localParts.map((part) => (part.id === editedRowData.id ? editedRowData : part));
       }
-      console.log("updatedPartsss", updatedParts)
       setLocalParts(updatedParts);
       calcTotalParts(updatedParts)
       handleModalClose()
@@ -425,7 +396,6 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               value={newPrice}
               onChange={(e) => {
                 setNewPrice(e.target.value)
-                console.log("newPricceeeee", e.target.value)
               }}
               fullWidth
               sx={{ mb: 2 }}
@@ -526,10 +496,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               onChange={handleTabChange}
               variant="scrollable"
               scrollButtons="auto">
-
+              <Tab label="Fertilizer" />
               <Tab label="Labor" />
               <Tab label="Material" />
-              <Tab label="Fertilizer" />
+              <Box sx={{
+                display: 'flex',
+                gap: 2,
+                justifyContent: 'flex-end',
+                padding: 1,
+                flex: 1,
+              }}
+              >
+                <Button variant="contained" color='error' onClick={handleReset}>Reset</Button>
+                {/* <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button> */}
+              </Box>
             </Tabs>
             <Box sx={{
               overflow: 'hidden',
@@ -540,7 +520,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               {
                 (() => {
                   switch (selectedTab) {
-                    case 0:
+                    case 1:
                       return (
                         <DataGrid
                           rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
@@ -567,7 +547,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               flex: 1,
                               editable: false,
                               headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => params.value || 'N/A', 
+                              valueFormatter: (params) => params.value || 'N/A',
                             },
                             {
                               field: 'totalPrice',
@@ -611,7 +591,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           sx={datagridStyle}
                         />
                       )
-                    case 1:
+                    case 2:
                       return (
                         <DataGrid
                           rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
@@ -630,7 +610,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               type: 'number',
                               editable: true,
                               headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => params.value || 'N/A', 
+                              valueFormatter: (params) => params.value || 'N/A',
                             },
                             {
                               field: 'unit',
@@ -638,7 +618,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               flex: 1,
                               editable: false,
                               headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => params.value || 'N/A', 
+                              valueFormatter: (params) => params.value || 'N/A',
                             },
                             {
                               field: 'totalPrice',
@@ -682,10 +662,23 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           sx={datagridStyle}
                         />
                       )
-                    case 2:
+                    case 0:
                       return (
                         <DataGrid
-                          rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer')}
+                          rows={
+                            localParts
+                              .filter(part => part.parent.toLowerCase() === 'fertilizer')
+                              .reduce((acc, part) => {
+                                const existing = acc.find(item => item.foreignId === part.foreignId);
+                                if (existing) {
+                                  existing.qntyPrice += part.qntyPrice; // Sum qntyPrice
+                                  existing.totalPrice += part.totalPrice; // Sum totalPrice
+                                } else {
+                                  acc.push({ ...part }); // Keep original part if it's not a duplicate
+                                }
+                                return acc;
+                              }, [])
+                          }
                           columns={[
                             {
                               field: 'name',
@@ -709,7 +702,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                               flex: 1,
                               editable: false,
                               headerClassName: 'super-app-theme--header',
-                              valueFormatter: (params) => params.value || 'N/A', 
+                              valueFormatter: (params) => params.value || 'N/A',
                             },
                             {
                               field: 'totalPrice',
@@ -783,19 +776,8 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                   }
                 })()
               }
-              <Box sx={{
-                display: 'flex',
-                gap: 2,
-                justifyContent: 'flex-end',
-                padding: 1,
-              }}
-              >
-                <Button variant="text" color='error' onClick={handleReset}>Reset</Button>
-                {/* <Button variant="contained" color='success' onClick={handleSaveAnalysis}>Save</Button> */}
-              </Box>
             </Box>
           </Grid>
-
           <Grid item xs={12} md={7}
             className='chartsBox' sx={{
               flex: 3,
@@ -803,6 +785,155 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               flexDirection: 'column',
               gap: 1.5
             }}>
+            <Box
+              // className='topTopChartsBox'
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                gap: 1.5,
+                flex: 1
+              }}>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#FFF',
+                // backgroundColor: '#E7F3E7',
+                flex: 1,
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' }
+              }}>
+                <Box className='column-one' sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 4,
+                  paddingY: 1.5,
+                  paddingLeft: 2,
+                  paddingRight: 1
+                }}>
+                  <Box sx={{
+                    display: 'flex',
+                    gap: 2,
+                    alignItems: 'center',
+                    justifyContent: 'flex-start'
+                  }}>
+                    <Typography sx={{
+                      fontWeight: 400
+                    }}>
+                      ROI
+                    </Typography>
+                  </Box>
+                  <Box sx={{
+                    display: 'flex',
+                    color: '#58AC58',
+                    // border: .6,
+                    // borderColor: '#88C488',
+                    borderRadius: 2,
+                    // backgroundColor: '#E7F3E7',
+                    paddingX: 1.5,
+                    paddingTop: .5
+                  }}>
+                    <Typography
+                      variant='h3'
+                      sx={{
+                        fontWeight: 700,
+                      }}
+                    >
+                      {newRoi.roi}
+                    </Typography>
+                    <Typography align='center'>
+                      %
+                    </Typography>
+                  </Box>
+                  {/* <Button variant='contained' color='success' size='small'>
+                      Edit
+                    </Button> */}
+                </Box>
+                <Box className='column-two' sx={{
+                  flex: 1,
+                  paddingY: 1.5,
+                  paddingRight: 2,
+                  paddingLeft: 1,
+                  backgroundColor: '#88C488',
+                  // borderRadius: 2,
+                  borderTopRightRadius: '8px',
+                  borderBottomRightRadius: '8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  color: '#FFF'
+                }}>
+                </Box>
+              </Box>
+              <Box sx={{
+                boxShadow: 2,
+                borderRadius: 2,
+                backgroundColor: '#FFF',
+                // backgroundColor: '#E7F3E7',
+                flex: 1,
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' }
+              }}>
+                <Box className='column-one' sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  flex: 4,
+                  paddingY: 1.5,
+                  paddingLeft: 2,
+                  paddingRight: 1
+                }}>
+                  <Box sx={{
+                    display: 'flex',
+                    gap: 2,
+                    alignItems: 'center',
+                    justifyContent: 'flex-start'
+                  }}>
+                    <Typography sx={{
+                      fontWeight: 400
+                    }}>
+                      Plant Number
+                    </Typography>
+                  </Box>
+                  <Box sx={{
+                    display: 'flex',
+                    color: '#58AC58',
+                    // border: .6,
+                    // borderColor: '#88C488',
+                    borderRadius: 2,
+                    // backgroundColor: '#E7F3E7',
+                    paddingX: 1.5,
+                    paddingTop: .5
+                  }}>
+                    <Typography
+                      variant='h3'
+                      sx={{
+                        fontWeight: 700,
+                      }}
+                    >
+                      {farm.plantNumber.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                    </Typography>
+                    <Typography align='center'>
+                      pcs
+                    </Typography>
+                  </Box>
+                  {/* <Button variant='contained' color='success' size='small'>
+                      Edit
+                    </Button> */}
+                </Box>
+                <Box className='column-two' sx={{
+                  flex: 1,
+                  paddingY: 1.5,
+                  paddingRight: 2,
+                  paddingLeft: 1,
+                  backgroundColor: '#88C488',
+                  // borderRadius: 2,
+                  borderTopRightRadius: '8px',
+                  borderBottomRightRadius: '8px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  color: '#FFF'
+                }}>
+                </Box>
+              </Box>
+            </Box>
             <Box
               // className='topChartsBox'
               sx={{
