@@ -75,8 +75,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
         if (!e) return
 
         setEvents(e)
-        console.log("the eeeeeeeeeee", e);
-
     }, [e])
 
 
@@ -205,10 +203,13 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                 const theLabel = compAct.find(obj => obj.id === fert)
                 if (theLabel.name.toLowerCase() === "flower inducer (ethrel)" && events) {
                     const vege_event = events.find(p => p.className === 'vegetative')
+                    console.log("1");
+
                     const date_diff = currDate - vege_event.end_time.toDate()
-                    console.log("the farm ethrel status:", farm);
+                    console.log("2");
 
                     if (farm.plantNumber - farm.ethrel === 0) {
+                        console.log("a");
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
@@ -221,8 +222,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         });
                         return
                     }
+                    console.log("4");
 
                     if (!ethrelValid(currDate, vege_event.start_time.toDate())) {
+                        console.log("b");
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
@@ -236,9 +239,13 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         return
                     }
 
+                    console.log("5");
                     events.map(async (e) => {
-                        switch (e.className) {
+                        console.log("6");
+
+                        switch (e.className.toLowerCase()) {
                             case 'vegetative':
+                                console.log("c");
                                 e.end_time = Timestamp.fromDate(currDate)
                                 e.title = `${e.title} - ${bilang} (${plantPercent(bilang, farm.plantNumber)}%)`
                                 const vegeEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
@@ -247,23 +254,26 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     createdAt: currDate,
                                 });
                                 await updateDoc(vegeEvent, { id: vegeEvent.id });
-                                console.log("the vege: ", e)
                                 break;
                             case 'flowering':
+                                console.log("d");
                                 e.start_time = Timestamp.fromDate(currDate)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toDate() + date_diff)
+                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
                                 const flowEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
                                     createdAt: currDate,
                                 });
                                 await updateDoc(flowEvent, { id: flowEvent.id });
-                                console.log("the flower: ", e)
                                 break;
                             case 'fruiting':
+                                console.log("e");
                                 e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
-                                const et = new Date(e.end_time.toMillis())
-                                e.end_time = Timestamp.fromMillis(et.setMonth(et.getMonth() + 3.5))
+                                // e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                const et = new Date(e.start_time.toDate())
+                                et.setMonth(et.getMonth()+3)
+                                et.setDate(et.getDate()+15)
+                                e.end_time = Timestamp.fromDate(et)
                                 const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -272,6 +282,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 await updateDoc(fruEvent, { id: fruEvent.id });
                                 break;
                             default:
+                                console.log("f");
                                 break;
                         }
 
@@ -285,8 +296,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         qnty: qnty
                     });
 
+                    console.log("i");
                     // update farm isEthrel
-                    console.log("ikaw ay naglagay ng ethrel ngayong ", currDate);
                     await updateDoc(doc(db, `farms/${farm.id}`), {
                         isEthrel: currDate,
                         ethrel: farm.ethrel + bilang
@@ -412,8 +423,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         setBilangError(false)
                                     }
                                     setBilang(b)
-                                    console.log(`the bilang is ${b}: ${farm.plantNumber}`)
-                                    console.log(b > farm.plantNumber);
 
                                 }}
                                 inputProps={{ min: 1, max: farm.plantNumber }}
@@ -453,7 +462,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
             <Box sx={{
                 display: 'flex',
                 padding: 5,
-                overflowY: 'hidden' 
+                overflowY: 'hidden'
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
@@ -497,8 +506,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             </Box>
                             <Box sx={{
                                 padding: 2,
-                                overflowY: 'auto', 
-                                maxHeight: '400px' 
+                                overflowY: 'auto',
+                                maxHeight: '400px'
                             }}>
                                 <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                     {newActivities.map((act, index) => (
