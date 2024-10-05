@@ -153,62 +153,70 @@ const Weather = ({ farm }) => {
                 </>
             )}
             {weather.current.main && (
-                <Grid container >
-                    <Grid item xs={12} lg={12} >
+                <Grid container alignItems="stretch" spacing={2}>
+                    <Grid item xs={12} lg={12} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
                         <Box sx={{
                             display: 'flex',
+                            width: '100%',
                             alignItems: 'center',
                             flexDirection: { xs: 'column', md: 'row' },
                             boxShadow: 2,
                             backgroundColor: '#28B463',
-                            //backgroundColor: weatherConditions[weather.current.weather[0].main]?.color || '#fff',
                             gap: 5,
                             justifyContent: 'space-evenly',
                             padding: 2,
+                            flexGrow: 1, // Make it flexible to fill the available space
                         }}>
                             <Box>
                                 <img
-                                    className=""
                                     src={`https://openweathermap.org/img/wn/${weather.current.weather[0].icon}@2x.png`}
                                     alt={weather.current.weather[0].description}
-                                    width='100%'
-                                    height='200px'
+                                    width="100%"
+                                    height="200px"
                                 />
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: { xs: 'center', md: 'flex-start' } }}>
-                                <Typography variant='h3' sx={{ marginLeft: 5, color: 'white' }}>
+                                <Typography variant="h3" sx={{ marginLeft: 5, color: 'white' }}>
                                     {Math.round(weather.current.main.temp)}
                                     <sup className="deg">°C</sup>
                                 </Typography>
-                                <Typography variant='h6' sx={{ color: 'white', textAlign: { xs: 'center', md: 'left' } }}>
+                                <Typography variant="h6" sx={{ color: 'white', textAlign: { xs: 'center', md: 'left' } }}>
                                     {weather.current.weather[0].description.toUpperCase()}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                                    <img src={require('../image_src/pin.png')} width='20px' height='20px' />
-                                    <Typography variant='button' sx={{ color: 'white' }}>
+                                    <img src={require('../image_src/pin.png')} width="20px" height="20px" />
+                                    <Typography variant="button" sx={{ color: 'white' }}>
                                         {weather.current.name}, Camarines Norte
                                     </Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                                    <img src={require('../image_src/calendar.png')} width='20px' height='20px' />
-                                    <Typography variant='button' sx={{ color: 'white' }}>
+                                    <img src={require('../image_src/calendar.png')} width="20px" height="20px" />
+                                    <Typography variant="button" sx={{ color: 'white' }}>
                                         {toDateFunction()}
                                     </Typography>
                                 </Box>
                                 <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                                    <img src={require('../image_src/wind.png')} width='20px' height='20px' />
-                                    <Typography variant='button' sx={{ color: 'white' }}>
+                                    <img src={require('../image_src/wind.png')} width="20px" height="20px" />
+                                    <Typography variant="button" sx={{ color: 'white' }}>
                                         Wind Speed: {weather.current.wind.speed} m/s
                                     </Typography>
                                 </Box>
                             </Box>
                         </Box>
                     </Grid>
-
-                    <Grid item xs={12} lg={12} >
-                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, }}>
+        
+                    <Grid item xs={12} lg={12} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                        <Box sx={{
+                            display: 'flex',
+                            width: '100%',
+                            alignItems: 'center',
+                            flexDirection: { xs: 'column', md: 'row' },
+                            gap: 2,
+                            padding: 2,
+                            flexGrow: 1, // Make it flexible to fill the available space
+                        }}>
                             {weather.forecast.map((item, index) => (
                                 <Box key={index}
                                     sx={{
@@ -216,8 +224,8 @@ const Weather = ({ farm }) => {
                                         backgroundColor: '#fff',
                                         padding: 3,
                                         boxShadow: 2,
-                                        // flex: '1 1 auto',
-                                        // margin: 1,
+                                        flexGrow: 1, // Allow each forecast box to grow and take available space
+                                        flexBasis: 0, // Allow the boxes to be of equal width
                                     }}>
                                     <div>{toDateFunction(item.dt)}</div>
                                     <img
@@ -233,6 +241,7 @@ const Weather = ({ farm }) => {
                 </Grid>
             )}
         </Box>
+        
     );
 };
 

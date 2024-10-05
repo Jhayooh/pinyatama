@@ -290,7 +290,7 @@ export default function Distribution({ farms, roi }) {
     // );
   };
 
-  const [buttonText, setButtonText] = useState('Saved Data');
+  const [buttonText, setButtonText] = useState('Report');
 
   const handleClick = () => {
     if (view === 'saved') {
@@ -303,7 +303,7 @@ export default function Distribution({ farms, roi }) {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100vh' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100%' }}>
       <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 , justifyContent: 'flex-end' }}>
         <Button variant="outlined" color="success" onClick={handleClick}>
           {buttonText}
