@@ -451,7 +451,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     return (
         <>
             <Box sx={{
-                display: 'flex', padding: 5, overflowY:'hidden'
+                display: 'flex',
+                padding: 5,
+                overflowY: 'hidden' 
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
@@ -465,13 +467,13 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             {e && <FarmsSchedule farms={[farm]} events={e} />}
                         </Box>
                     </Grid>
+
                     <Grid item xs={12} md={8}>
                         <Box sx={{
                             display: 'flex',
                             flexDirection: 'column',
-                            height: '80%',
+                            height: '100%',
                             width: '100%',
-                            overflowY: 'auto',
                             padding: 2,
                         }}>
                             <Box sx={{
@@ -486,16 +488,17 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     justifyContent: 'flex-end',
                                     marginBottom: 1,
                                 }}>
-                                    <Button variant="contained" onClick={() => setIsAdd(true)} color="success" s
-                                        x={{
-                                            width: { xs: '100%', md: '20%' }
-                                        }}>
+                                    <Button variant="contained" onClick={() => setIsAdd(true)} color="success" sx={{
+                                        width: { xs: '100%', md: '20%' }
+                                    }}>
                                         Add Activities
                                     </Button>
                                 </Box>
                             </Box>
                             <Box sx={{
                                 padding: 2,
+                                overflowY: 'auto', 
+                                maxHeight: '400px' 
                             }}>
                                 <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                     {newActivities.map((act, index) => (
@@ -511,7 +514,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                             '&:hover': {
                                                 cursor: 'pointer',
                                                 backgroundColor: '#58AC58',
-                                                // color:'#fff'
                                             }
                                         }}>
                                             <StepLabel StepIconComponent={QontoStepIcon} >
@@ -552,11 +554,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         </Step>
                                     ))}
                                 </Stepper>
-                            </Box>
+                            </Box> {/* End scrollable Box */}
                         </Box>
-
-
                     </Grid>
+
                     <Grid item xs={12} md={4}>
                         <Box sx={{
                             display: 'flex',
@@ -567,9 +568,8 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             boxShadow: 2,
                             padding: 5,
                             gap: 2,
-                            height:'80%'
+                            height: '100%'
                         }}>
-
                             <Carousel
                                 prevIcon={<span className="carousel-control-prev-icon" aria-hidden="true" style={{ display: 'none' }} />}
                                 nextIcon={<span className="carousel-control-next-icon" aria-hidden="true" style={{ display: 'none' }} />}
@@ -602,17 +602,13 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     </Box>
                                 </Carousel.Item>
                             </Carousel>
-
                         </Box>
                     </Grid>
                 </Grid>
             </Box>
+
             <HandleAddMouse />
-            {/* {alert.visible && (
-                <Alert severity={alert.severity}>
-                    {alert.message}
-                </Alert>
-            )} */}
+
         </>
 
     )
