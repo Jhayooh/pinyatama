@@ -243,6 +243,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     events.map(async (e) => {
                         console.log("6");
 
+
                         switch (e.className.toLowerCase()) {
                             case 'vegetative':
                                 console.log("c");
@@ -258,7 +259,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             case 'flowering':
                                 console.log("d");
                                 e.start_time = Timestamp.fromDate(currDate)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                const st = new Date(e.start_time.toDate())
+                                st.setMonth(st.getMonth()+1)
+                                e.end_time = Timestamp.fromMillis(st)
                                 const flowEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -268,12 +271,19 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 break;
                             case 'fruiting':
                                 console.log("e");
-                                e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
+                                const fru_st = new Date(e.start_time.toMillis() + date_diff)
+                                console.log("fru_st", fru_st);
+                                fru_st.setMonth(fru_st.getMonth()-1)
+                                console.log("fru_st", fru_st);
+                                e.start_time = Timestamp.fromDate(fru_st)
                                 // e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
-                                const et = new Date(e.start_time.toDate())
-                                et.setMonth(et.getMonth()+3)
-                                et.setDate(et.getDate()+15)
-                                e.end_time = Timestamp.fromDate(et)
+                                const fru_et = new Date(e.start_time.toDate())
+                                console.log("fru_et", fru_et);
+                                fru_et.setMonth(fru_et.getMonth()+3)
+                                console.log("fru_et", fru_et);
+                                fru_et.setDate(fru_et.getDate()+15)
+                                console.log("fru_et", fru_et);
+                                e.end_time = Timestamp.fromDate(fru_et)
                                 const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
