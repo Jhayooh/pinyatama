@@ -349,7 +349,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                 </Box>
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                   {/* Month & Year */}
-                  <Box sx={{
+                  {/* <Box sx={{
                     width: '100%',
                     display: 'flex',
                     flexDirection: 'row',
@@ -390,7 +390,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                         ))}
                       </Select>
                     </FormControl>
-                  </Box>
+                  </Box> */}
                   {/* SearchBox */}
                   <Box sx={{
                     width: '100%',
