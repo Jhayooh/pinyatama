@@ -84,7 +84,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     useEffect(() => {
         if (!parts) return
         console.log("the parts sa activities:", parts);
-        
+
         const ferts = parts.filter(part => part.parent.toLowerCase() === 'fertilizer');
         const mat = parts.filter(part => part.particular.toLowerCase() === 'material');
         setFertilizer(ferts)
@@ -178,7 +178,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const getMult = (numOne, numTwo) => {
         const num = numOne * numTwo
         return Math.round(num * 10) / 10
-      }
+    }
 
     const [alert, setAlert] = useState({
         visible: false,
@@ -211,7 +211,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                 const currDate = new Date()
                 const theLabel = compAct.find(obj => obj.id === fert)
                 console.log("the label", theLabel);
-                
+
                 if (theLabel.name.toLowerCase() === "flower inducer (ethrel)" && events) {
                     const vege_event = events.find(p => p.className === 'vegetative')
                     const date_diff = currDate - vege_event.end_time.toDate()
@@ -283,7 +283,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 await updateDoc(fruEvent, { id: fruEvent.id });
                                 break;
                             default:
-                                console.log("f");
                                 break;
                         }
 
@@ -301,6 +300,11 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         isEthrel: currDate,
                         ethrel: farm.ethrel + bilang
                     })
+                    const newCompAct = await addDoc(componentsColl, {
+                        ...theLabel,
+                        type: "a"
+                    })
+                    await updateDoc(newCompAct, { id: newCompAct.id })
                     setSaving(false)
                     setAlert({
                         visible: true,
@@ -317,6 +321,12 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         compId: fert,
                         qnty: comps.qntyPrice
                     });
+
+                    const newCompAct = await addDoc(componentsColl, {
+                        ...theLabel,
+                        type: "a"
+                    })
+                    await updateDoc(newCompAct, { id: newCompAct.id })
 
                     setSaving(false)
                     setAlert({
@@ -438,9 +448,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         setBilangError(false)
                                     }
                                     setBilang(b)
-                                    setComps(prev=>({
+                                    setComps(prev => ({
                                         ...prev,
-                                        qntyPrice: getMult((b/30000), prev.defQnty)
+                                        qntyPrice: getMult((b / 30000), prev.defQnty)
                                     }))
 
                                 }}

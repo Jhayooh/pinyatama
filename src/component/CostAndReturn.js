@@ -523,7 +523,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     case 1:
                       return (
                         <DataGrid
-                          rows={localParts.filter(part => part.particular.toLowerCase() === 'labor')}
+                          rows={localParts.filter(part => part.particular.toLowerCase() === 'labor' && part.type !== "a")}
                           columns={[
                             {
                               field: 'name',
@@ -594,7 +594,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     case 2:
                       return (
                         <DataGrid
-                          rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer')}
+                          rows={localParts.filter(part => part.particular.toLowerCase() === 'material' && part.parent.toLowerCase() !== 'fertilizer' && part.type !== "a")}
                           columns={[
                             {
                               field: 'name',
@@ -667,7 +667,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                         <DataGrid
                           rows={
                             localParts
-                              .filter(part => part.parent.toLowerCase() === 'fertilizer')
+                              .filter(part => part.parent.toLowerCase() === 'fertilizer' && part.type !== "a")
                               .reduce((acc, part) => {
                                 const existing = acc.find(item => item.foreignId === part.foreignId);
                                 if (existing) {
