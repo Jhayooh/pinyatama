@@ -41,6 +41,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import BgImage from '../image_src/bg.jpg';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import bgImage from '../image_src/bgpic.png'
 //Icon
 import CloseIcon from '@mui/icons-material/Close';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -82,6 +83,7 @@ function Dashboard() {
   const openNested = Boolean(anchorElNested);
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [logged, setLogged] = useState(false)
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -114,6 +116,7 @@ function Dashboard() {
   const handleClose = () => {
     setAnchorEl(null);
     setOpen(false);
+    setLogged(false);
   };
 
   const [loginModalDisplay, setLoginModalDisplay] = useState(false);
@@ -210,43 +213,79 @@ function Dashboard() {
   const himagasRef = useRef(null);
   const bentaRef = useRef(null);
 
-  const [logged, setLogged] = useState(false)
 
   return (
     <>
       {logged ?
-        <Box sx={{  height: '100vh', backgroundColor:'#fff', padding:5}}>
-          {/* <img scr={require('../image_src/bg.jpg')} style={{opacity:.5}}/> */}
+        <Box sx={{
+          height: '100vh', backgroundColor: '#e6f7e6', padding: 5, justifyContent: 'center',
+          alignItems: 'center',
+        }}>
           <Grid
             container
-            spacing={2}
             sx={{
-              // borderRadius: 4,
-              // backgroundColor: '#fff',
-              padding: 2,
+              // marginTop: 5,
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            <Grid item lg={7} md={6} xs={12}>
-              <Box
-                sx={{
-                  display: { xs: 'none', md: 'flex', lg: 'flex' },
-                  width: '100%',
-                  height: 'auto',
-                  overflow: 'hidden',
-                  backgroundColor: 'red',
-                  borderRadius: 4,
-                  '& img': {
-                    width: '100%',
-                    height: 'auto',
-                    objectFit: 'cover',
-                  },
-                }}
-              >
-                <img src={require('../image_src/p1.jpg')} alt='Image' />
+            <Grid item lg={6} md={'none'} xs={'none'}>
+              <Box sx={{
+                width: "100%",
+                height: 300,
+                display: { xs: 'none', md: 'none' , lg:'flex'},
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: 2,
+              }}>
+                <Paper elevation={3}
+                  sx={{
+                    position: 'absolute',
+                    top: '10%',
+                    left: '8%',
+                    width: '22%',
+                    height: '20%',
+                    borderRadius: 15,
+                    boxShadow: 2
+                  }} >
+                  <img
+                    src={require('../image_src/pinya1.jpg')}
+                    style={{ width: '100%', height: 300, borderRadius: 15 }}
+                  />
+                </Paper>
+                <Paper elevation={3}
+                  sx={{
+                    position: 'absolute',
+                    top: '32%',
+                    left: '22%',
+                    width: '22%',
+                    height: '20%',
+                    borderRadius: 15,
+                    boxShadow: 2
+                  }}  >
+                  <img
+                    src={require('../image_src/pinya4.jpg')}
+                    style={{ width: '100%', height: 300, borderRadius: 15 }}
+                  />
+                </Paper>
+                <Paper elevation={3}
+                  sx={{
+                    position: 'absolute',
+                    top: '58%',
+                    left: '10%',
+                    width: '22%',
+                    height: '20%',
+                    borderRadius: 15,
+                    boxShadow: 2
+                  }}  >
+                  <img
+                    src={require('../image_src/pinya2.jpg')}
+                    style={{ width: '100%', height: 300, borderRadius: 15 }}
+                  />
+                </Paper>
               </Box>
-            </Grid>
+            </Grid >
+
             <Grid item lg={5} md={6} xs={12}>
               <Box
                 sx={{
@@ -256,177 +295,150 @@ function Dashboard() {
                   justifyContent: 'center',
                   height: { lg: '100%', xs: '100%', md: '80%' },
                   padding: 2,
+                  backgroundColor: '#fff',
+                  borderRadius: 4,
+                  boxShadow: 3,
+                  marginTop: 5
                 }}
               >
-                <Button
-                  sx={{ alignSelf: 'flex-end' }}
-                  onClick={handleClose}
+
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                    mb: 2,
+                  }}
                 >
-                  <CloseIcon sx={{ color: 'gray' }} />
-                </Button>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column' }}>
-                  <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: 'auto' }} alt='Logo' />
-                  <Typography variant="h1" sx={{ fontSize: 30, color: 'green', fontFamily: 'monospace', mt: 2 }}>
-                    Welcome Back!
-                  </Typography>
-                </Box>
-                <Box sx={{ mt: 1, width: '100%' }}>
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    id="email"
-                    name="email"
-                    autoComplete="email"
-                    autoFocus
-                    label="Email"
-                    color="success"
-                    value={email}
-                    onChange={(event) => setEmail(event.target.value)}
-                    InputProps={{ style: { borderColor: 'green' } }}
-                  />
-                  <TextField
-                    margin="normal"
-                    required
-                    fullWidth
-                    name="password"
-                    type="password"
-                    id="password"
-                    autoComplete="current-password"
-                    label="Password"
-                    color="success"
-                    value={password}
-                    onChange={(event) => setPassword(event.target.value)}
-                    InputProps={{ style: { borderColor: 'green' } }}
-                  />
-                  <Button
-                    type="submit"
-                    fullWidth
-                    variant="contained"
-                    sx={{
-                      color: 'white',
-                      backgroundColor: 'green',
-                      borderColor: 'green',
-                      '&:hover': {
-                        backgroundColor: 'orange',
-                        color: 'white',
-                      },
-                    }}
-                    onClick={handleLogin}
-                  >
-                    Login
-                  </Button>
-                  <Copyright sx={{ mt: { xs: 2, lg: 5 } }} />
+                  {/* <Box sx={{
+                    position: 'absolute',
+                    top: {xs:'10%',sm:'12%',md:'4%', lg:'8%',xl:'3%'},
+                    left:  {xs:'40%',sm:'70%',md:'43%', lg:'68%',xl:'70%'},
+                  }}>
+                    <img
+                      src={require('../image_src/pinyatamap-logo.png')}
+                      style={{ width: "25%", height: 'auto' }}
+                      alt="Logo"
+                    />
+                  </Box> */}
+                  <Box sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexDirection: 'column',
+                  }}>
+                    <img
+                      src={require('../image_src/pinyatamap-logo.png')}
+                      style={{ width: "25%", height: 'auto' }}
+                      alt="Logo"
+                    />
+                    <Typography
+                      variant="h1"
+                      sx={{
+                        fontFamily: 'Georgia, serif',
+                        fontSize: { xs: 30, md: 60 },
+                        color: 'green',
+                        textAlign: 'center',
+                        fontWeight: 'bold',
+                        mt:0
+                      }}
+                    >
+                      QUEEN PINEAPPLE FARMING
+                    </Typography>
+                    <Typography
+                      variant="h1"
+                      sx={{
+                        fontSize: 30,
+                        color: 'green',
+                        fontFamily: 'monospace',
+                        mt: 2,
+                        mb: 2,
+                      }}
+                    >
+                      Welcome Back!
+                    </Typography>
+                  </Box>
+
+                  {/* Login Form */}
+                  <Box sx={{
+                    width: '100%',
+                    paddingLeft: {xs:'5%',md:'10%'},
+                    paddingRight:  {xs:'5%',md:'10%'},
+                  }}>
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      id="email"
+                      name="email"
+                      autoComplete="email"
+                      autoFocus
+                      label="Email"
+                      color="success"
+                      value={email}
+                      onChange={(event) => setEmail(event.target.value)}
+                      InputProps={{ style: { borderColor: 'green', borderRadius:20,backgroundColor:'#e6f7e6' } }}
+                    />
+                    <TextField
+                      margin="normal"
+                      required
+                      fullWidth
+                      name="password"
+                      type="password"
+                      id="password"
+                      autoComplete="current-password"
+                      label="Password"
+                      color="success"
+                      value={password}
+                      onChange={(event) => setPassword(event.target.value)}
+                      InputProps={{ style: { borderColor: 'green', borderRadius:20,backgroundColor:'#e6f7e6'  } }}
+                    />
+
+                    {/* Login Button */}
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                      <Button
+                        type="submit"
+
+                        variant="outlined"
+                        color='error'
+                        sx={{
+                          mt: 3,
+                          padding: 1.5,
+                          width: '30%',
+                          borderRadius:{xs:5,md:10}
+                        }}
+                        onClick={handleClose}
+                      >
+                        Cancel
+                      </Button>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color='success'
+                        sx={{
+                          '&:hover': {
+                            backgroundColor: 'green',
+                          },
+                          mt: 3,
+                          padding: 1.5,
+                          width: '70%',
+                          borderRadius: {xs:5,md:10}
+                        }}
+                        onClick={handleLogin}
+                      >
+                        Login
+                      </Button>
+                    </Box>
+
+
+                    <Copyright sx={{ mt: { xs: 2, lg: 5 } }} />
+                  </Box>
                 </Box>
               </Box>
             </Grid>
-          </Grid>
+          </Grid >
         </Box >
-        // <ThemeProvider theme={defaultTheme}>
-        //</ThemeProvider> <Grid container component="main" sx={{ height: '100%', justifyContent: 'center', position: 'absolute', width: '100%' }}>
-        //     <CssBaseline />
-        //     {/* <Box
-        //       item
-        //       xs={false}
-        //       sm={4}
-        //       md={7}
-        //       sx={{
-        //         backgroundImage: `url(${BgImage})`,
-        //         backgroundRepeat: 'no-repeat',
-        //         backgroundColor: (t) =>
-        //           t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-        //         backgroundSize: 'cover',
-        //         backgroundPosition: 'center',
-        //         position: 'absolute',
-        //         zIndex: -1,
-        //         top: 0,
-        //         left: 0,
-        //         width:'100%',
-        //         height:'100%',
-        //         boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
-        //         filter: 'brightness(50%)', 
-
-        //       }}
-        //     /> */}
-
-        //     <Grid item xs={12} md={12} lg={12} sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        //       <Box
-        //         sx={{
-        //           // mt: 5,
-        //           display: 'flex',
-        //           flexDirection: 'column',
-        //           // alignItems: 'center',
-        //           // justifyContent: 'center',
-        //           borderRadius: 2,
-        //           padding: 4,
-        //           boxShadow: 2,
-        //           width: {xs:'90%', md:'50%'}
-        //         }}
-        //       >
-        //         <Button sx={{justifyContent: 'flex-end'}}>
-        //           <CloseIcon sx={{ color: 'gray' }} onClick={handleClose} />
-        //         </Button>
-        //         <Box sx={{display:'flex', alignItems:'center', justifyContent:'center', flexDirection:'column'}}>
-        //           <img src={require('../image_src/pinyatamap-logo.png')} style={{ width: '20%', height: '20%' }} />
-        //         <Typography component="h1" variant="h5">
-        //           Sign in
-        //         </Typography>
-        //         </Box>
-        //         <Box sx={{ mt: 1 }}>
-        //           <TextField
-        //             margin="normal"
-        //             required
-        //             fullWidth
-        //             id="email"
-        //             name="email"
-        //             autoComplete="email"
-        //             autoFocus
-        //             label="Email"
-        //             color="secondary"
-        //             value={email}
-        //             onChange={(event) => { setEmail(event.target.value) }}
-        //             InputProps={{ style: { borderColor: 'green' } }}
-        //           />
-        //           <TextField
-        //             margin="normal"
-        //             required
-        //             fullWidth
-        //             name="password"
-        //             type="password"
-        //             id="password"
-        //             autoComplete="current-password"
-        //             label="Password"
-        //             color="secondary"
-        //             value={password}
-        //             onChange={(event) => {
-        //               setPassword(event.target.value)
-        //               console.log('pass')
-        //             }}
-        //             InputProps={{ style: { borderColor: 'green' } }}
-        //           />
-        //           <Button
-        //             type="submit"
-        //             fullWidth
-        //             variant="contained"
-        //             sx={{
-        //               color: 'white',
-        //               backgroundColor: 'green',
-        //               borderColor: 'green',
-        //               '&:hover': {
-        //                 backgroundColor: 'orange',
-        //                 color: 'white',
-        //               },
-        //             }}
-        //             onClick={handleLogin}
-        //           >
-        //             Login
-        //           </Button>
-        //           <Copyright sx={{ mt: 5 }} />
-        //         </Box>
-        //       </Box>
-        //     </Grid>
-        //   </Grid>
-        // </ThemeProvider > 
         :
 
         <div >
@@ -468,56 +480,28 @@ function Dashboard() {
                 {/* <AppBar position="fixed" elevation={4} style={{ backgroundColor: 'transparent', backdropFilter: 'blur(8px)', boxShadow: 'none' }}> */}
                 <Container maxWidth="xl">
                   <Toolbar disableGutters>
-                    <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
-                    <Typography
-                      variant="h6"
-                      noWrap
-                      component="a"
-                      href="#app-bar-with-responsive-menu"
-                      sx={{
-                        mr: 2,
-                        display: { xs: 'none', md: 'flex' },
-                        fontFamily: 'monospace',
-                        fontWeight: 700,
-                        letterSpacing: '.3rem',
-                        color: 'green',
-                        textDecoration: 'none',
-                      }}
-                      style={{ marginLeft: '10px' }}
-                    >
-                      QUEEN PINEAPPLE FARMING
-                    </Typography>
-                    {/* 
-                    <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}> */}
-                    {/* <IconButton
-                        size="large"
-                        aria-label="account of current user"
-                        aria-controls="menu-appbar"
-                        aria-haspopup="true"
-                        onClick={handleOpenNavMenu}
-                        color="inherit"
-                      >
-                        <MenuIcon sx={{ color: 'green' }} />
-                      </IconButton>
-                      <Menu
-                        id="menu-appbar"
-                        anchorEl={anchorElNav}
-                        anchorOrigin={{
-                          vertical: 'bottom',
-                          horizontal: 'left',
-                        }}
-                        keepMounted
-                        transformOrigin={{
-                          vertical: 'top',
-                          horizontal: 'left',
-                        }}
-                        open={open}
-                        onClose={handleCloseNavMenu}
+                    <Box onClick={scrollToTop}
+                      sx={{ display: 'flex', flexDirection: 'row' }}>
+                      <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
+                      <Typography
+                        variant="h6"
+                        noWrap
+                        component="a"
                         sx={{
-                          display: { xs: 'block', md: 'none' },
+                          mr: 2,
+                          display: { xs: 'flex', md: 'flex' },
+                          fontFamily: 'monospace',
+                          fontWeight: 700,
+                          letterSpacing: {xs: '.1rem',md:'.3rem'},
+                          color: 'green',
+                          textDecoration: 'none',
+                          m: 2
                         }}
-                      > */}
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                      >
+                        QUEEN PINEAPPLE FARMING
+                      </Typography>
+                    </Box>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: { xs: 1, lg: 2 } }}>
                       <Button
                         onClick={scrollToTop}
                         sx={{ my: 2, color: 'green', display: 'block' }}
@@ -808,16 +792,16 @@ function Images({ imagesList }) {
     <Carousel>
       {imagesList.map(image => (
         <Carousel.Item>
-          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '100%', height: '100%' }} />
+          <img src={require(`../image_src/${image}`)} alt='pineapple' style={{ width: '100%', height: 'auto' }} />
         </Carousel.Item>
       ))}
     </Carousel>
   )
 }
 const imagesList = [
-  "p1.jpg",
-  "p2.jpg",
-  "p3.jpg",
+  "pinya1.jpg",
+  "pinya2.jpg",
+  "pinya3.jpg",
 
 ]
 
@@ -1076,7 +1060,7 @@ const Lupa = () => {
         }}
       >
         <Grid item xs={12} md={6} lg={6}>
-          <img src={require('../image_src/p1.jpg')} style={{ width: '100%', height: '100%' }} />
+          <img src={require('../image_src/pinya1.jpg')} style={{ width: '100%', height: '100%' }} />
         </Grid >
         <Grid xs={12} md={6} lg={6}>
           <Box sx={{
@@ -1154,7 +1138,7 @@ const Tanim = () => {
           </Box>
         </Grid>
         <Grid item xs={12} md={6} lg={6}>
-          <img src={require('../image_src/p3.jpg')} style={{ width: '100%', height: '100%' }} />
+          <img src={require('../image_src/pinya4.jpg')} style={{ width: '100%', height: '100%' }} />
         </Grid>
       </Grid>
     </div>
@@ -1372,7 +1356,7 @@ const Bulaklak = () => {
         </Typography>
         <Grid container spacing={2}>
           <Grid item xs={12} md={6} lg={6}>
-            <img src={require('../image_src/Flower.jpg')} style={{ width: '100%', height: '100%' }} />
+            <img src={require('../image_src/pinya2.jpg')} style={{ width: '100%', height: '100%' }} />
           </Grid>
           <Grid item xs={12} md={6} lg={6}
           >
@@ -2286,79 +2270,6 @@ function ContactSec() {
 function SiteMap() {
   return (
     <div style={{ padding: 20, backgroundColor: 'white' }}>
-      {/* <Typography
-        variant="overline"
-        display="block"
-        gutterBottom
-        sx={{ color: 'orange', fontSize: '20px' }}>
-        Site Map
-      </Typography> */}
-      {/* <Box sx={{ flexDirection: 'row', display: 'flex' }}> */}
-
-      {/* <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> About Us</Typography>
-          <ul>
-            <li>
-            <a href="/About">Katangian ng Pinyang Queen</a>
-            </li>
-          </ul>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> Gallery</Typography>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Typography variant='button'> Agencies</Typography>
-        </Box> */}
-      {/* </Box>
-      <Box sx={{ flexDirection: 'row', display: 'flex', marginTop: 5 }}>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1 }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><LocationOnIcon /></Avatar>
-            </div>
-            <Typography variant='caption' > 2nd Floor Provincial Capitol Annex Building
-              Brgy. III, Daet Camarines Norte</Typography>
-            
-          </Box>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><PhoneIcon /></Avatar>
-            </div>
-            <Typography variant='caption'>054 721-0291</Typography>
-          </Box>
-        </Box>
-        <Box sx={{ flex: 1 }}>
-          <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-            <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}> <EmailIcon/></Avatar>
-            </div>
-            <Typography variant='caption'>opagcamnorte@yahoo.com/opagcamsnorte@gmail.com</Typography>
-          </Box>
-        </Box>
-      </Box> */}
-      {/* <Box sx={{ display: 'flex', flexDirection: 'column' , marginTop:2}}>
-        <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-              <div>
-                <Avatar sx={{backgroundColor:'#07da63'}}><FacebookIcon /></Avatar>
-              </div>
-              <Typography variant='caption'> OPAg Camarines Norte</Typography>
-            </Box>
-          </Box>
-          <Box sx={{ flex: 1 }}>
-            <Box sx={{ flexDirection: 'row', display: 'flex', gap:1  }}>
-              <div>
-              <Avatar sx={{backgroundColor:'#07da63'}}><LanguageIcon /></Avatar>
-              </div>
-              <Typography variant='caption'> <a href="https://opagcamnorte.com">https://opagcamnorte.com</a></Typography>
-            </Box>
-          </Box>
-        </Box>
-      </Box> */}
-
       <Box sx={{}}>
         <Divider />
         <Box sx={{ flexDirection: 'row', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -2370,7 +2281,6 @@ function SiteMap() {
               variant="h6"
               noWrap
               component="a"
-              href="#app-bar-with-responsive-menu"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },

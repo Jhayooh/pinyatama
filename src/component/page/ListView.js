@@ -21,6 +21,7 @@ function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
     const options = { year: 'numeric', month: 'long', day: '2-digit' };
     return d.toLocaleDateString('en-US', options);
   }
+  
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: theme.palette.common.black,

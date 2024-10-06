@@ -13,7 +13,7 @@ import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
 
 
-export default function Timeline({ farms, events, users, setSelected }) {
+export default function Timeline({ farms, events, users, setSelected, farmer }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
     const [timelineEvents, setTimelineEvents] = useState(events)
     const [filteredUsers, setFilteredUsers] = useState(users);
@@ -68,9 +68,6 @@ export default function Timeline({ farms, events, users, setSelected }) {
         { name: "Vinzons", value: "VINZONS" }
     ];
 
-    // Filter the municipalities based on the selected mun
-    const filteredMunicipalities = municipalities.filter(m => m.value === mun);
-
     // Month and year selection
     const months = [
         { value: 0, label: 'January' },
@@ -87,122 +84,129 @@ export default function Timeline({ farms, events, users, setSelected }) {
         { value: 11, label: 'December' }
     ];
 
-    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; // Adjust this range based on your data
+    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; 
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ marginBottom: 1, display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
-                    <Box sx={{ width: { xs: '100%', md: '80%', xl: '20%' } }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
-                            <Select
-                                sx={{ border: "none" }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={mun}
-                                label="Municipality"
-                                onChange={handleChange}
-                            >
-                                {
-                                    municipalities.map((municipality) => (
-                                        <MenuItem key={municipality.value} value={municipality.value}>
-                                            {municipality.name}
-                                        </MenuItem>
-                                    ))
-                                }
-                            </Select>
-                        </FormControl>
+                <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap:1 }}>
+                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+                        {/* Municipality  */}
+                        <Box sx={{ width: '100%' }}>
+                            <FormControl fullWidth size="small">
+                                <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
+                                <Select
+                                    sx={{ border: "none" }}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={mun}
+                                    label="Municipality"
+                                    onChange={handleChange}
+                                >
+                                    {
+                                        municipalities.map((municipality) => (
+                                            <MenuItem key={municipality.value} value={municipality.value}>
+                                                {municipality.name}
+                                            </MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        {/* Extensionist */}
+                        <Box sx={{ width: '100%' }}>
+                            <FormControl fullWidth size="small">
+                                <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
+                                <Select
+                                    sx={{ border: "none" }}
+                                    labelId="demo-simple-select-label"
+                                    id="demo-simple-select"
+                                    value={userFilter}
+                                    label="Extensionist"
+                                    onChange={handleUser}
+                                >
+                                    {newUser
+                                        .filter((user) => user.status === "active") // Filter users with active status
+                                        .map((user) => (
+                                            <MenuItem key={user.uid} value={user.id}>
+                                                {user.displayName}
+                                            </MenuItem>
+                                        ))}
+                                </Select>
+
+                            </FormControl>
+                        </Box>
                     </Box>
-                    <Box sx={{ width: { xs: '100%', md: '80%', xl: '20%' } }}>
-                        <FormControl fullWidth size="small">
-                            <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
-                            <Select
-                                sx={{ border: "none" }}
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={userFilter}
-                                label="Extensionist"
-                                onChange={handleUser}
-                            >
-                                {newUser
-                                    .filter((user) => user.status === "active") // Filter users with active status
-                                    .map((user) => (
-                                        <MenuItem key={user.uid} value={user.id}>
-                                            {user.displayName}
+                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+                        {/* Month & Year */}
+                        <Box
+                            sx={{
+                                width: '100%',
+                                display: 'flex',
+                                flexDirection: 'row',
+                                gap: 1,
+                            }}
+                        >
+                            <FormControl fullWidth size="small">
+                                <InputLabel id="month-select-label">Buwan</InputLabel>
+                                <Select
+                                    sx={{ border: 'none' }}
+                                    labelId="month-select-label"
+                                    id="month-select"
+                                    value={selectedMonth}
+                                    label="Buwan"
+                                    onChange={(e) => setSelectedMonth(e.target.value)}
+                                >
+                                    {months.map((month) => (
+                                        <MenuItem key={month.value} value={month.value}>
+                                            {month.label}
                                         </MenuItem>
                                     ))}
-                            </Select>
-
-                        </FormControl>
-                    </Box>
-                    <Box
-                        sx={{
-                            width: { xs: '100%', md: '80%', xl: '20%' },
-                            display: 'flex',
-                            flexDirection: 'row',
-                            gap: 1,
-                        }}
-                    >
-                        <FormControl fullWidth size="small">
-                            <InputLabel id="month-select-label">Month</InputLabel>
-                            <Select
-                                sx={{ border: 'none' }}
-                                labelId="month-select-label"
-                                id="month-select"
-                                value={selectedMonth}
-                                label="Month"
-                                onChange={(e) => setSelectedMonth(e.target.value)}
-                            >
-                                {months.map((month) => (
-                                    <MenuItem key={month.value} value={month.value}>
-                                        {month.label}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth size="small">
-                            <InputLabel id="year-select-label">Year</InputLabel>
-                            <Select
-                                sx={{ border: 'none' }}
-                                labelId="year-select-label"
-                                id="year-select"
-                                label="Year"
-                                value={selectedYear}
-                                onChange={(e) => setSelectedYear(e.target.value)}
-                            >
-                                {years.map((year) => (
-                                    <MenuItem key={year} value={year}>
-                                        {year}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Box>
-
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'flex-end',
-                            gap: 1,
-                            width: { xs: '100%', md: '100%', xl: '60%' },
-                        }}
-                    >
-                        <FormControl fullWidth size="small" >
-                            <OutlinedInput
-                                id="outlined-adornment-amount"
-                                placeholder="Maghanap..."
-                                startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
-                                value={search}
-                                onChange={handleSearch}
-                            />
-                        </FormControl>
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth size="small">
+                                <InputLabel id="year-select-label">Taon</InputLabel>
+                                <Select
+                                    sx={{ border: 'none' }}
+                                    labelId="year-select-label"
+                                    id="year-select"
+                                    label="Taon"
+                                    value={selectedYear}
+                                    onChange={(e) => setSelectedYear(e.target.value)}
+                                >
+                                    {years.map((year) => (
+                                        <MenuItem key={year} value={year}>
+                                            {year}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        {/* SearchBox */}
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'flex-end',
+                                gap: 1,
+                                width: { xs: '100%', md: '100%', xl: '60%' },
+                            }}
+                        >
+                            <FormControl fullWidth size="small" >
+                                <OutlinedInput
+                                    id="outlined-adornment-amount"
+                                    placeholder="Maghanap..."
+                                    startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                                    value={search}
+                                    onChange={handleSearch}
+                                />
+                            </FormControl>
+                        </Box>
                     </Box>
                 </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: {xs:'column', md:'row'} }}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
@@ -249,8 +253,8 @@ export default function Timeline({ farms, events, users, setSelected }) {
                         </Typography>
                     </Box>
                 </Box>
-                <Box sx={{ overflowY: 'auto', padding: 3, paddingBottom: 10, height: '100%' }}>
-                    <FarmsSchedule farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
+                <Box sx={{ overflowY: 'auto', padding: 1, paddingBottom: 10, height: '100%' }}>
+                    <FarmsSchedule farms={timelineFarms} events={timelineEvents} farmer={farmer} setSelected={setSelected} />
                 </Box>
             </Box>
         </Box>

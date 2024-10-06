@@ -36,6 +36,11 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
   const [cropFilter, setCropFilter] = useState('Lahat');
+  const [month, setMonth] = useState(0)
+  const [year, setYear] = useState(new Date().getFullYear())
+
+  const [selectedMonth, setSelectedMonth] = useState("Lahat");
+  const [selectedYear, setSelectedYear] = useState("Lahat");
 
   const [grid, setGrid] = useState(true);
 
@@ -64,23 +69,31 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const handleCrop = (event) => {
     setCropFilter(event.target.value);
   }
+  const handleMonth = (event) => {
+    setMonth(event.target.value)
+  }
+  const handleYear = (event) => {
+    setYear(event.target.value)
+  }
+
 
   useEffect(() => {
     const filteredFarms = farms.filter((farm) => {
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
+      const matchesMonth = month !== 0 ? (new Date(farm.start_date.toMillis()).getMonth() + 1) === month : true
+      const matchesYear = year ? new Date(farm.start_date.toMillis()).getFullYear() === year : true
+      console.log(`month ${new Date(farm.start_date.toMillis()).getFullYear()} ${year}`);
       const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage;
+      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage && matchesMonth && matchesYear;
     });
-    console.log('the farmm', farms)
-    console.log('the cropFilter', cropFilter)
     const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
     });
     setFilteredFarms(filteredFarms);
     setFilteredUsers(filteredUsers);
-  }, [search, farms, mun, newUser, userFilter, cropFilter]);
+  }, [search, farms, mun, newUser, userFilter, cropFilter, month, year]);
 
   async function getImage(id) {
     try {
@@ -230,24 +243,22 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   };
   // Month and year selection
   const months = [
-    { value: 0, label: 'January' },
-    { value: 1, label: 'February' },
-    { value: 2, label: 'March' },
-    { value: 3, label: 'April' },
-    { value: 4, label: 'May' },
-    { value: 5, label: 'June' },
-    { value: 6, label: 'July' },
-    { value: 7, label: 'August' },
-    { value: 8, label: 'September' },
-    { value: 9, label: 'October' },
-    { value: 10, label: 'November' },
-    { value: 11, label: 'December' }
+    { value: 0, label: 'Lahat' },
+    { value: 1, label: 'January' },
+    { value: 2, label: 'February' },
+    { value: 3, label: 'March' },
+    { value: 4, label: 'April' },
+    { value: 5, label: 'May' },
+    { value: 6, label: 'June' },
+    { value: 7, label: 'July' },
+    { value: 8, label: 'August' },
+    { value: 9, label: 'September' },
+    { value: 10, label: 'October' },
+    { value: 11, label: 'November' },
+    { value: 12, label: 'December' },
   ];
 
   const year2 = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
-
-  const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
-  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
 
   return (
     <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%' }}>
@@ -266,187 +277,188 @@ function Farms({ events, farms, users, particularData, pineapple }) {
         ) : (
           <Box sx={{ borderRadius: 4, height: '100%', paddingBottom: 5 }}>
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
-              <Box sx={{ display: 'flex', width: 1, justifyContent: 'flex-start', gap: 1, p: 2, borderRadius: 20 }}>
-              
-                {/* Municipality */}
-                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
-                  <FormControl fullWidth size='small'>
-                    <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
-                    <Select
-                      sx={{ border: 'none' }}
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={mun}
-                      label='Municipality'
-                      onChange={handleMun}
-                    >
-                      {municipalities.map((municipality) => (
-                        <MenuItem key={municipality.value} value={municipality.value}>
-                          {municipality.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* ExtensionistSorting */}
-                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
-                  <FormControl fullWidth size='small'>
-                    <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
-                    <Select
-                      sx={{ border: 'none' }}
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={userFilter}
-                      label='Extensionist'
-                      onChange={handleUser}
-                    >
-                      {[
-                        { uid: '1', id: '', displayName: 'Lahat' }, // Default user
-                        ...newUser.filter(user => user.status === 'active') // Filtered active users
-                      ].map((user) => (
-                        <MenuItem key={user.uid} value={user.id}>
-                          {user.displayName}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* Crop Stage */}
-                <Box sx={{ display: 'flex', width: { xs: '100%', md: '50%', lg: '20%' } }}>
-                  <FormControl fullWidth size='small'>
-                    <InputLabel id='demo-simple-select-label'>Crop Stage</InputLabel>
-                    <Select
-                      sx={{ border: 'none' }}
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={cropFilter}
-                      label='Crop Stage'
-                      onChange={handleCrop}
-                    >
-                      {
-                        [{ id: '', cropStage: 'Lahat' },
-                        { id: '0', cropStage: 'Vegetative' },
-                        { id: '1', cropStage: 'Flowering' },
-                        { id: '2', cropStage: 'Fruiting' }].map((farm) => (
-                          <MenuItem key={farm.id} value={farm.cropStage}>
-                            {farm.cropStage}
+              <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
+                  {/* Municipality */}
+                  <Box sx={{ display: 'flex', width: '100%' }}>
+                    <FormControl fullWidth size='small'>
+                      <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
+                      <Select
+                        sx={{ border: 'none' }}
+                        labelId='demo-simple-select-label'
+                        id='demo-simple-select'
+                        value={mun}
+                        label='Municipality'
+                        onChange={handleMun}
+                      >
+                        {municipalities.map((municipality) => (
+                          <MenuItem key={municipality.value} value={municipality.value}>
+                            {municipality.name}
                           </MenuItem>
                         ))}
-                    </Select>
-                  </FormControl>
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* ExtensionistSorting */}
+                  <Box sx={{ display: 'flex', width: '100%' }}>
+                    <FormControl fullWidth size='small'>
+                      <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
+                      <Select
+                        sx={{ border: 'none' }}
+                        labelId='demo-simple-select-label'
+                        id='demo-simple-select'
+                        value={userFilter}
+                        label='Extensionist'
+                        onChange={handleUser}
+                      >
+                        {[
+                          { uid: '1', id: '', displayName: 'Lahat' }, // Default user
+                          ...newUser.filter(user => user.status === 'active') // Filtered active users
+                        ].map((user) => (
+                          <MenuItem key={user.uid} value={user.id}>
+                            {user.displayName}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* Crop Stage */}
+                  <Box sx={{ display: 'flex', width: '100%' }}>
+                    <FormControl fullWidth size='small'>
+                      <InputLabel id='demo-simple-select-label'>Crop Stage</InputLabel>
+                      <Select
+                        sx={{ border: 'none' }}
+                        labelId='demo-simple-select-label'
+                        id='demo-simple-select'
+                        value={cropFilter}
+                        label='Crop Stage'
+                        onChange={handleCrop}
+                      >
+                        {
+                          [{ id: '', cropStage: 'Lahat' },
+                          { id: '0', cropStage: 'Vegetative' },
+                          { id: '1', cropStage: 'Flowering' },
+                          { id: '2', cropStage: 'Fruiting' }].map((farm) => (
+                            <MenuItem key={farm.id} value={farm.cropStage}>
+                              {farm.cropStage}
+                            </MenuItem>
+                          ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
                 </Box>
-                {/* Month & Year */}
-                <Box sx={{
-                  width: { xs: '100%', md: '50%', lg: '20%' },
-                  display: 'flex',
-                  flexDirection: 'row',
-                  gap: 1,
-                }}
-                >
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="month-select-label">Month</InputLabel>
-                    <Select
-                      sx={{ border: 'none' }}
-                      labelId="month-select-label"
-                      id="month-select"
-                      value={selectedMonth}
-                      label="Month"
-                      onChange={(e) => setSelectedMonth(e.target.value)}
-                    >
-                      {months.map((month) => (
-                        <MenuItem key={month.value} value={month.value}>
-                          {month.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="year-select-label">Year</InputLabel>
-                    <Select
-                      sx={{ border: 'none' }}
-                      labelId="year-select-label"
-                      id="year-select"
-                      label="Year"
-                      value={selectedYear}
-                      onChange={(e) => setSelectedYear(e.target.value)}
-                    >
-                      {year2.map((year) => (
-                        <MenuItem key={year} value={year}>
-                          {year}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                {/* SearchBox */}
-                <Box sx={{
-                  width: {
-                    xs: '100%', md: '50%', lg: '20%',
+                <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
+                  {/* Month & Year */}
+                  <Box sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: 1,
+                  }}
+                  >
+                    <FormControl fullWidth size="small">
+                      <InputLabel id="month-select-label">Buwan</InputLabel>
+                      <Select
+                        sx={{ border: 'none' }}
+                        labelId="month-select-label"
+                        id="month-select"
+                        value={month}
+                        label="Month"
+                        onChange={handleMonth}
+                      >
+                        {months.map((month) => (
+                          <MenuItem key={month.value} value={month.value}>
+                            {month.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                    <FormControl fullWidth size="small">
+                      <InputLabel id="year-select-label">Taon</InputLabel>
+                      <Select
+                        sx={{ border: 'none' }}
+                        labelId="year-select-label"
+                        id="year-select"
+                        label="Taon"
+                        value={year}
+                        onChange={handleYear}
+                      >
+                        {year2.map((year) => (
+                          <MenuItem key={year} value={year}>
+                            {year}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  </Box>
+                  {/* SearchBox */}
+                  <Box sx={{
+                    width: '100%',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'flex-end',
                     gap: 1,
-                  }
-                }}>
-                  <FormControl fullWidth size='small'>
-                    <OutlinedInput
-                      id='outlined-adornment-amount'
-                      placeholder='Maghanap...'
-                      startAdornment={<InputAdornment position='start'><SearchIcon /></InputAdornment>}
-                      value={search}
-                      onChange={handleSearch}
-                    />
-                  </FormControl>
-                </Box>
-                {/* MenuIcon */}
-                <Grid item >
-                  <IconButton
-                    aria-label="more"
-                    id="long-button"
-                    aria-controls={open ? 'long-menu' : undefined}
-                    aria-expanded={open ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={handleClick}
-                  >
-                    <More />
-                  </IconButton>
-                  <Menu
-                    id="demo-positioned-menu"
-                    aria-labelledby="demo-positioned-button"
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                    transformOrigin={{
-                      vertical: 'top',
-                      horizontal: 'left',
-                    }}
-                  >
-                    <MenuItem >
-                      <Importer sx={{ width: '100%' }} />
-                    </MenuItem>
-                    <MenuItem >
-                      <Exporter sx={{ width: '100%' }} />
-                    </MenuItem>
+                  }}>
+                    <FormControl fullWidth size='small'>
+                      <OutlinedInput
+                        id='outlined-adornment-amount'
+                        placeholder='Maghanap...'
+                        startAdornment={<InputAdornment position='start'><SearchIcon /></InputAdornment>}
+                        value={search}
+                        onChange={handleSearch}
+                      />
+                    </FormControl>
+                  </Box>
+                  {/* MenuIcon */}
+                  <Grid item >
+                    <IconButton
+                      aria-label="more"
+                      id="long-button"
+                      aria-controls={open ? 'long-menu' : undefined}
+                      aria-expanded={open ? 'true' : undefined}
+                      aria-haspopup="true"
+                      onClick={handleClick}
+                    >
+                      <More />
+                    </IconButton>
+                    <Menu
+                      id="demo-positioned-menu"
+                      aria-labelledby="demo-positioned-button"
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                      anchorOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                      transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'left',
+                      }}
+                    >
+                      <MenuItem >
+                        <Importer sx={{ width: '100%' }} />
+                      </MenuItem>
+                      <MenuItem >
+                        <Exporter farms={filteredFarms} sx={{ width: '100%' }} />
+                      </MenuItem>
 
-                  </Menu>
-                </Grid>
+                    </Menu>
+                  </Grid>
+                </Box>
               </Box>
               <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
-                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
-                  List
-                </Button>
                 <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewModuleIcon />} onClick={() => setGrid(true)}>
                   Grid
                 </Button>
+                <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
+                  List
+                </Button>
               </Box>
             </Box>
-            <Box sx={{ paddingBottom: 3, height: 1, overflow: 'hidden' }}>
+            <Box sx={{ paddingBottom: 3, height: '100%', overflowX: 'auto', }}>
               {grid ? (
-                <Box sx={{ display: 'flex', flexWrap: 'wrap', overflowX: 'auto', height: '100%', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
+                <Box sx={{ display: 'flex', flexWrap: 'wrap', paddingBottom: { xs: 18, lg: 10 }, marginTop: 2 }}>
                   {filteredFarms.map((marker, index) => (
                     <GridView
                       key={marker.id}

@@ -24,6 +24,7 @@ function Exporter({ farms }) {
         "Date of Planting",
         "Stage of Crops",
         "Date of Harvest",
+        "Date of application of flower inducer",
     ]]
 
     const propertiesToRemove = [
@@ -32,9 +33,12 @@ function Exporter({ farms }) {
         "images",
         "geopoint",
         "id",
+        "soil",
+        "farmerId",
+        "npk",
+        "ethrel",
+        "fieldId"
     ]
-
-    console.log("Farmsssss:", farms)
 
     const handleClose = () => {
         setExportModal(false)
@@ -46,6 +50,7 @@ function Exporter({ farms }) {
     }
 
     const handleExport = () => {
+        if (!farms) return console.log("wala laman")
 
         farms.forEach(farm => {
             propertiesToRemove.forEach(prop => {
@@ -58,14 +63,21 @@ function Exporter({ farms }) {
             if (farm.harvest_date) {
                 farm.harvest_date = new Date(farm.harvest_date.toMillis())
             }
+            if (farm.isEthrel){
+                farm.isEthrel = new Date(farm.isEthrel.toMillis())
+            } else {
+                farm.isEthrel = "N/A"
+            }
 
         });
 
 
-        const worksheet = XLSX.utils.json_to_sheet(farms, { header: ["mun", "brgy", "farmerName", "sex", "area", "plantNumber", "start_date", "cropStage", "harvest_date"], skipHeader: true });
+        const worksheet = XLSX.utils.json_to_sheet(farms, { header: ["mun", "brgy", "farmerName", "sex", "area", "plantNumber", "start_date", "cropStage", "harvest_date", "isEthrel"], skipHeader: true, origin: "A2" });
         XLSX.utils.sheet_add_aoa(worksheet, customHeader, { origin: "A1" });
+        const max_width = farms.reduce((w, r) => Math.max(w, r.farmerName.length), 10);
+        worksheet["!cols"] = [{ wch: max_width }];
         const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook, worksheet, "MASTERLIST");
+        XLSX.utils.book_append_sheet(workbook, worksheet, fileName);
 
         // Buffer to store the generated Excel file
         const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Divider, Grid } from '@mui/material';
+import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import FarmsSchedule1 from '../FarmsSchedule1';
 import Pie from '../chart/Pie1';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
@@ -14,6 +13,7 @@ import farmerImg from '../image_src/farmer.png';
 import farm from '../image_src/seedling.png';
 import production from '../image_src/production.png';
 import accounts from '../image_src/account.png'
+import FarmsSchedule from '../FarmsSchedule';
 
 const legends = [
   "Pagtatanim",
@@ -122,7 +122,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
 
       if (existing) {
         existing.value += pieValue; // Update existing value by adding pieValue
-        console.log('adding production', existing.value);
       } else {
         acc.push({
           label: farm.mun,
@@ -147,6 +146,13 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   const labels1 = combinedData2.map(item => item.label);
   const prod = productionData.map(item => item.value)
 
+  const municipalities = [
+    "BASUD", "CAPALONGA", "DAET (Capital)", "JOSE PANGANIBAN",
+    "LABO", "MERCEDES", "PARACALE", "SAN LORENZO RUIZ",
+    "SAN VICENTE", "SANTA ELENA", "TALISAY", "VINZONS"
+  ];
+
+  const filteredFarms = municipalities.map(mun => farms?.find(farm => farm.mun === mun)).filter(Boolean);
 
 
   return (
@@ -164,7 +170,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #789e4f',
               borderRadius: 3,
-              backgroundColor: 'green',
+              background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -190,7 +196,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #e1ad67',
               borderRadius: 3,
-              backgroundColor: '#df6d29',
+              background: 'linear-gradient(to right bottom, #FFA652, #FF8D21, #FF7B00)',
+              // backgroundColor: '#df6d29',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -216,7 +223,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #c17a05',
               borderRadius: 3,
-              backgroundColor: '#af7f35',
+              background: 'linear-gradient(to right bottom, #D2B48C, #987554, #664229)',
+              // backgroundColor: '#af7f35',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -240,7 +248,8 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #foa30a',
               borderRadius: 3,
-              backgroundColor: '#f8da5b',
+              background: 'linear-gradient(to right bottom, #FFE761, #FFDC2E, #FFD500)',
+              // backgroundColor: '#f8da5b',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -265,18 +274,53 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               <h4>Timeline</h4>
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
-            <FarmsSchedule1 farms={farms.slice(0, 12)} events={events} setSelected={setSelected} />
-            <Box>
-              <div className="legend">
-                <div className="legend-item">
-                  <span className="bullet" style={{ backgroundColor: "green", margin: "0 5px" }}></span>
-                  <span className="legend-label"> Vegetative</span>
-                  <span className="bullet" style={{ backgroundColor: "yellow", margin: "0 5px" }}></span>
-                  <span className="legend-label">Flowering</span>
-                  <span className="bullet" style={{ backgroundColor: "orange", margin: "0 5px" }}></span>
-                  <span className="legend-label">Fruiting</span>
-                </div>
-              </div>
+            <FarmsSchedule farms={filteredFarms} events={events} />
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } , marginTop:3}}>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start',
+                mr: 3
+              }} >
+                <Box
+                  sx={{
+                    width: 80,
+                    height: 18,
+                    background: 'linear-gradient(to right, #93d6b0, #68c690, #52be80)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 2,  // optional for rounded corners
+                    mr: 1
+                  }}
+                >
+                </Box>
+                <Typography variant="subtitle2">
+                  Projected
+                </Typography>
+              </Box>
+              <Box sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'flex-start'
+              }} >
+                <Box
+                  sx={{
+                    width: 80,
+                    height: 18,
+                    background: 'linear-gradient(to right, #f9c667, #f8ba48, #f6a30b)',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    borderRadius: 2,  // optional for rounded corners
+                    mr: 1
+                  }}
+                >
+                </Box>
+                <Typography variant="subtitle2">
+                  Actual
+                </Typography>
+              </Box>
             </Box>
           </Box>
         </Grid>
@@ -285,12 +329,12 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
-            <Pie labels={labels} data={series} title="Farms" sx={{ height: '100%', width: '100%'}}/>
+            <Pie labels={labels} data={series} title="Farms" sx={{ height: '100%', width: '100%' }} />
           </Box>
         </Grid>
         <Grid item lg={12} xs={12} md={12}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff' }} onDoubleClick={() => setSelected('Farms')}>
-            <GeoLoc />
+            <GeoLoc famrs={farms} />
           </Box>
         </Grid>
 
@@ -298,5 +342,5 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
 
     </Box >
   );
-} 
+}
 

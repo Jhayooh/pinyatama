@@ -6,7 +6,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase/Config';
 import CostAndReturn from '../CostAndReturn';
 import Farm from '../Farm';
-import FarmsSchedule from '../FarmsSchedule1';
 import Profile from './Profile';
 import Archive from './Archive';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
@@ -128,7 +127,8 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                         width: '100%',
                         position: 'sticky',
                         top: 0,
-                        padding: '10px',
+                        paddingY: '10px',
+                        paddingBottom: '10px',
                         zIndex: 9999,
                     }}>
                         <Tabs
