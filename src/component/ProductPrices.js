@@ -587,11 +587,41 @@ export default function ProductPrices({ particularData, pineappleData }) {
                     </Box>
                   </Box>
                 </Box>
+                // <Box elevation={3}
+                //   sx={{
+                //     //backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
+                //     backgroundColor: index === 0 ? '#fff' : '#fff',
+                //     padding: 2,
+                //     flex: 1,
+                //     height: '100%',
+                //     boxShadow:2,
+                //     borderRadius:4
+                //   }}>
+                //   {/* {index === 0 ? (
+                //     <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                //   ) : (
+                //     <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                //   )}
+                //   <Divider sx={{ marginTop: 2 }} /> */}
+                //   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                //     <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
+                //       {pineData.name}
+                //     </Typography>
+                //     <Typography variant="h6" gutterBottom>
+                //       {`₱${pineData.price}.00`}
+                //     </Typography>
+                //   </Box>
+                //   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                //     <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
+                //       Edit Price
+                //     </Button>
+                //   </Box>
+                // </Box>
               ))}
             </Box>
           </Grid>
           <Grid xs={12} md={8} lg={9} sx={{ height: '100%' }}>
-
             <Box sx={{
               display: 'flex',
               flexDirection: 'column',

@@ -156,13 +156,13 @@ function Dashboard() {
       })
       .catch((error) => {
         const errorCode = error.code;
-        const errorMessage = error.message;
+        const errorMessage = error.message
 
         if (errorCode === 'auth/user-not-found') {
           alert('User not found. Please check your email or sign up.');
         } else {
           // Handle other types of errors
-          alert(`Login failed: ${errorMessage}`);
+          alert('User not found.');
         }
       });
 
