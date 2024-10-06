@@ -381,7 +381,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 setEthrel(obj['foreignId'])
                                 setBilang(parseInt(farm.plantNumber) - parseInt(farm.ethrel))
                                 console.log("the objjjjj", obj);
-
+                                
                             }}
                         >
                             {/* {
@@ -393,24 +393,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         } */}
                             {
                                 [
-                                    ...compAct?.filter((f) => f.isAvailable)
-                                        .reduce((acc, part) => {
-                                            console.log("acc", acc);
-                                            console.log("part", part);
-                                            
-                                            // const existing = acc.find(item => item.id === part.id);
-                                            // console.log("exs", existing);
-                                            // console.log("acc", acc);
-                                            // console.log("part", part);
-                                            // if (existing) {
-                                            //     existing.qntyPrice += part.qntyPrice; // Sum qntyPrice
-                                            //     existing.totalPrice += part.totalPrice; // Sum totalPrice
-                                                
-                                            // } else {
-                                            //     acc.push({ ...part }); // Keep original part if it's not a duplicate
-                                            // }
-                                            // return acc;
-                                        }, []),
+                                    ...compAct?.filter((f) => f.isAvailable) || [],
                                     ...compAct?.filter((m) => m.name.toLowerCase() === "flower inducer (ethrel)") || []
                                 ].map((f) => (
                                     <MenuItem key={f.id} value={f.id}>
