@@ -45,6 +45,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const [isAdd, setIsAdd] = useState(false)
 
     const activityColl = collection(db, `farms/${farm.id}/activities`)
+    const componentsColl = collection(db, `farms/${farm.id}/components`)
     const activityQuery = query(activityColl, orderBy('createdAt'))
     const [activities] = useCollectionData(activityQuery)
 
@@ -57,6 +58,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const [material, setMaterial] = useState(null)
     const [compAct, setCompAct] = useState(null)
     const [events, setEvents] = useState(null)
+    const [comps, setComps] = useState(null)
 
     const [stepIndex, setStepIndex] = useState(-1)
 
@@ -73,7 +75,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     }
     useEffect(() => {
         if (!e) return
-
+        console.log('eveeennntttsss', e);
         setEvents(e)
     }, [e])
 
@@ -203,13 +205,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                 const theLabel = compAct.find(obj => obj.id === fert)
                 if (theLabel.name.toLowerCase() === "flower inducer (ethrel)" && events) {
                     const vege_event = events.find(p => p.className === 'vegetative')
-                    console.log("1");
-
                     const date_diff = currDate - vege_event.end_time.toDate()
-                    console.log("2");
 
                     if (farm.plantNumber - farm.ethrel === 0) {
-                        console.log("a");
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
@@ -222,10 +220,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         });
                         return
                     }
-                    console.log("4");
-
                     if (!ethrelValid(currDate, vege_event.start_time.toDate())) {
-                        console.log("b");
                         await delay(1000)
                         setSaving(false)
                         handleModalClose()
@@ -238,14 +233,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         });
                         return
                     }
-
-                    console.log("5");
                     events.map(async (e) => {
-                        console.log("6");
-
                         switch (e.className.toLowerCase()) {
                             case 'vegetative':
-                                console.log("c");
                                 e.end_time = Timestamp.fromDate(currDate)
                                 e.title = `${e.title} - ${bilang} (${plantPercent(bilang, farm.plantNumber)}%)`
                                 const vegeEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
@@ -256,9 +246,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 await updateDoc(vegeEvent, { id: vegeEvent.id });
                                 break;
                             case 'flowering':
-                                console.log("d");
                                 e.start_time = Timestamp.fromDate(currDate)
-                                e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
+                                const st = new Date(e.start_time.toDate())
+                                st.setMonth(st.getMonth() + 1)
+                                e.end_time = Timestamp.fromMillis(st)
                                 const flowEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -267,13 +258,14 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 await updateDoc(flowEvent, { id: flowEvent.id });
                                 break;
                             case 'fruiting':
-                                console.log("e");
-                                e.start_time = Timestamp.fromMillis(e.start_time.toMillis() + date_diff)
+                                const fru_st = new Date(e.start_time.toMillis() + date_diff)
+                                fru_st.setMonth(fru_st.getMonth() - 1)
+                                e.start_time = Timestamp.fromDate(fru_st)
                                 // e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
-                                const et = new Date(e.start_time.toDate())
-                                et.setMonth(et.getMonth()+3)
-                                et.setDate(et.getDate()+15)
-                                e.end_time = Timestamp.fromDate(et)
+                                const fru_et = new Date(e.start_time.toDate())
+                                fru_et.setMonth(fru_et.getMonth() + 3)
+                                fru_et.setDate(fru_et.getDate() + 15)
+                                e.end_time = Timestamp.fromDate(fru_et)
                                 const fruEvent = await addDoc(collection(db, `farms/${farm.id}/events`), {
                                     ...e,
                                     className: e.className + 'Actual',
@@ -295,8 +287,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         compId: fert,
                         qnty: qnty
                     });
+                    await addDoc(componentsColl, {
 
-                    console.log("i");
+                    })
                     // update farm isEthrel
                     await updateDoc(doc(db, `farms/${farm.id}`), {
                         isEthrel: currDate,
@@ -327,8 +320,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                         vertical: 'bottom',
                         horizontal: 'center'
                     });
-                    handleModalClose()
                 }
+
+                handleModalClose()
             } catch (error) {
                 console.error('error updating document', error);
             }
@@ -382,9 +376,12 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             onChange={(e) => {
                                 const obj = parts?.find(obj => obj.id === e.target.value)
                                 setFert(e.target.value)
+                                setComps(obj)
                                 setQnty(obj['qntyPrice'])
                                 setEthrel(obj['foreignId'])
                                 setBilang(parseInt(farm.plantNumber) - parseInt(farm.ethrel))
+                                console.log("the objjjjj", obj);
+                                
                             }}
                         >
                             {/* {
@@ -466,14 +463,22 @@ const Activities = ({ roi, farm, particularData, parts }) => {
             }}>
                 <Grid container spacing={2}>
                     <Grid item xs={12} md={12}>
-                        <Box sx={{
-                            backgroundColor: '#fff',
-                            borderRadius: 2,
-                            boxShadow: 2,
-                            padding: 1.5,
-                            gap: 2
-                        }}>
-                            {e && <FarmsSchedule farms={[farm]} events={e} />}
+                        <Box
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: 2,
+                                boxShadow: 2,
+                                padding: 1.5,
+                                gap: 2
+                            }}
+                        >
+                            {events &&
+                                <FarmsSchedule farms={[farm]} events={events.map(event => ({
+                                    ...event,
+                                    start_time: event.start_time.toMillis(),
+                                    end_time: event.end_time.toMillis()
+                                }))} />
+                            }
                         </Box>
                     </Grid>
 

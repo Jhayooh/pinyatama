@@ -82,11 +82,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
-      const matchesMonth = month !== 0 ? (new Date(farm.start_date.toMillis()).getMonth() + 1) === month : true
-      const matchesYear = year ? new Date(farm.start_date.toMillis()).getFullYear() === year : true
-      console.log(`month ${new Date(farm.start_date.toMillis()).getFullYear()} ${year}`);
       const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage && matchesMonth && matchesYear;
+      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage;
     });
     const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
