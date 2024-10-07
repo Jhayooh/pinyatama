@@ -199,7 +199,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                     },
                                 }}
                             />
-                            <Tab
+                            {/* <Tab
                                 label='Arkibo'
                                 {...a11yProps(3)}
                                 sx={{
@@ -208,9 +208,9 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                         color: 'orange',
                                     },
                                 }}
-                            />
+                            /> */}
 
-                            <Tab
+                            {/* <Tab
                                 label='Fertilizer'
                                 {...a11yProps(3)}
                                 sx={{
@@ -219,7 +219,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                         color: 'orange',
                                     },
                                 }}
-                            />
+                            /> */}
 
                         </Tabs>
                     </Box>
