@@ -141,7 +141,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                     </Box>
                     <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
                         {/* Month & Year */}
-                        <Box
+                        {/* <Box
                             sx={{
                                 width: '100%',
                                 display: 'flex',
@@ -183,7 +183,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                                     ))}
                                 </Select>
                             </FormControl>
-                        </Box>
+                        </Box> */}
                         {/* SearchBox */}
                         <Box
                             sx={{
@@ -191,7 +191,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                                 alignItems: 'center',
                                 justifyContent: 'flex-end',
                                 gap: 1,
-                                width: { xs: '100%', md: '100%', xl: '60%' },
+                                width: { xs: '100%', md: '100%', xl: '100%' },
                             }}
                         >
                             <FormControl fullWidth size="small" >

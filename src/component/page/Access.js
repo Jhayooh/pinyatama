@@ -21,7 +21,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Grid from '@mui/material/Grid';
 import { DataGrid } from '@mui/x-data-grid';
-import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { doc, updateDoc, deleteDoc, getDocs, where, query, collection, getDoc } from 'firebase/firestore';
 import { db, auth } from '../../firebase/Config';
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
 import SearchIcon from '@mui/icons-material/Search';
@@ -33,6 +33,8 @@ import moment from 'moment';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 
+import { address } from 'addresspinas';
+
 const Access = ({ usersRow }) => {
   const [rowModesModel, setRowModesModel] = useState({});
   const [confirm, setConfirm] = useState(false);
@@ -40,21 +42,74 @@ const Access = ({ usersRow }) => {
   const [clicked, setClicked] = useState({});
   const [searchInput, setSearchInput] = useState('');
   const [userRow, setUserRow] = useState(usersRow);
-  const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
-  const [viewModalOpen, setViewModalOpen] = useState(false); // State for View modal
-  const [viewedUser, setViewedUser] = useState({}); // State to store the user for View modal
+  const [viewModalOpen, setViewModalOpen] = useState(false);
+  const [viewedUser, setViewedUser] = useState({});
+
+
+  const [mun, setMun] = useState([]);
+  const [brgy, setBrgy] = useState(null);
+  const [munCode, setMunCode] = useState(null)
+  const [barangays, setBarangays] = useState([]);
+
+  const result = (address.getCityMunOfProvince('0516')).cityAndMun;
+
+  // useEffect(() => {
+  //   const fetchMunicipalities = () => {
+  //     const result = address.getCityMunOfProvince('0516');
+  //     setMun(result.cityAndMun)
+  //     result && console.log("city and mun", result.cityAndMun)
+  //   }
+
+  //   fetchMunicipalities();
+  // }, []);
+
+
+  useEffect(() => {
+    if (munCode) {
+      const result = address.getBarangaysOfCityMun(munCode);
+      setBarangays(result.barangays || []);
+    } else {
+      setBarangays([]);
+    }
+  }, [munCode]);
+
 
   const handleMun = (event) => {
-    setMun(event.target.value);
+    setMunCode(event.target.value);
+    setBrgy(null);
   };
+
+  const handleBrgy = (event) => {
+    setBrgy(event.target.value);
+  };
+
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
 
+  useEffect(() => {
+    const filteredUser = usersRow.filter((user) => {
+      console.log("munnn", mun);
+      const matchesMunicipality = mun.length !== 0
+        ? user.mun.toString().toLowerCase() === mun[0].name.toString().toLowerCase()
+        : true;
+      const matchesBarangay = brgy
+        ? user.brgy && user.brgy.toString().toLowerCase() === brgy.toString().toLowerCase()
+        : true;
+      const matchesSearch = user.displayName.toLowerCase().includes(search.toLowerCase());
+      return matchesMunicipality && matchesBarangay && matchesSearch;
+    });
+
+    console.log('Filtered Users:', filteredUser);
+    setUserRow(filteredUser);
+  }, [search, usersRow, munCode, brgy]);
+
+
+
   const handleClose = () => {
-    setViewModalOpen(false); // Close View modal
+    setViewModalOpen(false);
   };
 
   const handleCloseDialog = () => {
@@ -70,8 +125,9 @@ const Access = ({ usersRow }) => {
     } catch (e) {
       console.log('error deleting document:', e);
     }
-    handleClose()
-    handleCloseDialog()
+    handleClose();
+    handleCloseDialog();
+    refreshUsers();
   };
 
   const blockAccount = async (row) => {
@@ -85,8 +141,10 @@ const Access = ({ usersRow }) => {
     } catch (e) {
       console.log('error blocking document:', e);
     }
-    handleClose()
+    handleClose();
+    refreshUsers();
   };
+
 
   const unblockAccount = async (row) => {
     const userDocRef = doc(db, 'users', row.uid);
@@ -98,45 +156,93 @@ const Access = ({ usersRow }) => {
     } catch (e) {
       console.log('error unblocking document:', e);
     }
-    handleClose()
+    handleClose();
+    refreshUsers();
   };
-
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', viewedUser.uid);
-    const { email, password } = viewedUser;
+    const { email, password, mun, brgy } = viewedUser;
     const newAuth = getAuth();
+
     try {
-      const userCredential = await createUserWithEmailAndPassword(
-        newAuth,
-        email,
-        password
+      const existingUsersQuery = query(
+        collection(db, 'users'),
+        where('mun', '==', mun),
+        where('brgy', '==', brgy),
+        where('status', '==', 'active')
       );
+
+      const existingUsersSnapshot = await getDocs(existingUsersQuery);
+
+      if (!existingUsersSnapshot.empty) {
+        const disableUserPromises = existingUsersSnapshot.docs.map((docSnapshot) => {
+          const userRef = docSnapshot.ref;
+          return updateDoc(userRef, { status: 'blocked' });
+        });
+
+        await Promise.all(disableUserPromises);
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(newAuth, email, password);
       await updateDoc(userDocRef, {
         status: 'active',
         id: userCredential.user.uid,
       });
+
+      console.log('User successfully registered and previous users disabled');
     } catch (error) {
-      console.error('Error updating document:', error);
+      console.error('Error registering new user:', error);
     }
-    handleClose()
-    handleCloseDialog()
+
+    handleClose();
+    handleCloseDialog();
+    refreshUsers();
+  };
+  const refreshUsers = async () => {
+    const updatedUsers = await getDocs(collection(db, 'users'));
+    setUserRow(updatedUsers.docs.map((doc) => doc.data()));
   };
 
-  const municipalities = [
-    { name: 'Lahat', value: '' },
-    { name: 'Basud', value: 'BASUD' },
-    { name: 'Capalonga', value: 'CAPALONGA' },
-    { name: 'Daet', value: 'DAET (Capital)' },
-    { name: 'Jose Panganiban', value: 'JOSE PANGANIBAN' },
-    { name: 'Labo', value: 'LABO' },
-    { name: 'Mercedes', value: 'MERCEDES' },
-    { name: 'Paracale', value: 'PARACALE' },
-    { name: 'San Lorenzo Ruiz', value: 'SAN LORENZO RUIZ' },
-    { name: 'San Vicente', value: 'SAN VICENTE' },
-    { name: 'Santa Elena', value: 'SANTA ELENA' },
-    { name: 'Talisay', value: 'TALISAY' },
-    { name: 'Vinzons', value: 'VINZONS' },
-  ];
+
+  // const registerAccount = async () => {
+  //   const userDocRef = doc(db, 'users', viewedUser.uid);
+  //   const { email, password } = viewedUser;
+  //   const newAuth = getAuth();
+  //   try {
+  //     const userCredential = await createUserWithEmailAndPassword(
+  //       newAuth,
+  //       email,
+  //       password
+  //     );
+  //     await updateDoc(userDocRef, {
+  //       status: 'active',
+  //       id: userCredential.user.uid,
+  //     });
+  //   } catch (error) {
+  //     console.error('Error updating document:', error);
+  //   }
+  //   handleClose()
+  //   handleCloseDialog()
+  // };
+
+  // const municipalities = [
+  //   { name: 'Lahat', value: '' },
+  //   { name: 'Basud', value: 'BASUD' },
+  //   { name: 'Capalonga', value: 'CAPALONGA' },
+  //   { name: 'Daet', value: 'DAET (Capital)' },
+  //   { name: 'Jose Panganiban', value: 'JOSE PANGANIBAN' },
+  //   { name: 'Labo', value: 'LABO' },
+  //   { name: 'Mercedes', value: 'MERCEDES' },
+  //   { name: 'Paracale', value: 'PARACALE' },
+  //   { name: 'San Lorenzo Ruiz', value: 'SAN LORENZO RUIZ' },
+  //   { name: 'San Vicente', value: 'SAN VICENTE' },
+  //   { name: 'Santa Elena', value: 'SANTA ELENA' },
+  //   { name: 'Talisay', value: 'TALISAY' },
+  //   { name: 'Vinzons', value: 'VINZONS' },
+  // ];
+
+
+
   const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
       backgroundColor: '#44b700',
@@ -257,17 +363,6 @@ const Access = ({ usersRow }) => {
     return row?.uid;
   }
 
-  useEffect(() => {
-    const filteredUser = usersRow.filter((user) => {
-      const matchesSearch = user.displayName
-        .toLowerCase()
-        .includes(search.toLowerCase());
-      const matchesMunicipality = mun ? user.mun === mun : true;
-      return matchesSearch && matchesMunicipality;
-    });
-    setUserRow(filteredUser);
-  }, [search, usersRow, mun]);
-
   const datagridStyle = {
 
     paddingBottom: 0,
@@ -314,27 +409,55 @@ const Access = ({ usersRow }) => {
                   gap: 2,
                 }}
               >
-                <Box sx={{ width:'30%'}}>
+                <Box sx={{ width: '30%' }}>
                   <FormControl fullWidth size="small">
-                    <InputLabel id="demo-simple-select-label">
-                      Munisipalidad
-                    </InputLabel>
                     <Select
-                      sx={{ border: 'none' }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={mun}
-                      label="Municipality"
-                      onChange={handleMun}
+                      labelId="municipality-select-label"
+                      value={munCode || ''}
+                      onChange={(e) => {
+                        setMunCode(e.target.value);
+
+                        console.log("the munnnnn 2", result);
+                        console.log("the munnnnn", e.target.value);
+                        setMun(result.filter((m) => m.mun_code === e.target.value))
+                        setBrgy('');
+                      }}
+                      displayEmpty
                     >
-                      {municipalities.map((municipality) => (
-                        <MenuItem key={municipality.value} value={municipality.value}>
-                          {municipality.name}
+                      <MenuItem value="">
+                        <em>Municipality</em>
+                      </MenuItem>
+                      {result?.map((munItem) => (
+                        <MenuItem key={munItem.mun_code} value={munItem.mun_code}>
+                          {munItem.name}
                         </MenuItem>
                       ))}
                     </Select>
                   </FormControl>
                 </Box>
+
+                <Box sx={{ width: '30%' }}>
+                  <FormControl fullWidth size="small">
+                    <Select
+                      labelId="barangay-select-label"
+                      value={brgy || ''}
+                      onChange={(e) => setBrgy(e.target.value)}
+                      displayEmpty
+                      disabled={!munCode}
+                    >
+                      <MenuItem value="">
+                        <em>Choose Barangay</em>
+                      </MenuItem>
+                      {barangays?.map((barangay, index) => (
+                        <MenuItem key={index} value={barangay.name}>
+                          {barangay.name}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Box>
+
+
                 <Box sx={{ flex: '1 1 auto' }}>
                   <FormControl fullWidth size="small">
                     <OutlinedInput
@@ -350,39 +473,40 @@ const Access = ({ usersRow }) => {
                     />
                   </FormControl>
                 </Box>
-                
-              </Box>
 
-              <Box >
-                <DataGrid
-                  getRowId={getRowId}
-                  rows={userRow}
-                  columns={columns}
-                  initialState={{
-                    sorting: {
-                      sortModel: [{ field: 'name', sort: 'asc' }],
-                    },
-                  }}
-                  editMode='row'
-                  rowModesModel={rowModesModel}
-                  // onRowEditStop={handleRowEditStop}
-                  pageSizeOptions={[25, 50, 100]}
-                  disableRowSelectionOnClick
-                  sx={{
-                    ...datagridStyle,
-                    border: 'none',
-                    paddingX: 2,
-                    overflowX: 'auto',
-                    height: `calc(100% - 8px)`,
-                    backgroundColor: '#fff',
-                    paddingTop: 1
-                  }}
-                  getRowClassName={(getRowId) =>
-                    getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
-                  hideFooter
-                />
               </Box>
+            </Box>
+          </Grid>
+          <Grid item lg={12} md={12} sm={12} xs={12}>
+            <Box sx={{ display: 'flex', paddingY: 'auto' }} >
+              <DataGrid
+                getRowId={getRowId}
+                rows={userRow}
+                columns={columns}
+                initialState={{
+                  sorting: {
+                    sortModel: [{ field: 'name', sort: 'asc' }],
+                  },
+                }}
+                editMode='row'
+                rowModesModel={rowModesModel}
+                // onRowEditStop={handleRowEditStop}
+                pageSizeOptions={[25, 50, 100]}
+                disableRowSelectionOnClick
+                sx={{
+                  ...datagridStyle,
+                  border: 'none',
+                  paddingX: 2,
+                  overflowX: 'auto',
+                  height: `calc(100% - 8px)`,
+                  backgroundColor: '#fff',
+                  paddingTop: 1
+                }}
+                getRowClassName={(getRowId) =>
+                  getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
+                hideFooter
+              />
             </Box>
           </Grid>
 
@@ -393,6 +517,7 @@ const Access = ({ usersRow }) => {
         open={viewModalOpen}
         onClose={handleClose}>
         <Box sx={{
+          display: 'flex',
           position: 'absolute',
           top: '50%',
           left: '50%',
@@ -401,9 +526,9 @@ const Access = ({ usersRow }) => {
           borderRadius: '5px',
           boxShadow: 24,
           p: 4,
-          width: '50%',
+          width: { xs: '90%', md: '80%', lg: '40%' }
         }}>
-          <Grid container spacing={4} >
+          <Grid container spacing={4} sx={{ display: 'flex', width: '100%' }}>
             <Grid item xs={4} >
               <Box sx={{
                 display: 'flex',
@@ -443,34 +568,50 @@ const Access = ({ usersRow }) => {
                   // marginBottom: 2,  
                 }}>
                   {viewedUser.status === 'pending' && (
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1 }}>
                       <Button color='success' variant='contained' onClick={() => {
                         setConfirm(true)
                         setViewedUser(viewedUser)
                       }}>
                         Accept
                       </Button>
-                      <Button color='error' variant='contained' onClick={() => {
+                      <Button color='error' variant='outlined' onClick={() => {
                         setDel(true)
                         setViewedUser(viewedUser)
                       }}>
-                        Reject
+                        Delete
                       </Button>
                     </Box>
                   )}
                   {viewedUser.status === 'active' && (
-                    <Button color='error' variant='contained' onClick={() => {
-                      blockAccount(viewedUser)
-                    }}>
-                      Blocked Account
-                    </Button>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1 }}>
+                      <Button color='warning' variant='contained' onClick={() => {
+                        blockAccount(viewedUser)
+                      }}>
+                        Blocked Account
+                      </Button>
+                      <Button color='error' variant='outlined' onClick={() => {
+                        setDel(true)
+                        setViewedUser(viewedUser)
+                      }}>
+                        Delete
+                      </Button>
+                    </Box>
                   )}
                   {viewedUser.status === 'blocked' && (
-                    <Button color='success' variant='contained' onClick={() => {
-                      unblockAccount(viewedUser)
-                    }}>
-                      Unblocked Account
-                    </Button>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 1 }}>
+                      <Button color='success' variant='contained' onClick={() => {
+                        unblockAccount(viewedUser)
+                      }}>
+                        Unblocked Account
+                      </Button>
+                      <Button color='error' variant='outlined' onClick={() => {
+                        setDel(true)
+                        setViewedUser(viewedUser)
+                      }}>
+                        Delete
+                      </Button>
+                    </Box>
                   )}
                 </Box>
               </Box>
