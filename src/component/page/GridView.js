@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Box,
@@ -14,10 +14,17 @@ import {
 import CircularProgress from '@mui/material/CircularProgress';
 
 function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imageUrls, user }) {
+  const [newUser, setNewUser] = useState({})
   function dateFormatter(date) {
     const d = new Date(date.toMillis())
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
   }
+  useEffect(() => {
+    if (user.length === 0) return
+
+    setNewUser(user[0])
+  }, [user])
+
 
   return (
     <Grid container sx={{ width: { xs: '100%', sm: `calc(100%/2)`, md: `calc(100%/3)`, lg: `calc(100%/4)`, xl: `calc(100%/5)` } }}>
@@ -45,7 +52,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
             <Box sx={{ paddingLeft: .5 }}>
-             {user && <Avatar src={user[0].photoURL} alt='Profile' sx={{ marginTop: 1, marginRight: 1, border: 0.1, borderColor: 'green' }} />}
+              {newUser && <Avatar src={newUser.photoURL} alt='Profile' sx={{ marginTop: 1, marginRight: 1, border: 0.1, borderColor: 'green' }} />}
             </Box>
             <Box>
               <Typography variant="overline" display="block" sx={{ color: 'green', fontSize: 15, fontWeight: 'bold', alignItems: 'center', fontFamily: 'monospace' }}>
