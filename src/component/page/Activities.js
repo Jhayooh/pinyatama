@@ -169,7 +169,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
 
 
     function ethrelValid(currdate, start_date) {
-        const monthEight = new Date(start_date.setMonth(start_date.getMonth() + 8))
+        const monthEight = new Date(start_date.setMonth(start_date.getMonth() + 10))
         const monthTwelve = new Date(start_date.setMonth(start_date.getMonth() + 12))
         const bool = currdate >= monthEight && currdate <= monthTwelve
         return bool
@@ -268,7 +268,6 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                 break;
                             case 'fruiting':
                                 const fru_st = new Date(e.start_time.toMillis() + date_diff)
-                                fru_st.setMonth(fru_st.getMonth() - 1)
                                 e.start_time = Timestamp.fromDate(fru_st)
                                 // e.end_time = Timestamp.fromMillis(e.end_time.toMillis() + date_diff)
                                 const fru_et = new Date(e.start_time.toDate())
