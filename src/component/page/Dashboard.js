@@ -36,10 +36,13 @@ import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
 import Login from '../Login';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import BgImage from '../image_src/bg.jpg';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { getAuth } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
+import { doc, getDoc } from 'firebase/firestore';
 
 import bgImage from '../image_src/bgpic.png'
 //Icon
@@ -59,7 +62,6 @@ import { useMediaQuery } from 'react-responsive';
 import Crown from '../image_src/crown.jpg';
 import Aerial from '../image_src/arial.jpg';
 import Ground from '../image_src/ground.jpg';
-
 function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -125,48 +127,59 @@ function Dashboard() {
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [error, setError] = useState(''); // To show login errors
+  const [isLoading, setIsLoading] = useState(false); // To manage loading state
 
-  const openLoginModal = () => {
-    setLoginModalDisplay(true);
-  };
-  const closeLoginModal = () => {
-    setLoginModalDisplay(false);
-  };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+  const auth = getAuth();
+  const db = getFirestore();
 
-  const handleOutsideClick = (event) => {
-    if (event.target === modalRef.current) {
-      closeLoginModal();
+  // const openLoginModal = () => {
+  //   setLoginModalDisplay(true);
+  // };
+  // const closeLoginModal = () => {
+  //   setLoginModalDisplay(false);
+  // };
+  // const handleSubmit = (event) => {
+  //   event.preventDefault();
+  //   const data = new FormData(event.currentTarget);
+  //   console.log({
+  //     email: data.get('email'),
+  //     password: data.get('password'),
+  //   });
+  // };
+
+  // const handleOutsideClick = (event) => {
+  //   if (event.target === modalRef.current) {
+  //     closeLoginModal();
+  //   }
+  // };
+
+  // Function to handle login
+  const handleLogin = async () => {
+    setIsLoading(true); // Start loading
+    setError(''); // Clear any previous errors
+
+    const adminEmails = ["admin@gmail.com"]; // List of admin emails
+
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      // Check if the user's email matches the admin email
+      if (adminEmails.includes(user.email)) {
+        console.log("Admin logged in successfully");
+      } else {
+        console.log("Access denied. Not an admin.");
+        setError("Access denied: You do not have admin privileges.");
+        auth.signOut(); // Sign out non-admin users
+      }
+    } catch (loginError) {
+      setError("Login failed: " + loginError.message);
+    } finally {
+      setIsLoading(false); // End loading
     }
   };
 
-  const handleLogin = () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        // Signed in 
-        const user = userCredential.user;
-        // ...
-      })
-      .catch((error) => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-
-        if (errorCode === 'auth/user-not-found') {
-          alert('User not found. Please check your email or sign up.');
-        } else {
-          // Handle other types of errors
-          alert(`Login failed: ${errorMessage}`);
-        }
-      });
-
-  }
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -233,7 +246,7 @@ function Dashboard() {
               <Box sx={{
                 width: "100%",
                 height: 300,
-                display: { xs: 'none', md: 'none' , lg:'flex'},
+                display: { xs: 'none', md: 'none', lg: 'flex' },
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding: 2,
@@ -341,7 +354,7 @@ function Dashboard() {
                         color: 'green',
                         textAlign: 'center',
                         fontWeight: 'bold',
-                        mt:0
+                        mt: 0
                       }}
                     >
                       QUEEN PINEAPPLE FARMING
@@ -363,8 +376,8 @@ function Dashboard() {
                   {/* Login Form */}
                   <Box sx={{
                     width: '100%',
-                    paddingLeft: {xs:'5%',md:'10%'},
-                    paddingRight:  {xs:'5%',md:'10%'},
+                    paddingLeft: { xs: '5%', md: '10%' },
+                    paddingRight: { xs: '5%', md: '10%' },
                   }}>
                     <TextField
                       margin="normal"
@@ -378,7 +391,7 @@ function Dashboard() {
                       color="success"
                       value={email}
                       onChange={(event) => setEmail(event.target.value)}
-                      InputProps={{ style: { borderColor: 'green', borderRadius:20,backgroundColor:'#e6f7e6' } }}
+                      InputProps={{ style: { borderColor: 'green', borderRadius: 20, backgroundColor: '#e6f7e6' } }}
                     />
                     <TextField
                       margin="normal"
@@ -392,7 +405,7 @@ function Dashboard() {
                       color="success"
                       value={password}
                       onChange={(event) => setPassword(event.target.value)}
-                      InputProps={{ style: { borderColor: 'green', borderRadius:20,backgroundColor:'#e6f7e6'  } }}
+                      InputProps={{ style: { borderColor: 'green', borderRadius: 20, backgroundColor: '#e6f7e6' } }}
                     />
 
                     {/* Login Button */}
@@ -406,14 +419,13 @@ function Dashboard() {
                           mt: 3,
                           padding: 1.5,
                           width: '30%',
-                          borderRadius:{xs:5,md:10}
+                          borderRadius: { xs: 5, md: 10 }
                         }}
                         onClick={handleClose}
                       >
                         Cancel
                       </Button>
                       <Button
-                        type="submit"
                         variant="contained"
                         color='success'
                         sx={{
@@ -423,11 +435,12 @@ function Dashboard() {
                           mt: 3,
                           padding: 1.5,
                           width: '70%',
-                          borderRadius: {xs:5,md:10}
+                          borderRadius: { xs: 5, md: 10 }
                         }}
                         onClick={handleLogin}
+                        disabled={isLoading}
                       >
-                        Login
+                         {isLoading ? "Logging in..." : "Login"}
                       </Button>
                     </Box>
 
@@ -492,7 +505,7 @@ function Dashboard() {
                           display: { xs: 'flex', md: 'flex' },
                           fontFamily: 'monospace',
                           fontWeight: 700,
-                          letterSpacing: {xs: '.1rem',md:'.3rem'},
+                          letterSpacing: { xs: '.1rem', md: '.3rem' },
                           color: 'green',
                           textDecoration: 'none',
                           m: 2
@@ -599,14 +612,13 @@ function Dashboard() {
                   </Toolbar>
                 </Container>
               </AppBar>
-              <Modal
+              {/* <Modal
                 open={loginModalDisplay}
                 onClose={closeLoginModal}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
               >
-                {/* <Container component='main' maxWidth='xs'>
-                <CssBaseline /> */}
+               
                 <Box sx={{
                   position: 'fixed',
                   top: '50%',
@@ -618,9 +630,7 @@ function Dashboard() {
                   borderRadius: '10px',
                   boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
                 }}>
-                  {/* <Box sx={{width:25, height:25, justifyContent:'center', alignItems:'center'}}>
-                    <img src={require('../image_src/pinyatamap-logo.png')}/>
-                  </Box> */}
+                 
                   <h1 style={{ color: 'orange' }}>MALIGAYANG PAGDATING!</h1>
                   <h5 style={{ alignItems: 'center' }}>Mag-login sa iyong account</h5>
                   <TextField
@@ -662,8 +672,7 @@ function Dashboard() {
                   </Button>
 
                 </Box>
-                {/* </Container> */}
-              </Modal>
+              </Modal> */}
             </div>
           </div>
           {/* <div ref={opagRef}>
