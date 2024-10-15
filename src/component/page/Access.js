@@ -159,6 +159,7 @@ const Access = ({ usersRow }) => {
     handleClose();
     refreshUsers();
   };
+  
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', viewedUser.uid);
     const { email, password, mun, brgy } = viewedUser;
@@ -411,8 +412,10 @@ const Access = ({ usersRow }) => {
               >
                 <Box sx={{ width: '30%' }}>
                   <FormControl fullWidth size="small">
+                  <InputLabel shrink={true}  id="demo-simple-select-label">Munisipalidad</InputLabel>
                     <Select
                       labelId="municipality-select-label"
+                      label='Munisipalidad'
                       value={munCode || ''}
                       onChange={(e) => {
                         setMunCode(e.target.value);
@@ -425,7 +428,7 @@ const Access = ({ usersRow }) => {
                       displayEmpty
                     >
                       <MenuItem value="">
-                        <em>Municipality</em>
+                        <em>Lahat</em>
                       </MenuItem>
                       {result?.map((munItem) => (
                         <MenuItem key={munItem.mun_code} value={munItem.mun_code}>
@@ -438,6 +441,7 @@ const Access = ({ usersRow }) => {
 
                 <Box sx={{ width: '30%' }}>
                   <FormControl fullWidth size="small">
+                  <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
                     <Select
                       labelId="barangay-select-label"
                       value={brgy || ''}
@@ -446,7 +450,6 @@ const Access = ({ usersRow }) => {
                       disabled={!munCode}
                     >
                       <MenuItem value="">
-                        <em>Choose Barangay</em>
                       </MenuItem>
                       {barangays?.map((barangay, index) => (
                         <MenuItem key={index} value={barangay.name}>
