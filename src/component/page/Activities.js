@@ -562,6 +562,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                             '&:hover': {
                                                 cursor: 'pointer',
                                                 backgroundColor: '#58AC58',
+                                                color: '#FAFAFA',
                                             }
                                         }}>
                                             <StepLabel StepIconComponent={QontoStepIcon} >
@@ -581,10 +582,10 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                                         }}>
                                                             {formatDate(act.createdAt.toDate())} : {formatTime(act.createdAt.toDate())}
                                                         </Typography>
-                                                        <Typography variant="subtitle1" sx={{fontFamily:'serif'}}>{act.label}</Typography>
+                                                        <Typography variant="subtitle1" sx={{ fontFamily: 'serif' }}>{act.label}</Typography>
                                                     </Box>
-                                                    <Typography variant='body2' sx={{ fontWeight: 'bold', color: 'red', display: 'flex', justifyContent: 'flex-end' }}>
-                                                        {act.qnty ? `${act.qnty} kg` : null}
+                                                    <Typography variant='body2' sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end' }}>
+                                                        {index !== 0 ? `${act.qnty} kg` : null}
                                                     </Typography>
                                                 </Box>
                                             </StepLabel>
