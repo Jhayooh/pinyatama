@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -14,7 +14,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-
 import BackIcon from '@mui/icons-material/ArrowBackIosNew';
 import * as XLSX from 'xlsx';
 import { DataGrid } from '@mui/x-data-grid';
@@ -31,6 +30,21 @@ export default function Distribution({ farms, roi }) {
 
   const startOfWeek = selectedDate.startOf('week');
   const endOfWeek = selectedDate.endOf('week');
+
+  useEffect(() => {
+    // Load saved distributions from localStorage on component mount
+    const storedDistributions = localStorage.getItem('savedDistributions');
+    if (storedDistributions) {
+      setSavedDistributions(JSON.parse(storedDistributions));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save to localStorage whenever savedDistributions changes
+    if (savedDistributions.length > 0) {
+      localStorage.setItem('savedDistributions', JSON.stringify(savedDistributions));
+    }
+  }, [savedDistributions]);
 
   const formatDate = (timestamp) => {
     const dateObj = new Date(timestamp.seconds * 1000);
@@ -91,13 +105,12 @@ export default function Distribution({ farms, roi }) {
       date: filteredDate[index],
     }));
 
-    // Format the selected date to a readable format
     const formattedDate = selectedDate.format('YYYY-MM-DD');
-
-    // Include the amount and date in the farmsInvolved label
     const involvedFarms = `${inputText} distributed on ${formattedDate} to: ${filteredLabels.join(', ')}`;
 
-    setSavedDistributions(prev => [...prev, { id: Date.now(), data: saved, farmsInvolved: involvedFarms }]);
+    const newSavedDistribution = { id: Date.now(), data: saved, farmsInvolved: involvedFarms };
+
+    setSavedDistributions(prev => [...prev, newSavedDistribution]);
     setView('saved');
   };
 
@@ -134,6 +147,12 @@ export default function Distribution({ farms, roi }) {
       zIndex: 1,
       backgroundColor: '#88C488'
     },
+  };
+
+  const handleEditCellChange = (params) => {
+    const updatedActualDistribution = [...actualDistribution];
+    updatedActualDistribution[params.id] = params.value;
+    setActualDistribution(updatedActualDistribution);
   };
 
   const DataTable = ({ data, data1, data2, distribution, percentage, actualDistribution }) => {
@@ -185,7 +204,7 @@ export default function Distribution({ farms, roi }) {
       production: row,
       percentage: percentage[index] ? percentage[index].toFixed(2) : 0,
       suggested: distribution[index] || 0,
-      actual: distribution[index] || 0,
+      actual: actualDistribution[index] || 0,
     }));
 
     return (
@@ -206,6 +225,7 @@ export default function Distribution({ farms, roi }) {
             paddingTop: 1,
             boxShadow: 2
           }}
+          onCellEditCommit={handleEditCellChange}
           getRowClassName={(rows) =>
             rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
           }
@@ -234,37 +254,26 @@ export default function Distribution({ farms, roi }) {
           {buttonText}
         </Button>
       </Box>
-
       {view === 'distribution' ? (
         <Box>
-          <Box sx={{ marginBottom: 1, display: 'flex', gap: 1, p: 2 }}>
-            <FormControl fullWidth size="small" sx={{ width: '100%' }}>
-              <OutlinedInput
-                id="total-production-input"
-                type="number"
-                placeholder="Enter distribute value"
-                value={inputText}
-                onChange={(e) => setInputText(e.target.value)}
-              />
-            </FormControl>
-
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Select week"
-                value={selectedDate}
-                onChange={(newValue) => setSelectedDate(newValue)}
-                renderInput={(params) => <TextField {...params} />}
-              />
-            </LocalizationProvider>
-
-            <Button variant="contained" color="success" onClick={distributeResources}>
-              Distribute
-            </Button>
-            <Button variant="outlined" color="success" onClick={saveDistribution}>
-              Save
-            </Button>
-          </Box>
-
+          <Typography variant="h6">Select Date</Typography>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={selectedDate}
+              onChange={newValue => setSelectedDate(newValue)}
+              renderInput={(params) => <TextField {...params} />}
+            />
+          </LocalizationProvider>
+          <Typography variant="h6">Enter Total Distribution</Typography>
+          <OutlinedInput
+            type="number"
+            onChange={(e) => setInputText(e.target.value)}
+            value={inputText}
+            fullWidth
+          />
+          <Button variant="contained" color="primary" onClick={distributeResources}>
+            Distribute
+          </Button>
           <DataTable
             data={filteredSeries}
             data1={filteredLabels}
@@ -273,13 +282,20 @@ export default function Distribution({ farms, roi }) {
             percentage={percentageData}
             actualDistribution={actualDistribution}
           />
+          <Button variant="contained" color="secondary" onClick={saveDistribution}>
+            Save Distribution
+          </Button>
         </Box>
       ) : (
         <Box>
+          <Typography variant="h6">Saved Distributions</Typography>
           <FormControl fullWidth>
-            <InputLabel>Select Saved Distributions</InputLabel>
-            <Select value={selectedSavedDistribution?.id || ''} label="Select Saved Distribution" onChange={handleSavedChange}>
-              {savedDistributions.map(distribution => (
+            <InputLabel>Select Distribution</InputLabel>
+            <Select
+              value={selectedSavedDistribution ? selectedSavedDistribution.id : ''}
+              onChange={handleSavedChange}
+            >
+              {savedDistributions.map((distribution) => (
                 <MenuItem key={distribution.id} value={distribution.id}>
                   {distribution.farmsInvolved}
                 </MenuItem>
@@ -289,15 +305,19 @@ export default function Distribution({ farms, roi }) {
           {selectedSavedDistribution && (
             <>
               <DataTable
-                data={selectedSavedDistribution.data.map((item) => item.value)}
-                data1={selectedSavedDistribution.data.map((item) => item.label)}
-                data2={selectedSavedDistribution.data.map((item) => item.date)}
-                distribution={selectedSavedDistribution.data.map((item) => item.distribution)}
-                percentage={selectedSavedDistribution.data.map((item) => item.percentage)}
-                actualDistribution={selectedSavedDistribution.data.map((item) => item.actualDistribution)}
+                data={selectedSavedDistribution.data.map(item => item.value)}
+                data1={selectedSavedDistribution.data.map(item => item.label)}
+                data2={selectedSavedDistribution.data.map(item => item.date)}
+                distribution={selectedSavedDistribution.data.map(item => item.distribution)}
+                percentage={selectedSavedDistribution.data.map(item => item.percentage)}
+                actualDistribution={selectedSavedDistribution.data.map(item => item.actualDistribution)}
               />
-              <Button sx={{ marginTop: 3 }} variant="outlined" color="success" onClick={() => downloadExcel(selectedSavedDistribution)}>
-                Download as Excel
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => downloadExcel(selectedSavedDistribution)}
+              >
+                Download Excel
               </Button>
             </>
           )}
