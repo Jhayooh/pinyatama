@@ -203,7 +203,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               color: 'black',
               cursor: 'pointer',
             }}
-            onClick={() => setSelected('particular')}
+            onClick={() => setSelected('Distribution')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{totalProduction}</h1>
@@ -228,7 +228,9 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
+              cursor: 'pointer',
             }}
+            onClick={() => setSelected('Farms')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
@@ -259,7 +261,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h5 style={{ margin: 0 }}>BAEWs</h5>
+              <h6 style={{ margin: 0 }}>Barangay Agricultural Extension Workers (BAEWs) </h6>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />

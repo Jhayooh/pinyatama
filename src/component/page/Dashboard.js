@@ -466,7 +466,7 @@ function Dashboard() {
               }}
             >
               <img
-                src={require('../image_src/bg.jpg')}
+                src={require('../image_src/banner.png')}
                 alt="pineapple"
                 style={{
                   position: 'absolute',
