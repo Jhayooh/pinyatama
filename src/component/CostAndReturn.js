@@ -14,6 +14,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 // icon
 import pesoCoin from './image_src/peso.png'
 
+
 // charts
 import Pie from './chart/Pie';
 import Doughnut from './chart/Doughnut';
@@ -605,7 +606,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             },
                             {
                               field: 'qntyPrice',
-                              headerName: 'Qnty',
+                              headerName: 'Quantity',
                               flex: 1,
                               type: 'number',
                               editable: true,
@@ -689,7 +690,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             },
                             {
                               field: 'qntyPrice',
-                              headerName: 'Qnty',
+                              headerName: 'Quantity',
                               flex: 1,
                               type: 'number',
                               editable: true,
@@ -951,7 +952,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 <Doughnut
                   labels={["Net return", "Production cost"]}
                   data={[newRoi.netReturn, newRoi.costTotal]}
-                  title={"Expected QP Production"}
+                  title={"Inaasahang Produksyon"}
                 />
               </Box>
               <Box className='productionBox' sx={{
@@ -961,9 +962,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 flex: 1
               }}>
                 <Doughnut
-                  labels={["Materyales", "Labor", "Fertilizer"]}
+                  labels={["Materials", "Labor", "Fertilizer"]}
                   data={laborMaterial}
-                  title={'Production Cost'}
+                  title={'Gastos sa Produksyon'}
                 />
               </Box>
             </Box>
@@ -982,9 +983,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 flex: 1
               }}>
                 <Doughnut
-                  labels={["Pineapple", "Butterball"]}
+                  labels={["Good Size", "Butterball"]}
                   data={[newRoi.grossReturn * getPinePrice('pineapple', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
-                  title={"Pineapple cost"}
+                  title={"Produksyon ng Pinya"}
                 />
               </Box>
               <Box className='pricesBox' sx={{
@@ -1081,7 +1082,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       color: '#FFF'
                     }}>
                     <Typography align='center' variant='caption'>
-                      Market price
+                      SRP
                     </Typography>
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600

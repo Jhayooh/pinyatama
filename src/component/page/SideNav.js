@@ -378,7 +378,7 @@ export default function SideNav() {
           </DrawerHeader>
           {/* <Divider /> */}
           <List sx={{ backgroundColor: 'green', flexGrow: 1 }}>
-            <Box onClick = {() => setSelected('dashboard')} sx={{ p: 2.4, display: open ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center' }}>
+            <Box onClick={() => setSelected('dashboard')} sx={{ p: 2.4, display: open ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center' }}>
               <img src={logo} alt='pinyatamap logo' width='50%' />
             </Box>
             <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
@@ -530,18 +530,18 @@ export default function SideNav() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle id="alert-dialog-title">
+            {/* <DialogTitle id="alert-dialog-title">
               {"Logout"}
-            </DialogTitle>
+            </DialogTitle> */}
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Are you sure you want to sign out from this account?
+                Sigurado ka bang gusto mong mag-log out sa account na ito?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button variant='text' color='error' onClick={closeLogoutModal}>Cancel</Button>
+              <Button variant='text' color='error' onClick={closeLogoutModal}>Kanselahin</Button>
               <Button variant='contained' color='success' onClick={handleSignOut} autoFocus>
-                Ok
+                Oo
               </Button>
             </DialogActions>
           </Dialog>
