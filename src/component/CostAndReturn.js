@@ -136,7 +136,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }
 
   useEffect(() => {
-    const grossReturn = newRoi.grossReturn * getPinePrice('pineapple', localPine)
+    const grossReturn = newRoi.grossReturn * getPinePrice('good size', localPine)
     const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
     const netReturnValue = grossReturn - costTotal;
     const roiValue = (netReturnValue / grossReturn) * 100;
@@ -381,7 +381,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               <TextField
                 label="Market Price"
                 name="marketPrice"
-                value={formatter.format(getPinePrice('pineapple', pineapple))}
+                value={formatter.format(getPinePrice('good size', pineapple))}
                 fullWidth
                 disabled
                 inputProps={{
@@ -984,7 +984,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Good Size", "Butterball"]}
-                  data={[newRoi.grossReturn * getPinePrice('pineapple', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
+                  data={[newRoi.grossReturn * getPinePrice('good size', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
                   title={"Produksyon ng Pinya"}
                 />
               </Box>
@@ -1029,7 +1029,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       </Typography>
                       <IconButton
                         onClick={() => {
-                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'good size'))
                           setPineModal(true)
                         }}
                         sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
@@ -1057,7 +1057,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           fontWeight: 700,
                         }}
                       >
-                        {parseFloat(getPinePrice('pineapple', localPine)).toFixed(2)}
+                        {parseFloat(getPinePrice('good size', localPine)).toFixed(2)}
                       </Typography>
                       <Typography align='center'>
                         /pc
@@ -1087,7 +1087,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600
                     }}>
-                      {formatter.format(getPinePrice('pineapple', pineapple))}
+                      {formatter.format(getPinePrice('good size', pineapple))}
                     </Typography>
                   </Box>
                 </Box>

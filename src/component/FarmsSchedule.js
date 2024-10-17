@@ -83,10 +83,10 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
   const itemRender = ({ item, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
     const backgroundColor = itemContext.selected
-      ? itemContext.dragging
-        ? 'red'
-        : item.selectedBgColor
-      : item.bgColor
+      && itemContext.dragging
+        && 'red'
+        // : item.selectedBgColor
+      // : item.bgColor
     const borderColor = itemContext.resizing ? 'red' : item.color
     return (
       <div
