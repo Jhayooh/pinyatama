@@ -8,11 +8,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Fab from '@mui/material/Fab';
 
 // Icons
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import CloseIcon from '@mui/icons-material/CloseOutlined';
-import DeleteIcon from '@mui/icons-material/DeleteOutline';
 
 export default function Farm({ farmId }) {
     const [images, setImages] = useState([]);
@@ -44,7 +44,7 @@ export default function Farm({ farmId }) {
                     const downloadURL = await getDownloadURL(itemRef);
                     return {
                         src: downloadURL,
-                        ref: itemRef // Store the reference to use for deletion
+                        ref: itemRef 
                     };
                 });
                 const imagesData = await Promise.all(imagePromises);
@@ -70,16 +70,16 @@ export default function Farm({ farmId }) {
 
         uploadTask.on('state_changed',
             (snapshot) => {
-                // Observe state change events such as progress, pause, and resume
+                
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 setUploadProgress(progress);
             },
             (error) => {
-                // Handle unsuccessful uploads
+                
                 console.error('Upload error:', error);
             },
             async () => {
-                // Handle successful uploads on complete
+                
                 const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                 setImages((prevImages) => [...prevImages, { src: downloadURL, ref: storageRef }]);
                 setUploadProgress(0);
@@ -113,11 +113,15 @@ export default function Farm({ farmId }) {
     return (
         <>
             <Box>
-                <Box mt={2} sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <Button variant='contained' color='success' onClick={() => setModal(true)}>Add Image</Button>
-                    <Button variant='contained' color='error' onClick={handleDialogOpen} disabled={selectedImages.length === 0}>
-                        Delete Selected
-                    </Button>
+                <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    <Box sx={{ '& > :not(style)': { m: 1 } }}>
+                        <Fab sx={{ border: 1, color: 'green', backgroundColor: '#fff' }} onClick={() => setModal(true)}>
+                            <img src={require('./image_src/add.png')} width={25} />
+                        </Fab>
+                        <Fab sx={{ border: 1, color: 'red', backgroundColor: '#fff' }} onClick={handleDialogOpen} disabled={selectedImages.length === 0} >
+                            <img src={require('./image_src/delete.png')} width={25} />
+                        </Fab>
+                    </Box>
                     <Dialog
                         open={open}
                         onClose={handleDialogClose}
@@ -125,18 +129,18 @@ export default function Farm({ farmId }) {
                         aria-describedby="alert-dialog-description"
                     >
                         <DialogTitle id="alert-dialog-title" >
-                            {"Delete Selected Image"}
+                            {"Tanggalin ang napiling larawan"}
                         </DialogTitle>
                         <Divider />
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description">
-                                Are your sure you want to delete this image?
+                                Sigurado ka bang gusto mong tanggalin ang larawang ito?
                             </DialogContentText>
                         </DialogContent>
                         <DialogActions>
-                            <Button onClick={handleDialogClose}>Disagree</Button>
+                            <Button onClick={handleDialogClose}>Kanselahin</Button>
                             <Button onClick={handleDeleteSelected} autoFocus>
-                                Agree
+                                Oo
                             </Button>
                         </DialogActions>
                     </Dialog>
@@ -249,7 +253,7 @@ export default function Farm({ farmId }) {
                     <Box
                         sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', }} >
                         <FileIcon />
-                        <Input type="file" onChange={handleFileChange} />
+                        <Input type="file" accept="image/png, image/gif, image/jpeg"  onChange={handleFileChange} />
                     </Box>
 
                     <Button

@@ -169,8 +169,18 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                     },
                                 }}
                             />
-                            <Tab
+                            {/* <Tab
                                 label="Panahon"
+                                {...a11yProps(1)}
+                                sx={{
+                                    color: value === 2 ? 'orange' : 'green',
+                                    '&:hover': {
+                                        color: 'orange',
+                                    },
+                                }}
+                            /> */}
+                            <Tab
+                                label="Galeriya ng Sakahan"
                                 {...a11yProps(1)}
                                 sx={{
                                     color: value === 2 ? 'orange' : 'green',
@@ -180,20 +190,10 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 }}
                             />
                             <Tab
-                                label="Galeriya ng Sakahan"
+                                label="Detalye ng Sakahan"
                                 {...a11yProps(1)}
                                 sx={{
                                     color: value === 3 ? 'orange' : 'green',
-                                    '&:hover': {
-                                        color: 'orange',
-                                    },
-                                }}
-                            />
-                            <Tab
-                                label="Farm Profile"
-                                {...a11yProps(1)}
-                                sx={{
-                                    color: value === 4 ? 'orange' : 'green',
                                     '&:hover': {
                                         color: 'orange',
                                     },
@@ -203,23 +203,13 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                                 label='Arkibo'
                                 {...a11yProps(3)}
                                 sx={{
-                                    color: value === 5 ? 'orange' : 'green',
+                                    color: value === 4 ? 'orange' : 'green',
                                     '&:hover': {
                                         color: 'orange',
                                     },
                                 }}
                             /> */}
 
-                            {/* <Tab
-                                label='Fertilizer'
-                                {...a11yProps(3)}
-                                sx={{
-                                    color: value === 6 ? 'orange' : 'green',
-                                    '&:hover': {
-                                        color: 'orange',
-                                    },
-                                }}
-                            /> */}
 
                         </Tabs>
                     </Box>
@@ -241,21 +231,19 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                             parts={parts}
                         />}
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={2}>
+                    {/* <CustomTabPanel value={value} index={2}>
                         <Weather farm={farm} />
-                    </CustomTabPanel>
-                    <CustomTabPanel value={value} index={3}>
+                    </CustomTabPanel> */}
+                    <CustomTabPanel value={value} index={2}>
                         <Farm farmId={farm.id} />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={4}>
+                    <CustomTabPanel value={value} index={3}>
                         <Profile user={user} farm={farm} />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={5}>
+                    <CustomTabPanel value={value} index={4}>
                         <Archive fieldId={farm.fieldId} />
                     </CustomTabPanel>
-                    <CustomTabPanel value={value} index={6}>
-                        <Fertilizer />
-                    </CustomTabPanel>
+                    
                 </Box>
             </div>
         </>

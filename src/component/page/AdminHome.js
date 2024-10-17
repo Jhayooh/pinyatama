@@ -180,7 +180,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
-              <h5 style={{ margin: 0 }}>Farms</h5>
+              <h5 style={{ margin: 0 }}>Mga Sakahan</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={farm} alt="Farms icon" style={{ width: '100%', height: '100%' }} />
@@ -203,11 +203,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               color: 'black',
               cursor: 'pointer',
             }}
-            onClick={() => setSelected('particular')}
+            onClick={() => setSelected('Distribution')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{totalProduction}</h1>
-              <h5 style={{ margin: 0 }}>Production</h5>
+              <h5 style={{ margin: 0 }}>Produksyon</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={production} alt="Production icon" style={{ width: '100%', height: '100%' }} />
@@ -228,11 +228,13 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
+              cursor: 'pointer',
             }}
+            onClick={() => setSelected('Farms')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
-              <h5 style={{ margin: 0 }}>Farmers</h5>
+              <h5 style={{ margin: 0 }}>Mga Magsasaka</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={farmerImg} alt="Farmer icon" style={{ width: '100%', height: '100%' }} />
@@ -259,7 +261,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h5 style={{ margin: 0 }}>Accounts</h5>
+              <h6 style={{ margin: 0 }}>Barangay Agricultural Extension Workers (BAEWs) </h6>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
@@ -296,7 +298,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 >
                 </Box>
                 <Typography variant="subtitle2">
-                  Projected
+                  Inaasahang Iskedyul
                 </Typography>
               </Box>
               <Box sx={{
@@ -318,18 +320,18 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 >
                 </Box>
                 <Typography variant="subtitle2">
-                  Actual
+                  Aktuwal na Iskedyul
                 </Typography>
               </Box>
             </Box>
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Pie labels={labels1} data={series1} title="Municipalties" />
+          <Pie labels={labels1} data={series1} title="Munisipalidad" />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
-            <Pie labels={labels} data={series} title="Farms" sx={{ height: '100%', width: '100%' }} />
+            <Pie labels={labels} data={series} title="Mga Sakahan" sx={{ height: '100%', width: '100%' }} />
           </Box>
         </Grid>
         <Grid item lg={12} xs={12} md={12}>

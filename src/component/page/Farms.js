@@ -279,7 +279,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   {/* Municipality */}
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
-                      <InputLabel id='demo-simple-select-label'>Municipality</InputLabel>
+                      <InputLabel id='demo-simple-select-label'>Munisipalidad</InputLabel>
                       <Select
                         sx={{ border: 'none' }}
                         labelId='demo-simple-select-label'
@@ -299,7 +299,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   {/* ExtensionistSorting */}
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
-                      <InputLabel id='demo-simple-select-label'>Extensionist</InputLabel>
+                      <InputLabel id='demo-simple-select-label'>BAEWs</InputLabel>
                       <Select
                         sx={{ border: 'none' }}
                         labelId='demo-simple-select-label'
@@ -322,7 +322,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   {/* Crop Stage */}
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
-                      <InputLabel id='demo-simple-select-label'>Crop Stage</InputLabel>
+                      <InputLabel id='demo-simple-select-label'>Yugto ng Pananim</InputLabel>
                       <Select
                         sx={{ border: 'none' }}
                         labelId='demo-simple-select-label'
