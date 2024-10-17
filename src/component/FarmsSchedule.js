@@ -7,14 +7,14 @@ import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase/Config'
 import './ripple.css'
 import Textfield from './Timeline'
-import { Box, Paper, Slide, Button, CircularProgress } from '@mui/material'
+import { Box, Paper, Slide, Button, Typography, CircularProgress } from '@mui/material'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
   var options = {
-    month: 'long', // Full month name
-    day: 'numeric', // Day of the month
-    year: 'numeric' // Full year
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
   };
 
   const startDate = new Date(eventClicked.start_time)
@@ -25,19 +25,17 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
     <>
       {
         farm &&
-        <Box sx={{ position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '1' }}>
-          <Button onClick={() => setClicked({})}>x</Button>
-          {/* lagay closing */}
+        <Box sx={{ position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '10', backgroundColor: '#fff' }}>
+          <Button sx={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'flex-end', ml: 'auto', color: 'red' }} onClick={() => setClicked({})}>X</Button>
+          <Box sx={{margin:2}}>
+            <Typography variant='button' sx={{fontFamily:'serif', fontSize:25, justifyContent:'center', alignItems:'center', display:'flex', color:'red'}}> {farm.title} </Typography>
+            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Bilang ng Tanim:<span style={{color:'green', fontSize:15, padding:2}}> {farm.plantNumber} piraso </span></Typography>
+            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Yugto ng Pananim:<span style={{color:'green', fontSize:15, padding:2}}>{eventClicked.title}</span></Typography>
+            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Petsa ng Pagtanim:<span style={{color:'green', fontSize:15, padding:2}}>{formattedStart}</span> </Typography>
+            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Inaasahang Petsa ng Pag-ani:<span style={{color:'green', fontSize:15, padding:2}}>{formattedEnd}</span> </Typography>
+          </Box>
 
-          <h2>{farm.farmerName}</h2>
-          <h3>{farm.plantNumber}</h3>
-          <h5>Phase:{eventClicked.title}</h5>
-          <p>Planting Date: {formattedStart}</p>
-          <p>Expected Harvest Date: {formattedEnd}</p>
-          <p></p>
-          <h5>Activities: </h5>
-          <p>No Activities</p>
-          <Button variant='contained' color='success' onClick={() => setSelected && setSelected('Farms')}>View Details</Button>
+          <Button variant='contained' color='success' onClick={() => setSelected && setSelected('Farms')}>Tingnan ang Buong Detalye</Button>
         </Box>
       }
     </>
@@ -85,10 +83,10 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
   const itemRender = ({ item, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
     const backgroundColor = itemContext.selected
-      ? itemContext.dragging
-        ? 'red'
-        : item.selectedBgColor
-      : item.bgColor
+      && itemContext.dragging
+        && 'red'
+        // : item.selectedBgColor
+      // : item.bgColor
     const borderColor = itemContext.resizing ? 'red' : item.color
     return (
       <div
@@ -195,7 +193,7 @@ function FarmsSchedule({ farms, events, setSelected, farmer }) {
           <TimelineHeaders className='timeline-header'>
             <SidebarHeader >
               {({ getRootProps }) => {
-                return <h3 {...getRootProps()}>QP Farm</h3>
+                return <h3 {...getRootProps()}>Mga Sakahan</h3>
               }}
             </SidebarHeader>
             <DateHeader sticky unit="primaryHeader" />

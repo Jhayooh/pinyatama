@@ -98,7 +98,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
         // const revAct = activities.slice().reverse()
         setNewActivities(prev => [{
             createdAt: farm.start_date,
-            label: 'The pine has been planted.',
+            label: 'Araw ng Pagtanim ng Pinya',
             compId: '',
             qnty: 0,
         }, ...activities])
@@ -330,7 +330,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     setSaving(false)
                     setAlert({
                         visible: true,
-                        message: `ikaw ay nakapaglagay ng fertilizer ngayong ${formatDate(currDate)}`,
+                        message: `ikaw ay naglagay ng fertilizer ngayong ${formatDate(currDate)}`,
                         severity: "success",
                         vertical: 'bottom',
                         horizontal: 'center'
@@ -524,7 +524,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                             width: '100%',
                             padding: 2,
                         }}>
-                            <Box sx={{
+                            {/* <Box sx={{
                                 width: '100%',
                                 display: 'flex',
                                 flexDirection: 'column',
@@ -542,7 +542,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         Add Activities
                                     </Button>
                                 </Box>
-                            </Box>
+                            </Box> */}
                             <Box sx={{
                                 padding: 2,
                                 overflowY: 'auto',
@@ -562,6 +562,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                             '&:hover': {
                                                 cursor: 'pointer',
                                                 backgroundColor: '#58AC58',
+                                                color: '#FAFAFA',
                                             }
                                         }}>
                                             <StepLabel StepIconComponent={QontoStepIcon} >
@@ -579,30 +580,19 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                                         <Typography variant='caption' sx={{
                                                             color: '#4E4E4E'
                                                         }}>
-                                                            {formatDate(act.createdAt.toDate())}
+                                                            {formatDate(act.createdAt.toDate())} : {formatTime(act.createdAt.toDate())}
                                                         </Typography>
-                                                        <Typography variant="subtitle1">{act.label}</Typography>
+                                                        <Typography variant="subtitle1" sx={{ fontFamily: 'serif' }}>{act.label}</Typography>
                                                     </Box>
-                                                    <Typography variant='caption' sx={{
-                                                        color: '#4E4E4E'
-                                                    }} >
-                                                        {formatTime(act.createdAt.toDate())}
+                                                    <Typography variant='body2' sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end' }}>
+                                                        {index !== 0 ? `${act.qnty} kg` : null}
                                                     </Typography>
                                                 </Box>
                                             </StepLabel>
-                                            <StepContent sx={{
-                                                borderLeft: 0,
-                                            }}>
-                                                <Box sx={{ paddingY: 2 }}>
-                                                    <Typography variant='body2'>
-                                                        Ikaw ay naglagay ng <span style={{ fontWeight: 'bold' }}>{act.qnty}kg</span> ng fertilizer na <span style={{ fontWeight: 'bold' }}>{act.label}</span>
-                                                    </Typography>
-                                                </Box>
-                                            </StepContent>
                                         </Step>
                                     ))}
                                 </Stepper>
-                            </Box> {/* End scrollable Box */}
+                            </Box>
                         </Box>
                     </Grid>
 
@@ -627,7 +617,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         <Doughnut
                                             labels={["Net return", "Production cost"]}
                                             data={[roi[0].netReturn, roi[0].costTotal]}
-                                            title={"QP Production"}
+                                            title={"Produksyon ng Pinya"}
                                         />
                                     </Box>
                                 </Carousel.Item>
@@ -636,7 +626,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         <Doughnut
                                             labels={["Materyales", "Labor", "Fertilizer"]}
                                             data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
-                                            title={'Production Cost'}
+                                            title={'Gastos sa Produksyon'}
                                         />
                                     </Box>
                                 </Carousel.Item>
@@ -645,7 +635,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                         <Doughnut
                                             labels={["Materyales", "Labor", "Fertilizer"]}
                                             data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
-                                            title={'Production Cost'}
+                                            title={'Gastos sa Produksyon'}
                                         />
                                     </Box>
                                 </Carousel.Item>

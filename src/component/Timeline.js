@@ -96,7 +96,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         {/* Municipality  */}
                         <Box sx={{ width: '100%' }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
+                                <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
                                 <Select
                                     sx={{ border: "none" }}
                                     labelId="demo-simple-select-label"
@@ -118,7 +118,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         {/* Extensionist */}
                         <Box sx={{ width: '100%' }}>
                             <FormControl fullWidth size="small">
-                                <InputLabel id="demo-simple-select-label">Extensionist</InputLabel>
+                                <InputLabel id="demo-simple-select-label">BAEWs</InputLabel>
                                 <Select
                                     sx={{ border: "none" }}
                                     labelId="demo-simple-select-label"
@@ -227,7 +227,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         >
                         </Box>
                         <Typography variant="subtitle2">
-                            Projected
+                            Inaasahang Iskedyul
                         </Typography>
                     </Box>
                     <Box sx={{
@@ -249,7 +249,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         >
                         </Box>
                         <Typography variant="subtitle2">
-                            Actual
+                           Aktuwal na Iskedyul
                         </Typography>
                     </Box>
                 </Box>

@@ -14,6 +14,7 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 // icon
 import pesoCoin from './image_src/peso.png'
 
+
 // charts
 import Pie from './chart/Pie';
 import Doughnut from './chart/Doughnut';
@@ -135,7 +136,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }
 
   useEffect(() => {
-    const grossReturn = newRoi.grossReturn * getPinePrice('pineapple', localPine)
+    const grossReturn = newRoi.grossReturn * getPinePrice('good size', localPine)
     const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
     const netReturnValue = grossReturn - costTotal;
     const roiValue = (netReturnValue / grossReturn) * 100;
@@ -380,7 +381,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
               <TextField
                 label="Market Price"
                 name="marketPrice"
-                value={formatter.format(getPinePrice('pineapple', pineapple))}
+                value={formatter.format(getPinePrice('good size', pineapple))}
                 fullWidth
                 disabled
                 inputProps={{
@@ -605,7 +606,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             },
                             {
                               field: 'qntyPrice',
-                              headerName: 'Qnty',
+                              headerName: 'Quantity',
                               flex: 1,
                               type: 'number',
                               editable: true,
@@ -689,7 +690,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                             },
                             {
                               field: 'qntyPrice',
-                              headerName: 'Qnty',
+                              headerName: 'Quantity',
                               flex: 1,
                               type: 'number',
                               editable: true,
@@ -951,7 +952,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 <Doughnut
                   labels={["Net return", "Production cost"]}
                   data={[newRoi.netReturn, newRoi.costTotal]}
-                  title={"Expected QP Production"}
+                  title={"Inaasahang Produksyon"}
                 />
               </Box>
               <Box className='productionBox' sx={{
@@ -961,9 +962,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 flex: 1
               }}>
                 <Doughnut
-                  labels={["Materyales", "Labor", "Fertilizer"]}
+                  labels={["Materials", "Labor", "Fertilizer"]}
                   data={laborMaterial}
-                  title={'Production Cost'}
+                  title={'Gastos sa Produksyon'}
                 />
               </Box>
             </Box>
@@ -982,9 +983,9 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                 flex: 1
               }}>
                 <Doughnut
-                  labels={["Pineapple", "Butterball"]}
-                  data={[newRoi.grossReturn * getPinePrice('pineapple', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
-                  title={"Pineapple cost"}
+                  labels={["Good Size", "Butterball"]}
+                  data={[newRoi.grossReturn * getPinePrice('good size', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
+                  title={"Produksyon ng Pinya"}
                 />
               </Box>
               <Box className='pricesBox' sx={{
@@ -1028,7 +1029,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       </Typography>
                       <IconButton
                         onClick={() => {
-                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'pineapple'))
+                          setNewPine(localPine.find((pone) => pone.name.toLowerCase() === 'good size'))
                           setPineModal(true)
                         }}
                         sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
@@ -1056,7 +1057,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                           fontWeight: 700,
                         }}
                       >
-                        {parseFloat(getPinePrice('pineapple', localPine)).toFixed(2)}
+                        {parseFloat(getPinePrice('good size', localPine)).toFixed(2)}
                       </Typography>
                       <Typography align='center'>
                         /pc
@@ -1081,12 +1082,12 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                       color: '#FFF'
                     }}>
                     <Typography align='center' variant='caption'>
-                      Market price
+                      SRP
                     </Typography>
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600
                     }}>
-                      {formatter.format(getPinePrice('pineapple', pineapple))}
+                      {formatter.format(getPinePrice('good size', pineapple))}
                     </Typography>
                   </Box>
                 </Box>

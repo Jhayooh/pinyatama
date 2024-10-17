@@ -174,12 +174,14 @@ function Profile({ user, farm }) {
                 <Box>
                     <Typography
                         sx={{
-                            color: 'green',
-                            fontFamily: 'monospace',
+                            color: '#fff',
+                            fontFamily: 'serif',
                             paddingLeft: 5,
                             paddingTop: 2,
+                            fontSize: {xs:15, md:25}
+
                         }}>
-                        BARANGAY EXTENSIONIST</Typography>
+                         Barangay Agricultural Extension Workers </Typography>
 
                     <Box sx={{ justifyContent: 'center', display: 'flex', alignItems: 'center', flexDirection: 'column', padding: 2, marginLeft: 5 }}>
                         <Avatar
@@ -206,7 +208,7 @@ function Profile({ user, farm }) {
                             variant="subtitle2"
                             gutterBottom
                             sx={{ marginLeft: 3, fontWeight: 'bold' }}>
-                            Barangay:
+                            Baranggay:
                         </Typography>
                         <Typography
                             sx={{ color: 'white' }}
@@ -221,7 +223,7 @@ function Profile({ user, farm }) {
                             gutterBottom
                             sx={{ marginLeft: 3, fontWeight: 'bold' }}
                         >
-                            Municipality:
+                            Munisipalidad:
                         </Typography>
                         <Typography
                             sx={{ color: 'white' }}
@@ -235,7 +237,7 @@ function Profile({ user, farm }) {
                             variant="subtitle2"
                             gutterBottom
                             sx={{ marginLeft: 3, fontWeight: 'bold' }}>
-                            Email:
+                            Username:
                         </Typography>
                         <Typography
                             variant="subtitle2"
@@ -251,7 +253,7 @@ function Profile({ user, farm }) {
                             gutterBottom
                             xs={12}
                             sx={{ marginLeft: 3, fontWeight: 'bold' }}>
-                            Phone Number:
+                            Numero ng Telepono:
                         </Typography>
                         <Typography
                             variant="subtitle2"
