@@ -156,27 +156,25 @@ function Dashboard() {
 
   // Function to handle login
   const handleLogin = async () => {
-    setIsLoading(true); // Start loading
-    setError(''); // Clear any previous errors
+    setIsLoading(true); 
+    setError(''); 
 
-    const adminEmails = ["admin@gmail.com"]; // List of admin emails
+    const adminEmails = ["admin@gmail.com"]; 
 
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-
-      // Check if the user's email matches the admin email
       if (adminEmails.includes(user.email)) {
         console.log("Admin logged in successfully");
       } else {
         console.log("Access denied. Not an admin.");
         setError("Access denied: You do not have admin privileges.");
-        auth.signOut(); // Sign out non-admin users
+        auth.signOut();
       }
     } catch (loginError) {
       setError("Login failed: " + loginError.message);
     } finally {
-      setIsLoading(false); // End loading
+      setIsLoading(false); 
     }
   };
 
@@ -203,7 +201,7 @@ function Dashboard() {
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth' // Optional: smooth scrolling animation
+      behavior: 'smooth' 
     });
   };
   const opagRef = useRef(null);
