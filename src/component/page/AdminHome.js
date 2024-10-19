@@ -261,7 +261,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h7 style={{ margin: 0 }}>Barangay Agricultural Extension Workers (BAEWs)</h7>
+              <h5 style={{ margin: 0 }}>BAEWs</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
