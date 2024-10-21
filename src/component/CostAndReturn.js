@@ -95,7 +95,20 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
       return
     }
 
-    const updatedLocalParts = parts.map(part => {
+    const reducedParts = parts
+      .filter(part => part.type !== "a")
+      .reduce((acc, part) => {
+        const existing = acc.find(item => item.foreignId === part.foreignId);
+        if (existing) {
+          existing.qntyPrice += part.qntyPrice; // Sum qntyPrice
+          existing.totalPrice += part.totalPrice; // Sum totalPrice
+        } else {
+          acc.push({ ...part }); // Add the part if it's not already in the accumulator
+        }
+        return acc;
+      }, []);
+
+    const updatedLocalParts = reducedParts.map(part => {
       const thePart = particularData.find(data => data.id === part.foreignId)?.isAvailable;
       console.log("isAvailable:", thePart)
       return {
@@ -136,7 +149,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
   }
 
   useEffect(() => {
-    const grossReturn = newRoi.grossReturn * getPinePrice('good size', localPine)
+    const grossReturn = newRoi.grossReturn * getPinePrice('good size', localPine) + newRoi.butterBall * getPinePrice('butterball', localPine)
     const costTotal = laborMaterial[0] + laborMaterial[1] + laborMaterial[2]
     const netReturnValue = grossReturn - costTotal;
     const roiValue = (netReturnValue / grossReturn) * 100;
@@ -666,20 +679,7 @@ function CostAndReturn({ markers, parts, farm, roi, pineapple }) {
                     case 0:
                       return (
                         <DataGrid
-                          rows={
-                            localParts
-                              .filter(part => part.parent.toLowerCase() === 'fertilizer' && part.type !== "a")
-                              .reduce((acc, part) => {
-                                const existing = acc.find(item => item.foreignId === part.foreignId);
-                                if (existing) {
-                                  existing.qntyPrice += part.qntyPrice; // Sum qntyPrice
-                                  existing.totalPrice += part.totalPrice; // Sum totalPrice
-                                } else {
-                                  acc.push({ ...part }); // Keep original part if it's not a duplicate
-                                }
-                                return acc;
-                              }, [])
-                          }
+                          rows={localParts.filter(part => part.parent.toLowerCase() === 'fertilizer' && part.type !== "a")}
                           columns={[
                             {
                               field: 'name',
