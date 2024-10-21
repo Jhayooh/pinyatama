@@ -13,7 +13,9 @@ import ProductPrices from '../ProductPrices';
 import Weather from './Weather';
 import Fertilizer from './Fertilizer'
 import Activities from './Activities'
-
+// import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 import BackIcon from '@mui/icons-material/ArrowBackIosNew';
 
@@ -91,6 +93,73 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
         setValue(newValue);
     };
 
+    const qntyParts = (label, fert) => {
+        const thePart = parts.find(part => part.label === label && part.name.includes(fert));
+        return thePart ? thePart.qntyPrice : 0; 
+    };
+
+
+    const handleSar = async () => {
+        const workbook = new ExcelJS.Workbook();
+
+        // Fetch and load the existing Excel template
+        const response = await fetch('/reportOne.xlsx');
+        const data = await response.arrayBuffer();
+
+        await workbook.xlsx.load(data);
+
+        // Get the first worksheet (1-based index)
+        const worksheet = workbook.getWorksheet(1);
+
+        // Modify cells F14, G14, H14
+        worksheet.getCell('F14').value = farm.npk[0];
+        worksheet.getCell('G14').value = farm.npk[1];
+        worksheet.getCell('H14').value = farm.npk[2];
+        worksheet.getCell('C8').value = farm.farmerName;
+        worksheet.getCell('H7').value = farm.mun;
+        worksheet.getCell('H8').value = farm.farmerName;
+        worksheet.getCell('H10').value = farm.area;
+
+        // Nutrients Requirements
+        worksheet.getCell('B19').value = farm.data.first.nutrients.N;
+        worksheet.getCell('D19').value = farm.data.first.nutrients.P;
+        worksheet.getCell('H19').value = farm.data.first.nutrients.K;
+        worksheet.getCell('B20').value = farm.data.second.nutrients.N;
+        worksheet.getCell('D20').value = farm.data.second.nutrients.P;
+        worksheet.getCell('H20').value = farm.data.second.nutrients.K;
+
+        // Fertilizer Recommendation
+        // - first
+        worksheet.getCell('C27').value = qntyParts(1, "14-14-14");
+        worksheet.getCell('D27').value = qntyParts(1, "46-0-0");
+        worksheet.getCell('F27').value = qntyParts(1, "0-0-60");
+        worksheet.getCell('H27').value = qntyParts(1, "16-20-0");
+        // - 4th
+        worksheet.getCell('C28').value = qntyParts(4, "14-14-14");
+        worksheet.getCell('D28').value = qntyParts(4, "46-0-0");
+        worksheet.getCell('F28').value = qntyParts(4, "0-0-60");
+        worksheet.getCell('H28').value = qntyParts(4, "16-20-0");
+        // - 7th
+        worksheet.getCell('C29').value = qntyParts(7, "14-14-14");
+        worksheet.getCell('D29').value = qntyParts(7, "46-0-0");
+        worksheet.getCell('F29').value = qntyParts(7, "0-0-60");
+        worksheet.getCell('H29').value = qntyParts(7, "16-20-0");
+        // - 10th
+        worksheet.getCell('C30').value = qntyParts(10, "14-14-14");
+        worksheet.getCell('D30').value = qntyParts(10, "46-0-0");
+        worksheet.getCell('F30').value = qntyParts(10, "0-0-60");
+        worksheet.getCell('H30').value = qntyParts(10, "16-20-0");
+
+        console.log("worksheet ", worksheet);
+
+        // Write the modified workbook to a buffer
+        const buffer = await workbook.xlsx.writeBuffer();
+
+        // Create a Blob from the buffer and trigger the download
+        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8' });
+        saveAs(blob, `${farm.title.trim()}.xlsx`);
+    }
+
     markers = markers.map(marker => {
         switch (marker.name) {
             case 'totalPines':
@@ -119,6 +188,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
                     <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
+                    {parts && <Button onClick={handleSar}>Download SAR</Button>}
                 </Box>
                 <Box style={{ width: '100%', padding: '10px' }}>
                     <Box style={{
@@ -243,7 +313,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                     <CustomTabPanel value={value} index={4}>
                         <Archive fieldId={farm.fieldId} />
                     </CustomTabPanel>
-                    
+
                 </Box>
             </div>
         </>
