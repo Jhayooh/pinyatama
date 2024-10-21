@@ -46,8 +46,11 @@ import FarmsSchedule from "../FarmsSchedule";
 const Activities = ({ roi, farm, particularData, parts }) => {
     const [isAdd, setIsAdd] = useState(false)
 
-    const activityColl = collection(db, `farms/${farm.id}/activities`)
     const componentsColl = collection(db, `farms/${farm.id}/components`)
+    const [newComp] = useCollectionData(componentsColl)
+    const roiColl = collection(db, `farms/${farm.id}/roi`)
+    const [newRoi] = useCollectionData(roiColl)
+    const activityColl = collection(db, `farms/${farm.id}/activities`)
     const activityQuery = query(activityColl, orderBy('createdAt'))
     const [activities] = useCollectionData(activityQuery)
 
@@ -60,6 +63,9 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const [material, setMaterial] = useState(null)
     const [compAct, setCompAct] = useState(null)
     const [events, setEvents] = useState(null)
+
+    const [actualRoi, setActualRoi] = useState(roi[0])
+    const [actualComp, setActualComp] = useState({})
 
     const [stepIndex, setStepIndex] = useState(-1)
 
@@ -81,28 +87,38 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     }, [e])
 
 
-    useEffect(() => {
-        if (!parts) return
-        console.log("the parts sa activities:", parts);
+    // useEffect(() => {
+    //     if (!parts) return
+    //     console.log("the parts sa activities:", parts);
 
-        const ferts = parts.filter(part => part.parent.toLowerCase() === 'fertilizer');
-        const mat = parts.filter(part => part.particular.toLowerCase() === 'material');
-        setFertilizer(ferts)
-        setMaterial(mat)
-        setCompAct([...ferts, ...mat])
-    }, [parts])
+    //     const ferts = parts.filter(part => part.parent.toLowerCase() === 'fertilizer');
+    //     const mat = parts.filter(part => part.particular.toLowerCase() === 'material');
+    //     setFertilizer(ferts)
+    //     setMaterial(mat)
+    //     setCompAct([...ferts, ...mat])
+    // }, [parts])
 
 
     useEffect(() => {
         if (!activities) return
-        // const revAct = activities.slice().reverse()
+
         setNewActivities(prev => [{
             createdAt: farm.start_date,
             label: 'Araw ng Pagtanim ng Pinya',
             compId: '',
             qnty: 0,
         }, ...activities])
-    }, [activities])
+
+        const hasAct = activities.find(act => act.type === 'a')
+        console.log("actual activityyyy:", hasAct)
+
+        if (hasAct && newRoi) {
+            setActualRoi(newRoi.find(nr => nr.type === 'a'))
+            console.log("newRoi sa activiites:",)
+        } else {
+            setActualRoi(roi[0])
+        }
+    }, [activities, newRoi])
 
     const QontoConnector = styled(StepConnector)(({ theme }) => ({
         [`&.${stepConnectorClasses.alternativeLabel}`]: {
@@ -166,6 +182,15 @@ const Activities = ({ roi, farm, particularData, parts }) => {
     const handleModalClose = () => {
         setIsAdd(false);
     };
+
+    // function calcTotalParts(upPart) {
+    //     const totalLabor = upPart.filter(item => item.particular.toLowerCase() === 'labor').reduce((sum, item) => sum + item.totalPrice, 0);
+    //     const totalMaterial = upPart.filter(item => item.particular.toLowerCase() === 'material').reduce((sum, item) => sum + item.totalPrice, 0);
+    //     const totalFertilizer = upPart
+    //       .filter(item => item.parent.toLowerCase() === "fertilizer")
+    //       .reduce((sum, item) => sum + item.totalPrice, 0);
+    //     setLaborMaterial([totalMaterial - totalFertilizer, totalLabor, totalFertilizer])
+    //   }   
 
 
     function ethrelValid(currdate, start_date) {
@@ -297,7 +322,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                     // update farm isEthrel
                     await updateDoc(doc(db, `farms/${farm.id}`), {
                         isEthrel: currDate,
-                        ethrel: farm.ethrel + bilang
+                        ethrel: farm.ethrel + parseInt(bilang)
                     })
                     const newCompAct = await addDoc(componentsColl, {
                         ...theLabel,
@@ -616,7 +641,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     <Box className='roi'>
                                         <Doughnut
                                             labels={["Net return", "Production cost"]}
-                                            data={[roi[0].netReturn, roi[0].costTotal]}
+                                            data={[actualRoi.netReturn, actualRoi.costTotal]}
                                             title={"Produksyon ng Pinya"}
                                         />
                                     </Box>
@@ -625,16 +650,7 @@ const Activities = ({ roi, farm, particularData, parts }) => {
                                     <Box className='parti' >
                                         <Doughnut
                                             labels={["Materyales", "Labor", "Fertilizer"]}
-                                            data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
-                                            title={'Gastos sa Produksyon'}
-                                        />
-                                    </Box>
-                                </Carousel.Item>
-                                <Carousel.Item>
-                                    <Box className='parti' >
-                                        <Doughnut
-                                            labels={["Materyales", "Labor", "Fertilizer"]}
-                                            data={[roi[0].materialTotal - roi[0].fertilizerTotal, roi[0].laborTotal, roi[0].fertilizerTotal]}
+                                            data={[actualRoi.materialTotal - actualRoi.fertilizerTotal, actualRoi.laborTotal, actualRoi.fertilizerTotal]}
                                             title={'Gastos sa Produksyon'}
                                         />
                                     </Box>

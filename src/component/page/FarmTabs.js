@@ -95,7 +95,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
 
     const qntyParts = (label, fert) => {
         const thePart = parts.find(part => part.label === label && part.name.includes(fert));
-        return thePart ? thePart.qntyPrice : 0; 
+        return thePart ? thePart.qntyPrice : 0;
     };
 
 
@@ -286,7 +286,7 @@ export default function FarmTabs({ farms, setShow, user, event, particularData, 
                     <CustomTabPanel value={value} index={0}>
                         {roi && <CostAndReturn
                             markers={markers}
-                            parts={parts}
+                            parts={parts.filter(p => p.type !== 'a')}
                             farm={farm}
                             roi={roi}
                             particularData={particularData}
