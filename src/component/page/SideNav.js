@@ -134,7 +134,7 @@ export default function SideNav() {
   const userQuery = query(userRef)
   const [users] = useCollectionData(userQuery)
 
-  const farmerRef = collection(db, '/farmer')
+  const farmerRef = collection(db, '/dataFarm')
   const [farmerRow, farmerLoading] = useCollectionData(farmerRef)
 
   const particularsRef = collection(db, '/particulars')
@@ -561,9 +561,9 @@ export default function SideNav() {
               <>
                 <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, width: 1, overflow: 'hidden', backgroundColor: 'green' }}>
                   {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
-                  {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} roi={roi} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
+                  {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-                  {selected === 'timeline' && <Timeline farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} farmer={farmerRow} users={users} setSelected={setSelected} />}
+                  {selected === 'timeline' && <Timeline farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
                   {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>

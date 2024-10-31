@@ -1,11 +1,33 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-const ExampleBarChart = ({ name, data, name1, data1 }) => {
-  const options = {
+const Column = ({ goodsize, butterball }) => {
+  var options = {
+    series: [{
+      name: 'PRODUCT A',
+      data: [44, 55, 41, 67, 22, 43]
+    }, {
+      name: 'PRODUCT B',
+      data: [13, 23, 20, 8, 13, 27]
+    }],
     chart: {
       type: 'bar',
       stacked: true,
+      toolbar: {
+        tools: {
+          download: true,
+          selection: false,
+          zoom: false,
+          zoomin: false,
+          zoomout: false,
+          pan: false,
+          reset: false | '<img src="/static/icons/reset.png" width="20">',
+          customIcons: []
+        },
+      },
+      zoom: {
+        enabled: true
+      }
     },
     responsive: [{
       breakpoint: 480,
@@ -17,35 +39,41 @@ const ExampleBarChart = ({ name, data, name1, data1 }) => {
         }
       }
     }],
-    xaxis: {
-      categories: ['Category A', 'Category B', 'Category C', 'Category D', 'Category E'],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        borderRadius: 10,
+        borderRadiusApplication: 'end', // 'around', 'end'
+        borderRadiusWhenStacked: 'last', // 'all', 'last'
+        dataLabels: {
+          total: {
+            enabled: true,
+            style: {
+              fontSize: '13px',
+              fontWeight: 900
+            }
+          }
+        }
+      },
     },
-    fill: {
-      opacity: 1
+    xaxis: {
+      type: 'datetime',
+      categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
+        '01/05/2011 GMT', '01/06/2011 GMT'
+      ],
     },
     legend: {
       position: 'right',
-      offsetX: 0,
-      offsetY: 50
+      offsetY: 40
     },
-  };
-
-  const series = [
-    {
-      name: name,
-      data: data
-    },
-    {
-      name: 'Series 2',
-      data: data1 
+    fill: {
+      opacity: 1
     }
-  ];
-
+  };
   return (
-    <div className="stacked-bar-chart">
-      <Chart options={options} series={series} type="bar" height={350} />
-    </div>
-  );
-};
+    <Chart options={options} height={320} type='bar' series={options.series} />
+  )
+}
 
-export default ExampleBarChart;
+export default Column
+

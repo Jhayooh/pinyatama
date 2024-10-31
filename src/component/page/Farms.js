@@ -10,15 +10,17 @@ import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 
-
 import Importer from '../Importer.js';
 import Exporter from '../Exporter.js';
+import Archive from './Archive.js';
 
 // icon
 import ViewModuleIcon from '@mui/icons-material/ViewModule';
 import ViewListIcon from '@mui/icons-material/ViewList';
 import More from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
+import ArchiveIcon from '@mui/icons-material/ArchiveOutlined';
+import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
 
 import GridView from './GridView.js';
 import ListView from './ListView.js';
@@ -41,6 +43,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
 
   const [selectedMonth, setSelectedMonth] = useState("Lahat");
   const [selectedYear, setSelectedYear] = useState("Lahat");
+
+  const [archive, setArchive] = useState(false)
 
   const [grid, setGrid] = useState(true);
 
@@ -76,21 +80,25 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     setYear(event.target.value)
   }
 
+  const handleArchive = () => {
+    setArchive(!archive)
+  }
 
   useEffect(() => {
-    const filteredFarms = farms.filter((farm) => {
+    const useFilteredFarms = farms.filter((farm) => {
+      const matchesArchive = archive ? farm.cropStage === 'complete' : farm.cropStage !== 'complete'
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
       const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
-      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage;
+      return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage && matchesArchive;
     });
     const filteredUsers = newUser.filter((user) => {
       return user.displayName.includes(userFilter);
     });
-    setFilteredFarms(filteredFarms);
+    setFilteredFarms(useFilteredFarms);
     setFilteredUsers(filteredUsers);
-  }, [search, farms, mun, newUser, userFilter, cropFilter, month, year]);
+  }, [search, farms, mun, newUser, userFilter, cropFilter, month, year, archive]);
 
   async function getImage(id) {
     try {
@@ -263,9 +271,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
         {showFarmTabs ? (
           <Box sx={{ height: '100%', overflowY: 'auto', borderRadius: 4 }}>
             <FarmTabs
-              farms={filteredFarms.filter((marker) => marker.id === indFarm)}
+              farm={filteredFarms.find((marker) => marker.id === indFarm)}
               setShow={setShowFarmTabs}
-              user={users.filter((user) => user.id === indUser)}
+              user={users.find((user) => user.id === indUser)}
               event={events.filter((event) => event.id === indFarm)}
               particularData={particularData}
               pineapple={pineapple}
@@ -276,6 +284,13 @@ function Farms({ events, farms, users, particularData, pineapple }) {
             <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
               <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
                 <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
+                  {/* Bak butun */}
+                  {
+                    archive &&
+                    <Button onClick={() => (setArchive(false))}>
+                      <UndoRoundedIcon />
+                    </Button>
+                  }
                   {/* Municipality */}
                   <Box sx={{ display: 'flex', width: '100%' }}>
                     <FormControl fullWidth size='small'>
@@ -408,6 +423,11 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                   </Box>
                   {/* MenuIcon */}
                   <Grid item >
+                    <IconButton onClick={() => setGrid(!grid)} >
+                      {grid ? <ViewListIcon /> : <ViewModuleIcon />}
+                    </IconButton>
+                  </Grid>
+                  <Grid item >
                     <IconButton
                       aria-label="more"
                       id="long-button"
@@ -439,19 +459,21 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       <MenuItem >
                         <Exporter farms={filteredFarms} sx={{ width: '100%' }} />
                       </MenuItem>
-
+                      <MenuItem onClick={handleArchive} sx={{ width: '100%' }}>
+                        <Button variant='text' color='warning' ><ArchiveIcon />{archive ? `Active` : `Archive`}</Button>
+                      </MenuItem>
                     </Menu>
                   </Grid>
                 </Box>
               </Box>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
+              {/* <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 1, width: 1, p: 2 }}>
                 <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewModuleIcon />} onClick={() => setGrid(true)}>
                   Grid
                 </Button>
                 <Button variant='contained' sx={{ backgroundColor: 'orange', '&:hover': { backgroundColor: 'green' } }} startIcon={<ViewListIcon />} onClick={() => setGrid(false)}>
                   List
                 </Button>
-              </Box>
+              </Box> */}
             </Box>
             <Box sx={{ paddingBottom: 3, height: '100%', overflowX: 'auto', }}>
               {grid ? (
