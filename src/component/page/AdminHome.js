@@ -112,24 +112,24 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   const [totalProduction, setTotalProduction] = useState(0);
 
   useEffect(() => {
-    const totalProduction = { sum: 0 }; // Initialize a sum object to keep track of the total value
+    const totalProduction = { sum: 0 }; 
 
     const data = farms.reduce((acc, farm, index) => {
       const existing = acc.find(item => item.label === farm.mun);
-      const pieValue = parseFloat(pieData1[index]) || 0; // Convert to float
+      const pieValue = parseFloat(pieData1[index]) || 0; 
 
-      totalProduction.sum += pieValue; // Add pieValue to the total sum
+      totalProduction.sum += pieValue; 
 
       if (existing) {
-        existing.value += pieValue; // Update existing value by adding pieValue
+        existing.value += pieValue; 
       } else {
         acc.push({
           label: farm.mun,
-          value: pieValue, // Use pieValue directly if no existing item is found
+          value: pieValue, 
         });
       }
 
-      return acc; // Don't forget to return the accumulator
+      return acc;
     }, []);
 
     setProductionData(data);
@@ -165,7 +165,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #789e4f',
@@ -191,7 +190,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #e1ad67',
@@ -218,13 +216,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #c17a05',
               borderRadius: 3,
               background: 'linear-gradient(to right bottom, #D2B48C, #987554, #664229)',
-              // backgroundColor: '#af7f35',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -233,7 +229,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             onClick={() => setSelected('Farms')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
+              <Typography variant='button'sx={{ fontWeight: 'bold', fontSize:40}}>{farmer.length}</Typography>
               <h5 style={{ margin: 0 }}>Mga Magsasaka</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -245,13 +241,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #foa30a',
               borderRadius: 3,
               background: 'linear-gradient(to right bottom, #FFE761, #FFDC2E, #FFD500)',
-              // backgroundColor: '#f8da5b',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -261,7 +255,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h5 style={{ margin: 0 }}>BAEWs</h5>
+              <h5 style={{ margin: 0 }}>BAEW's</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
@@ -292,7 +286,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2,  // optional for rounded corners
+                    borderRadius: 2,  
                     mr: 1
                   }}
                 >
@@ -314,7 +308,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2,  // optional for rounded corners
+                    borderRadius: 2, 
                     mr: 1
                   }}
                 >

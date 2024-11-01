@@ -51,7 +51,7 @@ import Pine from './image_src/p.jpg';
 import Butt from './image_src/p1.jpg'
 
 
-export default function ProductPrices({ particularData, pineappleData }) {
+export default function ProductPrices({ particularData, pineappleData, others }) {
   const [rowModesModel, setRowModesModel] = useState({});
 
   const [saving, setSaving] = useState(false);
@@ -641,6 +641,7 @@ export default function ProductPrices({ particularData, pineappleData }) {
                 <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
+                <Tab label="Others" value="others" />
 
               </Tabs>
               <Box

@@ -48,7 +48,7 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({ farms, events, setSelected, farmer }) {
+function FarmsSchedule({ farms, events, setSelected }) {
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
