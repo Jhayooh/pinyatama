@@ -165,7 +165,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #789e4f',
@@ -191,7 +190,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #e1ad67',
@@ -218,13 +216,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #c17a05',
               borderRadius: 3,
               background: 'linear-gradient(to right bottom, #D2B48C, #987554, #664229)',
-              // backgroundColor: '#af7f35',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -233,7 +229,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             onClick={() => setSelected('Farms')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <h1 style={{ fontWeight: 'bold' }}>{farmer.length}</h1>
+              <Typography variant='button'sx={{ fontWeight: 'bold', fontSize:40}}>{farmer.length}</Typography>
               <h5 style={{ margin: 0 }}>Mga Magsasaka</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -245,13 +241,11 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
         <Grid item lg={3} md={6} sm={6} xs={12}>
           <Box
             sx={{
-              flex: 1,
               paddingX: 3,
               paddingY: 2,
               boxShadow: '0px 5px 5px -3px #foa30a',
               borderRadius: 3,
               background: 'linear-gradient(to right bottom, #FFE761, #FFDC2E, #FFD500)',
-              // backgroundColor: '#f8da5b',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
@@ -261,7 +255,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
               <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h7 style={{ margin: 0 }}>Barangay Agricultural Extension Workers (BAEWs)</h7>
+              <h5 style={{ margin: 0 }}>BAEW's</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
