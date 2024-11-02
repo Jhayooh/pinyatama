@@ -1,0 +1,24 @@
+.expect {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 32px
+}
+.map {
+    height: 400px;
+    
+}
+
+.farm-schedule {
+    width: 100%
+}
+
+.btn-view-all {
+    background-color: #ffa500;
+    border: none;
+    padding: 8px 10px;
+    width: 120px;
+    color: #fff;
+    font-size: 18px;
+    border-radius: 6px;
+}
