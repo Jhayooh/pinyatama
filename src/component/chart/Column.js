@@ -1,15 +1,9 @@
+import { Label } from '@mui/icons-material';
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-const Column = ({ goodsize, butterball }) => {
+const Column = ({ series }) => {
   var options = {
-    series: [{
-      name: 'PRODUCT A',
-      data: [44, 55, 41, 67, 22, 43]
-    }, {
-      name: 'PRODUCT B',
-      data: [13, 23, 20, 8, 13, 27]
-    }],
     chart: {
       type: 'bar',
       stacked: true,
@@ -58,9 +52,12 @@ const Column = ({ goodsize, butterball }) => {
     },
     xaxis: {
       type: 'datetime',
-      categories: ['01/01/2011 GMT', '01/02/2011 GMT', '01/03/2011 GMT', '01/04/2011 GMT',
-        '01/05/2011 GMT', '01/06/2011 GMT'
-      ],
+      Label: {
+        formatter: function (value, stamp) {
+          return new Date(stamp)
+        }
+      },
+      categories: series.categories,
     },
     legend: {
       position: 'right',
@@ -71,7 +68,7 @@ const Column = ({ goodsize, butterball }) => {
     }
   };
   return (
-    <Chart options={options} height={320} type='bar' series={options.series} />
+    <Chart options={options} height={320} type='bar' series={series.series} />
   )
 }
 

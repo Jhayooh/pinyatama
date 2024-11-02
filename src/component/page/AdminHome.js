@@ -112,24 +112,24 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   const [totalProduction, setTotalProduction] = useState(0);
 
   useEffect(() => {
-    const totalProduction = { sum: 0 }; // Initialize a sum object to keep track of the total value
+    const totalProduction = { sum: 0 }; 
 
     const data = farms.reduce((acc, farm, index) => {
       const existing = acc.find(item => item.label === farm.mun);
-      const pieValue = parseFloat(pieData1[index]) || 0; // Convert to float
+      const pieValue = parseFloat(pieData1[index]) || 0; 
 
-      totalProduction.sum += pieValue; // Add pieValue to the total sum
+      totalProduction.sum += pieValue; 
 
       if (existing) {
-        existing.value += pieValue; // Update existing value by adding pieValue
+        existing.value += pieValue; 
       } else {
         acc.push({
           label: farm.mun,
-          value: pieValue, // Use pieValue directly if no existing item is found
+          value: pieValue, 
         });
       }
 
-      return acc; // Don't forget to return the accumulator
+      return acc;
     }, []);
 
     setProductionData(data);
@@ -286,7 +286,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2,  // optional for rounded corners
+                    borderRadius: 2,  
                     mr: 1
                   }}
                 >
@@ -308,7 +308,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2,  // optional for rounded corners
+                    borderRadius: 2, 
                     mr: 1
                   }}
                 >

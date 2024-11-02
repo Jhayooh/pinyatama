@@ -132,8 +132,10 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
             <div>
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
-                    <h2 style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1 }}>{farm.title}</h2>
-                    {parts && <Button onClick={handleSar}>Download SAR</Button>}
+                    <Typography style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1, fontSize:50}}>{farm.title}</Typography>
+                    {parts &&
+                        <Button variant='outlined' color='success' onClick={handleSar} sx={{marginRight: '20px'}}>Download Soil Analysis Result </Button>
+                    }
                 </Box>
                 <Box style={{ width: '100%', padding: '10px' }}>
                     <Box style={{

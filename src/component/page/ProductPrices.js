@@ -31,7 +31,7 @@ import {
 import Backdrop from '@mui/material/Backdrop';
 
 // firebase
-import { db } from '../firebase/Config';
+import { db } from '../../firebase/Config';
 import { addDoc, collection, doc, getDoc, updateDoc, query, orderBy, limit, arrayUnion } from 'firebase/firestore';
 
 // icons
@@ -47,8 +47,8 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import moment from 'moment';
 
-import Pine from './image_src/p.jpg';
-import Butt from './image_src/p1.jpg'
+import Pine from '../image_src/p.jpg';
+import Butt from '../image_src/p1.jpg'
 
 
 export default function ProductPrices({ particularData, pineappleData, others }) {

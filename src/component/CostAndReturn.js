@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { DataGrid, GridCellModes, GridActionsCellItem, } from '@mui/x-data-grid';
-import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip, InputAdornment, IconButton } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Typography, Paper, Snackbar, Alert, Tooltip, InputAdornment, IconButton, CircularProgress } from '@mui/material';
 import { Tabs, Tab, Box, TextField, Modal, Button } from '@mui/material';
 import { GetApp, NetworkWifi } from '@mui/icons-material';
 import { darken, lighten, styled } from '@mui/material/styles';
@@ -27,6 +27,9 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
   // const marker = markers[0]
   const particularsRef = collection(db, '/particulars')
   const [particularData, particularLoading] = useCollectionData(particularsRef)
+
+  const farmsColl = collection(db, `/farms`)
+  const [farms, farmsLoading] = useCollectionData(farmsColl)
 
   const [selectedTab, setSelectedTab] = useState(0);
   const [show, setShow] = useState(false);
@@ -88,6 +91,48 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
     event.defaultMuiPrevented = true;
   }, []);
 
+  const columnSeries = (farm) => {
+    console.log(`"column farms:" ${farm} ${farms}`);
+    const completedFarms = farms.filter(c => c.fieldId === farm.fieldId && c.cropStage === 'complete')
+
+    // series: [{
+    //   name: 'PRODUCT A',
+    //   data: [44, 55, 41, 67, 22, 43]
+    // }, {
+    //   name: 'PRODUCT B',
+    //   data: [13, 23, 20, 8, 13, 27]
+    // }],
+
+    // categories: [
+    //   "date", "date", "date"
+    //]
+
+    const dataPoints = completedFarms.map(f => {
+      const roiEntry = f.roi.find(r => r.type === 'a') || f.roi.find(r => r.type === 'p');
+      return roiEntry
+        ? {
+          grossReturn: roiEntry.grossReturn,
+          butterBall: roiEntry.butterBall,
+          date: f.harvest_date.toDate().toString()
+        }
+        : null;
+    }).filter(Boolean);
+
+    const categories = dataPoints.map(point => point.date);
+    const series = [
+      {
+        name: 'Gross Return',
+        data: dataPoints.map(point => point.grossReturn)
+      },
+      {
+        name: 'Butter Ball',
+        data: dataPoints.map(point => point.butterBall)
+      }
+    ];
+
+    return { series, categories }
+  }
+
   useEffect(() => {
     if (!parts || !particularData || !pineapple) {
       return
@@ -108,7 +153,6 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
 
     const updatedLocalParts = reducedParts.map(part => {
       const thePart = particularData.find(data => data.id === part.foreignId)?.isAvailable;
-      console.log("isAvailable:", thePart)
       return {
         ...part,
         isAvailable: thePart ?? part.isAvailable,
@@ -1206,7 +1250,14 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
             borderRadius: 2,
             backgroundColor: '#fff',
           }}>
-            <Column />
+            {
+              farmsLoading &&
+              <CircularProgress sx={{ padding: 2 }} />
+            }
+            {
+              farms && farm &&
+              <Column series={columnSeries(farm)} />
+            }
           </Box>
         </Box>
       </Box >
