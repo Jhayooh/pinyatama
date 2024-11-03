@@ -11,11 +11,11 @@ const Column = ({ series }) => {
         tools: {
           download: true,
           selection: false,
-          zoom: false,
+          zoom: true,
           zoomin: false,
           zoomout: false,
-          pan: false,
-          reset: false | '<img src="/static/icons/reset.png" width="20">',
+          pan: true,
+          reset: true | '<img src="/static/icons/reset.png" width="20">',
           customIcons: []
         },
       },

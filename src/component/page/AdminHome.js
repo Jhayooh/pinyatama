@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Pie from '../chart/Pie1';
 import SplineArea from '../chart/SplineArea';
 import './AdminHome.css';
+import '../css/AdminHome.css'
 import { Modal } from 'react-bootstrap';
 import GeoLoc from './GeoLoc';
 import Heatmap from './Heatmap';
@@ -13,7 +14,7 @@ import farmerImg from '../image_src/farmer.png';
 import farm from '../image_src/seedling.png';
 import production from '../image_src/production.png';
 import accounts from '../image_src/account.png'
-import FarmsSchedule from '../FarmsSchedule';
+import FarmsSchedule from './FarmsSchedule';
 
 const legends = [
   "Pagtatanim",
@@ -44,8 +45,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
     { color: 'green', label: 'Safe' }
   ];
 
-
-  const pineapple = pineappleData.price
 
   // Group the roi data by farm title 
   const groupedByTitle = roi.reduce((acc, roiItem) => {
@@ -112,20 +111,20 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   const [totalProduction, setTotalProduction] = useState(0);
 
   useEffect(() => {
-    const totalProduction = { sum: 0 }; 
+    const totalProduction = { sum: 0 };
 
     const data = farms.reduce((acc, farm, index) => {
       const existing = acc.find(item => item.label === farm.mun);
-      const pieValue = parseFloat(pieData1[index]) || 0; 
+      const pieValue = parseFloat(pieData1[index]) || 0;
 
-      totalProduction.sum += pieValue; 
+      totalProduction.sum += pieValue;
 
       if (existing) {
-        existing.value += pieValue; 
+        existing.value += pieValue;
       } else {
         acc.push({
           label: farm.mun,
-          value: pieValue, 
+          value: pieValue,
         });
       }
 
@@ -229,7 +228,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             onClick={() => setSelected('Farms')}
           >
             <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <Typography variant='button'sx={{ fontWeight: 'bold', fontSize:40}}>{farmer.length}</Typography>
+              <Typography variant='button' sx={{ fontWeight: 'bold', fontSize: 40 }}>{farmer.length}</Typography>
               <h5 style={{ margin: 0 }}>Mga Magsasaka</h5>
             </Box>
             <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -271,7 +270,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               <button className='btn-view-all' onClick={() => setSelected('timeline')}>View All</button>
             </section>
             <FarmsSchedule farms={filteredFarms} events={events} />
-            <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } , marginTop:3}}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-start', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' }, marginTop: 3 }}>
               <Box sx={{
                 display: 'flex',
                 alignItems: 'center',
@@ -286,7 +285,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2,  
+                    borderRadius: 2,
                     mr: 1
                   }}
                 >
@@ -308,7 +307,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    borderRadius: 2, 
+                    borderRadius: 2,
                     mr: 1
                   }}
                 >
@@ -321,7 +320,9 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
           </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
-          <Pie labels={labels1} data={series1} title="Munisipalidad" />
+          <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>
+            <Pie labels={labels1} data={series1} title="Munisipalidad" />
+          </Box>
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6}>
           <Box sx={{ boxShadow: 1, p: 1, borderRadius: 3, backgroundColor: '#fff', height: '100%', width: '100%' }}>

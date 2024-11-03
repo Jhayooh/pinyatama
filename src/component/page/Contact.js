@@ -45,64 +45,7 @@ export const Contact = () => {
         <div id="contact" style={{ fontFamily: 'Arial', borderColor: 'green' }}>
             <div className="container" style={{ alignContent: 'center', alignItems: 'center' }}>
                 <div className="row">
-                    {/* <div className="col-md-6">
-                        <div className="section-title">
-                            <p style={{ fontFamily: 'Arial', fontSize: 20 }}>
-                                Please fill out the form below to send us an email and we will get back to you as soon as possible.
-                            </p>
-                        </div>
-                        <form onSubmit={handleSubmit}>
-                            <div className="row">
-                                <div className="col-md-6">
-                                    <div>
-                                        <input
-                                            type="text"
-                                            id="name"
-                                            name="name"
-                                            className="form-control"
-                                            placeholder="Name"
-                                            required
-                                            onChange={handleChange}
-                                            style={{borderColor:'green'}}
-                                        />
-                                        <p className="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                                <div className="col-md-6">
-                                    <div>
-                                        <input
-                                            type="email"
-                                            id="email"
-                                            name="email"
-                                            className="form-control"
-                                            placeholder="Email"
-                                            required
-                                            onChange={handleChange}
-                                            style={{borderColor:'green'}}
-                                        />
-                                        <p className="help-block text-danger"></p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div>
-                                <textarea
-                                    name="message"
-                                    id="message"
-                                    className="form-control"
-                                    rows="4"
-                                    placeholder="Message"
-                                    required
-                                    onChange={handleChange}
-                                    style={{borderColor:'green'}}
-                                ></textarea>
-                                <p className="help-block text-danger"></p>
-                            </div>
-                            <div id="success"></div>
-                            <button type="submit" className="btn btn-outline-warning">
-                                Send Message
-                            </button>
-                        </form>
-                    </div> */}
+                    
                         <div className="contact-info">
                             <div className="row">
                                 <div className="col-md-6">

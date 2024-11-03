@@ -47,8 +47,8 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 
 import moment from 'moment';
 
-import Pine from '../image_src/p.jpg';
-import Butt from '../image_src/p1.jpg'
+import Pine from './../image_src/p.jpg';
+import Butt from './../image_src/p1.jpg'
 
 
 export default function ProductPrices({ particularData, pineappleData, others }) {

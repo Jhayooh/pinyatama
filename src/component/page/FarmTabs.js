@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { db } from '../../firebase/Config';
-import CostAndReturn from '../CostAndReturn';
-import Farm from '../Farm';
+import CostAndReturn from './CostAndReturn';
+import Farm from './Farm';
 import Profile from './Profile';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIos';
-import ProductPrices from '../ProductPrices';
+import ProductPrices from './ProductPrices';
 import Weather from './Weather';
 import Fertilizer from './Fertilizer'
 import Activities from './Activities'

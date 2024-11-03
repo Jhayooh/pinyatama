@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Gallery } from 'react-grid-gallery';
 import { getStorage, ref, listAll, getDownloadURL, uploadBytesResumable, deleteObject } from 'firebase/storage';
-import { storage } from '../firebase/Config';
+import { storage } from '../../firebase/Config';
 import { Button, Box, Input, Modal, Divider } from '@mui/material';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -116,10 +116,10 @@ export default function Farm({ farmId }) {
                 <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Box sx={{ '& > :not(style)': { m: 1 } }}>
                         <Fab sx={{ border: 1, color: 'green', backgroundColor: '#fff' }} onClick={() => setModal(true)}>
-                            <img src={require('../image_src/add.png')} width={25} />
+                            <img src={require('./../image_src/add.png')} width={25} />
                         </Fab>
                         <Fab sx={{ border: 1, color: 'red', backgroundColor: '#fff' }} onClick={handleDialogOpen} disabled={selectedImages.length === 0} >
-                            <img src={require('../image_src/delete.png')} width={25} />
+                            <img src={require('./../image_src/delete.png')} width={25} />
                         </Fab>
                     </Box>
                     <Dialog

@@ -10,8 +10,8 @@ import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 
-import Importer from '../Importer.js';
-import Exporter from '../Exporter.js';
+import Importer from './Importer.js';
+import Exporter from './Exporter.js';
 import Archive from './Archive.js';
 
 // icon
