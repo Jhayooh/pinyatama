@@ -24,7 +24,7 @@ const Column = ({ series }) => {
       }
     },
     responsive: [{
-      breakpoint: 480,
+      // breakpoint: 480,
       options: {
         legend: {
           position: 'bottom',
@@ -35,6 +35,7 @@ const Column = ({ series }) => {
     }],
     plotOptions: {
       bar: {
+        columnWidth: '40%',
         horizontal: false,
         borderRadius: 10,
         borderRadiusApplication: 'end', // 'around', 'end'
@@ -54,7 +55,9 @@ const Column = ({ series }) => {
       type: 'datetime',
       Label: {
         formatter: function (value, stamp) {
-          return new Date(stamp)
+          const date = new Date(stamp)
+          const options = { year: 'numeric', month: 'short' }
+          return date.toLocaleDateString('en-US', options).replace('.', '.')
         }
       },
       categories: series.categories,
