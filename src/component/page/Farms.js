@@ -20,6 +20,7 @@ import ViewListIcon from '@mui/icons-material/ViewList';
 import More from '@mui/icons-material/MoreVert';
 import IconButton from '@mui/material/IconButton';
 import ArchiveIcon from '@mui/icons-material/ArchiveOutlined';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
 import UndoRoundedIcon from '@mui/icons-material/UndoRounded';
 
 import GridView from './GridView.js';
@@ -460,7 +461,10 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                         <Exporter farms={filteredFarms} sx={{ width: '100%' }} />
                       </MenuItem>
                       <MenuItem onClick={handleArchive} sx={{ width: '100%' }}>
-                        <Button variant='text' color='warning' ><ArchiveIcon />{archive ? `Active` : `Archive`}</Button>
+                        <Button variant='text' color='warning' >
+                          {archive ? <UnarchiveIcon/>:<ArchiveIcon /> }
+                          {archive ? `Active` : `Archive`}
+                          </Button>
                       </MenuItem>
                     </Menu>
                   </Grid>
