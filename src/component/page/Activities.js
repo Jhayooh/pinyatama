@@ -42,7 +42,7 @@ import { db } from "../../firebase/Config";
 // chart
 import Doughnut from '../chart/Doughnut'
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import FarmsSchedule from "../FarmsSchedule";
+import FarmsSchedule from "./FarmsSchedule";
 import { LocalDiningRounded } from "@mui/icons-material";
 
 const Activities = ({ farm }) => {
@@ -87,7 +87,7 @@ const Activities = ({ farm }) => {
             qnty: 0,
         }, ...activities])
 
-        const hasAct = activities.find(act => act.type === 'a')
+        const hasAct = activities.find(act => act.type === 'a' || act.type === 'r')
         if (hasAct) {
             setActualRoi(farm.roi.find(r => r.type === 'a'))
         } else {
@@ -188,7 +188,7 @@ const Activities = ({ farm }) => {
                     <Grid item xs={12} md={12}>
                         {
                             activitiesLoading && eLoading
-                                ? <Skeleton variant="rounded" width='100%' height={120} sx={{bgcolor: '#D4D4D4'}} />
+                                ? <Skeleton variant="rounded" width='100%' height={120} sx={{ bgcolor: '#D4D4D4' }} />
                                 : <Box
                                     sx={{
                                         backgroundColor: '#fff',

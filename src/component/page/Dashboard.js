@@ -35,7 +35,7 @@ import { auth } from '../../firebase/Config';
 import Contact from './Contact';
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
-import Login from '../Login';
+import Login from './Login.js';
 import { Link, useNavigate } from 'react-router-dom';
 import CssBaseline from '@mui/material/CssBaseline';
 import BgImage from '../image_src/bg.jpg';

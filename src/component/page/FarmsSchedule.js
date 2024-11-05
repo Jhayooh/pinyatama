@@ -1,12 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Timeline, { CursorMarker, CustomMarker, DateHeader, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
-import '../css/FarmSchedule.css'
+import './FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/Config'
-import '../css/ripple.css'
-import Textfield from '../page/Timeline'
+import './ripple.css'
+import Textfield from './Timeline'
 import { Box, Paper, Slide, Button, Typography, CircularProgress } from '@mui/material'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
@@ -55,7 +55,6 @@ function FarmsSchedule({ farms, events, setSelected }) {
   const dataFarmColl = collection(db, '/dataFarm')
   const [dataFarm] = useCollectionData(dataFarmColl)
 
-  dataFarm && console.log("farmer:", dataFarm);
   const [farmClicked, setFarmClicked] = useState(null)
   const [farmerClicked, setFarmerClicked] = useState(null)
 

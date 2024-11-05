@@ -24,13 +24,15 @@ import { signOut } from 'firebase/auth';
 import { auth, db } from '../../firebase/Config';
 import { collection, doc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
 import AdminHome from './AdminHome';
-import Timeline from '../Timeline';
-import ProductPrices from '../ProductPrices';
+import Timeline from './Timeline';
+import ProductPrices from './ProductPrices';
 import Farms from './Farms';
 import Access from './Access';
 import Geoloc from './GeoLoc';
 import useIdle from '../provider/IdleTimer';
 import Distribution from './Distribution';
+import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 //icons
 import access from '../image_src/access.png';
@@ -118,6 +120,17 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function SideNav() {
+  const [user] = useAuthState(auth);
+  const location = useLocation();
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if (!user) {
+      navigate('/')
+    }
+    
+  }, []);
+
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState('dashboard');
@@ -217,15 +230,25 @@ export default function SideNav() {
       }
 
       for (const farm of farms) {
+        // console.log(`Processing farm: ${farm.id}, crop: ${farm.crop}`); // Log the farm and its crop status
+
+        if (farm.crop) {
+          // console.log(`Skipping farm: ${farm.id} because crop is true`);
+          continue;
+        }
+
+        // console.log(`Not skipping: ${farm.id} because crop is false`);
+
         const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
         const farmEventsSnapshot = await getDocs(farmEventsColl);
         const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
+        console.log("farmEvents:", farmEvents);
+
         const farmStage = farm.cropStage
+
 
         const cropstage = new Date();
         let newCropstage = '';
-
-        farmStage ? console.log('farmer name', farmStage) : console.log("no farmEvvents", farmStage);
 
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
@@ -246,6 +269,7 @@ export default function SideNav() {
             cropStage: newCropstage,
           });
         }
+        console.log("updated farm=======>>>", farm.id)
       }
     };
 
@@ -280,11 +304,7 @@ export default function SideNav() {
 
     const fetchRoi = async () => {
       const roiPromises = farms.map(async (farm) => {
-        const roiRef = collection(db, `farms/${farm.id}/roi`);
-        const roiSnapshot = await getDocs(roiRef);
-        const roiData = roiSnapshot.docs.map((doc) => ({
-          ...doc.data()
-        }))
+        const roiData = farm.roi
         return roiData;
       });
       const allRoi = await Promise.all(roiPromises);
@@ -560,10 +580,10 @@ export default function SideNav() {
             : (
               <>
                 <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, width: 1, overflow: 'hidden', backgroundColor: 'green' }}>
-                  {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
+                  {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms.filter(f => f.cropStage !== 'complete')} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
                   {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-                  {selected === 'timeline' && <Timeline farms={farms.filter(f=>f.cropStage !== 'complete')} events={events} users={users} setSelected={setSelected} />}
+                  {selected === 'timeline' && <Timeline farms={farms.filter(f => f.cropStage !== 'complete')} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
                   {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>

@@ -9,7 +9,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/FileDownloadOutlined';
 import FileIcon from '@mui/icons-material/InsertDriveFileOutlined';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import ExcelIcon from '../image_src/excel.png'
+import ExcelIcon from './../image_src/excel.png'
 
 
 function Exporter({ farms }) {

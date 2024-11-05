@@ -436,8 +436,6 @@ const App = () => {
 
   const initPosition = [14.153655055051429, 122.7702990538368];
 
-  console.log("farmms", farms)
-
   const apiKey = 'e30a4cb23a6a41028fcbd7df077cde27'
   const custIcon = `https://api.geoapify.com/v1/icon/?type=material&color=%23f6a30b&size=small&icon=grass&iconSize=small&textSize=small&strokeColor=%23f6a30b&noWhiteCircle&apiKey=${apiKey}`
   const customIcon = L.icon({
@@ -452,8 +450,8 @@ const App = () => {
     <Box xs={12} lg={12} sx={{ borderRadius: 4, }}>
       <MapContainer
         center={initPosition}
-        zoom={10}
-        maxZoom={20}
+        zoom={11}
+        maxZoom={18}
         scrollWheelZoom={false}
         style={{ height: '700px' }}
       >
