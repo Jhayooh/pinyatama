@@ -224,21 +224,27 @@ const Activities = ({ farm }) => {
                                     }}>
                                         <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
                                             {newActivities.map((act, index) => (
-                                                <Step expanded={index > 0 && index === stepIndex} onClick={() => setStepIndex(stepIndex === index ? 0 : index)} key={act.id} sx={{
-                                                    display: 'flex',
-                                                    flexDirection: 'column',
-                                                    marginLeft: index === 0 ? 0 : 4,
-                                                    backgroundColor: '#E7F3E7',
-                                                    borderRadius: 2,
-                                                    paddingX: 2,
-                                                    boxShadow: 2,
-                                                    height: index === 0 && 62,
-                                                    '&:hover': {
-                                                        cursor: 'pointer',
-                                                        backgroundColor: '#58AC58',
-                                                        color: '#FAFAFA',
-                                                    }
-                                                }}>
+                                                <Step
+                                                    expanded={index > 0 && index === stepIndex}
+                                                    onClick={() => { setStepIndex(stepIndex === index ? 0 : index) }}
+                                                    key={act.id}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        marginLeft: index === 0 ? 0 : 4,
+                                                        backgroundColor: index === 0 ? '#fff' : (act.type === 'a' ? '#58AC58' : "#E74C3C"),
+                                                        borderRadius: 2,
+                                                        paddingX: 2,
+                                                        boxShadow: 2,
+                                                        height: index === 0 ? 62 : 'auto',
+                                                        color: act.type === 'a' ? 'black' : '#fff',
+                                                        '&:hover': {
+                                                            cursor: index === 0 ? 'default' : 'pointer',
+                                                            backgroundColor: index === 0 ? '#fff' : (act.type === 'a' ? '#E7F3E7' : "#E74C3C"),
+                                                            //color: index === 0 ? 'inherit' : '#FAFAFA',
+                                                        },
+                                                    }}
+                                                >
                                                     <StepLabel StepIconComponent={QontoStepIcon} >
                                                         <Box sx={{
                                                             flexDirection: { xs: 'column', md: 'row' },
@@ -256,12 +262,31 @@ const Activities = ({ farm }) => {
                                                                 }}>
                                                                     {formatDate(act.createdAt.toDate())} : {formatTime(act.createdAt.toDate())}
                                                                 </Typography>
-                                                                <Typography variant="subtitle1" sx={{ fontFamily: 'serif' }}>{act.label}</Typography>
+                                                                <Typography variant="subtitle1" sx={{ fontFamily: 'serif', color: index === 0 ? 'orange' : '#4E4E4E' }}>{act.label}</Typography>
                                                             </Box>
                                                             <Typography variant='body2' sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end' }}>
-                                                                {index !== 0 ? `${act.qnty} kg` : null}
+                                                                {
+                                                                    index !== 0 ?
+                                                                        act.type === 'a' ?
+                                                                            `${act.qnty}kg` :
+                                                                            `${act.qnty}% Damage`
+                                                                        : null
+                                                                }
                                                             </Typography>
                                                         </Box>
+                                                        <StepContent sx={{
+                                                            borderLeft: 0,
+                                                        }}>
+                                                            <Box sx={{ paddingY: 2 }}>
+                                                                <Typography variant='body2'>
+                                                                    {
+                                                                        act.type === 'a' ?
+                                                                            `Ikaw ay naglagay ng ${act.qnty}kg na ${act.label}` :
+                                                                            `${act.desc}`
+                                                                    }
+                                                                </Typography>
+                                                            </Box>
+                                                        </StepContent>
                                                     </StepLabel>
                                                 </Step>
                                             ))}

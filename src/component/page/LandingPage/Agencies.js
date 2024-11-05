@@ -27,7 +27,7 @@ const Agencies = () => {
     return (
         <div id="team" className="text-center">
             <div className="container">
-                <div className="col-md-8 col-md-offset-2 section-title">
+                <div className="section-title">
                     <h2>AGENCIES</h2>
                     <p>
                         Meet the Supported Agencies

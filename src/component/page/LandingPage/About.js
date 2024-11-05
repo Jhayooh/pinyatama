@@ -43,46 +43,6 @@ const About = () => {
                 Ang bunga ng queen ay malaki sa gawing puno at paliit sa gawing dulo. Matingkad na kulay dilaw ang balat kung hinog na at ang laman ay malutong. Hindi ito gaanong makatas
                 at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
                 ng Queen kaysa sa Hawaian.</p>
-              {/* <h3>Ayon pa rin sa Food and Nutrition Research Institute ito ay nagtataglay ng mga sumusunod:?</h3>
-              <div className="list-style">
-                <div className="col-lg-6 col-sm-6 col-xs-12">
-                  <TableContainer component={Paper} sx={{ width: '100%', height: '50%', backgroundColor: '#fdff72' }}>
-                    <Table aria-label="simple table">
-                      <TableHead>
-                        <TableRow>
-                          <TableCell>Nutrients</TableCell>
-                          <TableCell align="right">Amount</TableCell>
-
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {r.map((row) => (
-                          <TableRow
-                            key={row.nutrients}
-                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                          >
-                            <TableCell component="th" scope="row">
-                              {row.nutrients}
-                            </TableCell>
-                            <TableCell align="right">{row.amount}</TableCell>
-
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-                </div>
-                <div className="col-lg-6 col-sm-6 col-xs-12">
-                  <ul>
-
-                    <p>Extra Large: (mahigit 1,000g)</p>
-                    <p>Large: (850-1,000g)</p>
-                    <p>Medium: (700-850g)</p>
-                    <p>Small: (550-700g)</p>
-                    <p>Butterball: (below 550g)</p>
-                  </ul>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
