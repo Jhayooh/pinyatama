@@ -11,7 +11,7 @@ import Login from './Login';
 import Navbar from './Navbar';
 import Header from './Header';
 import About from './About';
-import Contact from '../Contact';
+import Contact from './Contact';
 import Gallery from './Gallery';
 import Agencies from './Agencies';
 import { useEffect } from 'react';
@@ -53,7 +53,7 @@ const Landing = () => {
             <div className="section-title">
                 <h2 style={{ textAlign: 'center' }}>Get In Touch</h2>
                 <p style={{ textAlign: 'center' }}>
-                    Please fill free to Contact
+                    Please feel free to Contact Us
                 </p>
                 <Contact />
             </div>

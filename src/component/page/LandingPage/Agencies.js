@@ -1,21 +1,25 @@
 import React from 'react'
 import { Box } from '@mui/material';
 
+import POCN from '../../image_src/POCN_logo.png'
+import OPAG from '../../image_src/OPAG_logo.png'
+import DOA from '../../image_src/DOA_logo.png'
+
 const agencyList = [
     {
         name: "Camarines Norte",
-        logo: "POCN_logo.png",
+        logo: `${POCN}`,
         url: 'https://www.camsnorte.com'
     },
     {
         name: "OPAG - Cam Norte",
-        logo: "OPAG_logo.png",
+        logo: `${OPAG}`,
         url: 'https://www.opagcamnorte.com'
 
     },
     {
         name: "DA - CNLRRS",
-        logo: "DOA_logo.png",
+        logo: `${DOA}`,
         url: 'https://www.da.gov.ph'
     }
 ]
@@ -27,30 +31,24 @@ const Agencies = () => {
     return (
         <div id="team" className="text-center">
             <div className="container">
-                <div className="section-title">
+                <div className="col-md-8 col-md-offset-2 section-title">
                     <h2>AGENCIES</h2>
                     <p>
                         Meet the Supported Agencies
                     </p>
                 </div>
-                <div style={{display:'flex', flexDirection:'row', justifyContent:'space-between' }}>
-                    {agencyList.map((agency, index) => (
-
-                        <Box onClick={() => handleClick(agency.url)} 
-                        sx={{display:'flex',
-                         flexDirection:'column', 
-                         justifyContent:'space-between',
-                         backgroundColor:'#93d6b0',
-                         padding:10,
-                         borderRadius:10}}>
-                            <img
-                                src={require(`../../image_src/${agency.logo}`)}
-                                alt={agency.name}
-                                className="logo-image"
-                                style={{ width: 200, height: 200, backgroundColor:'white', padding:10, borderRadius:10 }}
-                            />
-                            <h3 style={{ marginTop: 5 }}>{agency.name}</h3>
-                        </Box>
+                <div className="row">
+                    {agencyList.map((d, i) => (
+                        <div onClick={() => handleClick(d.url)}
+                            key={`${d.name}-${i}`} className="col-md-4 col-sm-4 team">
+                            <div className="thumbnail">
+                                {" "}
+                                <img src={d.logo} alt="..." className="team-img" />
+                                <div className="caption">
+                                    <h4>{d.name}</h4>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
             </div>
