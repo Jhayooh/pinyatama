@@ -144,7 +144,8 @@ function FarmsSchedule({ farms, events, setSelected }) {
           keys={keys}
           groups={farms.map(f => ({
             ...f,
-            stackItems: true
+            stackItems: true,
+            canMove: true
           }))}
           onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
