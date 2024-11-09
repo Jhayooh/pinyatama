@@ -79,6 +79,8 @@ function FarmsSchedule({ farms, events, setSelected }) {
     itemTimeStartKey: 'start_time',
     itemTimeEndKey: 'end_time',
   }
+
+;
   const itemRender = ({ item, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
     const backgroundColor = itemContext.selected
@@ -159,9 +161,9 @@ function FarmsSchedule({ farms, events, setSelected }) {
           minZoom={1.24 * 86400 * 1000 * 7 * 3}
           // fullUpdate
           itemTouchSendsClick={false}
-          // stackItems
+          stackItems={true} 
           itemHeightRatio={0.75}
-          showCursorLine
+          showCursorLine 
           canMove={false}
         >
           <TimelineMarkers>
