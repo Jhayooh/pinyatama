@@ -14,7 +14,6 @@ import { useCollectionData } from 'react-firebase-hooks/firestore';
 // icon
 import pesoCoin from './../image_src/peso.png'
 
-
 // charts
 import Pie from '../chart/Pie';
 import Doughnut from '../chart/Doughnut';
@@ -72,24 +71,10 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
     return cellModesModel[id]?.[field]?.mode || 'view';
   }, [cellModesModel, selectedCellParams]);
 
-  const handleCellKeyDown = React.useCallback(
-    (params, event) => {
-      if (cellMode === 'edit') {
-        // Prevents calling event.preventDefault() if Tab is pressed on a cell in edit mode
-        event.defaultMuiPrevented = true;
-      }
-    },
-    [cellMode],
-  );
-
   const handleModalClose = () => {
     setIsModalOpen(false);
     setPineModal(false)
   };
-
-  const handleCellEditStop = React.useCallback((params, event) => {
-    event.defaultMuiPrevented = true;
-  }, []);
 
   const columnSeries = (farm) => {
     const completedFarms = farms.filter(c => c.fieldId === farm.fieldId && c.cropStage === 'complete')
@@ -165,9 +150,6 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
     setLocalPine(pineapple)
   }, [particularData, isClicked]);
 
-  const handleShow = () => setShow(true);
-  const handleClose = () => setShow(false);
-
   const handleTabChange = (event, newValue) => {
     setSelectedCellParams(null)
     setCellModesModel({})
@@ -175,12 +157,18 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
   };
 
   function calcTotalParts(upPart) {
-    const totalLabor = upPart.filter(item => item.particular.toLowerCase() === 'labor').reduce((sum, item) => sum + item.totalPrice, 0);
-    const totalMaterial = upPart.filter(item => item.particular.toLowerCase() === 'material').reduce((sum, item) => sum + item.totalPrice, 0);
+    console.log("upPart", upPart);
+    
+    const totalLabor = upPart.
+      filter(item => item.particular.toLowerCase() === 'labor')
+      .reduce((sum, item) => sum + item.totalPrice, 0);
+    const totalMaterial = upPart
+      .filter(item => item.particular.toLowerCase() === 'material' && item.parent.toLowerCase() !== 'fertilizer')
+      .reduce((sum, item) => sum + item.totalPrice, 0);
     const totalFertilizer = upPart
       .filter(item => item.parent.toLowerCase() === "fertilizer")
       .reduce((sum, item) => sum + item.totalPrice, 0);
-    setLaborMaterial([totalMaterial - totalFertilizer, totalLabor, totalFertilizer])
+    setLaborMaterial([totalMaterial, totalLabor, totalFertilizer])
   }
 
   function getPinePrice(pine, pineObject) {
@@ -203,21 +191,6 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
     }))
   }, [localParts, localPine, pineapple])
 
-  function addEditedData(newItem) {
-    setEditedRowData((prevItems) => {
-      const itemIndex = prevItems.findIndex(item => item.id === newItem.id);
-      if (itemIndex === -1) {
-        // Item does not exist, add it
-        return [...prevItems, newItem];
-      } else {
-        // Item exists, update it
-        const updatedItems = [...prevItems];
-        updatedItems[itemIndex] = newItem;
-        return updatedItems;
-      }
-    });
-  }
-
   const handleCloseSnackbar = () => setSnackbar(null);
 
   const handleReset = () => {
@@ -228,8 +201,6 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
     setIsModalOpen(false)
     setSaving(true)
     try {
-      // const compRef = doc(db, `farms/${farm.id}/components`, selectedRow.id)
-      // await updateDoc(compRef, localParts)
       const roiRef = collection(db, `farms/${farm.id}/roi`)
       await setDoc(doc(roiRef, newRoi.id), newRoi);
     } catch (error) {
@@ -1026,8 +997,9 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Good Size", "Butterball"]}
-                  data={[newRoi.grossReturn * getPinePrice('good size', localPine), newRoi.butterBall * getPinePrice('butterball', localPine)]}
+                  data={[newRoi.grossReturn, newRoi.butterBall]}
                   title={"Produksyon ng Pinya"}
+                  unit={'pcs'}
                 />
               </Box>
               <Box className='pricesBox' sx={{

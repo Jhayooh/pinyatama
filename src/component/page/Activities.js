@@ -1,26 +1,9 @@
 import {
-    Alert,
-    Backdrop,
     Box,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogActions,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    fabClasses,
-    InputAdornment,
-    MenuItem,
-    Modal,
-    Select,
     StepContent,
-    TextField,
     Typography,
-    Snackbar,
-    FormControl,
-    InputLabel,
-    Skeleton
+    Skeleton,
+    CircularProgress
 } from "@mui/material";
 import Grid from '@mui/material/Unstable_Grid2';
 import React, { useEffect, useState } from "react";
@@ -58,6 +41,7 @@ const Activities = ({ farm }) => {
     const [events, setEvents] = useState(null)
 
     const [actualRoi, setActualRoi] = useState(farm.roi.find(r => r.type === 'a'))
+    const [projectedRoi, setProjectedRoi] = useState(farm.roi.find(r => r.type === 'p'))
 
     const [stepIndex, setStepIndex] = useState(-1)
 
@@ -68,14 +52,6 @@ const Activities = ({ farm }) => {
     const formatTime = (date) => {
         return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })
     }
-
-    const loading = true
-
-    // useEffect(() => {
-    //     if (!e) return
-    //     setEvents(e)
-    // }, [e])
-
 
     useEffect(() => {
         if (!activities) return
@@ -88,11 +64,7 @@ const Activities = ({ farm }) => {
         }, ...activities])
 
         const hasAct = activities.find(act => act.type === 'a' || act.type === 'r')
-        if (hasAct) {
-            setActualRoi(farm.roi.find(r => r.type === 'a'))
-        } else {
-            setActualRoi(farm.roi.find(r => r.type === 'p'))
-        }
+        setActualRoi(farm.roi.find(r => r.type === 'a'))
     }, [activities, farm])
 
     const QontoConnector = styled(StepConnector)(({ theme }) => ({
@@ -182,7 +154,7 @@ const Activities = ({ farm }) => {
                 height: '100%',
                 display: 'flex',
                 overflowY: 'hidden',
-
+                paddingBottom: 2
             }}>
                 <Grid container spacing={2} sx={{ width: '100%' }}>
                     <Grid item xs={12} md={12}>
@@ -206,7 +178,215 @@ const Activities = ({ farm }) => {
                                 </Box>
                         }
                     </Grid>
-                    <Grid item xs={12} md={7}>
+                    <Grid item xs={12} md={4}>
+                        <Box
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: 2,
+                                boxShadow: 2,
+                                padding: 1.5,
+                                gap: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                minHeight: 580
+                            }}
+                        >
+                            <Typography>Projected</Typography>
+                            {
+                                activitiesLoading && eLoading
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Net return", "Production cost"]}
+                                                data={[projectedRoi.netReturn, projectedRoi.costTotal]}
+                                                title={"Inaasahang Produksyon"}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                            {
+                                farm.roi.length === 0
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Materials", "Labor", "Fertilizer"]}
+                                                data={[projectedRoi.materialTotal || 0, projectedRoi.laborTotal || 0, projectedRoi.fertilizerTotal || 0]}
+                                                title={'Gastos sa Produksyon'}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                            {
+                                activitiesLoading && eLoading
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Good Size", "Butterball"]}
+                                                data={[projectedRoi.grossReturn, projectedRoi.butterBall]}
+                                                title={"Produksyon ng Pinya"}
+                                                unit={'pcs'}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Box
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: 2,
+                                boxShadow: 2,
+                                padding: 1.5,
+                                gap: 2,
+                                display: 'flex',
+                                flexDirection: 'column',
+                                minHeight: 580
+                            }}
+                        >
+                            <Typography>Actual</Typography>
+                            {
+                                activitiesLoading && eLoading
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Net return", "Production cost", "Damage"]}
+                                                data={[actualRoi.netReturn, actualRoi.costTotal, actualRoi.damage||0]}
+                                                title={"Inaasahang Produksyon"}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                            {
+                                activitiesLoading && eLoading
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Materials", "Labor", "Fertilizer"]}
+                                                data={[actualRoi.materialTotal || 0, actualRoi.laborTotal || 0, actualRoi.fertilizerTotal || 0]}
+                                                title={'Gastos sa Produksyon'}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                            {
+                                activitiesLoading && eLoading
+                                    ? <CircularProgress />
+                                    : <>
+                                        <Box>
+                                            <Doughnut
+                                                labels={["Good Size", "Butterball"]}
+                                                data={[actualRoi.grossReturn, actualRoi.butterBall]}
+                                                title={"Produksyon ng Pinya"}
+                                                unit={'pcs'}
+                                            />
+                                        </Box>
+                                    </>
+                            }
+                        </Box>
+                    </Grid>
+                    <Grid item xs={12} md={4}>
+                        <Box
+                            sx={{
+                                backgroundColor: '#fff',
+                                borderRadius: 2,
+                                boxShadow: 2,
+                                padding: 1.5,
+                                gap: 2,
+                                minHeight: 580,
+                            }}
+                        >
+                            {
+                                activitiesLoading && eLoading
+                                    ? <Skeleton animation='wave' variant="rounded" width='100%' height={240} />
+                                    : <Box sx={{
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        height: '100%',
+                                        minHeight: 580,
+                                        width: '100%',
+                                        overflowY: 'auto',
+                                        maxHeight: '100%'
+                                    }}>
+                                        <Stepper activeStep={newActivities.length} connector={<QontoConnector />} orientation='vertical'>
+                                            {newActivities.map((act, index) => (
+                                                <Step
+                                                    expanded={index > 0 && index === stepIndex}
+                                                    onClick={() => { setStepIndex(stepIndex === index ? 0 : index) }}
+                                                    key={act.id}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        marginLeft: index === 0 ? 0 : 2,
+                                                        backgroundColor: index === 0 ? '#fff' : (act.type === 'a' ? '#58AC58' : "#E74C3C"),
+                                                        borderRadius: 2,
+                                                        paddingX: 2,
+                                                        boxShadow: 2,
+                                                        height: index === 0 ? 62 : 'auto',
+                                                        color: act.type === 'a' ? 'black' : '#fff',
+                                                        '&:hover': {
+                                                            cursor: index === 0 ? 'default' : 'pointer',
+                                                            backgroundColor: index === 0 ? '#fff' : (act.type === 'a' ? '#E7F3E7' : "#E74C3C"),
+                                                            //color: index === 0 ? 'inherit' : '#FAFAFA',
+                                                        },
+                                                    }}
+                                                >
+                                                    <StepLabel StepIconComponent={QontoStepIcon} >
+                                                        <Box sx={{
+                                                            flexDirection: { xs: 'column', md: 'row' },
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between'
+                                                        }}>
+                                                            <Box sx={{
+                                                                flexDirection: { xs: 'column', md: 'row' },
+                                                                display: 'flex',
+                                                                gap: 2,
+                                                                alignItems: 'center'
+                                                            }}>
+                                                                <Typography variant='caption' sx={{
+                                                                    color: '#4E4E4E'
+                                                                }}>
+                                                                    {formatDate(act.createdAt.toDate())} : {formatTime(act.createdAt.toDate())}
+                                                                </Typography>
+                                                                <Typography variant="subtitle1" sx={{ fontFamily: 'serif', color: index === 0 ? 'orange' : '#4E4E4E' }}>{act.label}</Typography>
+                                                            </Box>
+                                                            <Typography variant='body2' sx={{ fontWeight: 'bold', display: 'flex', justifyContent: 'flex-end' }}>
+                                                                {
+                                                                    index !== 0 ?
+                                                                        act.type === 'a' ?
+                                                                            `${act.qnty}kg` :
+                                                                            `${act.qnty}% Damage`
+                                                                        : null
+                                                                }
+                                                            </Typography>
+                                                        </Box>
+                                                        <StepContent sx={{
+                                                            borderLeft: 0,
+                                                        }}>
+                                                            <Box sx={{ paddingY: 2 }}>
+                                                                <Typography variant='body2'>
+                                                                    {
+                                                                        act.type === 'a' ?
+                                                                            `Ikaw ay naglagay ng ${act.qnty}kg na ${act.label}` :
+                                                                            `${act.desc}`
+                                                                    }
+                                                                </Typography>
+                                                            </Box>
+                                                        </StepContent>
+                                                    </StepLabel>
+                                                </Step>
+                                            ))}
+                                        </Stepper>
+                                    </Box>
+                            }
+                        </Box>
+                    </Grid>
+                    {/* <Grid item xs={12} md={7}>
                         {
                             activitiesLoading && eLoading
                                 ? <Skeleton animation='wave' variant="rounded" width='100%' height={240} />
@@ -327,7 +507,7 @@ const Activities = ({ farm }) => {
                                             <Box className='parti' >
                                                 <Doughnut
                                                     labels={["Materyales", "Labor", "Fertilizer"]}
-                                                    data={[actualRoi.materialTotal - actualRoi.fertilizerTotal, actualRoi.laborTotal, actualRoi.fertilizerTotal]}
+                                                    data={[actualRoi.materialTotal, actualRoi.laborTotal, actualRoi.fertilizerTotal]}
                                                     title={'Gastos sa Produksyon'}
                                                 />
                                             </Box>
@@ -335,7 +515,7 @@ const Activities = ({ farm }) => {
                                     </Carousel>
                                 </Box>
                         }
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </Box>
 

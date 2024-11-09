@@ -1,7 +1,8 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function ExamplePieChart({ labels, data, title }) {
+function ExamplePieChart({ labels, data, title, unit='peso' }) {
+  console.log("example pie chart", labels, data);
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP'
@@ -52,7 +53,7 @@ function ExamplePieChart({ labels, data, title }) {
       y: {
         formatter: function (value, opts) {
           const percent = opts.globals.seriesPercent[opts.seriesIndex]
-          return `${formatter.format(value)} (${Math.round(percent)}%)`
+          return unit === 'peso'?`${formatter.format(value)} (${Math.round(percent)}%)`:`${value.toLocaleString('en-US')} (${Math.round(percent)}%)`
         },
       },
     },
@@ -82,7 +83,7 @@ function ExamplePieChart({ labels, data, title }) {
               color: undefined,
               offsetY: 10,
               formatter: function (val) {
-                return formatter.format(val)
+                return unit === 'peso' ? formatter.format(val) : `${val.toLocaleString('en-US')}pcs`
               }
             },
             total: {
@@ -95,7 +96,7 @@ function ExamplePieChart({ labels, data, title }) {
                 const total = w.globals.seriesTotals.reduce((a, b) => {
                   return a + b
                 })
-                return formatter.format(total)
+                return unit === 'peso' ? formatter.format(total) : `${total.toLocaleString('en-US')}pcs`
               }
             }
           }
