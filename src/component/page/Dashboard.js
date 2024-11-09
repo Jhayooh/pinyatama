@@ -32,7 +32,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import React, { useEffect, useRef, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { auth } from '../../firebase/Config';
-import Contact from './Contact';
+import Contact from '../page/LandingPage/Contact.js'
 import './Dashboard.css';
 import ImageGal from "./ImageGal";
 import Login from './Login.js';
