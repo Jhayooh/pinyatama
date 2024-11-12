@@ -90,8 +90,19 @@ export default function Distribution({ farms, roi }) {
     const filteredTotalProduction = filteredSeries.reduce((acc, value) => acc + value, 0);
     const percentages = filteredSeries.map(value => (value / filteredTotalProduction) * 100);
     const distribution = percentages.map(percentage => Math.round((inputText * percentage) / 100));
+
+    // Ensure the distribution does not exceed total production
+    const maxTotalDistribution = Math.min(filteredTotalProduction, Number(inputText));
+    const totalSuggestedDistribution = distribution.reduce((acc, val) => acc + val, 0);
+
+    if (totalSuggestedDistribution > maxTotalDistribution) {
+      const scaleFactor = maxTotalDistribution / totalSuggestedDistribution;
+      setDistributionData(distribution.map(d => Math.round(d * scaleFactor)));
+    } else {
+      setDistributionData(distribution);
+    }
+
     setPercentage(percentages);
-    setDistributionData(distribution);
     setActualDistribution(new Array(distribution.length).fill(''));
   };
 
@@ -254,13 +265,14 @@ export default function Distribution({ farms, roi }) {
           {buttonText}
         </Button>
       </Box>
-      {view === 'distribution' ? (
-        <Box>
+      {view === 'distribution' && (
+        <>
+          
           <Typography variant="h6">Select Date</Typography>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DatePicker
               value={selectedDate}
-              onChange={newValue => setSelectedDate(newValue)}
+              onChange={(newValue) => setSelectedDate(newValue)}
               renderInput={(params) => <TextField {...params} />}
             />
           </LocalizationProvider>
@@ -285,15 +297,19 @@ export default function Distribution({ farms, roi }) {
           <Button variant="contained" color="secondary" onClick={saveDistribution}>
             Save Distribution
           </Button>
-        </Box>
-      ) : (
-        <Box>
-          <Typography variant="h6">Saved Distributions</Typography>
+        </>
+      )}
+
+      {view === 'saved' && (
+        <>
+          <Typography variant="h6">Saved Distribution</Typography>
           <FormControl fullWidth>
-            <InputLabel>Select Distribution</InputLabel>
+            <InputLabel id="saved-distribution-select-label">Select Distribution</InputLabel>
             <Select
+              labelId="saved-distribution-select-label"
               value={selectedSavedDistribution ? selectedSavedDistribution.id : ''}
               onChange={handleSavedChange}
+              label="Select Distribution"
             >
               {savedDistributions.map((distribution) => (
                 <MenuItem key={distribution.id} value={distribution.id}>
@@ -302,8 +318,14 @@ export default function Distribution({ farms, roi }) {
               ))}
             </Select>
           </FormControl>
+
           {selectedSavedDistribution && (
             <>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', marginTop: 2 }}>
+                <Button variant="outlined" onClick={() => downloadExcel(selectedSavedDistribution)}>
+                  Download Excel
+                </Button>
+              </Box>
               <DataTable
                 data={selectedSavedDistribution.data.map(item => item.value)}
                 data1={selectedSavedDistribution.data.map(item => item.label)}
@@ -312,16 +334,9 @@ export default function Distribution({ farms, roi }) {
                 percentage={selectedSavedDistribution.data.map(item => item.percentage)}
                 actualDistribution={selectedSavedDistribution.data.map(item => item.actualDistribution)}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => downloadExcel(selectedSavedDistribution)}
-              >
-                Download Excel
-              </Button>
             </>
           )}
-        </Box>
+        </>
       )}
     </Box>
   );
