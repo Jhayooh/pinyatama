@@ -8,14 +8,14 @@ const Navbar = () => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 0);
         };
-        
+
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     return (
         <nav
-            id='menu'
+            id="menu"
             className="navbar navbar-expand-lg fixed-top"
             style={{
                 backgroundColor: isScrolled ? '#ffffff' : 'transparent',
@@ -25,41 +25,66 @@ const Navbar = () => {
             }}
         >
             <div className="container">
-                <div className="navbar-header">
-                    <button
-                        className="navbar-toggler"
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbarTogglerDemo01"
-                        aria-controls="navbarTogglerDemo01"
-                        aria-expanded="false"
-                        aria-label="Toggle navigation"
+                <a
+                    className="navbar-brand page-scroll d-flex align-items-center"
+                    href="#page-top"
+                    style={{ gap: '8px' }} // Adds space between the logo and text
+                >
+                    <img
+                        src={require('../../image_src/pinyatamap-logo.png')}
+                        width={40}
+                        height={40}
+                        alt="Logo"
+                        style={{ display: 'block' }}
+                    />
+                    <span
+                        style={{
+                            fontSize: 'clamp(16px, 2.5vw, 24px)', // Dynamically adjusts text size
+                            whiteSpace: 'nowrap', // Prevents text wrapping
+                        }}
                     >
-                        <span className="navbar-toggler-icon"></span>
-                    </button>
-                    <div className="collapse navbar-collapse" id="navbarTogglerDemo01">
-                        <div>
-                            <a className="navbar-brand page-scroll" href="#page-top">
-                                <img src={require('../../image_src/pinyatamap-logo.png')} width={50} height={50} alt="Logo" />
+                        QUEEN PINEAPPLE FARMING
+                    </span>
+                </a>
+
+                <div className="collapse navbar-collapse" id="navbarNav">
+                    <ul className="navbar-nav ms-auto text-center">
+                        <li className="nav-item">
+                            <a href="#about" className="nav-link page-scroll">
+                                About
                             </a>
-                            <a className="navbar-brand page-scroll" href="#page-top">
-                                QUEEN PINEAPPLE FARMING
+                        </li>
+                        <li className="nav-item">
+                            <a href="#portfolio" className="nav-link page-scroll">
+                                Screenshots
                             </a>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <ul className="nav navbar-nav navbar-right">
-                        <li><a href="#about" className="page-scroll">About</a></li>
-                        <li><a href="#portfolio" className="page-scroll">Screenshots</a></li>
-                        <li><a href="#team" className="page-scroll">Agencies</a></li>
-                        <li><a href="#contact" className="page-scroll">Contact</a></li>
-                        <Link to="/login" className="btn btn-custom btn-lg page-scroll">Login</Link>
+                        </li>
+                        <li className="nav-item">
+                            <a href="#team" className="nav-link page-scroll">
+                                Agencies
+                            </a>
+                        </li>
+                        <li className="nav-item">
+                            <a href="#contact" className="nav-link page-scroll">
+                                Contact
+                            </a>
+                        </li>
                     </ul>
                 </div>
+
+                {/* Login Button */}
+                <Link
+                    to="/login"
+                    className="btn btn-custom btn-lg ms-3"
+                    style={{
+                        fontSize: 'clamp(14px, 2vw, 18px)', // Responsive text size for the button
+                    }}
+                >
+                    Login
+                </Link>
             </div>
         </nav>
     );
-}
+};
 
 export default Navbar;

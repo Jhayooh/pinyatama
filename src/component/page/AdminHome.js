@@ -166,22 +166,46 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             sx={{
               paddingX: 3,
               paddingY: 2,
-              boxShadow: '0px 5px 5px -3px #789e4f',
-              borderRadius: 3,
+              boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
               background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
               cursor: 'pointer',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+              },
             }}
             onClick={() => setSelected('Farms')}
           >
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <h1 style={{ fontWeight: 'bold' }}>{farms.length}</h1>
-              <h5 style={{ margin: 0 }}>Mga Sakahan</h5>
+            <Box
+              sx={{
+                flex: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '36px', marginBottom: 1 }}>
+                {farms.length}
+              </Typography>
+              <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
+                Mga Sakahan
+              </Typography>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={farm} alt="Farms icon" style={{ width: '100%', height: '100%' }} />
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img src={farm} alt="Farms icon" style={{ width: '60%', height: 'auto', maxHeight: '60px' }} />
             </Box>
           </Box>
         </Grid>
@@ -191,23 +215,50 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             sx={{
               paddingX: 3,
               paddingY: 2,
-              boxShadow: '0px 5px 5px -3px #e1ad67',
-              borderRadius: 3,
+              boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
               background: 'linear-gradient(to right bottom, #FFA652, #FF8D21, #FF7B00)',
-              // backgroundColor: '#df6d29',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
               cursor: 'pointer',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+              },
             }}
             onClick={() => setSelected('Distribution')}
           >
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <h1 style={{ fontWeight: 'bold' }}>{totalProduction}</h1>
-              <h5 style={{ margin: 0 }}>Produksyon</h5>
+            <Box
+              sx={{
+                flex: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '36px', marginBottom: 1 }}>
+                {totalProduction}
+              </Typography>
+              <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
+                Produksyon
+              </Typography>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={production} alt="Production icon" style={{ width: '100%', height: '100%' }} />
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={production}
+                alt="Production icon"
+                style={{ width: '60%', height: 'auto', maxHeight: '60px' }}
+              />
             </Box>
           </Box>
         </Grid>
@@ -217,22 +268,50 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             sx={{
               paddingX: 3,
               paddingY: 2,
-              boxShadow: '0px 5px 5px -3px #c17a05',
-              borderRadius: 3,
+              boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
               background: 'linear-gradient(to right bottom, #D2B48C, #987554, #664229)',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
               cursor: 'pointer',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+              },
             }}
             onClick={() => setSelected('Farms')}
           >
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <Typography variant='button' sx={{ fontWeight: 'bold', fontSize: 40 }}>{farmer.length}</Typography>
-              <h5 style={{ margin: 0 }}>Mga Magsasaka</h5>
+            <Box
+              sx={{
+                flex: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '36px', marginBottom: 1 }}>
+                {farmer.length}
+              </Typography>
+              <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
+                Mga Magsasaka
+              </Typography>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={farmerImg} alt="Farmer icon" style={{ width: '100%', height: '100%' }} />
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={farmerImg}
+                alt="Farmer icon"
+                style={{ width: '60%', height: 'auto', maxHeight: '60px' }}
+              />
             </Box>
           </Box>
         </Grid>
@@ -242,22 +321,50 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             sx={{
               paddingX: 3,
               paddingY: 2,
-              boxShadow: '0px 5px 5px -3px #foa30a',
-              borderRadius: 3,
+              boxShadow: '0px 5px 10px rgba(0, 0, 0, 0.2)',
+              borderRadius: '16px',
               background: 'linear-gradient(to right bottom, #FFE761, #FFDC2E, #FFD500)',
               display: 'flex',
               flexDirection: 'row',
               color: 'black',
               cursor: 'pointer',
+              transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+              },
             }}
             onClick={() => setSelected('access')}
           >
-            <Box sx={{ flex: 2, display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'flex-start' }}>
-              <h1 style={{ fontWeight: 'bold' }}>{users.length}</h1>
-              <h5 style={{ margin: 0 }}>BAEW's</h5>
+            <Box
+              sx={{
+                flex: 2,
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-start',
+              }}
+            >
+              <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '36px', marginBottom: 1 }}>
+                {users.length}
+              </Typography>
+              <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
+                BAEW's
+              </Typography>
             </Box>
-            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={accounts} alt="Accounts icon" style={{ width: '100%', height: '100%' }} />
+            <Box
+              sx={{
+                flex: 1,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <img
+                src={accounts}
+                alt="Accounts icon"
+                style={{ width: '60%', height: 'auto', maxHeight: '60px' }}
+              />
             </Box>
           </Box>
         </Grid>

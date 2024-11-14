@@ -40,7 +40,7 @@ const Agencies = () => {
                 <div className="row">
                     {agencyList.map((d, i) => (
                         <div onClick={() => handleClick(d.url)}
-                            key={`${d.name}-${i}`} className="col-md-4 col-sm-4 team">
+                            key={`${d.name}-${i}`} className="col-md-4 col-sm-12 team">
                             <div className="thumbnail">
                                 {" "}
                                 <img src={d.logo} alt="..." className="team-img" />

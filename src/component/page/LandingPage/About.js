@@ -101,12 +101,8 @@ const About = () => {
   return (
     <div id="about">
       {/* 1st */}
-      <div className="container">
+      <div id='features' className="container">
         <div className="row">
-          <div className="col-xs-12 col-md-6">
-            {" "}
-            <img src={require('../../image_src/pinya3.jpg')} className="img-responsive" alt="" width={520} />{" "}
-          </div>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
               <h2>Katangian ng Pinyang Queen</h2>
@@ -115,6 +111,9 @@ const About = () => {
                 at tamang tama lang sa panlasa at tamis. Napagalaman sa pagsusuri ng DOLE Philippines ma mataas ang taglay na iron, magnesium, potasyum, copper at manganese
                 ng Queen kaysa sa Hawaian.</p>
             </div>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <img src={require('../../image_src/pinya3.jpg')} className="img-responsive" alt="" width={520} />{" "}
           </div>
         </div>
       </div>
@@ -205,7 +204,7 @@ const About = () => {
         </div>
       </div>
       {/* 1st */}
-      <div id='testimonials'  className="container" >
+      <div id='features' className="container" >
         <div className="row" style={{ marginTop: 50, }}>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
@@ -220,19 +219,13 @@ const About = () => {
             </div>
           </div>
           <div className="col-xs-12 col-md-6">
-            {" "}
             <img src={require('../../image_src/pinya1.jpg')} className="img-responsive" alt="" width={520} />{" "}
           </div>
-
         </div>
       </div>
       {/* 1st */}
-      <div id='testimonials' className="container" style={{backgroundColor:'#f6f6f6'}}>
+      <div id='features' className="container" >
         <div className="row">
-          <div className="col-xs-12 col-md-6">
-            {" "}
-            <img src={require('../../image_src/pinya3.jpg')} className="img-responsive" alt="" width={520} />{" "}
-          </div>
           <div className="col-xs-12 col-md-6">
             <div className="about-text">
               <h2>Paghahanda ng Lupa</h2>
@@ -248,6 +241,9 @@ const About = () => {
                 Maari din gumawa ng kama-kama para doon itanim ang pinya.
               </p>
             </div>
+          </div>
+          <div className="col-xs-12 col-md-6">
+            <img src={require('../../image_src/pinya3.jpg')} className="img-responsive" alt="" width={520} />{" "}
           </div>
         </div>
       </div>

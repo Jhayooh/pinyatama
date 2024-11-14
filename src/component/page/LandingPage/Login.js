@@ -1,13 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import { Box, Grid, Paper, Typography, TextField, Button } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import {signOut, getAuth } from 'firebase/auth';
+import { signOut, getAuth } from 'firebase/auth';
 import { auth } from '../../firebase/Config';
-import { useEffect } from 'react';
-
 
 function Copyright(props) {
     return (
@@ -21,26 +18,21 @@ function Copyright(props) {
         </Typography>
     );
 }
+
 const Login = () => {
     const [user] = useAuthState(auth);
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (user) {
-          signOut(auth)
+            signOut(auth);
         }
-        
-      }, []);
+    }, []);
 
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [logged, setLogged] = useState(false)
-
-    const handleClose = () => {
-        setLogged(false);
-    };
 
     const newAuth = getAuth();
     const handleLogin = async () => {
@@ -53,244 +45,162 @@ const Login = () => {
             const userCredential = await signInWithEmailAndPassword(newAuth, email, password);
             const user = userCredential.user;
             if (adminEmails.includes(user.email)) {
-                console.log("Admin logged in successfully");
-                navigate('/')
+                navigate('/');
             } else {
-                console.log("Access denied. Not an admin.");
                 setError("Access denied: You do not have admin privileges.");
                 newAuth.signOut();
             }
         } catch (loginError) {
-            setError("Login failed: " + loginError.message);
+            setError("Login failed: " + "PLease fill up a correct login credentials.");
         } finally {
             setIsLoading(false);
         }
     };
 
+    const handleCancel = () => {
+        navigate('/');
+    };
+
     return (
-        <div id='#login' style={{
-            height: '100vh', backgroundColor: '#e6f7e6', padding: 5, justifyContent: 'center',
-            alignItems: 'center',
-        }}>
+        <div
+            style={{
+                background: 'linear-gradient(135deg, #52be80, #B5FFFC)',
+                minHeight: '100vh',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+            }}
+        >
             <Grid
                 container
                 sx={{
-                    // marginTop: 5,
                     justifyContent: 'center',
                     alignItems: 'center',
                 }}
             >
-                {/* <Grid item lg={6} md={'none'} xs={'none'}>
-                    <Box sx={{
-                        width: "100%",
-                        height: 300,
-                        display: { xs: 'none', md: 'none', lg: 'flex' },
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        padding: 2,
-                    }}>
-                        <Paper elevation={3}
-                            sx={{
-                                position: 'absolute',
-                                top: '10%',
-                                left: '8%',
-                                width: '22%',
-                                height: '20%',
-                                borderRadius: 15,
-                                boxShadow: 2
-                            }} >
-                            <img
-                                src={require('../image_src/pinya1.jpg')}
-                                style={{ width: '100%', height: 300, borderRadius: 15 }}
-                            />
-                        </Paper>
-                        <Paper elevation={3}
-                            sx={{
-                                position: 'absolute',
-                                top: '32%',
-                                left: '22%',
-                                width: '22%',
-                                height: '20%',
-                                borderRadius: 15,
-                                boxShadow: 2
-                            }}  >
-                            <img
-                                src={require('../image_src/pinya4.jpg')}
-                                style={{ width: '100%', height: 300, borderRadius: 15 }}
-                            />
-                        </Paper>
-                        <Paper elevation={3}
-                            sx={{
-                                position: 'absolute',
-                                top: '58%',
-                                left: '10%',
-                                width: '22%',
-                                height: '20%',
-                                borderRadius: 15,
-                                boxShadow: 2
-                            }}  >
-                            <img
-                                src={require('../image_src/pinya2.jpg')}
-                                style={{ width: '100%', height: 300, borderRadius: 15 }}
-                            />
-                        </Paper>
-                    </Box>
-                </Grid > */}
-
-                <Grid item lg={5} md={6} xs={12}>
+                <Grid item xs={12} sm={10} md={8} lg={6}>
                     <Box
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
                             alignItems: 'center',
-                            justifyContent: 'center',
-                            height: { lg: '100%', xs: '100%', md: '80%' },
-                            padding: 2,
-                            backgroundColor: '#fff',
+                            padding: 4,
                             borderRadius: 4,
-                            boxShadow: 3,
-                            marginTop: 5
+                            backgroundColor: '#FFFFFF',
+                            boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.5)',
+                            width: '100%',
+                            maxWidth: 450,  // max width of the form
+                            margin: 'auto',
                         }}
                     >
-
+                        <img
+                            src={require('../../image_src/pinyatamap-logo.png')}
+                            alt="Logo"
+                            style={{
+                                width: '80px',
+                                height: '80px',
+                                marginBottom: '20px',
+                                filter: 'drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.2))',
+                            }}
+                        />
+                        <Typography
+                            variant="h4"
+                            sx={{
+                                fontFamily: "'Pacifico', cursive",
+                                color: '#52be80',
+                                marginBottom: '10px',
+                                fontSize:30,
+                                fontWeight:600
+                            }}
+                        >
+                            Queen Pineapple Farming
+                        </Typography>
+                        <Typography
+                            variant="h6"
+                            sx={{
+                                fontFamily: "'Roboto', sans-serif",
+                                color: '#333333',
+                                marginBottom: '20px',
+                            }}
+                        >
+                            Welcome Back!
+                        </Typography>
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            variant="outlined"
+                            color="success"
+                            value={email}
+                            onChange={(event) => setEmail(event.target.value)}
+                            sx={{
+                                marginBottom: '15px',
+                                backgroundColor: '#f8f8f8',
+                                borderRadius: 2,
+                            }}
+                        />
+                        <TextField
+                            fullWidth
+                            type="password"
+                            label="Password"
+                            variant="outlined"
+                            color="success"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            sx={{
+                                marginBottom: '20px',
+                                backgroundColor: '#f8f8f8',
+                                borderRadius: 2,
+                            }}
+                        />
+                        {error && (
+                            <Typography color="error" sx={{ marginBottom: '10px' }}>
+                                {error}
+                            </Typography>
+                        )}
                         <Box
                             sx={{
                                 display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                                mb: 2,
+                                justifyContent: 'space-between',
+                                width: '100%',
+                                gap: 2,
                             }}
                         >
-                            {/* <Box sx={{
-                      position: 'absolute',
-                      top: {xs:'10%',sm:'12%',md:'4%', lg:'8%',xl:'3%'},
-                      left:  {xs:'40%',sm:'70%',md:'43%', lg:'68%',xl:'70%'},
-                    }}>
-                      <img
-                        src={require('../../image_src/pinyatamap-logo.png')}
-                        style={{ width: "25%", height: 'auto' }}
-                        alt="Logo"
-                      />
-                    </Box> */}
-                            <Box sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                flexDirection: 'column',
-                            }}>
-                                <img
-                                    src={require('../../image_src/pinyatamap-logo.png')}
-                                    style={{ width: "25%", height: 'auto' }}
-                                    alt="Logo"
-                                />
-                                <Typography
-                                    variant="h1"
-                                    sx={{
-                                        fontFamily: 'Georgia, serif',
-                                        fontSize: { xs: 30, md: 60 },
-                                        color: 'green',
-                                        textAlign: 'center',
-                                        fontWeight: 'bold',
-                                        mt: 0
-                                    }}
-                                >
-                                    QUEEN PINEAPPLE FARMING
-                                </Typography>
-                                <Typography
-                                    variant="h1"
-                                    sx={{
-                                        fontSize: 30,
-                                        color: 'green',
-                                        fontFamily: 'monospace',
-                                        mt: 2,
-                                        mb: 2,
-                                    }}
-                                >
-                                    Welcome Back!
-                                </Typography>
-                            </Box>
-
-                            {/* Login Form */}
-                            <Box sx={{
-                                width: '100%',
-                                paddingLeft: { xs: '5%', md: '10%' },
-                                paddingRight: { xs: '5%', md: '10%' },
-                            }}>
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    name="email"
-                                    autoComplete="email"
-                                    autoFocus
-                                    label="Email"
-                                    color="success"
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
-                                    InputProps={{ style: { borderColor: 'green', borderRadius: 20, backgroundColor: '#e6f7e6' } }}
-                                />
-                                <TextField
-                                    margin="normal"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                    label="Password"
-                                    color="success"
-                                    value={password}
-                                    onChange={(event) => setPassword(event.target.value)}
-                                    InputProps={{ style: { borderColor: 'green', borderRadius: 20, backgroundColor: '#e6f7e6' } }}
-                                />
-
-                                {/* Login Button */}
-                                <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                                    <Button
-                                        type="submit"
-
-                                        variant="outlined"
-                                        color='error'
-                                        sx={{
-                                            mt: 3,
-                                            padding: 1.5,
-                                            width: '30%',
-                                            borderRadius: { xs: 5, md: 10 }
-                                        }}
-                                    // onClick={handleClose}
-                                    >
-                                        Cancel
-                                    </Button>
-                                    <Button
-                                        variant="contained"
-                                        color='success'
-                                        sx={{
-                                            '&:hover': {
-                                                backgroundColor: 'green',
-                                            },
-                                            mt: 3,
-                                            padding: 1.5,
-                                            width: '70%',
-                                            borderRadius: { xs: 5, md: 10 }
-                                        }}
-                                        onClick={handleLogin}
-                                        disabled={isLoading}
-                                    >
-                                        {isLoading ? "Logging in..." : "Login"}
-                                    </Button>
-                                </Box>
-
-
-                                <Copyright sx={{ mt: { xs: 2, lg: 5 } }} />
-                            </Box>
+                            <Button
+                                variant="outlined"
+                                color="error"
+                                sx={{
+                                    flex: 1,
+                                    borderRadius: 2,
+                                    textTransform: 'none',
+                                }}
+                                onClick={handleCancel}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="contained"
+                                color="success"
+                                onClick={handleLogin}
+                                disabled={isLoading}
+                                sx={{
+                                    flex: 2,
+                                    backgroundColor: '#52be80',
+                                    '&:hover': {
+                                        backgroundColor: '#68c690',
+                                    },
+                                    borderRadius: 2,
+                                    textTransform: 'none',
+                                }}
+                            >
+                                {isLoading ? "Logging in..." : "Login"}
+                            </Button>
                         </Box>
+                        <Copyright sx={{ marginTop: 3 }} />
                     </Box>
                 </Grid>
-            </Grid >
-        </div >
-    )
-}
+            </Grid>
+        </div>
+    );
+};
 
-export default Login
+export default Login;
