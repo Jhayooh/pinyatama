@@ -18,6 +18,7 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import VideoLabelIcon from '@mui/icons-material/VideoLabel';
 import StepConnector, { stepConnectorClasses } from '@mui/material/StepConnector';
+import { DataGrid, GridCellModes, GridActionsCellItem, } from '@mui/x-data-grid';
 
 import { addDoc, collection, doc, orderBy, query, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase/Config";
@@ -36,6 +37,9 @@ const Activities = ({ farm }) => {
     const eventsColl = collection(db, `farms/${farm.id}/events`)
     const eventsQuery = query(eventsColl, orderBy('createdAt'))
     const [e, eLoading] = useCollectionData(eventsQuery)
+
+    const pineappleColl = collection(db, `pineapple`)
+    const [pineapple, pineappleLoading] = useCollectionData(pineappleColl)
 
     const [newActivities, setNewActivities] = useState([])
     const [events, setEvents] = useState(null)
@@ -127,25 +131,25 @@ const Activities = ({ farm }) => {
         );
     }
 
-    function ethrelValid(currdate, start_date) {
-        const monthEight = new Date(start_date.setMonth(start_date.getMonth() + 10))
-        const monthTwelve = new Date(start_date.setMonth(start_date.getMonth() + 12))
-        const bool = currdate >= monthEight && currdate <= monthTwelve
-        return bool
+    const datagridStyle = {
+        border: 'none',
+        overflow: 'auto',
+        maxHeight: '100%',
+        p: 1,
+        paddingBottom: 0,
+        '& .even': {
+            backgroundColor: '#FFFFFF',
+        },
+        '& .odd': {
+            backgroundColor: '#F6FAF6',
+        },
+        '& .MuiDataGrid-columnHeaders': {
+            position: 'sticky',
+            top: 0,
+            zIndex: 1,
+            backgroundColor: '#88C488'
+        },
     }
-
-    const getMult = (numOne, numTwo) => {
-        const num = numOne * numTwo
-        return Math.round(num * 10) / 10
-    }
-
-    const [alert, setAlert] = useState({
-        visible: false,
-        message: "",
-        severity: "info",
-        vertical: "top",
-        horizontal: 'center'
-    })
 
     return (
         <>
@@ -167,7 +171,7 @@ const Activities = ({ farm }) => {
                                         borderRadius: 2,
                                         boxShadow: 2,
                                         padding: 1.5,
-                                        gap: 2
+                                        gap: 2,
                                     }}
                                 >
                                     <FarmsSchedule farms={[farm]} events={e.map(event => ({
@@ -178,117 +182,469 @@ const Activities = ({ farm }) => {
                                 </Box>
                         }
                     </Grid>
-                    <Grid item xs={12} md={4}>
-                        <Box
-                            sx={{
-                                backgroundColor: '#fff',
-                                borderRadius: 2,
-                                boxShadow: 2,
-                                padding: 1.5,
-                                gap: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                minHeight: 580
-                            }}
-                        >
-                            <Typography>Projected</Typography>
-                            {
-                                activitiesLoading && eLoading
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Net return", "Production cost"]}
-                                                data={[projectedRoi.netReturn, projectedRoi.costTotal]}
-                                                title={"Inaasahang Produksyon"}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                            {
-                                farm.roi.length === 0
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Materials", "Labor", "Fertilizer"]}
-                                                data={[projectedRoi.materialTotal || 0, projectedRoi.laborTotal || 0, projectedRoi.fertilizerTotal || 0]}
-                                                title={'Gastos sa Produksyon'}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                            {
-                                activitiesLoading && eLoading
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Good Size", "Butterball"]}
-                                                data={[projectedRoi.grossReturn, projectedRoi.butterBall]}
-                                                title={"Produksyon ng Pinya"}
-                                                unit={'pcs'}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                        </Box>
+                    <Grid container spacing={2} xs={12} md={4}>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                <Typography >Projected</Typography>
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Net return", "Production cost", "Damage"]}
+                                                    data={[projectedRoi.netReturn, projectedRoi.costTotal, projectedRoi.damage || 0]}
+                                                    title={"Inaasahang Produksyon"}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Net Return',
+                                                value: projectedRoi.netReturn,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Cost of Production',
+                                                value: projectedRoi.costTotal,
+                                                id: 1
+                                            },
+                                            {
+                                                name: 'Production damage',
+                                                value: projectedRoi.damage || 0,
+                                                id: 2
+                                            },
+
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Materials", "Labor", "Fertilizer"]}
+                                                    data={[projectedRoi.materialTotal || 0, projectedRoi.laborTotal || 0, projectedRoi.fertilizerTotal || 0]}
+                                                    title={'Gastos sa Produksyon'}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Material',
+                                                value: projectedRoi.materialTotal || 0,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Labor',
+                                                value: projectedRoi.laborTotal || 0,
+                                                id: 1
+                                            },
+                                            {
+                                                name: 'Fertilizer',
+                                                value: projectedRoi.fertilizerTotal || 0,
+                                                id: 2
+                                            },
+
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Good Size", "Butterball"]}
+                                                    data={[projectedRoi.grossReturn, projectedRoi.butterBall]}
+                                                    title={"Produksyon ng Pinya"}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Good Size',
+                                                value: projectedRoi.grossReturn,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Butterball',
+                                                value: projectedRoi.butterBall,
+                                                id: 1
+                                            }
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={12} md={4}>
-                        <Box
-                            sx={{
-                                backgroundColor: '#fff',
-                                borderRadius: 2,
-                                boxShadow: 2,
-                                padding: 1.5,
-                                gap: 2,
-                                display: 'flex',
-                                flexDirection: 'column',
-                                minHeight: 580
-                            }}
-                        >
-                            <Typography>Actual</Typography>
-                            {
-                                activitiesLoading && eLoading
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Net return", "Production cost", "Damage"]}
-                                                data={[actualRoi.netReturn, actualRoi.costTotal, actualRoi.damage||0]}
-                                                title={"Inaasahang Produksyon"}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                            {
-                                activitiesLoading && eLoading
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Materials", "Labor", "Fertilizer"]}
-                                                data={[actualRoi.materialTotal || 0, actualRoi.laborTotal || 0, actualRoi.fertilizerTotal || 0]}
-                                                title={'Gastos sa Produksyon'}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                            {
-                                activitiesLoading && eLoading
-                                    ? <CircularProgress />
-                                    : <>
-                                        <Box>
-                                            <Doughnut
-                                                labels={["Good Size", "Butterball"]}
-                                                data={[actualRoi.grossReturn, actualRoi.butterBall]}
-                                                title={"Produksyon ng Pinya"}
-                                                unit={'pcs'}
-                                            />
-                                        </Box>
-                                    </>
-                            }
-                        </Box>
+                    <Grid container spacing={2} xs={12} md={4}>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                <Typography >Actual</Typography>
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Net return", "Production cost", "Damage"]}
+                                                    data={[actualRoi.netReturn, actualRoi.costTotal, actualRoi.damage || 0]}
+                                                    title={"Inaasahang Produksyon"}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Net Return',
+                                                value: actualRoi.netReturn,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Cost of Production',
+                                                value: actualRoi.costTotal,
+                                                id: 1
+                                            },
+                                            {
+                                                name: 'Production damage',
+                                                value: actualRoi.damage || 0,
+                                                id: 2
+                                            },
+
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Materials", "Labor", "Fertilizer"]}
+                                                    data={[actualRoi.materialTotal || 0, actualRoi.laborTotal || 0, actualRoi.fertilizerTotal || 0]}
+                                                    title={'Gastos sa Produksyon'}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Material',
+                                                value: actualRoi.materialTotal || 0,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Labor',
+                                                value: actualRoi.laborTotal || 0,
+                                                id: 1
+                                            },
+                                            {
+                                                name: 'Fertilizer',
+                                                value: actualRoi.fertilizerTotal || 0,
+                                                id: 2
+                                            },
+
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+
+                            </Box>
+                        </Grid>
+                        <Grid item xs={12} md={12}>
+                            <Box
+                                sx={{
+                                    backgroundColor: '#fff',
+                                    borderRadius: 2,
+                                    boxShadow: 2,
+                                    padding: 1.5,
+                                    gap: 2,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                }}
+                            >
+                                {
+                                    activitiesLoading && eLoading
+                                        ? <CircularProgress />
+                                        : <>
+                                            <Box>
+                                                <Doughnut
+                                                    labels={["Good Size", "Butterball"]}
+                                                    data={[actualRoi.grossReturn, actualRoi.butterBall]}
+                                                    title={"Produksyon ng Pinya"}
+                                                />
+                                            </Box>
+                                        </>
+                                }
+                                <DataGrid
+                                    rows={
+                                        [
+                                            {
+                                                name: 'Good Size',
+                                                value: actualRoi.grossReturn,
+                                                id: 0
+                                            },
+                                            {
+                                                name: 'Butterball',
+                                                value: actualRoi.butterBall,
+                                                id: 1
+                                            }
+                                        ]
+                                        // Object.entries(actualRoi)
+                                        //     .map(([name, value], index) => ({
+                                        //         id: index + 1,
+                                        //         name,
+                                        //         value
+                                        //     }))
+                                        //     .sort((a, b) => a.name.localeCompare(b.name))
+                                    }
+                                    columns={[
+                                        {
+                                            field: 'name',
+                                            headerName: 'Name',
+                                            flex: 2,
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                        {
+                                            field: 'value',
+                                            headerName: 'Value',
+                                            flex: 1,
+                                            type: 'number',
+                                            editable: false,
+                                            headerClassName: 'super-app-theme--header',
+                                        },
+                                    ]}
+                                    hideFooter
+                                    getRowClassName={(params) =>
+                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                    }
+                                    sx={datagridStyle}
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
                     <Grid item xs={12} md={4}>
                         <Box
