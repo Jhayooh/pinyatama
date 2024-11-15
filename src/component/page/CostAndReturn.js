@@ -997,9 +997,8 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Good Size", "Butterball"]}
-                  data={[newRoi.grossReturn, newRoi.butterBall]}
+                  data={[newRoi.grossReturn*getPinePrice('good size', pineapple), newRoi.butterBall*getPinePrice('butterball', pineapple)]}
                   title={"Produksyon ng Pinya"}
-                  unit={'pcs'}
                 />
               </Box>
               <Box className='pricesBox' sx={{
