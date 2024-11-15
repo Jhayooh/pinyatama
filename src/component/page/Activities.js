@@ -136,7 +136,7 @@ const Activities = ({ farm }) => {
         overflow: 'auto',
         maxHeight: '100%',
         p: 1,
-        paddingBottom: 0,
+        // paddingBottom: 0,
         '& .even': {
             backgroundColor: '#FFFFFF',
         },
@@ -195,15 +195,15 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
-                                <Typography >Projected</Typography>
+                                <Typography variant="h4">Projected</Typography>
                                 {
                                     activitiesLoading && eLoading
                                         ? <CircularProgress />
                                         : <>
                                             <Box>
                                                 <Doughnut
-                                                    labels={["Net return", "Production cost", "Damage"]}
-                                                    data={[projectedRoi.netReturn, projectedRoi.costTotal, projectedRoi.damage || 0]}
+                                                    labels={["Net return", "Production cost"]}
+                                                    data={[projectedRoi.netReturn, projectedRoi.costTotal]}
                                                     title={"Inaasahang Produksyon"}
                                                 />
                                             </Box>
@@ -427,15 +427,15 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
-                                <Typography >Actual</Typography>
+                                <Typography variant="h4">Actual</Typography>
                                 {
                                     activitiesLoading && eLoading
                                         ? <CircularProgress />
                                         : <>
                                             <Box>
                                                 <Doughnut
-                                                    labels={["Net return", "Production cost", "Damage"]}
-                                                    data={[actualRoi.netReturn, actualRoi.costTotal, actualRoi.damage || 0]}
+                                                    labels={["Net return", "Production cost"]}
+                                                    data={[Math.max(0, actualRoi.netReturn), actualRoi.costTotal]}
                                                     title={"Inaasahang Produksyon"}
                                                 />
                                             </Box>
@@ -456,7 +456,7 @@ const Activities = ({ farm }) => {
                                             },
                                             {
                                                 name: 'Production damage',
-                                                value: actualRoi.damage || 0,
+                                                value: actualRoi.damageCost || 0,
                                                 id: 2
                                             },
 
