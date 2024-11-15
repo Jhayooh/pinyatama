@@ -25,14 +25,17 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
     <>
       {
         farm &&
-        <Box sx={{ position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '10', backgroundColor: '#fff' }}>
+        <Box sx={{
+          position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '10', backgroundColor: '#fff',
+          zIndex: 9999
+        }}>
           <Button sx={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'flex-end', ml: 'auto', color: 'red' }} onClick={() => setClicked({})}>X</Button>
-          <Box sx={{margin:2}}>
-            <Typography variant='button' sx={{fontFamily:'serif', fontSize:25, justifyContent:'center', alignItems:'center', display:'flex', color:'red'}}> {farm.title} </Typography>
-            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Bilang ng Tanim:<span style={{color:'green', fontSize:15, padding:2}}> {farm.plantNumber} piraso </span></Typography>
-            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Yugto ng Pananim:<span style={{color:'green', fontSize:15, padding:2}}>{eventClicked.title}</span></Typography>
-            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Petsa ng Pagtanim:<span style={{color:'green', fontSize:15, padding:2}}>{formattedStart}</span> </Typography>
-            <Typography sx={{fontFamily:'serif', fontSize:15, display:'flex'}}> Inaasahang Petsa ng Pag-ani:<span style={{color:'green', fontSize:15, padding:2}}>{formattedEnd}</span> </Typography>
+          <Box sx={{ margin: 2 }}>
+            <Typography variant='button' sx={{ fontFamily: 'serif', fontSize: 25, justifyContent: 'center', alignItems: 'center', display: 'flex', color: 'red' }}> {farm.title} </Typography>
+            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Bilang ng Tanim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}> {farm.plantNumber} piraso </span></Typography>
+            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Yugto ng Pananim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{eventClicked.title}</span></Typography>
+            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Petsa ng Pagtanim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{formattedStart}</span> </Typography>
+            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Inaasahang Petsa ng Pag-ani:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{formattedEnd}</span> </Typography>
           </Box>
 
           <Button variant='contained' color='success' onClick={() => setSelected && setSelected('Farms')}>Tingnan ang Buong Detalye</Button>
@@ -48,7 +51,10 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({ farms, events, setSelected }) {
+function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
+
+  console.log(isTimelinePage,'pagggee');
+
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
@@ -79,13 +85,15 @@ function FarmsSchedule({ farms, events, setSelected }) {
     itemTimeStartKey: 'start_time',
     itemTimeEndKey: 'end_time',
   }
+
+    ;
   const itemRender = ({ item, itemContext, getItemProps, getResizeProps }) => {
     const { left: leftResizeProps, right: rightResizeProps } = getResizeProps()
     const backgroundColor = itemContext.selected
       && itemContext.dragging
-        && 'red'
-        // : item.selectedBgColor
-      // : item.bgColor
+      && 'red'
+    // : item.selectedBgColor
+    // : item.bgColor
     const borderColor = itemContext.resizing ? 'red' : item.color
     return (
       <div
@@ -159,7 +167,7 @@ function FarmsSchedule({ farms, events, setSelected }) {
           minZoom={1.24 * 86400 * 1000 * 7 * 3}
           // fullUpdate
           itemTouchSendsClick={false}
-          // stackItems
+          stackItems={true}
           itemHeightRatio={0.75}
           showCursorLine
           canMove={false}
@@ -201,12 +209,11 @@ function FarmsSchedule({ farms, events, setSelected }) {
           </TimelineHeaders>
         </Timeline >
       </Box >
-      {
-        Object.keys(clicked).length !== 0 &&
+      {isTimelinePage && Object.keys(clicked).length !== 0 && (
         <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
           <SideDetails farm={farmClicked} setClicked={setClicked} eventClicked={clicked} setSelected={setSelected} farmer={farmerClicked} />
         </Box>
-      }
+      )}
     </Box>
   )
 }

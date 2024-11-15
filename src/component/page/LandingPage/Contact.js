@@ -50,7 +50,7 @@ export const Contact = () => {
                             <div className="row">
                                 <div className="col-md-6">
                                 <p style={{ color: 'black' }}>
-                                    <span style={{ color: 'green' }}>
+                                    <span style={{ color: '#fff' }}>
                                     <LocationOnIcon /> Address: <br />
                                     </span>
                                     2nd Floor Provincial Capitol Annex Building <br />
@@ -60,25 +60,25 @@ export const Contact = () => {
                                 </div>
                                 <div className="col-md-6">
                                 <p style={{ color: 'black' }}>
-                                    <span style={{ color: 'green' }}>
+                                    <span style={{ color: '#fff' }}>
                                     <PhoneIcon /> Telephone Number: <br />
                                     </span>
                                     054 721-0291
                                 </p>
                                 <p style={{ color: 'black' }}>
-                                    <span style={{ color: 'green' }}>
+                                    <span style={{ color: '#fff' }}>
                                     <EmailIcon /> Email Address:<br />
                                     </span>
                                     opagcamnorte@yahoo.com <br /> opagcamsnorte@gmail.com
                                 </p>
                                 <p style={{ color: 'black' }}>
-                                    <span style={{ color: 'green' }}>
+                                    <span style={{ color: '#fff' }}>
                                     <FacebookIcon /> Facebook:<br />
                                     </span>
                                     OPAg Camarines Norte
                                 </p>
                                 <p style={{ color: 'black' }}>
-                                    <span style={{ color: 'green' }}>
+                                    <span style={{ color: '#fff' }}>
                                     <LanguageIcon /> Website:<br />
                                     </span>
                                     <a href="https://opagcamnorte.com">https://opagcamnorte.com</a>

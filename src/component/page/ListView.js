@@ -70,6 +70,7 @@ function ListView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
               <StyledTableCell align="right">{marker.mun}</StyledTableCell>
               <StyledTableCell align="right">{dateFormatter(marker.start_date)}</StyledTableCell>
               <StyledTableCell align="right">{dateFormatter(marker.harvest_date)}</StyledTableCell>
+              <StyledTableCell align="right">{marker.CropStage}</StyledTableCell>
             </StyledTableRow>
 
           </TableBody>

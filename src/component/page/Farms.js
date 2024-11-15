@@ -206,6 +206,20 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       sortable: true,
       valueGetter: (params) => dateFormatter(params.row.harvest_date),
     },
+    {
+      field: 'cropStage',
+      headerName: 'Status', //complete or failed
+      flex: 1,
+      sortable: true,
+      renderCell: (params) => <Typography variant='overline'>{params.row.cropStage}</Typography>,
+    },
+    {
+      field: 'remarks',
+      headerName: 'Remarks',//complete, pest, typhoon, flood
+      flex: 1,
+      sortable: true,
+      valueGetter: (params) => dateFormatter(params.row.harvest_date),
+    },
   ];
 
   const datagridStyle = {
