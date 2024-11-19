@@ -51,9 +51,9 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
+function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
 
-  console.log(isTimelinePage,'pagggee');
+  console.log(isTimelinePage, 'pagggee');
 
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
@@ -103,7 +103,10 @@ function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
             color: '#fff',
             borderColor,
             border: itemContext.selected ? 'dashed 1px rgba(0,0,0,0.3)' : 'none',
-            borderRadius: 8,
+            borderRadius: 7,
+            position: 'sticky',
+            position: '-webkit-sticky',
+            display: 'inline-block'
             // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
             //            0 2px 2px 0 rgba(0, 0, 0, 0.14),
             //            0 3px 1px -2px rgba(0, 0, 0, 0.12)`
@@ -116,7 +119,7 @@ function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
         {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}
 
         <div
-          className="ripple"
+          className="rct-item-content"
           style={{
             height: itemContext.dimensions.height,
             overflow: 'hidden',
@@ -124,7 +127,7 @@ function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
             textOverflow: 'ellipsis',
             whiteSpace: 'nowrap',
             fontSize: '1rem',
-            marginLeft: '1rem'
+            marginLeft: '1rem',
           }}
         >
           {itemContext.title}
@@ -153,7 +156,7 @@ function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
           groups={farms.map(f => ({
             ...f,
             stackItems: true,
-            canMove: true
+            canMove: false
           }))}
           onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
           onItemDeselect={() => (setClicked({}))}
@@ -208,6 +211,15 @@ function FarmsSchedule({isTimelinePage, farms, events, setSelected }) {
             <DateHeader sticky />
           </TimelineHeaders>
         </Timeline >
+        {/* <Timeline
+          groups={farms}
+          itemRenderer={itemRender}
+          items={events.sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())}
+          minZoom={365.24 * 86400 * 1000} // 1 year
+          maxZoom={365.24 * 86400 * 1000 * 20} // 20 years
+          defaultTimeStart={moment().add(-20, "year")}
+          defaultTimeEnd={moment()}
+        /> */}
       </Box >
       {isTimelinePage && Object.keys(clicked).length !== 0 && (
         <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
