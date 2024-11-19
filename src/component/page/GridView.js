@@ -36,6 +36,11 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
             borderColor: '#f9fafb', '&:hover': { borderColor: '#88c488' },
             cursor: 'pointer',
             height: '100%',
+            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+              '&:hover': {
+                transform: 'scale(1.05)',
+                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+              },
 
           }}
           onClick={() => {

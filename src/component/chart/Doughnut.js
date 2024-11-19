@@ -2,8 +2,6 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 function ExamplePieChart({ labels, data, title, unit='peso' }) {
-  console.log("example pie chart", labels, data);
-
   const formatter = new Intl.NumberFormat('en-PH', {
     style: 'currency',
     currency: 'PHP'
