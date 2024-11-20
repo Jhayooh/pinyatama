@@ -33,6 +33,8 @@ import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Doughnut from '../chart/Doughnut';
 import { addDoc, collection, updateDoc } from 'firebase/firestore';
+import ExcelJS from 'exceljs';
+import { saveAs } from 'file-saver';
 
 import { db } from '../../firebase/Config';
 
@@ -40,6 +42,7 @@ import { db } from '../../firebase/Config';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
+import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 export default function Distribution({ farms, roi }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
@@ -56,9 +59,12 @@ export default function Distribution({ farms, roi }) {
   const [openError, setOpenError] = useState(false)
   const [alert, setAlert] = useState({ show: false })
 
+  const distributionColl = collection(db, '/distributions')
+  const [distributions] = useCollectionData(distributionColl)
+
   function dateFormatter(date) {
     const d = new Date(date)
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   }
 
   const getPercentage = (num1, num2) => {
@@ -75,6 +81,145 @@ export default function Distribution({ farms, roi }) {
     }, 0);
   };
 
+  const exportExcel = async () => {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Harvest Schedule');
+    
+    const year = 2026;  // Replace with dynamic year if needed
+    const month = 4;  // Replace with dynamic month if needed
+    const currentDate = new Date(year, month);
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+  
+    // Title Setup with line breaks
+    const title = [
+      'Republic of the Philippines',
+      'Province of Camarines Norte',
+      '-Daet-',
+      'OFFICE OF THE PROVINCIAL AGRICULTURIST',
+      '',
+      ` HARVEST SCHEDULE FOR THE MONTH OF ${currentDate.toLocaleString('default', {
+        month: 'long',
+      }).toUpperCase()} ${year}`,
+    ];
+  
+    const totalColumns = 5 + daysInMonth + 1; // First 5 columns + day columns + Total column
+  
+    // Merge the first row for title and insert line breaks
+    worksheet.mergeCells(1, 1, 1, totalColumns);  // Merge the entire first row
+    worksheet.getCell(1, 1).value = title.join('\n'); // Join the title lines with line breaks
+    worksheet.getCell(1, 1).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }; // Enable text wrapping
+    worksheet.getCell(1, 1).font = { bold: true, size: 12 };
+  
+    // Set custom row height for the first row to show all content
+    worksheet.getRow(1).height = 90;  // Adjust the height as needed (increase if content doesn't fit)
+  
+    // Headers
+    const headers = [
+      'Name of farmers',
+      'Barangay',
+      'Municipality',
+      'Area',
+      'Planting date',
+    ];
+  
+    headers.forEach((header, index) => {
+      const colIndex = index + 1;
+      worksheet.mergeCells(2, colIndex, 3, colIndex); // Merge 2nd and 3rd rows for headers
+      worksheet.getCell(2, colIndex).value = header;
+      worksheet.getCell(2, colIndex).alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+  
+      // Set width for specific columns
+      if (header === 'Name of farmers') worksheet.getColumn(colIndex).width = 20;
+      if (header === 'Barangay') worksheet.getColumn(colIndex).width = 15;
+      if (header === 'Municipality') worksheet.getColumn(colIndex).width = 15;
+      if (header === 'Area') worksheet.getColumn(colIndex).width = 10;
+      if (header === 'Planting date') worksheet.getColumn(colIndex).width = 15;
+    });
+  
+    // Days of the month
+    const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+    for (let day = 1; day <= daysInMonth; day++) {
+      const date = new Date(year, month, day);
+      const dayOfWeek = date.getDay();
+      const colIndex = day + headers.length;
+      worksheet.getCell(2, colIndex).value = dayNames[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
+      worksheet.getCell(3, colIndex).value = day;
+      worksheet.getCell(2, colIndex).alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+      worksheet.getCell(3, colIndex).alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+    }
+  
+    // Add "Total" column
+    const totalColIndex = headers.length + daysInMonth + 1;
+    worksheet.mergeCells(2, totalColIndex, 3, totalColIndex);
+    worksheet.getCell(2, totalColIndex).value = 'Total';
+    worksheet.getCell(2, totalColIndex).alignment = {
+      vertical: 'middle',
+      horizontal: 'center',
+    };
+  
+    // Filter Farms and Map Data
+    const filteredFarms = farms.filter((farm) =>
+      distributions.some((dist) => {
+        const distDate = new Date(dist.date);
+        return dist.id === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
+      })
+    );
+  
+    let rowIndex = 4;  // Start from row 4 (after merged title and header rows)
+    let totalArea = 0;
+    let totalOfTotal = 0;
+  
+    filteredFarms.forEach((farm) => {
+      const farmDistributions = distributions.filter((dist) => {
+        const distDate = new Date(dist.date);
+        return dist.id === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
+      });
+      worksheet.getCell(rowIndex, 1).value = farm.farmerName;
+      worksheet.getCell(rowIndex, 2).value = farm.brgy;
+      worksheet.getCell(rowIndex, 3).value = farm.mun;
+      worksheet.getCell(rowIndex, 4).value = parseFloat(farm.area);
+      worksheet.getCell(rowIndex, 5).value = dateFormatter(farm.start_date.toDate());
+  
+      let total = 0;
+      farmDistributions.forEach((dist) => {
+        const distDate = new Date(dist.date);
+        const colIndex = headers.length + distDate.getDate();
+        worksheet.getCell(rowIndex, colIndex).value = dist.actual;
+        total += dist.actual;
+      });
+  
+      worksheet.getCell(rowIndex, totalColIndex).value = total;
+  
+      // Update total values
+      totalArea += parseFloat(farm.area);
+      totalOfTotal += total;
+  
+      rowIndex++;
+    });
+  
+    // Add last row with total Area and Total sum
+    worksheet.getCell(rowIndex, 1).value = 'TOTAL';
+    worksheet.getCell(rowIndex, 4).value = totalArea;  // Sum of Area column
+    worksheet.getCell(rowIndex, totalColIndex).value = totalOfTotal;  // Sum of Total column
+    worksheet.getCell(rowIndex, 1).alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell(rowIndex, 4).alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell(rowIndex, totalColIndex).alignment = { vertical: 'middle', horizontal: 'center' };
+  
+    // Save the Excel file
+    const buffer = await workbook.xlsx.writeBuffer();
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+    saveAs(blob, `Harvest_Schedule_${year}_${month + 1}.xlsx`);
+  };
+  
   useEffect(() => {
     if (!farms) return
     const filterFarmsByDate = farms
@@ -99,7 +244,7 @@ export default function Distribution({ farms, roi }) {
       production: filFarm.grossReturn,
       percentage: getPercentage(filFarm.grossReturn, totalGrossReturn),
       suggested: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
-      actual: 0
+      actual: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100))
     }))
 
     setLocalFarms(locFarms)
@@ -131,7 +276,7 @@ export default function Distribution({ farms, roi }) {
       production: filFarm.grossReturn,
       percentage: getPercentage(filFarm.grossReturn, totalGrossReturn),
       suggested: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
-      actual: 0
+      actual: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
     }))
     setLocalFarms(locFarms)
     setTotalGrossReturn(theTotalGrossReturn)
@@ -199,7 +344,7 @@ export default function Distribution({ farms, roi }) {
   const columns = [
     {
       field: 'date',
-      headerName: 'Date',
+      headerName: 'Date of harvest',
       flex: 1,
       align: 'center',
     },
@@ -333,10 +478,10 @@ export default function Distribution({ farms, roi }) {
                 marginBottom: 4,
                 gap: 4
               }}>
-                <Button variant="outlined" >
+                <Button variant="outlined" onClick={() => exportExcel(selectedDate)} >
                   Download report
                 </Button>
-                <Button variant="contained" onClick={()=>setOpen(true)}>
+                <Button variant="contained" onClick={() => setOpen(true)}>
                   Save
                 </Button>
               </Box>

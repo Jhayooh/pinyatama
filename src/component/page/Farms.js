@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
 import FarmTabs from './FarmTabs.js';
-import './Farms.css';
+import '../../component/css/Farms.css';
 import { getStorage, ref, listAll, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';

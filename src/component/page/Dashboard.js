@@ -33,7 +33,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { auth } from '../../firebase/Config';
 import Contact from '../page/LandingPage/Contact.js'
-import './Dashboard.css';
+import '../../component/css/Dashboard.css';
 import ImageGal from "./ImageGal";
 import Login from './Login.js';
 import { Link, useNavigate } from 'react-router-dom';
