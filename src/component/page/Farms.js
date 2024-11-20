@@ -98,7 +98,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
 
   useEffect(() => {
     const useFilteredFarms = farms.filter((farm) => {
-      const matchesArchive = archive ? farm.cropStage === 'complete' || farm.remarks === 'failed' : farm.cropStage !== 'complete' && farm.remarks !== 'failed'
+      const matchesArchive = archive ? farm.cropStage === 'complete' || farm.remarks === 'failed' : farm.cropStage !== 'complete' && farm.remarks !== 'failed' && farm.remarks === 'On going'
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;

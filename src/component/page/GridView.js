@@ -20,6 +20,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 
 function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imageUrls, user }) {
   const [newUser, setNewUser] = useState({})
+  const [label, setLabel] = useState(null)
   function dateFormatter(date) {
     const d = new Date(date.toMillis())
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
@@ -30,10 +31,26 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
     setNewUser(user[0])
   }, [user])
 
-
   const activityColl = collection(db, `farms/${marker.id}/activities`)
   const activityQuery = query(activityColl, orderBy('createdAt'))
   const [activities, activitiesLoading] = useCollectionData(activityQuery)
+
+  useEffect(() => {
+    if (!activities) return
+    const act = activities.find(a => a.remarks === true)
+    if (act) {
+      console.log("labelll", act.label);
+      setLabel(act.label)
+    }
+  }, [activities])
+
+
+  const getRemark = () => {
+    const label = activities?.find(a => a.remarks === true ? a.label : "Undipaynd")
+
+  }
+
+  getRemark()
 
   return (
     <Grid container sx={{ width: { xs: '100%', sm: `calc(100%/2)`, md: `calc(100%/3)`, lg: `calc(100%/4)`, xl: `calc(100%/5)` } }}>
@@ -84,9 +101,9 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
                   display="block"
                   color={marker.remarks ? (marker.remarks === 'failed' ? 'red' : 'orange') : 'green'}
                 >
-                  {marker.remarks ? marker.remarks.toUpperCase() : 'SUCCESS'}
+                  {marker.remarks ? `${marker.remarks.toUpperCase()}` : 'SUCCESS'}
+                  {marker.remarks === 'failed' && label && ` due to ${label[0]}`}
                 </Typography>
-
 
               </Box>
             </Box>
