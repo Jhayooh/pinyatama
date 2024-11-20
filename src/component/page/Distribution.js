@@ -31,7 +31,7 @@ import BackIcon from '@mui/icons-material/ArrowBackIosNew';
 import * as XLSX from 'xlsx';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
-import Doughnut from '../chart/Doughnut';
+import Pie from '../chart/Pie1';
 import { addDoc, collection, updateDoc } from 'firebase/firestore';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
@@ -396,7 +396,7 @@ export default function Distribution({ farms, roi }) {
 
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
         <Grid container spacing={3} alignItems='stretch'>
 
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }}>
@@ -453,17 +453,19 @@ export default function Distribution({ farms, roi }) {
                     inputProps={{
                       max: totalGrossReturn,
                     }}
+                    sx={{ borderTopLeftRadius: 20, borderBottomLeftRadius: 20, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                   />
-                  <Button variant="contained" color="primary" onClick={distribute}>
+                  <Button variant="contained" color="warning" onClick={distribute}
+                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}>
                     Distribute
                   </Button>
                 </Box>
               </Box>
               <Box>
-                <Doughnut
+                <Pie
                   labels={localFarms.map(lf => lf.farm)}
                   data={localFarms.map(lf => lf.suggested)}
-                  title={"Inaasahang Produksyon"}
+                  title={"Inaasahang Komit"}
                   unit="pcs"
                 />
               </Box>
@@ -478,10 +480,10 @@ export default function Distribution({ farms, roi }) {
                 marginBottom: 4,
                 gap: 4
               }}>
-                <Button variant="outlined" onClick={() => exportExcel(selectedDate)} >
+                <Button variant="outlined" color='error' onClick={() => exportExcel(selectedDate)} >
                   Download report
                 </Button>
-                <Button variant="contained" onClick={() => setOpen(true)}>
+                <Button variant="contained" color='success' onClick={() => setOpen(true)}>
                   Save
                 </Button>
               </Box>

@@ -17,7 +17,6 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import LogoutIcon from '@mui/icons-material/Logout';
 import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { signOut } from 'firebase/auth';
@@ -46,6 +45,7 @@ import distribution from '../image_src/box.png';
 import land from '../image_src/land.png';
 import landSelected from '../image_src/landSelected.png'
 import parti from '../image_src/parti.png';
+import LogoutIcon from '@mui/icons-material/Logout';
 import partiSelected from '../image_src/partiSelected.png'
 
 
@@ -249,6 +249,7 @@ export default function SideNav() {
 
         const cropstage = new Date();
         let newCropstage = '';
+        let newRemarks ='';
 
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
@@ -262,11 +263,13 @@ export default function SideNav() {
           newCropstage = 'fruiting';
         } else {
           newCropstage = 'complete';
+          newRemarks='success'
         }
 
         if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
           await updateDoc(doc(db, `/farms/${farm.id}`), {
             cropStage: newCropstage,
+            remarks:newRemarks
           });
         }
         console.log("updated farm=======>>>", farm.id)
@@ -510,7 +513,7 @@ export default function SideNav() {
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
                   {selected === 'timeline' && <Timeline farms={farms.filter(f => f.cropStage !== 'complete' && f.remarks !== 'failed')} events={events} users={users} setSelected={setSelected} />}
                   {selected === 'accounts' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-                  {selected === 'distribution' && <Distribution farms={farms} roi={roi} />}
+                  {selected === 'distribution' && <Distribution farms={farms.filter(f => f.remarks !== 'failed')} roi={roi} />}
                 </Box>
               </>
             )
