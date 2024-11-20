@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Grid, Paper, Typography, TextField, Button } from '@mui/material';
+import { Box, Grid, Typography, TextField, Button, IconButton } from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { signInWithEmailAndPassword } from 'firebase/auth';
@@ -33,6 +34,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
 
     const newAuth = getAuth();
     const handleLogin = async () => {
@@ -51,7 +53,7 @@ const Login = () => {
                 newAuth.signOut();
             }
         } catch (loginError) {
-            setError("Login failed: " + "PLease fill up a correct login credentials.");
+            setError("The Email/Password you've entered is incorrect.");
         } finally {
             setIsLoading(false);
         }
@@ -80,6 +82,7 @@ const Login = () => {
             >
                 <Grid item xs={12} sm={10} md={8} lg={6}>
                     <Box
+                        component="form"
                         sx={{
                             display: 'flex',
                             flexDirection: 'column',
@@ -89,8 +92,12 @@ const Login = () => {
                             backgroundColor: '#FFFFFF',
                             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.5)',
                             width: '100%',
-                            maxWidth: 450,  // max width of the form
+                            maxWidth: 450,
                             margin: 'auto',
+                        }}
+                        onSubmit={(event) => {
+                            event.preventDefault();
+                            handleLogin();
                         }}
                     >
                         <img
@@ -109,8 +116,8 @@ const Login = () => {
                                 fontFamily: "'Pacifico', cursive",
                                 color: '#52be80',
                                 marginBottom: '10px',
-                                fontSize:30,
-                                fontWeight:600
+                                fontSize: 30,
+                                fontWeight: 600,
                             }}
                         >
                             Queen Pineapple Farming
@@ -140,20 +147,44 @@ const Login = () => {
                         />
                         <TextField
                             fullWidth
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             label="Password"
                             variant="outlined"
                             color="success"
                             value={password}
                             onChange={(event) => setPassword(event.target.value)}
+                            onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                    event.preventDefault();
+                                    handleLogin();
+                                }
+                            }}
                             sx={{
-                                marginBottom: '20px',
+                                marginBottom: '15px',
                                 backgroundColor: '#f8f8f8',
                                 borderRadius: 2,
                             }}
+                            InputProps={{
+                                endAdornment: (
+                                    <IconButton
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                ),
+                            }}
                         />
                         {error && (
-                            <Typography color="error" sx={{ marginBottom: '10px' }}>
+                            <Typography
+                                color="error"
+                                sx={{
+                                    marginBottom: '20px',
+                                    fontWeight: 600,
+                                    fontSize: '12px',
+                                    textAlign: 'center',
+                                }}
+                            >
                                 {error}
                             </Typography>
                         )}
@@ -166,6 +197,7 @@ const Login = () => {
                             }}
                         >
                             <Button
+                                type="button"
                                 variant="outlined"
                                 color="error"
                                 sx={{
@@ -178,9 +210,9 @@ const Login = () => {
                                 Cancel
                             </Button>
                             <Button
+                                type="submit"
                                 variant="contained"
                                 color="success"
-                                onClick={handleLogin}
                                 disabled={isLoading}
                                 sx={{
                                     flex: 2,
@@ -192,7 +224,7 @@ const Login = () => {
                                     textTransform: 'none',
                                 }}
                             >
-                                {isLoading ? "Logging in..." : "Login"}
+                                {isLoading ? 'Logging in...' : 'Login'}
                             </Button>
                         </Box>
                         <Copyright sx={{ marginTop: 3 }} />

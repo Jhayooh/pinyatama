@@ -87,7 +87,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
 
   useEffect(() => {
     const useFilteredFarms = farms.filter((farm) => {
-      const matchesArchive = archive ? farm.cropStage === 'complete' : farm.cropStage !== 'complete'
+      const matchesArchive = archive ? farm.cropStage === 'complete' || farm.remarks === 'failed' : farm.cropStage !== 'complete' && farm.remarks !== 'failed'
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
       const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
@@ -208,7 +208,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     },
     {
       field: 'cropStage',
-      headerName: 'Status', //complete or failed
+      headerName: 'Status',
       flex: 1,
       sortable: true,
       renderCell: (params) => <Typography variant='overline'>{params.row.cropStage}</Typography>,
@@ -218,8 +218,25 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       headerName: 'Remarks',//complete, pest, typhoon, flood
       flex: 1,
       sortable: true,
-      valueGetter: (params) => dateFormatter(params.row.harvest_date),
-    },
+      renderCell: (params) => {
+        const { cropStage, remarks } = params.row;
+
+        if (cropStage === 'complete') {
+          return 'Success';
+        }
+
+        if (remarks === 'failed') {
+          return 'Failed';
+        }
+
+        if (cropStage === cropStage || remarks === '') {
+          return 'On going';
+        }
+
+        return remarks;
+
+      },
+    }
   ];
 
   const datagridStyle = {
@@ -476,9 +493,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       </MenuItem>
                       <MenuItem onClick={handleArchive} sx={{ width: '100%' }}>
                         <Button variant='text' color='warning' >
-                          {archive ? <UnarchiveIcon/>:<ArchiveIcon /> }
+                          {archive ? <UnarchiveIcon /> : <ArchiveIcon />}
                           {archive ? `Active` : `Archive`}
-                          </Button>
+                        </Button>
                       </MenuItem>
                     </Menu>
                   </Grid>

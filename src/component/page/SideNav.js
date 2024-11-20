@@ -123,12 +123,12 @@ export default function SideNav() {
   const [user] = useAuthState(auth);
   const location = useLocation();
   const navigate = useNavigate()
-  
+
   useEffect(() => {
     if (!user) {
       navigate('/')
     }
-    
+
   }, []);
 
   const theme = useTheme();
@@ -330,47 +330,28 @@ export default function SideNav() {
     window.location.reload();
   };
 
+  const icons = {
+    dashboard,
+    dashboardSelected,
+    land,
+    landSelected,
+    timeline: timelinepng,
+    timelineSelected: timelinepng,
+    distribution,
+    distriSelected,
+    parti,
+    partiSelected,
+    access,
+    accessSelected,
+  };
 
+  const getIcon = (iconName) => {
+    return icons[iconName] ;
+  };
 
   return (
     <>
       <Box sx={{ display: 'flex', height: '100%', width: 1, position: 'fixed', overflowY: 'hidden', }}>
-        {/* <CssBaseline /> */}
-        {/* <AppBar position="fixed" open={open} sx={{ backgroundColor: '#fff' }}>
-          <Toolbar>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{
-                marginRight: 5,
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon sx={{ color: 'green' }} />
-            </IconButton>
-            <img src={require('../image_src/pinyatamap-logo.png')} width={50} height={50} marginLeft />
-            <Typography
-              variant="h6"
-              noWrap
-              component="a"
-              // href="#app-bar-with-responsive-menu"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'green',
-                textDecoration: 'none',
-              }}
-              style={{ marginLeft: '10px' }}
-            >
-              QUEEN PINEAPPLE FARMING
-            </Typography>
-          </Toolbar>
-        </AppBar> */}
         <Drawer variant="permanent" open={open} elevation={0} hideBackdrop={true} sx={{ height: '100vh', "& .MuiDrawer-paper": { borderWidth: 0 } }}>
           <DrawerHeader sx={{ backgroundColor: 'green' }}>
             <IconButton onClick={handleDrawerOpen}>
@@ -391,144 +372,88 @@ export default function SideNav() {
                 textDecoration: 'none',
                 opacity: open ? 1 : 0,
               }}
-              style={{ marginLeft: '10px' }}
             >
               QP FARMING
             </Typography>
           </DrawerHeader>
-          {/* <Divider /> */}
-          <List sx={{ backgroundColor: 'green', flexGrow: 1 }}>
-            <Box onClick={() => setSelected('dashboard')} sx={{ p: 2.4, display: open ? 'flex' : 'none', alignItems: 'center', justifyContent: 'center' }}>
-              <img src={logo} alt='pinyatamap logo' width='50%' />
+          <List sx={{ backgroundColor: 'green', flexGrow: 1, color: '#ffffff', height: '100vh', }}>
+            {/* Logo Section */}
+            <Box
+              onClick={() => setSelected('dashboard')}
+              sx={{
+                p: 2.4,
+                display: 'flex',
+                justifyContent: open ? 'center' : 'flex-start',
+                alignItems: 'center',
+                cursor: 'pointer',
+              }}
+            >
+              <img src={logo} alt="pinyatamap logo" width={open ? '50%' : '0'} />
             </Box>
-            <ListItem disablePadding onClick={() => setSelected('dashboard')} sx={selected === 'dashboard' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'dashboard' ? dashboardSelected : dashboard} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Dashboard' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('Farms')} sx={selected === 'Farms' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'Farms' ? landSelected : land} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Farms' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('timeline')} sx={selected === 'timeline' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={timelinepng} alt='timeline' style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Timeline' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('Distribution')} sx={selected === 'Distribution' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'Distribution' ? distriSelected : distribution} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Distribution' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('particular')} sx={selected === 'particular' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'particular' ? partiSelected : parti} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Particulars' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <ListItem disablePadding onClick={() => setSelected('access')} sx={selected === 'access' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : 'auto',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <img src={selected === 'access' ? accessSelected : access} style={{ width: 24 }} />
-                </ListItemIcon>
-                <ListItemText primary='Accounts' sx={{ opacity: open ? 1 : 0 }} />
-              </ListItemButton>
-            </ListItem>
-            <Divider sx={{ color: 'orange', border: 1 }} />
-            <ListItem disablePadding onClick={openLogoutModal} sx={selected === 'Logout' ? styles.isSelected : styles.notSelected}>
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? 'initial' : 'center',
-                  px: 2.5,
 
+            {/* Sidebar Items */}
+            {[
+              { name: 'Dashboard', icon: 'dashboard', selectedIcon: 'dashboardSelected' },
+              { name: 'Farms', icon: 'land', selectedIcon: 'landSelected' },
+              { name: 'Timeline', icon: 'timeline', selectedIcon: 'timelineSelected' },
+              { name: 'Distribution', icon: 'distribution', selectedIcon: 'distriSelected' },
+              { name: 'Particular', icon: 'parti', selectedIcon: 'partiSelected' },
+              { name: 'Accounts', icon: 'access', selectedIcon: 'accessSelected' },
+            ].map((item) => (
+              <ListItem
+                key={item.name}
+                disablePadding
+                onClick={() => setSelected(item.name.toLowerCase())}
+                sx={{
+                  backgroundColor: selected === item.name.toLowerCase() ? '#fff' : 'transparent',
+                  borderTopLeftRadius: '20px', borderBottomLeftRadius: '20px',
+                  color: selected === item.name.toLowerCase() ? 'black' : '#fff',
+                  '&:hover': {
+                    backgroundColor: selected === item.name.toLowerCase() ? '#b8e994' : '#b8e994', 
+                  },
+                  boxShadow: selected === item.name.toLowerCase() ? '0px 2px 6px rgba(0, 0, 0, 0.1)' : 'none',
+                }}
+              >
+                <ListItemButton
+                  sx={{
+                    minHeight: 48,
+                    justifyContent: open ? 'initial' : 'center',
+                    px: 2.5,
+                    borderRadius: '8px',
+                  }}
+                >
+                  <ListItemIcon
+                    sx={{
+                      minWidth: 0,
+                      mr: open ? 3 : 'auto',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img
+                      src={getIcon(selected === item.name.toLowerCase() ? item.selectedIcon : item.icon)}
+                      style={{ width: 24 }}
+                      alt={`${item.name} icon`}
+                    />
+                  </ListItemIcon>
+                  <ListItemText primary={item.name} sx={{ opacity: open ? 1 : 0 }} />
+                </ListItemButton>
+              </ListItem>
+            ))}
+
+            {/* Divider */}
+            <Divider sx={{ borderColor: '#f9a883', my: 1 }} />
+
+            {/* Logout */}
+            <ListItem disablePadding onClick={openLogoutModal}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? 'initial' : 'center',
+                  px: 2.5,
+                  borderRadius: '20px',
+                  '&:hover': {
+                    backgroundColor: '#f9a883',
+                  },
                 }}
               >
                 <ListItemIcon
@@ -538,9 +463,9 @@ export default function SideNav() {
                     justifyContent: 'center',
                   }}
                 >
-                  <LogoutIcon style={{ width: 24, color: 'orange' }} />
+                  <LogoutIcon style={{ width: 24, color: '#ffffff' }} />
                 </ListItemIcon>
-                <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary="Logout" sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
             </ListItem>
           </List>
@@ -550,9 +475,9 @@ export default function SideNav() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            {/* <DialogTitle id="alert-dialog-title">
+            <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }}  id="alert-dialog-title">
               {"Logout"}
-            </DialogTitle> */}
+            </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
                 Sigurado ka bang gusto mong mag-log out sa account na ito?
@@ -580,12 +505,12 @@ export default function SideNav() {
             : (
               <>
                 <Box component="main" sx={{ flexBox: 1, p: 1.5, pl: 0, width: 1, overflow: 'hidden', backgroundColor: 'green' }}>
-                  {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms.filter(f => f.cropStage !== 'complete')} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
-                  {selected === 'Farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
+                  {selected === 'dashboard' && <AdminHome setSelected={setSelected} farms={farms.filter(f => f.cropStage !== 'complete' && f.remarks !== 'failed')} events={events} users={users} roi={roi} farmer={farmerRow} pineappleData={pineappleData} />}
+                  {selected === 'farms' && particularRow && pineappleData ? <Farms farms={farms} events={events} users={users} particularData={particularRow} pineapple={pineappleData} /> : <></>}
                   {selected === 'particular' && particularRow && pineappleData ? <ProductPrices particularData={particularRow} pineappleData={pineappleData} /> : <></>}
-                  {selected === 'timeline' && <Timeline farms={farms.filter(f => f.cropStage !== 'complete')} events={events} users={users} setSelected={setSelected} />}
-                  {selected === 'access' && usersRow ? <Access usersRow={usersRow} /> : <></>}
-                  {selected === 'Distribution' && <Distribution farms={farms} roi={roi} />}
+                  {selected === 'timeline' && <Timeline farms={farms.filter(f => f.cropStage !== 'complete' && f.remarks !== 'failed')} events={events} users={users} setSelected={setSelected} />}
+                  {selected === 'accounts' && usersRow ? <Access usersRow={usersRow} /> : <></>}
+                  {selected === 'distribution' && <Distribution farms={farms} roi={roi} />}
                 </Box>
               </>
             )
@@ -600,7 +525,7 @@ export default function SideNav() {
         aria-describedby="alert-dialog-description"
         maxWidth="sm"
       >
-        <DialogTitle sx={{ backgroundColor: 'green', color: 'white' }} id="alert-dialog-title">
+        <DialogTitle sx={{ backgroundColor: '#52be80', color: 'white' }} id="alert-dialog-title">
           Session Time Out
         </DialogTitle>
         <DialogContent dividers>

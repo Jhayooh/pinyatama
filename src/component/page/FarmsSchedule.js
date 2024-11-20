@@ -52,9 +52,6 @@ function getObject(list, key, value) {
 }
 
 function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
-
-  console.log(isTimelinePage, 'pagggee');
-
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 

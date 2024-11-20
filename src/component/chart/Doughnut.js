@@ -83,7 +83,7 @@ function ExamplePieChart({ labels, data, title, unit='peso' }) {
               color: undefined,
               offsetY: 10,
               formatter: function (val) {
-                return unit === 'peso' ? formatter.format(val) : `${val.toLocaleString('en-US')}pcs`
+                return unit === 'peso' ? formatter.format(val) : `${parseInt(val).toLocaleString('en-US')} pcs`
               }
             },
             total: {
@@ -96,7 +96,7 @@ function ExamplePieChart({ labels, data, title, unit='peso' }) {
                 const total = w.globals.seriesTotals.reduce((a, b) => {
                   return a + b
                 })
-                return unit === 'peso' ? formatter.format(total) : `${total.toLocaleString('en-US')}pcs`
+                return unit === 'peso' ? formatter.format(total) : `${parseInt(total).toLocaleString('en-US')} pcs`
               }
             }
           }

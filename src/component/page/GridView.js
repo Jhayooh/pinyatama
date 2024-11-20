@@ -37,10 +37,10 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
             cursor: 'pointer',
             height: '100%',
             transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-              '&:hover': {
-                transform: 'scale(1.05)',
-                boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
-              },
+            '&:hover': {
+              transform: 'scale(1.05)',
+              boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.1)',
+            },
 
           }}
           onClick={() => {
@@ -70,6 +70,14 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
                 <Typography variant="caption" display="block" color="text.secondary">
                   {dateFormatter(marker.start_date)} - {dateFormatter(marker.harvest_date)}
                 </Typography>
+                <Typography variant="caption" display="block" color="text.secondary">
+                  {
+                    (marker.remarks
+                      ? marker.remarks.toUpperCase() :
+                      'SUCCESS')
+                  }
+                </Typography>
+
               </Box>
             </Box>
           </Box>
