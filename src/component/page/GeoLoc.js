@@ -14,7 +14,7 @@ import {
 // import { MapContainer, Marker, Polygon, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
-import './GeoLoc.css';
+import '../../component/css/GeoLoc.css';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet.heat';
 import 'leaflet.heat/dist/leaflet-heat.js';
@@ -29,7 +29,7 @@ import {
 const Geocollection = collection(db, "farms")
 
 const customIcon = new L.Icon({
-  iconUrl: require('./marker.png'),
+  iconUrl: require('../image_src/marker.png'),
   iconSize: [32, 32],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
@@ -456,7 +456,7 @@ const App = () => {
         style={{ height: '700px' }}
       >
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          //attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 

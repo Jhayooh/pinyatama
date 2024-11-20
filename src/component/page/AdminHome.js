@@ -3,8 +3,7 @@ import { Box, Button, Divider, Grid, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Pie from '../chart/Pie1';
 import SplineArea from '../chart/SplineArea';
-import './AdminHome.css';
-import '../css/AdminHome.css'
+import '../../component/css/AdminHome.css'
 import { Modal } from 'react-bootstrap';
 import GeoLoc from './GeoLoc';
 import Heatmap from './Heatmap';

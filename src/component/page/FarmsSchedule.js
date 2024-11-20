@@ -1,11 +1,11 @@
 import React, { useState, useRef, useEffect } from 'react'
 import Timeline, { CursorMarker, CustomMarker, DateHeader, SidebarHeader, TimelineHeaders, TimelineMarkers, TodayMarker } from 'react-calendar-timeline'
-import './FarmSchedule.css'
+import '../../component/css/FarmSchedule.css'
 import 'react-calendar-timeline/lib/Timeline.css'
 import moment from 'moment'
 import { getFirestore, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/Config'
-import './ripple.css'
+import '../../component/css/ripple.css'
 import Textfield from './Timeline'
 import { Box, Paper, Slide, Button, Typography, CircularProgress } from '@mui/material'
 import { useCollectionData } from 'react-firebase-hooks/firestore';
