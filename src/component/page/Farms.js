@@ -10,6 +10,13 @@ import { storage } from '../../firebase/Config.js';
 import { createTheme } from '@mui/material/styles';
 import { DataGrid } from '@mui/x-data-grid';
 
+//db
+
+import { addDoc, collection, doc, orderBy, query, updateDoc, Timestamp } from "firebase/firestore";
+import { db } from "../../firebase/Config";
+import { useCollectionData } from "react-firebase-hooks/firestore";
+
+
 import Importer from './Importer.js';
 import Exporter from './Exporter.js';
 import Archive from './Archive.js';
@@ -48,6 +55,10 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [archive, setArchive] = useState(false)
 
   const [grid, setGrid] = useState(true);
+
+  const activityColl = collection(db, `farms/${farms.id}/activities`)
+  const activityQuery = query(activityColl, orderBy('createdAt'))
+  const [activities, activitiesLoading] = useCollectionData(activityQuery)
 
   const theme = createTheme({
     palette: {
@@ -215,30 +226,43 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     },
     {
       field: 'remarks',
-      headerName: 'Remarks',//complete, pest, typhoon, flood
+      headerName: 'Remarks',
       flex: 1,
       sortable: true,
       renderCell: (params) => {
         const { cropStage, remarks } = params.row;
-
+        let status = '';
         if (cropStage === 'complete') {
-          return 'Success';
+          status = 'Success';
+        } else if (remarks === 'failed') {
+          status = 'Failed';
+        } else if (remarks === 'On going') {
+          status = 'On going';
+        } else {
+          status = remarks;
         }
-
-        if (remarks === 'failed') {
-          return 'Failed';
-        }
-
-        if (cropStage === cropStage || remarks === '') {
-          return 'On going';
-        }
-
-        return remarks;
-
+        const bgColor = {
+          Success: 'green',
+          Failed: 'red',
+          'On going': 'orange',
+        }[status] || 'transparent';
+        return (
+          <div
+            style={{
+              backgroundColor: bgColor,
+              color: '#fff',
+              padding: '5px',
+              borderRadius: '4px',
+              textAlign: 'center',
+            }}
+          >
+            {status}
+          </div>
+        );
       },
     }
-  ];
 
+  ];
   const datagridStyle = {
 
     paddingBottom: 0,
@@ -254,6 +278,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       zIndex: 1,
       backgroundColor: '#88C488'
     },
+
   }
 
   const [anchorEl, setAnchorEl] = useState('');
