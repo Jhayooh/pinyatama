@@ -9,6 +9,11 @@ import {
   Avatar
 } from '@mui/material';
 
+//db
+
+import { addDoc, collection, doc, orderBy, query, updateDoc, Timestamp } from "firebase/firestore";
+import { db } from "../../firebase/Config";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 //icon
 import CircularProgress from '@mui/material/CircularProgress';
@@ -25,6 +30,10 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
     setNewUser(user[0])
   }, [user])
 
+
+  const activityColl = collection(db, `farms/${marker.id}/activities`)
+  const activityQuery = query(activityColl, orderBy('createdAt'))
+  const [activities, activitiesLoading] = useCollectionData(activityQuery)
 
   return (
     <Grid container sx={{ width: { xs: '100%', sm: `calc(100%/2)`, md: `calc(100%/3)`, lg: `calc(100%/4)`, xl: `calc(100%/5)` } }}>
@@ -70,13 +79,14 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
                 <Typography variant="caption" display="block" color="text.secondary">
                   {dateFormatter(marker.start_date)} - {dateFormatter(marker.harvest_date)}
                 </Typography>
-                <Typography variant="caption" display="block" color="text.secondary">
-                  {
-                    (marker.remarks
-                      ? marker.remarks.toUpperCase() :
-                      'SUCCESS')
-                  }
+                <Typography
+                  variant="caption"
+                  display="block"
+                  color={marker.remarks ? (marker.remarks === 'failed' ? 'red' : 'orange') : 'green'}
+                >
+                  {marker.remarks ? marker.remarks.toUpperCase() : 'SUCCESS'}
                 </Typography>
+
 
               </Box>
             </Box>
