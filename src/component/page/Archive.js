@@ -25,7 +25,7 @@ const Archive = ({ events, farms, users, particularData, pineapple }) => {
         aria-describedby="modal-modal-description"
       >
         <Box sx={modalStyle}>
-          <Farms farms={farms.filter(f=>f.cropStage.toLowerCase() === 'complete')} events={events} users={users} particularData={particularData} pineapple={pineapple}/>
+          <Farms farms={farms.filter(f=>f.cropStage.toLowerCase() === 'complete' || 'failed')} events={events} users={users} particularData={particularData} pineapple={pineapple}/>
         </Box>
 
       </Modal>

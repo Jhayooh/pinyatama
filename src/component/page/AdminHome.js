@@ -441,9 +441,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             <GeoLoc famrs={farms} />
           </Box>
         </Grid>
-
       </Grid>
-
     </Box >
   );
 }
