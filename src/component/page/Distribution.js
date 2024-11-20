@@ -21,7 +21,8 @@ import {
   DialogActions,
   Alert,
   Tooltip,
-  AlertTitle
+  AlertTitle,
+  Autocomplete
 } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -57,10 +58,13 @@ export default function Distribution({ farms, roi }) {
   const [saving, setSaving] = useState(false)
   const [open, setOpen] = useState(false)
   const [openError, setOpenError] = useState(false)
-  const [alert, setAlert] = useState({ show: false })
+  const [downloadReport, setDownloadReport] = useState(false)
+  const [value, setValue] = useState(null)
 
   const distributionColl = collection(db, '/distributions')
-  const [distributions] = useCollectionData(distributionColl)
+  const [distributions, distributionLoading] = useCollectionData(distributionColl)
+
+  const [reportSelection, setReportSelection] = useState(null)
 
   function dateFormatter(date) {
     const d = new Date(date)
@@ -81,15 +85,18 @@ export default function Distribution({ farms, roi }) {
     }, 0);
   };
 
-  const exportExcel = async () => {
+  const exportExcel = async (reportSelectionDate) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Harvest Schedule');
     
-    const year = 2026;  // Replace with dynamic year if needed
-    const month = 4;  // Replace with dynamic month if needed
-    const currentDate = new Date(year, month);
+    const currentDate = new Date(reportSelectionDate);
+    const year = currentDate.getFullYear();  // Replace with dynamic year if needed
+    const month = currentDate.getMonth();  // Replace with dynamic month if needed
     const daysInMonth = new Date(year, month + 1, 0).getDate();
-  
+
+    console.log("year", year);
+    console.log("month", month);
+
     // Title Setup with line breaks
     const title = [
       'Republic of the Philippines',
@@ -101,18 +108,18 @@ export default function Distribution({ farms, roi }) {
         month: 'long',
       }).toUpperCase()} ${year}`,
     ];
-  
+
     const totalColumns = 5 + daysInMonth + 1; // First 5 columns + day columns + Total column
-  
+
     // Merge the first row for title and insert line breaks
     worksheet.mergeCells(1, 1, 1, totalColumns);  // Merge the entire first row
     worksheet.getCell(1, 1).value = title.join('\n'); // Join the title lines with line breaks
     worksheet.getCell(1, 1).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }; // Enable text wrapping
     worksheet.getCell(1, 1).font = { bold: true, size: 12 };
-  
+
     // Set custom row height for the first row to show all content
     worksheet.getRow(1).height = 90;  // Adjust the height as needed (increase if content doesn't fit)
-  
+
     // Headers
     const headers = [
       'Name of farmers',
@@ -121,7 +128,7 @@ export default function Distribution({ farms, roi }) {
       'Area',
       'Planting date',
     ];
-  
+
     headers.forEach((header, index) => {
       const colIndex = index + 1;
       worksheet.mergeCells(2, colIndex, 3, colIndex); // Merge 2nd and 3rd rows for headers
@@ -130,7 +137,7 @@ export default function Distribution({ farms, roi }) {
         vertical: 'middle',
         horizontal: 'center',
       };
-  
+
       // Set width for specific columns
       if (header === 'Name of farmers') worksheet.getColumn(colIndex).width = 20;
       if (header === 'Barangay') worksheet.getColumn(colIndex).width = 15;
@@ -138,7 +145,7 @@ export default function Distribution({ farms, roi }) {
       if (header === 'Area') worksheet.getColumn(colIndex).width = 10;
       if (header === 'Planting date') worksheet.getColumn(colIndex).width = 15;
     });
-  
+
     // Days of the month
     const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     for (let day = 1; day <= daysInMonth; day++) {
@@ -156,7 +163,7 @@ export default function Distribution({ farms, roi }) {
         horizontal: 'center',
       };
     }
-  
+
     // Add "Total" column
     const totalColIndex = headers.length + daysInMonth + 1;
     worksheet.mergeCells(2, totalColIndex, 3, totalColIndex);
@@ -165,7 +172,7 @@ export default function Distribution({ farms, roi }) {
       vertical: 'middle',
       horizontal: 'center',
     };
-  
+
     // Filter Farms and Map Data
     const filteredFarms = farms.filter((farm) =>
       distributions.some((dist) => {
@@ -173,11 +180,11 @@ export default function Distribution({ farms, roi }) {
         return dist.id === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
       })
     );
-  
+
     let rowIndex = 4;  // Start from row 4 (after merged title and header rows)
     let totalArea = 0;
     let totalOfTotal = 0;
-  
+
     filteredFarms.forEach((farm) => {
       const farmDistributions = distributions.filter((dist) => {
         const distDate = new Date(dist.date);
@@ -188,7 +195,7 @@ export default function Distribution({ farms, roi }) {
       worksheet.getCell(rowIndex, 3).value = farm.mun;
       worksheet.getCell(rowIndex, 4).value = parseFloat(farm.area);
       worksheet.getCell(rowIndex, 5).value = dateFormatter(farm.start_date.toDate());
-  
+
       let total = 0;
       farmDistributions.forEach((dist) => {
         const distDate = new Date(dist.date);
@@ -196,16 +203,16 @@ export default function Distribution({ farms, roi }) {
         worksheet.getCell(rowIndex, colIndex).value = dist.actual;
         total += dist.actual;
       });
-  
+
       worksheet.getCell(rowIndex, totalColIndex).value = total;
-  
+
       // Update total values
       totalArea += parseFloat(farm.area);
       totalOfTotal += total;
-  
+
       rowIndex++;
     });
-  
+
     // Add last row with total Area and Total sum
     worksheet.getCell(rowIndex, 1).value = 'TOTAL';
     worksheet.getCell(rowIndex, 4).value = totalArea;  // Sum of Area column
@@ -213,13 +220,13 @@ export default function Distribution({ farms, roi }) {
     worksheet.getCell(rowIndex, 1).alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell(rowIndex, 4).alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell(rowIndex, totalColIndex).alignment = { vertical: 'middle', horizontal: 'center' };
-  
+
     // Save the Excel file
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     saveAs(blob, `Harvest_Schedule_${year}_${month + 1}.xlsx`);
   };
-  
+
   useEffect(() => {
     if (!farms) return
     const filterFarmsByDate = farms
@@ -254,6 +261,7 @@ export default function Distribution({ farms, roi }) {
   const handleClose = () => {
     setOpen(false)
     setOpenError(false)
+    setDownloadReport(false)
   }
 
   const distribute = () => {
@@ -286,6 +294,40 @@ export default function Distribution({ farms, roi }) {
     return Math.floor(Math.random() * Date.now())
   }
 
+  const monthYear = (dateStr) => {
+    const date = new Date(dateStr);
+    const options = { year: 'numeric', month: 'long' };
+    return date.toLocaleDateString('en-US', options); // Returns "November 2024", for example
+  };
+
+  useEffect(() => {
+    if (!distributions) return
+
+    const reducedData = distributions.reduce((acc, current) => {
+      // Format the date to "Month Year"
+      const formattedDate = monthYear(current.date);
+
+      // Check if the formatted date already exists in the accumulator
+      const existing = acc.find(item => item.label === formattedDate);
+
+      if (!existing) {
+        // If the formatted date doesn't exist, add the current object
+        acc.push({
+          id: current.id, // Take the id from the first object with that month-year
+          label: formattedDate,
+        });
+      } else {
+        // If it exists, merge the data (sum the values in this case)
+        existing.value += current.value;
+      }
+
+      return acc;
+    }, []);
+
+    setReportSelection(reducedData)
+
+  }, [distributions])
+
 
   const saveDistribution = async () => {
     setSaving(true)
@@ -305,8 +347,6 @@ export default function Distribution({ farms, roi }) {
       console.log("error pag save: ", error);
 
     }
-
-
   }
 
   const datagridStyle = {
@@ -324,16 +364,6 @@ export default function Distribution({ farms, roi }) {
       backgroundColor: '#88C488'
     },
   };
-
-  const checkActual = () => {
-    const zeroActual = localFarms.some(farm => farm.actual === 0)
-    if (zeroActual) {
-      setOpenError(true)
-      return
-    }
-
-    setOpen(true)
-  }
 
   const handleEditCellChange = (params) => {
     const updatedActualDistribution = [...actualDistribution];
@@ -478,8 +508,8 @@ export default function Distribution({ farms, roi }) {
                 marginBottom: 4,
                 gap: 4
               }}>
-                <Button variant="outlined" onClick={() => exportExcel(selectedDate)} >
-                  Download report
+                <Button variant="outlined" disabled={distributionLoading} onClick={() => setDownloadReport(true)} >
+                  {distributionLoading ? 'Waiting...' : 'Download report'}
                 </Button>
                 <Button variant="contained" onClick={() => setOpen(true)}>
                   Save
@@ -561,58 +591,35 @@ export default function Distribution({ farms, roi }) {
           <Button variant='outlined' onClick={handleClose}>Close</Button>
         </DialogActions>
       </Dialog>
+      <Modal open={downloadReport} onClose={handleClose} aria-labelledby="edit-row-modal">
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            borderRadius: '5px',
+            boxShadow: 24,
+            p: 1,
+            width: 380,
+          }}
+        >
+          <Autocomplete
+            value={value}
+            onChange={(event, newValue) => {
+              setValue(newValue);
+            }}
+            disablePortal
+            options={reportSelection}
+            sx={{ width: '100%' }}
+            renderInput={(params) => <TextField {...params} label="Reports" />}
+          />
+          <Button variant='contained' onClick={()=>exportExcel(value.label)}>
+            Download
+          </Button>
+        </Box>
+      </Modal>
     </>
-    // <Box sx={{ backgroundColor: '#f9fafb', padding: 3, borderRadius: 4, minHeight: '100%' }}>
-    //   <Typography variant="h6">Select Date</Typography>
-    //   <LocalizationProvider dateAdapter={AdapterDayjs}>
-    //     <DatePicker
-    //       value={selectedDate}
-    //       onChange={(newValue) => setSelectedDate(newValue)}
-    //       renderInput={(params) => <TextField {...params} />}
-    //     />
-    //   </LocalizationProvider>
-    //   <Typography variant="h6">Enter Total Distribution (limit to {totalGrossReturn})</Typography>
-    //   <OutlinedInput
-    //     type="number"
-    //     onChange={(e) => {
-    //       const value = Math.min(e.target.value, totalGrossReturn);
-    //       setInputText(value);
-    //     }}
-    //     value={inputText}
-    //     fullWidth
-    //     inputProps={{
-    //       max: totalGrossReturn,
-    //     }}
-    //   />
-
-    //   <Button variant="contained" color="primary" onClick={distributeResources}>
-    //     Distribute
-    //   </Button>
-    //   <Box sx={{ height: 400, width: '100%', marginTop: 4 }}>
-    //     <DataGrid
-    //       rows={localFarms}
-    //       columns={columns}
-    //       disableSelectionOnClick
-    //       sx={{
-    //         ...datagridStyle,
-    //         border: 'none',
-    //         paddingX: 2,
-    //         overflowX: 'auto',
-    //         height: `calc(100% - 8px)`,
-    //         backgroundColor: '#fff',
-    //         paddingTop: 1,
-    //         boxShadow: 2
-    //       }}
-    //       onCellEditCommit={handleEditCellChange}
-    //       getRowClassName={(rows) => 
-    //         rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-    //       }
-    //       hideFooter
-    //     />
-    //   </Box>
-    //   <Button variant="contained" color="secondary">
-    //     Save Distribution
-    //   </Button>
-    // </Box>
   );
 }
