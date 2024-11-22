@@ -51,7 +51,7 @@ function getObject(list, key, value) {
   })
 }
 
-function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
+function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {  
   const [clicked, setClicked] = useState({})
   const containerRef = useRef(null);
 
@@ -135,80 +135,75 @@ function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
     )
   }
 
-  const sideDetails = (
-    <Box sx={{ minWidth: 380, p: 2, pt: 3, borderRadius: 3, zIndex: 9999, boxShadow: '-48px 0px 29px -7px rgba(0,0,0,0.1)' }}>
-      {/* lagay closing */}
-      <h2>Phase details</h2>
-      <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p>No activity</p>
-      </div>
-    </Box>
-  )
-
   return (
-    <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .92)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
-      <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100%)', flex: 1 }}>
-        <Timeline
-          keys={keys}
-          groups={farms.map(f => ({
-            ...f,
-            stackItems: true,
-            canMove: false
-          }))}
-          onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
-          onItemDeselect={() => (setClicked({}))}
-          itemRenderer={itemRender}
-          items={events.sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())}
-          lineHeight={35}
-          sidebarContent={<div>QP Farms</div>}
-          defaultTimeStart={moment().add(-2, 'month')}
-          defaultTimeEnd={moment().add(9, 'month')}
-          maxZoom={1.5 * 365.24 * 86400 * 1000}
-          minZoom={1.24 * 86400 * 1000 * 7 * 3}
-          // fullUpdate
-          itemTouchSendsClick={false}
-          stackItems={true}
-          itemHeightRatio={0.75}
-          showCursorLine
-          canMove={false}
-        >
-          <TimelineMarkers>
-            <CursorMarker >
-              {({ styles, date }) =>
-                // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
-                <div style={{ ...styles, backgroundColor: '#22b14c' }} >
-                  <Paper elevation={3} className='date-hover' sx={{
-                    position: 'absolute',
-                    left: '-40',
-                    width: 80,
-                    p: 1,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: '#ffb550',
-                    color: '#fff'
-                  }}>
-                    {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
-                  </Paper>
-                </div>
-              }
-            </CursorMarker>
-            <TodayMarker>
-              {({ styles, date }) =>
-                <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
-              }
-            </TodayMarker>
-          </TimelineMarkers>
-          <TimelineHeaders className='timeline-header'>
-            <SidebarHeader >
-              {({ getRootProps }) => {
-                return <h3 {...getRootProps()}>Mga Sakahan</h3>
-              }}
-            </SidebarHeader>
-            <DateHeader sticky unit="primaryHeader" />
-            <DateHeader sticky />
-          </TimelineHeaders>
-        </Timeline >
-        {/* <Timeline
+    <>
+
+      {!events
+        ? <CircularProgress />
+        :
+        <Box sx={{ display: 'flex', pl: 2, maxHeight: 'calc(100% * .92)', flexDirection: { xs: 'column', md: clicked ? 'row' : 'column' } }} ref={containerRef} >
+          <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100%)', flex: 1 }}>
+            <Timeline
+              keys={keys}
+              groups={farms.map(f => ({
+                ...f,
+                stackItems: true,
+                canMove: false
+              }))}
+              onItemSelect={(item) => (setClicked(getObject(events, "id", item)))}
+              onItemDeselect={() => (setClicked({}))}
+              itemRenderer={itemRender}
+              items={events.sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())}
+              lineHeight={35}
+              sidebarContent={<div>QP Farms</div>}
+              defaultTimeStart={moment().add(-2, 'month')}
+              defaultTimeEnd={moment().add(9, 'month')}
+              maxZoom={1.5 * 365.24 * 86400 * 1000}
+              minZoom={1.24 * 86400 * 1000 * 7 * 3}
+              // fullUpdate
+              itemTouchSendsClick={false}
+              stackItems={true}
+              itemHeightRatio={0.75}
+              showCursorLine
+              canMove={false}
+            >
+              <TimelineMarkers>
+                <CursorMarker >
+                  {({ styles, date }) =>
+                    // e.g. styles = {...styles, backgroundColor: isDateInAfternoon(date) ? 'red' : 'limegreen'}
+                    <div style={{ ...styles, backgroundColor: '#22b14c' }} >
+                      <Paper elevation={3} className='date-hover' sx={{
+                        position: 'absolute',
+                        left: '-40',
+                        width: 80,
+                        p: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        background: '#ffb550',
+                        color: '#fff'
+                      }}>
+                        {new Date(date).toLocaleDateString('en-US', { month: 'short', day: '2-digit' })}
+                      </Paper>
+                    </div>
+                  }
+                </CursorMarker>
+                <TodayMarker>
+                  {({ styles, date }) =>
+                    <div style={{ ...styles, width: '0.3rem', backgroundColor: 'rgba(255,0,0,0.5)' }} />
+                  }
+                </TodayMarker>
+              </TimelineMarkers>
+              <TimelineHeaders className='timeline-header'>
+                <SidebarHeader >
+                  {({ getRootProps }) => {
+                    return <h3 {...getRootProps()}>Mga Sakahan</h3>
+                  }}
+                </SidebarHeader>
+                <DateHeader sticky unit="primaryHeader" />
+                <DateHeader sticky />
+              </TimelineHeaders>
+            </Timeline >
+            {/* <Timeline
           groups={farms}
           itemRenderer={itemRender}
           items={events.sort((a, b) => a.createdAt.toDate() - b.createdAt.toDate())}
@@ -217,13 +212,15 @@ function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
           defaultTimeStart={moment().add(-20, "year")}
           defaultTimeEnd={moment()}
         /> */}
-      </Box >
-      {isTimelinePage && Object.keys(clicked).length !== 0 && (
-        <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
-          <SideDetails farm={farmClicked} setClicked={setClicked} eventClicked={clicked} setSelected={setSelected} farmer={farmerClicked} />
+          </Box >
+          {isTimelinePage && Object.keys(clicked).length !== 0 && (
+            <Box sx={{ flex: { md: '0 0 380px' }, pl: 1 }}>
+              <SideDetails farm={farmClicked} setClicked={setClicked} eventClicked={clicked} setSelected={setSelected} farmer={farmerClicked} />
+            </Box>
+          )}
         </Box>
-      )}
-    </Box>
+      }
+    </>
   )
 }
 

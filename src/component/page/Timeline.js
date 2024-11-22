@@ -11,7 +11,8 @@ import {
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
-
+import { db } from '../../firebase/Config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function Timeline({ farms, events, users, setSelected, farmer }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
@@ -37,6 +38,30 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
     const handleUser = (event) => {
         setUserFilter(event.target.value)
     };
+
+    useEffect(() => {
+        if (!farms) return;
+
+        const fetchEvents = async () => {
+            const eventsPromises = farms.map(async (farm) => {
+              const eventsRef = collection(db, `farms/${farm.id}/events`);
+              const eventsSnapshot = await getDocs(eventsRef);
+              const eventsData = eventsSnapshot.docs.map((doc) => ({
+                ...doc.data(),
+                start_time: doc.data().start_time.toMillis(),
+                end_time: doc.data().end_time.toMillis()
+              }));
+              return eventsData;
+            });
+            const allEvents = await Promise.all(eventsPromises);
+            setTimelineEvents(allEvents.flat());
+          };
+
+        // Execute the async function
+        fetchEvents();
+    }, [farms]);
+
+
 
     useEffect(() => {
         const filteredFarms = farms.filter((farm) => {
@@ -84,15 +109,15 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
         { value: 11, label: 'December' }
     ];
 
-    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; 
+    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     return (
         <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
             <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap:1 }}>
-                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+                <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                         {/* Municipality  */}
                         <Box sx={{ width: '100%' }}>
                             <FormControl fullWidth size="small">
@@ -139,7 +164,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                             </FormControl>
                         </Box>
                     </Box>
-                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
+                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                         {/* Month & Year */}
                         {/* <Box
                             sx={{
@@ -249,7 +274,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         >
                         </Box>
                         <Typography variant="subtitle2">
-                           Aktuwal na Iskedyul
+                            Aktuwal na Iskedyul
                         </Typography>
                     </Box>
                 </Box>

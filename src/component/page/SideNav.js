@@ -230,26 +230,19 @@ export default function SideNav() {
       }
 
       for (const farm of farms) {
-        // console.log(`Processing farm: ${farm.id}, crop: ${farm.crop}`); // Log the farm and its crop status
-
         if (farm.crop) {
-          // console.log(`Skipping farm: ${farm.id} because crop is true`);
           continue;
         }
-
-        // console.log(`Not skipping: ${farm.id} because crop is false`);
 
         const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
         const farmEventsSnapshot = await getDocs(farmEventsColl);
         const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
-        console.log("farmEvents:", farmEvents);
 
         const farmStage = farm.cropStage
 
-
         const cropstage = new Date();
         let newCropstage = '';
-        let newRemarks ='';
+        let newRemarks = '';
 
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
@@ -263,16 +256,15 @@ export default function SideNav() {
           newCropstage = 'fruiting';
         } else {
           newCropstage = 'complete';
-          newRemarks='success'
+          newRemarks = 'success'
         }
 
         if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
           await updateDoc(doc(db, `/farms/${farm.id}`), {
             cropStage: newCropstage,
-            remarks:newRemarks
+            remarks: newRemarks
           });
         }
-        console.log("updated farm=======>>>", farm.id)
       }
     };
 
@@ -349,7 +341,7 @@ export default function SideNav() {
   };
 
   const getIcon = (iconName) => {
-    return icons[iconName] ;
+    return icons[iconName];
   };
 
   return (
@@ -412,7 +404,7 @@ export default function SideNav() {
                   borderTopLeftRadius: '20px', borderBottomLeftRadius: '20px',
                   color: selected === item.name.toLowerCase() ? 'black' : '#fff',
                   '&:hover': {
-                    backgroundColor: selected === item.name.toLowerCase() ? '#b8e994' : '#b8e994', 
+                    backgroundColor: selected === item.name.toLowerCase() ? '#b8e994' : '#b8e994',
                   },
                   boxShadow: selected === item.name.toLowerCase() ? '0px 2px 6px rgba(0, 0, 0, 0.1)' : 'none',
                 }}
@@ -478,7 +470,7 @@ export default function SideNav() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }}  id="alert-dialog-title">
+            <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }} id="alert-dialog-title">
               {"Logout"}
             </DialogTitle>
             <DialogContent>

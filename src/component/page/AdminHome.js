@@ -178,7 +178,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
               },
             }}
-            onClick={() => setSelected('Farms')}
+            onClick={() => setSelected('farms')}
           >
             <Box
               sx={{
@@ -227,7 +227,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
               },
             }}
-            onClick={() => setSelected('Distribution')}
+            onClick={() => setSelected('distribution')}
           >
             <Box
               sx={{
@@ -280,7 +280,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
               },
             }}
-            onClick={() => setSelected('Farms')}
+            onClick={() => setSelected('farms')}
           >
             <Box
               sx={{
@@ -333,7 +333,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
               },
             }}
-            onClick={() => setSelected('access')}
+            onClick={() => setSelected('accounts')}
           >
             <Box
               sx={{

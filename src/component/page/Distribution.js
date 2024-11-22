@@ -33,7 +33,7 @@ import * as XLSX from 'xlsx';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Pie from '../chart/Pie1';
-import { addDoc, collection, updateDoc } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 
@@ -57,7 +57,7 @@ export default function Distribution({ farms, roi }) {
 
   const [saving, setSaving] = useState(false)
   const [open, setOpen] = useState(false)
-  const [openError, setOpenError] = useState(false)
+  const [openError, setOpenError] = useState({ show: false })
   const [downloadReport, setDownloadReport] = useState(false)
   const [value, setValue] = useState(null)
 
@@ -71,33 +71,21 @@ export default function Distribution({ farms, roi }) {
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   }
 
-  const getPercentage = (num1, num2) => {
-    if (num2 === 0) return 0; // Prevent division by zero
-    return Math.round((num1 / num2) * 100);
-  };
-
-  const calculateGrossReturn = (filteredFarms) => {
-    return filteredFarms.reduce((sum, farm) => {
-      const roiSum = farm.roi
-        .filter(roi => roi.type === 'p')
-        .reduce((roiSum, roi) => roiSum + roi.grossReturn, 0);
-      return sum + roiSum;
-    }, 0);
+  const getPercentage = (num1, num2, decimalPlaces = 10) => {
+    if (num2 === 0) return 0;
+    const percentage = (num1 / num2) * 100;
+    return +percentage;
   };
 
   const exportExcel = async (reportSelectionDate) => {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Harvest Schedule');
-    
+
     const currentDate = new Date(reportSelectionDate);
-    const year = currentDate.getFullYear();  // Replace with dynamic year if needed
-    const month = currentDate.getMonth();  // Replace with dynamic month if needed
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-    console.log("year", year);
-    console.log("month", month);
-
-    // Title Setup with line breaks
     const title = [
       'Republic of the Philippines',
       'Province of Camarines Norte',
@@ -109,16 +97,14 @@ export default function Distribution({ farms, roi }) {
       }).toUpperCase()} ${year}`,
     ];
 
-    const totalColumns = 5 + daysInMonth + 1; // First 5 columns + day columns + Total column
+    const totalColumns = 5 + daysInMonth + 1;
 
-    // Merge the first row for title and insert line breaks
-    worksheet.mergeCells(1, 1, 1, totalColumns);  // Merge the entire first row
-    worksheet.getCell(1, 1).value = title.join('\n'); // Join the title lines with line breaks
-    worksheet.getCell(1, 1).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true }; // Enable text wrapping
+    // Title Row (merged and centered)
+    worksheet.mergeCells(1, 1, 1, totalColumns);
+    worksheet.getCell(1, 1).value = title.join('\n');
+    worksheet.getCell(1, 1).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
     worksheet.getCell(1, 1).font = { bold: true, size: 12 };
-
-    // Set custom row height for the first row to show all content
-    worksheet.getRow(1).height = 90;  // Adjust the height as needed (increase if content doesn't fit)
+    worksheet.getRow(1).height = 90;
 
     // Headers
     const headers = [
@@ -152,15 +138,25 @@ export default function Distribution({ farms, roi }) {
       const date = new Date(year, month, day);
       const dayOfWeek = date.getDay();
       const colIndex = day + headers.length;
+
+      // Add day letters (e.g., M, T, W) and day numbers
       worksheet.getCell(2, colIndex).value = dayNames[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
       worksheet.getCell(3, colIndex).value = day;
-      worksheet.getCell(2, colIndex).alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
+
+      // Apply center alignment for day headers
+      worksheet.getCell(2, colIndex).alignment = { vertical: 'middle', horizontal: 'center' };
+      worksheet.getCell(3, colIndex).alignment = { vertical: 'middle', horizontal: 'center' };
+
+      // Highlight day letter and day number with grayish color
+      worksheet.getCell(2, colIndex).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'B4B8B4' }, // Grayish color
       };
-      worksheet.getCell(3, colIndex).alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
+      worksheet.getCell(3, colIndex).fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'B4B8B4' }, // Grayish color
       };
     }
 
@@ -173,23 +169,37 @@ export default function Distribution({ farms, roi }) {
       horizontal: 'center',
     };
 
+    // Aggregate distributions by id and dayOfHarvest
+    const aggregatedDistributions = distributions.reduce((acc, dist) => {
+      const distKey = `${dist.farmId}-${new Date(dist.dayOfHarvest.toDate()).getTime()}`;
+      if (!acc[distKey]) {
+        acc[distKey] = { ...dist };
+      } else {
+        acc[distKey].actual += dist.actual;
+      }
+      return acc;
+    }, {});
+
+    const aggregatedDistributionsArray = Object.values(aggregatedDistributions);
+
     // Filter Farms and Map Data
     const filteredFarms = farms.filter((farm) =>
-      distributions.some((dist) => {
-        const distDate = new Date(dist.date);
-        return dist.id === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
+      aggregatedDistributionsArray.some((dist) => {
+        const distDate = new Date(dist.dayOfHarvest.toDate());
+        return dist.farmId === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
       })
     );
 
-    let rowIndex = 4;  // Start from row 4 (after merged title and header rows)
+    let rowIndex = 4; // Start from row 4 (after merged title and header rows)
     let totalArea = 0;
     let totalOfTotal = 0;
 
     filteredFarms.forEach((farm) => {
-      const farmDistributions = distributions.filter((dist) => {
-        const distDate = new Date(dist.date);
-        return dist.id === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
+      const farmDistributions = aggregatedDistributionsArray.filter((dist) => {
+        const distDate = new Date(dist.dayOfHarvest.toDate());
+        return dist.farmId === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
       });
+
       worksheet.getCell(rowIndex, 1).value = farm.farmerName;
       worksheet.getCell(rowIndex, 2).value = farm.brgy;
       worksheet.getCell(rowIndex, 3).value = farm.mun;
@@ -198,7 +208,7 @@ export default function Distribution({ farms, roi }) {
 
       let total = 0;
       farmDistributions.forEach((dist) => {
-        const distDate = new Date(dist.date);
+        const distDate = new Date(dist.dayOfHarvest.toDate());
         const colIndex = headers.length + distDate.getDate();
         worksheet.getCell(rowIndex, colIndex).value = dist.actual;
         total += dist.actual;
@@ -213,15 +223,46 @@ export default function Distribution({ farms, roi }) {
       rowIndex++;
     });
 
-    // Add last row with total Area and Total sum
+    // Add last row with total Area and Total sum, and apply yellow highlighting
     worksheet.getCell(rowIndex, 1).value = 'TOTAL';
-    worksheet.getCell(rowIndex, 4).value = totalArea;  // Sum of Area column
-    worksheet.getCell(rowIndex, totalColIndex).value = totalOfTotal;  // Sum of Total column
+    worksheet.getCell(rowIndex, 4).value = totalArea; // Sum of Area column
+    worksheet.getCell(rowIndex, totalColIndex).value = totalOfTotal; // Sum of Total column
+
+    // Apply yellow highlight and borders for the total row
+    worksheet.getCell(rowIndex, 1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' }, // Yellow highlight
+    };
+    worksheet.getCell(rowIndex, 4).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' },
+    };
+    worksheet.getCell(rowIndex, totalColIndex).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' },
+    };
+
     worksheet.getCell(rowIndex, 1).alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell(rowIndex, 4).alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getCell(rowIndex, totalColIndex).alignment = { vertical: 'middle', horizontal: 'center' };
 
-    // Save the Excel file
+
+    worksheet.eachRow({ includeEmpty: true }, (row) => {
+      row.eachCell({ includeEmpty: true }, (cell) => {
+        if (!(cell.row === 1 && cell.col === 1)) {
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            right: { style: 'thin' },
+            bottom: { style: 'thin' },
+          };
+        }
+      });
+    });
+
     const buffer = await workbook.xlsx.writeBuffer();
     const blob = new Blob([buffer], { type: 'application/octet-stream' });
     saveAs(blob, `Harvest_Schedule_${year}_${month + 1}.xlsx`);
@@ -229,63 +270,120 @@ export default function Distribution({ farms, roi }) {
 
   useEffect(() => {
     if (!farms) return
+    setInputText(0)
     const filterFarmsByDate = farms
       .filter(farm =>
         farm.cropStage !== 'complete' && farm.remarks !== 'failed'
       )
-      .filter(farm => {
-        const harvestDate = dayjs(farm.harvest_date.toDate())
-        return harvestDate.isAfter(startOfWeek) && harvestDate.isBefore(endOfWeek)
+      .flatMap(farm => {
+        if (!farm.batches || farm.batches.length === 0) {
+          return [{
+            ...farm,
+            grossReturn: farm.roi.find(fr => fr.type === 'a').grossReturn - (farm.commit || 0),
+          }];
+        }
+
+        return farm.batches.map(batch => ({
+          ...farm,
+          title: `${farm.title} (Batch ${batch.index})`,
+          batchId: batch.index,
+          harvest_date: batch.harvestDate,
+          grossReturn: batch.plantSize - (batch.commit || 0), // Set grossReturn to batch.plantSize
+        }));
       })
-      .map(f => ({
-        ...f,
-        grossReturn: f.roi.find(fr => fr.type === 'p').grossReturn
-      }))
+      .filter(farm => {
+        const harvestDate = dayjs(farm.harvest_date.toDate());
+        return harvestDate.isAfter(startOfWeek) && harvestDate.isBefore(endOfWeek) && farm.grossReturn !== 0;
+      })
 
-    const theTotalGrossReturn = calculateGrossReturn(filterFarmsByDate)
+    const theTotalGrossReturn = filterFarmsByDate.reduce((sum, farm) => sum + (farm.grossReturn || 0), 0)
 
-    const locFarms = filterFarmsByDate.map(filFarm => ({
-      id: filFarm.id,
-      date: dateFormatter(filFarm.harvest_date.toDate()),
-      farm: filFarm.title,
-      production: filFarm.grossReturn,
-      percentage: getPercentage(filFarm.grossReturn, totalGrossReturn),
-      suggested: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
-      actual: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100))
-    }))
-
+    const locFarms = filterFarmsByDate.map(filFarm => {
+      const percentage = getPercentage(filFarm.grossReturn, totalGrossReturn);
+      const allocation = Math.round(inputText * (percentage / 100));
+      return {
+        farmId: filFarm.id,
+        id: filFarm.batchId ? filFarm.batchId + filFarm.id : filFarm.id,
+        batchId: filFarm.batchId || null,
+        date: dateFormatter(filFarm.harvest_date.toDate()),
+        farm: filFarm.title,
+        production: filFarm.grossReturn,
+        percentage: percentage.toFixed(2),
+        suggested: allocation,
+        actual: allocation
+      }
+    })
     setLocalFarms(locFarms)
     setTotalGrossReturn(theTotalGrossReturn)
-  }, [selectedDate])
+  }, [selectedDate, farms])
 
   const handleClose = () => {
     setOpen(false)
-    setOpenError(false)
+    setOpenError((prev) => ({ ...prev, show: false }));
     setDownloadReport(false)
   }
 
   const distribute = () => {
-    const filterFarmsByDate = farms
-      .filter(farm => {
-        const harvestDate = dayjs(farm.harvest_date.toDate())
-        return harvestDate.isAfter(startOfWeek) && harvestDate.isBefore(endOfWeek)
+    if (!localFarms || !localFarms.length > 0) {
+      setOpenError({
+        show: true,
+        title: 'No Farms Found',
+        content: 'No Farms found to distribute.'
       })
-      .map(f => ({
-        ...f,
-        grossReturn: f.roi.find(fr => fr.type === 'p').grossReturn
-      }))
+      return
+    }
 
-    const theTotalGrossReturn = calculateGrossReturn(filterFarmsByDate)
+    if (!inputText) {
+      setOpenError({
+        show: true,
+        title: 'Invalid Input Value',
+        content: 'The total production to distribute is not a valid number'
+      })
+      return
+    }
 
-    const locFarms = filterFarmsByDate.map(filFarm => ({
-      id: filFarm.id,
-      date: dateFormatter(filFarm.harvest_date.toDate()),
-      farm: filFarm.title,
-      production: filFarm.grossReturn,
-      percentage: getPercentage(filFarm.grossReturn, totalGrossReturn),
-      suggested: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
-      actual: Math.round((inputText * getPercentage(filFarm.grossReturn, totalGrossReturn) / 100)),
-    }))
+    const filterFarmsByDate = farms
+      .filter(farm =>
+        farm.cropStage !== 'complete' && farm.remarks !== 'failed'
+      )
+      .flatMap(farm => {
+        if (!farm.batches || farm.batches.length === 0) {
+          return [{
+            ...farm,
+            grossReturn: farm.roi.find(fr => fr.type === 'a').grossReturn - (farm.commit || 0),
+          }];
+        }
+
+        return farm.batches.map(batch => ({
+          ...farm,
+          title: `${farm.title} (Batch ${batch.index})`,
+          batchId: batch.index,
+          harvest_date: batch.harvestDate,
+          grossReturn: batch.plantSize - (batch.commit || 0), // Set grossReturn to batch.plantSize
+        }));
+      })
+      .filter(farm => {
+        const harvestDate = dayjs(farm.harvest_date.toDate());
+        return harvestDate.isAfter(startOfWeek) && harvestDate.isBefore(endOfWeek) && farm.grossReturn !== 0;
+      })
+
+    const theTotalGrossReturn = filterFarmsByDate.reduce((sum, farm) => sum + (farm.grossReturn || 0), 0)
+
+    const locFarms = filterFarmsByDate.map(filFarm => {
+      const percentage = getPercentage(filFarm.grossReturn, totalGrossReturn);
+      const allocation = Math.round(inputText * (percentage / 100));
+      return {
+        farmId: filFarm.id,
+        id: filFarm.batchId ? filFarm.batchId + filFarm.id : filFarm.id,
+        batchId: filFarm.batchId || null,
+        date: dateFormatter(filFarm.harvest_date.toDate()),
+        farm: filFarm.title,
+        production: filFarm.grossReturn,
+        percentage: percentage.toFixed(2),
+        suggested: allocation,
+        actual: allocation
+      }
+    })
     setLocalFarms(locFarms)
     setTotalGrossReturn(theTotalGrossReturn)
   };
@@ -297,54 +395,93 @@ export default function Distribution({ farms, roi }) {
   const monthYear = (dateStr) => {
     const date = new Date(dateStr);
     const options = { year: 'numeric', month: 'long' };
-    return date.toLocaleDateString('en-US', options); // Returns "November 2024", for example
+    return date.toLocaleDateString('en-US', options);
   };
 
   useEffect(() => {
     if (!distributions) return
 
     const reducedData = distributions.reduce((acc, current) => {
-      // Format the date to "Month Year"
       const formattedDate = monthYear(current.date);
-
-      // Check if the formatted date already exists in the accumulator
       const existing = acc.find(item => item.label === formattedDate);
 
       if (!existing) {
-        // If the formatted date doesn't exist, add the current object
         acc.push({
-          id: current.id, // Take the id from the first object with that month-year
+          farmId: current.farmId,
           label: formattedDate,
         });
       } else {
-        // If it exists, merge the data (sum the values in this case)
         existing.value += current.value;
       }
 
       return acc;
     }, []);
-
     setReportSelection(reducedData)
-
   }, [distributions])
 
 
   const saveDistribution = async () => {
     setSaving(true)
+    const currentDate = new Date()
     const distributionColl = collection(db, '/distributions')
-
+    console.log("lcoal farms:", localFarms);
     try {
       const uniqueId = uniqueID()
       for (const farm of localFarms) {
-        const farmRef = await addDoc(distributionColl, {
+        await addDoc(distributionColl, {
           ...farm,
+          dayOfHarvest: selectedDate.toDate(),
           distributionId: uniqueId
         })
+        const farmDocRef = doc(db, `farms/${farm.farmId}`);
+        const farmDocSnapshot = await getDoc(farmDocRef);
+        if (!farmDocSnapshot.exists()) {
+          console.error(`Farm with ID ${farm.farmId} does not exist.`);
+          continue;
+        }
+
+        const farmToCommit = farmDocSnapshot.data();
+        console.log("farm to commit", farmToCommit);
+
+        if (farmToCommit.batches || farmToCommit.batches.length > 0) {
+          const updatedBatches = farmToCommit.batches.map((batch, index) => {
+            if (batch.index === farm.batchId) {
+              return {
+                ...batch,
+                commit: batch.commit ? batch.commit + farm.actual : farm.actual,
+              };
+            }
+            return batch;
+          });
+
+          await updateDoc(farmDocRef, {
+            batches: updatedBatches,
+          });
+        }
+
+        await updateDoc(farmDocRef, {
+          commit: farmToCommit.commit ? farmToCommit.commit + farm.actual : farm.actual,
+        });
+
+        await addDoc(collection(db, `farms/${farm.farmId}/activities`), {
+          compId: "",
+          createdAt: currentDate,
+          desc: `${farm.batchId ? `Batch ${farm.batchId}` : farm.title} committed ${farm.actual} pcs of good size pineapple`,
+          label: 'Commitment',
+          qnty: farm.actual,
+          type: 'a'
+        })
       }
+
       handleClose()
       setSaving(false)
     } catch (error) {
-      console.log("error pag save: ", error);
+      setSaving(false)
+      setOpenError({
+        show: true,
+        title: 'Saving Error',
+        content: error instanceof Error ? error.message : error
+      })
 
     }
   }
@@ -375,20 +512,20 @@ export default function Distribution({ farms, roi }) {
     {
       field: 'date',
       headerName: 'Date of harvest',
-      flex: 1,
       align: 'center',
+      flex: 1
     },
     {
       field: 'farm',
       headerName: 'Farm',
-      flex: 1,
       align: 'center',
+      width: 300
     },
     {
       field: 'production',
       headerName: 'Production (pcs)',
-      flex: 1,
       align: 'right',
+      flex: 1,
       valueFormatter: (value) => {
         if (value == null) {
           return '';
@@ -399,14 +536,15 @@ export default function Distribution({ farms, roi }) {
     {
       field: 'percentage',
       headerName: 'Percentage (%)',
-      flex: 1,
       align: 'center',
+      width: 120
+
     },
     {
       field: 'suggested',
       headerName: 'Distribution (pcs)',
-      flex: 1,
       align: 'right',
+      flex: 1,
       valueFormatter: (value) => {
         if (value == null) {
           return '';
@@ -416,7 +554,7 @@ export default function Distribution({ farms, roi }) {
     },
     {
       field: 'actual',
-      headerName: 'Actual distribution',
+      headerName: 'Actual',
       flex: 1,
       type: 'number',
       editable: true,
@@ -426,7 +564,7 @@ export default function Distribution({ farms, roi }) {
 
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
+      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflowY: 'auto' }}>
         <Grid container spacing={3} alignItems='stretch'>
 
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 3 }}>
@@ -442,7 +580,6 @@ export default function Distribution({ farms, roi }) {
               borderRadius: 3,
               backgroundColor: '#fff',
               overflow: 'hidden',
-              maxHeight: 1000,
               height: '100%',
               display: 'flex',
               flexDirection: 'column',
@@ -458,7 +595,10 @@ export default function Distribution({ farms, roi }) {
                   <DatePicker
                     label="Select"
                     value={selectedDate}
-                    onChange={(newValue) => setSelectedDate(newValue)}
+                    onChange={(newValue) => {
+                      setLocalFarms([])
+                      setSelectedDate(newValue)
+                    }}
                     renderInput={(params) => <TextField {...params} />}
                   />
                 </LocalizationProvider>
@@ -467,7 +607,7 @@ export default function Distribution({ farms, roi }) {
                 <Typography variant="h6" sx={{
                   marginBottom: 2
                 }}>
-                  Enter Total Distribution (limit to {totalGrossReturn})
+                  Enter Total Distribution
                 </Typography>
                 <Box sx={{
                   display: 'flex'
@@ -475,7 +615,16 @@ export default function Distribution({ farms, roi }) {
                   <OutlinedInput
                     type="number"
                     onChange={(e) => {
-                      const value = Math.min(e.target.value, totalGrossReturn);
+                      if (!localFarms || !localFarms.length > 0) {
+                        setOpenError({
+                          show: true,
+                          title: 'No Farms Found',
+                          content: 'No Farms found to distribute.'
+                        })
+                        setInputText(0)
+                        return
+                      }
+                      const value = Math.min(e.target.value, totalGrossReturn)
                       setInputText(value);
                     }}
                     value={inputText}
@@ -483,10 +632,10 @@ export default function Distribution({ farms, roi }) {
                     inputProps={{
                       max: totalGrossReturn,
                     }}
-                    sx={{ borderTopLeftRadius: 20, borderBottomLeftRadius: 20, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+                    sx={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
                   />
                   <Button variant="contained" color="warning" onClick={distribute}
-                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 20, borderBottomRightRadius: 20 }}>
+                    sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 8, borderBottomRightRadius: 8, paddingX: 5 }}>
                     Distribute
                   </Button>
                 </Box>
@@ -503,11 +652,21 @@ export default function Distribution({ farms, roi }) {
           </Grid>
 
           <Grid item lg={8} md={6} sm={6} xs={12}>
-            <Box >
+            <Box sx={{
+              boxShadow: 1,
+              padding: 4,
+              borderRadius: 3,
+              backgroundColor: '#fff',
+              overflow: 'hidden',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4
+
+            }}>
               <Box sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
-                marginBottom: 4,
                 gap: 4
               }}>
                 <Button variant="outlined" disabled={distributionLoading} onClick={() => setDownloadReport(true)} >
@@ -523,16 +682,11 @@ export default function Distribution({ farms, roi }) {
                 disableSelectionOnClick
                 sx={{
                   ...datagridStyle,
-                  // border: 'none',
-                  // paddingX: 2,
-                  // overflowX: 'auto',
-                  height: `calc(100% - 8px)`,
-                  boxShadow: 1,
                   borderRadius: 2,
                   backgroundColor: '#fff',
-                  overflow: 'hidden',
-                  maxHeight: 1000,
-                  height: '100%',
+                  overflowY: 'hidden',
+                  flex: 1,
+                  width: '100%'
                 }}
                 onCellEditCommit={handleEditCellChange}
                 getRowClassName={(rows) =>
@@ -576,17 +730,17 @@ export default function Distribution({ farms, roi }) {
       </Dialog>
 
       <Dialog
-        open={openError}
+        open={openError.show}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          May problema
+          {openError.title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Maglagay ng actuwal na ditribusyon.
+            {openError.content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -617,7 +771,7 @@ export default function Distribution({ farms, roi }) {
             sx={{ width: '100%' }}
             renderInput={(params) => <TextField {...params} label="Reports" />}
           />
-          <Button variant='contained' onClick={()=>exportExcel(value.label)}>
+          <Button variant='contained' onClick={() => { exportExcel(value.label) }}>
             Download
           </Button>
         </Box>
