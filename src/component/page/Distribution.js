@@ -37,7 +37,7 @@ import * as XLSX from 'xlsx';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Pie from '../chart/Pie2';
-import { addDoc, collection, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, addDoc, setDoc, updateDoc, getDoc, writeBatch } from "firebase/firestore";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import IconButton from '@mui/material/IconButton';
@@ -61,6 +61,7 @@ export default function Distribution({ farms, roi }) {
 
   const [localFarms, setLocalFarms] = useState([])
   const [totalGrossReturn, setTotalGrossReturn] = useState(0)
+  const [totalActualGross, setTotalActualGross] = useState(0)
   const startOfWeek = selectedDate.startOf('week');
   const endOfWeek = selectedDate.endOf('week');
 
@@ -69,6 +70,8 @@ export default function Distribution({ farms, roi }) {
   const [openError, setOpenError] = useState({ show: false })
   const [downloadReport, setDownloadReport] = useState(false)
   const [value, setValue] = useState(null)
+  const [selectedRow, setSelectedRow] = useState(false)
+  const [editModal, setEditModal] = useState(false)
 
   const distributionColl = collection(db, '/distributions')
   const [distributions, distributionLoading] = useCollectionData(distributionColl)
@@ -90,7 +93,7 @@ export default function Distribution({ farms, roi }) {
 
   const exportExcel = async (reportSelectionDate) => {
     console.log("export date", reportSelectionDate);
-    
+
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Harvest Schedule');
 
@@ -281,8 +284,16 @@ export default function Distribution({ farms, roi }) {
     saveAs(blob, `Harvest_Schedule_${year}_${month + 1}.xlsx`);
   };
 
+  const handleEditClick = (id, row) => () => {
+    setSelectedRow(row);
+    setEditModal(true);
+  };
+
+  const handleActualValue = () => {
+
+  }
+
   const handleSavedDate = (date) => {
-    console.log("new date", date);
     setSavedDate(date)
 
     const month = date.month()
@@ -290,16 +301,35 @@ export default function Distribution({ farms, roi }) {
 
     const filteredDistributions = distributions.filter(item => {
       const filDate = new Date(item.date);
-      console.log("date", filDate.getMonth());
-      console.log("selected date", date.month());
-
-
       return filDate.getMonth() === month && filDate.getFullYear() === year;
     });
-    console.log("distri", filteredDistributions);
-
     setSavedDistributions(filteredDistributions)
   }
+
+  const handleEditCommit = () => {
+    // Update the localFarms state
+    setLocalFarms((prevFarms) => {
+      // Update the specific farm object and return a new array
+      const updatedFarms = prevFarms.map((farm) => {
+        if (farm.id === selectedRow.id) {
+          // If the field being edited exists, update it with the new value
+          return { ...farm, actual: parseInt(selectedRow.actual) };
+        }
+        return farm;
+      });
+      // Calculate the actual total of 'production'
+      const actualTotal = updatedFarms.reduce((sum, farm) => {
+        return sum + (farm.actual || 0);
+      }, 0);
+      setTotalActualGross(actualTotal);
+
+      return updatedFarms;
+    });
+    setEditModal(false)
+  };
+
+
+
 
   useEffect(() => {
     if (!farms) return
@@ -348,6 +378,7 @@ export default function Distribution({ farms, roi }) {
     })
     setLocalFarms(locFarms)
     setTotalGrossReturn(theTotalGrossReturn)
+    setTotalActualGross(0)
   }, [selectedDate, farms])
 
   const handleClose = () => {
@@ -417,6 +448,8 @@ export default function Distribution({ farms, roi }) {
         actual: allocation
       }
     })
+    const totalAct = locFarms.reduce((acc, act) => acc + (act.actual || 0), 0)
+    setTotalActualGross(totalAct)
     setLocalFarms(locFarms)
     setTotalGrossReturn(theTotalGrossReturn)
   };
@@ -451,8 +484,6 @@ export default function Distribution({ farms, roi }) {
   //   }, []);
   //   setReportSelection(reducedData)
   // }, [distributions])
-
-
   const saveDistribution = async () => {
     setSaving(true)
     const currentDate = new Date()
@@ -472,11 +503,10 @@ export default function Distribution({ farms, roi }) {
           console.error(`Farm with ID ${farm.farmId} does not exist.`);
           continue;
         }
-
         const farmToCommit = farmDocSnapshot.data();
         console.log("farm to commit", farmToCommit);
-
-        if (farmToCommit.batches || farmToCommit.batches.length > 0) {
+        
+        if (farmToCommit.batches) {
           const updatedBatches = farmToCommit.batches.map((batch, index) => {
             if (batch.index === farm.batchId) {
               return {
@@ -486,16 +516,13 @@ export default function Distribution({ farms, roi }) {
             }
             return batch;
           });
-
           await updateDoc(farmDocRef, {
             batches: updatedBatches,
           });
         }
-
         await updateDoc(farmDocRef, {
           commit: farmToCommit.commit ? farmToCommit.commit + farm.actual : farm.actual,
         });
-
         await addDoc(collection(db, `farms/${farm.farmId}/activities`), {
           compId: "",
           createdAt: currentDate,
@@ -505,7 +532,6 @@ export default function Distribution({ farms, roi }) {
           type: 'a'
         })
       }
-
       handleClose()
       setSaving(false)
     } catch (error) {
@@ -515,9 +541,9 @@ export default function Distribution({ farms, roi }) {
         title: 'Saving Error',
         content: error instanceof Error ? error.message : error
       })
-
     }
   }
+
 
   const datagridStyle = {
     // paddingBottom: 0,
@@ -536,6 +562,7 @@ export default function Distribution({ farms, roi }) {
   };
 
   const handleEditCellChange = (params) => {
+    console.log("params");
     const updatedActualDistribution = [...actualDistribution];
     updatedActualDistribution[params.id] = params.value;
     setActualDistribution(updatedActualDistribution);
@@ -558,7 +585,7 @@ export default function Distribution({ farms, roi }) {
       field: 'farm',
       headerName: 'Farm Name',
       align: 'center',
-      width: 200,
+      flex: 1,
       headerAlign: 'center',
     },
     {
@@ -604,9 +631,47 @@ export default function Distribution({ farms, roi }) {
       align: 'right',
       headerAlign: 'center',
     },
-  ];
-  const actualSum = localFarms.reduce((sum, row) => sum + (row.actual || 0), 0).toLocaleString();
+    ...(
+      tabIndex !== 1
+        ? [
+          {
+            field: 'actions',
+            type: 'actions',
+            headerName: 'Actions',
+            flex: 1,
+            cellClassName: 'actions',
+            getActions: ({ id, row }) => {
+              const editAction = (
+                <GridActionsCellItem
+                  icon={<EditOutlinedIcon />}
+                  label="Edit"
+                  className="textPrimary"
+                  onClick={handleEditClick(id, row)}
+                  color="inherit"
+                  sx={{
+                    backgroundColor: '#E7F3E7',
+                    height: '40px',
+                    width: '40px',
+                    borderRadius: 3,
+                    color: '#58AC58',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    '&:hover': {
+                      color: '#FFF',
+                      backgroundColor: '#88C488'
+                    }
+                  }}
+                />
+              );
 
+              return [editAction];
+            },
+          },
+        ]
+        : [])
+  ];
 
   const TabItem = styled(Tab)(({ theme }) => ({
     opacity: 1,
@@ -714,6 +779,7 @@ export default function Distribution({ farms, roi }) {
                           value={selectedDate}
                           onChange={(newValue) => {
                             setLocalFarms([]);
+                            setTotalActualGross(0)
                             setSelectedDate(newValue);
                           }}
                           renderInput={(params) => <TextField {...params} />}
@@ -808,7 +874,6 @@ export default function Distribution({ farms, roi }) {
                       height: '100%',
                       overflowY: 'auto',
                     }}
-                    onCellEditCommit={handleEditCellChange}
                     getRowClassName={(rows) =>
                       rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                     }
@@ -825,7 +890,7 @@ export default function Distribution({ farms, roi }) {
                   >
                     <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
                       <Typography variant='h5'>Actual Total Production: </Typography>
-                      <Typography variant='h5' sx={{ color: 'black', fontWeight: 500 }}> {actualSum}</Typography>
+                      <Typography variant='h5' sx={{ color: 'black', fontWeight: 500 }}> {totalActualGross}</Typography>
                     </Box>
                     <Button
                       variant="contained"
@@ -1036,6 +1101,59 @@ export default function Distribution({ farms, roi }) {
           <Button variant='contained' color='success' onClick={() => { exportExcel(value.label) }}>
             Download
           </Button>
+        </Box>
+      </Modal>
+      <Modal open={editModal} onClose={() => setEditModal(false)} aria-labelledby="edit-row-modal">
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            borderRadius: '5px',
+            boxShadow: 24,
+            p: 4,
+            width: 380,
+          }}
+        >
+          <TextField
+            label="Actual Value"
+            name="actual"
+            type="number"
+            value={selectedRow.actual}
+            InputProps={{
+              inputProps: {
+                max: selectedRow.suggested,
+                min: 0,
+              }
+            }}
+            onChange={(value) => {
+              const inputValue = parseInt(value.target.value, 10);
+
+              console.log("Input value type:", typeof (inputValue), "value:", inputValue);
+
+              const newValue = (isNaN(inputValue) || inputValue < 0)
+                ? 0
+                : Math.min(inputValue, selectedRow.suggested);
+
+              setSelectedRow((prev) => ({
+                ...prev,
+                actual: newValue,
+              }));
+            }}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+            <button className="btn-view-all" onClick={handleEditCommit}>
+              Save
+            </button>
+            <button className="btn-view-all" onClick={() => setEditModal(false)}>
+              Cancel
+            </button>
+          </Box>
         </Box>
       </Modal>
     </>
