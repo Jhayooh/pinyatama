@@ -10,7 +10,6 @@ import {
 } from '@mui/material';
 
 //db
-
 import { addDoc, collection, doc, orderBy, query, updateDoc, Timestamp } from "firebase/firestore";
 import { db } from "../../firebase/Config";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -43,13 +42,9 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
       setLabel(act.label)
     }
   }, [activities])
-
-
   const getRemark = () => {
     const label = activities?.find(a => a.remarks === true ? a.label : "Undipaynd")
-
   }
-
   getRemark()
 
   return (
@@ -59,7 +54,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
           sx={{
             borderRadius: '20px',
             border: 2,
-            borderColor: '#f9fafb', '&:hover': { borderColor: '#88c488' },
+            borderColor: '#88c488', '&:hover': { borderColor: '#88c488' },
             cursor: 'pointer',
             height: '100%',
             transition: 'transform 0.3s ease, box-shadow 0.3s ease',

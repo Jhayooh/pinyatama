@@ -352,7 +352,7 @@ export default function SideNav() {
             <IconButton onClick={handleDrawerOpen}>
               <MenuIcon sx={{ color: '#fff' }} />
             </IconButton>
-            <Typography
+            {/* <Typography
               variant="h6"
               noWrap
               component="a"
@@ -369,21 +369,24 @@ export default function SideNav() {
               }}
             >
               QP FARMING
-            </Typography>
+            </Typography> */}
           </DrawerHeader>
           <List sx={{ backgroundColor: 'green', flexGrow: 1, color: '#ffffff', height: '100vh', }}>
             {/* Logo Section */}
             <Box
               onClick={() => setSelected('dashboard')}
               sx={{
-                p: 2.4,
+                paddingTop: 0,
+                pl: 5,
+                pb: 5,
+                pr: 5,
                 display: 'flex',
                 justifyContent: open ? 'center' : 'flex-start',
                 alignItems: 'center',
-                cursor: 'pointer',
               }}
             >
-              <img src={logo} alt="pinyatamap logo" width={open ? '50%' : '0'} />
+              <img src={logo} alt="pinyatamap logo" width={open ? '100%' : '0'}
+                />
             </Box>
 
             {/* Sidebar Items */}
@@ -415,6 +418,12 @@ export default function SideNav() {
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                     borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+                    },
                   }}
                 >
                   <ListItemIcon
@@ -446,7 +455,11 @@ export default function SideNav() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                   borderRadius: '20px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
                     backgroundColor: '#f9a883',
                   },
                 }}

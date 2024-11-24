@@ -1,6 +1,6 @@
 import React from 'react'
 import { TableContainer, TableBody, TableCell, Table, TableHead, TableRow } from '@mui/material'
-import { Typography, Grid, Paper, Box, Avatar, Card, CardContent, CardActionArea } from '@mui/material'
+import { Typography, Grid, Paper, Box, Avatar, Card, CardContent, CardActionArea, Stack, Divider, CardMedia } from '@mui/material'
 
 //images
 import Crown from '../../image_src/crown.jpg';
@@ -70,33 +70,33 @@ const data = [
     "text": " Ang bunga ng pinya ay maaring anihin 4 1/2 hanggang 5 buwan depende sa panahon at timpla ng ethephon na inilagay sa pagpabulaklak.Medyo matagal anihin kung ginagawa sa panahon ng tag-ulan at mababa ang timpla ng pampabulaklak na ginamit."
   }
 ]
-const Pest = [
-  {
-    "img": `${Mealy}`,
-    "text": "Ito'y isang insektong sumisipsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.",
-    "name": "Mealybugs"
-  },
-  {
-    "img": `${Butt}`,
-    "text": "Ito'y isang insektong sumisipsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.",
-    "name": "Butt Rot"
-  },
-  {
-    "img": `${Fruit}`,
-    "text": "Ang sakit na ito ay dulot ng fungus. Ito ay labis na nagpapababa ng kalidad ng bunga ng pinya.",
-    "name": "Fruit Core Rot"
-  },
-  {
-    "img": `${Heart}`,
-    "text": "Ang sakit na ito ay dulot ng fungus at karaniwang pinapatay nito ang bagong tanim na halaman.",
-    "name": "Heart Rot"
-  },
-  {
-    "img": `${Mouse}`,
-    "text": "Kinakain ang prutas, murang dahon at ubod ng halaman",
-    "name": "Daga"
-  },
-]
+// const Pest = [
+//   {
+//     "img": `${Mealy}`,
+//     "text": "Ito'y isang insektong sumisipsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.",
+//     "name": "Mealybugs"
+//   },
+//   {
+//     "img": `${Butt}`,
+//     "text": "Ito'y isang insektong sumisipsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.",
+//     "name": "Butt Rot"
+//   },
+//   {
+//     "img": `${Fruit}`,
+//     "text": "Ang sakit na ito ay dulot ng fungus. Ito ay labis na nagpapababa ng kalidad ng bunga ng pinya.",
+//     "name": "Fruit Core Rot"
+//   },
+//   {
+//     "img": `${Heart}`,
+//     "text": "Ang sakit na ito ay dulot ng fungus at karaniwang pinapatay nito ang bagong tanim na halaman.",
+//     "name": "Heart Rot"
+//   },
+//   {
+//     "img": `${Mouse}`,
+//     "text": "Kinakain ang prutas, murang dahon at ubod ng halaman",
+//     "name": "Daga"
+//   },
+// ]
 const About = () => {
   return (
     <div id="about">
@@ -247,29 +247,371 @@ const About = () => {
           </div>
         </div>
       </div>
-
-      <div id="testimonials">
-        <div className="container">
-          <div className="section-title text-center">
+      <div id="testimonials" className='container'>
+        <Box>
+          <div className="section-title">
             <h2>Mga Peste ng Pinya</h2>
           </div>
-          <div className="row">
-            {Pest.map((d, i) => (
-              <div key={`${d.name}-${i}`} className="col-md-4">
-                <div className="testimonial">
-                  <div className="testimonial-image">
-                    {" "}
-                    <img src={d.img} alt="" />{" "}
-                  </div>
-                  <div className="testimonial-content">
-                    <p>"{d.text}"</p>
-                    <div className="testimonial-meta"> - {d.name} </div>
-                  </div>
-                </div>
-              </div>
-            ))}
+          <Grid container columns={15} spacing={2}>
+            <Grid item xs={15} md={5} lg={3}>
+              <Card variant="outlined" sx={{ height: '100%' }}>
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
+                      Mealybugs
+                    </Typography>
+
+                  </Stack>
+                  <img src={Mealy} width='100%' height='50%' />
+                </Box>
+                <Divider />
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    <p>Ito'y isang insektong sumisipsip ng katas ng mga murang dahon at mga dahong nagsisismulang gumulang.</p>
+                    <b style={{ color: '#07da63' }}>Sintomas:</b>
+                    <li>Pamumula ng dahon</li>
+                    <li>Pagkalanta ng dahon</li>
+                    <li>Panunuyo ng malaking bahaging dahong apektado</li>
+                    <li>Pagkupas ng berdeng kulay dahon</li>
+                    <li>Bansot ang halaman</li>
+                    <b style={{ color: '#07da63' }}>Pagpuksa:</b>
+                    <p>Ang mealybugs ay nabubuhay kasam ng mga langgam. Ang langgam ang naglilipat sa mga ito sa mga malulusog na bahagi ng halaman.</p>
+                    <li>Paggamit ng 'mealybug-free' na pananim</li>
+                    <li>Mag-gpray ng 1-1.4ml./li ng Malathion o Diazinon</li>
+                    <li>Puksain ang mga langgam na nagkakalat ng peste sa pamamagitan ng pagbobomba ng Sumicidin sa border area na may 4-6 na tudling.</li>
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={15} md={5} lg={3}>
+              <Card variant="outlined" sx={{ height: '100%' }}>
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
+                      Butt Rot
+                    </Typography>
+
+                  </Stack>
+                  <img src={Butt} width='100%' height='30%' />
+                </Box>
+                <Divider />
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    <b style={{ color: '#07da63' }}>Sintomas</b>
+                    <li>Pagkabulok ng gawing puno ng halaman</li>
+                    <li>Pagkalanta ng buong halaman</li>
+                    <li>Biglaang pagkamatay ng halaman</li>
+                    <b style={{ color: '#07da63' }}>Pagpuksa/pag-iwas</b>
+                    <li>Iwasan na magkasugat ang halaman upang hindi makapasok ang fungus na nagdudulot ng sakit</li>
+                    <li>Maari ding ilubog ang puno ng halaman sa 2.5 gramo bawat litro ng Aliette solusyon habang sariwa pa ang sugat.</li>
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={15} md={5} lg={3}>
+              <Card variant="outlined" sx={{ height: '100%' }}>
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
+                      Fruit Core Rot
+                    </Typography>
+
+                  </Stack>
+                  <img src={Fruit} width='100%' height='30%' />
+                </Box>
+                <Divider />
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    <p>Ang sakit na ito ay dulot ng fungus. Ito ay labis na nagpapababa ng kalidad ng bunga ng pinya. </p>
+                    <b style={{ color: '#07da63' }}>Sintomas:</b>
+                    <li>Berde at maliit ang bunga</li>
+                    <li>Lubog ang mata ng apektadong bunga na kulay brown</li>
+                    <li>Kapag hiniwa ang apektadong bahagi ay nangingitim, matigas, basa at nabubulok</li>
+                    <b style={{ color: '#07da63' }}>Pagpuksa/pag-iwas:</b>
+                    <li>Panatilihing tama ang dami ng N, P at K.</li>
+                    <li>Mag-bomba ng 1-1.4 m/li ng malathion o kaya 0.1% Diazinon laban sa mealybugs na gumagawa ng butas o sira sa pinya na maaring pasukan ng fungus.</li>
+                    <li>iwasan ang pagtanggal ng ubod ng korona sa panahon ng tag-ulan.</li>
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={15} md={5} lg={3}>
+              <Card variant="outlined" sx={{ height: '100%' }}>
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
+                      Heart Rot
+                    </Typography>
+
+                  </Stack>
+                  <img src={Heart} width='100%' height='30%' />
+                </Box>
+                <Divider />
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    <p>Ang sakit na ito ay dulot ng fungus at karaniwang pinapatay nito ang bagong tanim na halaman. </p>
+                    <b style={{ color: '#07da63' }}>Sintomas:</b>
+                    <li>Paninilaw o pamumula ng dahon ng halaman sa gitna</li>
+                    <li>Pagkalanta ng mga gilid (margins) ng dahon</li>
+                    <li>Ang puno ng dahon ay nalilinaw hanggang kumupas maging puti, malambot at basa na kulay na kape ang gilid.
+                      Madaling matanggal ang ganitong dahon sa puno
+                    </li>
+                    <li>May mabahong amoy</li>
+                    <b style={{ color: '#07da63' }}>Pagpuksa/pag-iwas:</b>
+                    <li>Siguradong maayos ang labasan ng tubig</li>
+                    <li>Itaas hanggang 25cm ang taniman kung laganap ang sakit</li>
+                    <li>Maglagay ng kulob o mulch kung ginawang 25cm ang taas ng taniman</li>
+                    <li>Magtanim sa panahon ng tag-araw</li>
+                    <li>Illubog ang pananim ng ilang minuto sa 8-10 g/li solusyon ng Difoltan o 2.5 g/li ng Aliette.</li>
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+            <Grid item xs={15} md={5} lg={3}>
+              <Card variant="outlined" sx={{ height: '100%' }}>
+                <Box sx={{ p: 2 }}>
+                  <Stack direction="row" justifyContent="space-between" alignItems="center">
+                    <Typography gutterBottom variant="h5" component="div" sx={{ color: 'green' }}>
+                      Daga
+                    </Typography>
+
+                  </Stack>
+                  <img src={Mouse} width='100%' height='30%' />
+                </Box>
+                <Divider />
+                <Box sx={{ p: 2 }}>
+                  <Typography gutterBottom variant="body2">
+                    <b style={{ color: '#07da63' }}>Pinsala:</b>
+                    <li>Kinakain ang prutas, murang dahon at ubod ng halaman</li>
+                    <b style={{ color: '#07da63' }}>Pagpuksa/pag-iwas</b>
+                    <li>Paglagay ng pain o lason ng Racumin. Ito ay maaring ihalo sa bigas at ikalat sa taniman. Maari din itong ilagay sa bunot ng niyog o kawayan na may butas.</li>
+                    <li>Panatilihing malinis ang taniman</li>
+                  </Typography>
+                </Box>
+              </Card>
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
+      <div id='features' className="container" >
+        <Box>
+          <div className="section-title">
+            <h2>Pag-ani ng Dahon</h2>
           </div>
-        </div>
+          <Paper elevation={3} sx={{ padding: 2 }}>
+            <Typography variant='caption' display='block' gutterBottom>
+              Ang dahon ng pinya ay isa sa pinagkukunan ng magandang uri ng hibla para sa tela at papel. Dagdag na kita ito sa mga magtatanim ng pinya kung aanihin at ipagbibili ang sariwang dahon o kaysa
+              pinatuyong hibla. Piliin ang magulang na dahon at walangs sira na may habang dalawang talampakan. Ginagawa ang pag-ani ng dahon matapos anihin ang bunga ng pinya.
+            </Typography>
+            <Typography variant='caption' display='block' gutterBottom>
+              Sa halip na tabasin para makagawa ng 'walking alley' o daanan sa pag-ani at pag-hakot ng bunga maaring anihin ang dahon upang ibenta at gawing hibla. Ang mga natitirang dahon
+              ay anihin ang dahon upang ibenta at gawing hibla. Ang mga natitirang dahon ay anihin ulit pagkatapos anihin ang mga bunga.
+            </Typography>
+            <Typography variant='caption' display='block' gutterBottom>
+              Napag-alaman na ang pag-ani ng dahon ay hindi nakakaapekto sa paglaki ng suhi na gagamitin pantanim.
+            </Typography>
+          </Paper>
+        </Box>
+      </div>
+      <div id='features' className="container" >
+        <Box>
+          <div className="section-title">
+            <h2>Mga Produkto at Gamit ng Pinya</h2>
+          </div>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={6} lg={6}>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  01
+                </Typography>
+                <Typography variant='caption'>
+                  Prutas bilang sangkap sa salad
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  02
+                </Typography>
+                <Typography variant='caption'>
+                  Sangkap ito sa paggawa ng ice cream, halo-halo at gelatin
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  03
+                </Typography>
+                <Typography variant='caption'>
+                  Palaman sa paggawa ng cake, pies, tarts at tinapay
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  04
+                </Typography>
+                <Typography variant='caption'>
+                  Sangkap sa mga lutuing karne, curry at iba pa
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  05
+                </Typography>
+                <Typography variant='caption'>
+                  Ginagawang jam, jelly at pure
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  06
+                </Typography>
+                <Typography variant='caption'>
+                  Ginagawang juice at iba pang inumin
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  07
+                </Typography>
+                <Typography variant='caption'>
+                  Nagawang chunks, sliced or crushed na niluluto sa syrup
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  08
+                </Typography>
+                <Typography variant='caption'>
+                  Ginagawang candies
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  09
+                </Typography>
+                <Typography variant='caption'>
+                  Ginagawa suka, alak at toyo
+                </Typography>
+              </Box>
+              <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                <Typography variant='caption' sx={{ color: 'green' }}>
+                  10
+                </Typography>
+                <Typography variant='caption'>
+                  Pinoproseso bilang nata de pina
+                </Typography>
+              </Box>
+            </Grid>
+            <Grid item xs={12} md={6} lg={6}>
+              <Box sx={{ flexDirection: 'column', display: 'flex', gap: 1 }}>
+                <Box sx={{ flexDirection: 'row', display: 'flex', gap: 2 }}>
+                  {/* <img src={require('../image_src/product.png')} width='20%' /> */}
+                  <img src={require('../../image_src/candy.jfif')} width='20%' />
+                  <img src={require('../../image_src/jam.jfif')} width='20%' />
+                  <img src={require('../../image_src/salad.jfif')} width='20%' />
+                  <img src={require('../../image_src/icecream.jfif')} width='20%' />
+                </Box>
+              </Box>
+            </Grid>
+          </Grid>
+        </Box>
+      </div>
+      <div id='features' className="container" >
+        <Box>
+          <div className="section-title">
+            <h2>Paraan ng paghanda ng Pinya bilang Panghimagas o Table Fruit</h2>
+          </div>
+        </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={12} md={3} lg={3}>
+            <Card variant="outlined">
+              <Box sx={{ p: 2 }}>
+                <img src={require('../../image_src/koron.jfif')} width='100%' height='50%' />
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <Typography gutterBottom variant="caption">
+                  Alisin and Korona
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Card variant="outlined" >
+              <Box sx={{ p: 2 }}>
+                <img src={require('../../image_src/haba.jfif')} width='100%' height='50%' />
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <Typography gutterBottom variant="caption">
+                  Putulin ang Prutas ng Pahaba
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Card variant="outlined" >
+              <Box sx={{ p: 2 }}>
+                <img src={require('../../image_src/tuklap.jfif')} width='100%' height='50%' />
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <Typography gutterBottom variant="caption">
+                  Putol-putulin ang pinya at tuklapin sa pamamagitan ng kutsilyo
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
+          <Grid item xs={12} md={3} lg={3}>
+            <Card variant="outlined" >
+              <Box sx={{ p: 2 }}>
+                <img src={require('../../image_src/bitesize.jfif')} width='100%' height='50%' />
+              </Box>
+              <Divider />
+              <Box sx={{ p: 2 }}>
+                <Typography gutterBottom variant="caption">
+                  Hiwa-hiwain ng bite size o kayang isubo sa bibig
+                </Typography>
+              </Box>
+            </Card>
+          </Grid>
+        </Grid>
+      </div>
+      <div id='features' className="container" >
+        <Grid container spacing={2} >
+          <CardActionArea component="a" href="#">
+            <Card sx={{ display: 'flex' }}>
+              <CardContent sx={{ flex: 1 }}>
+                <div className="section-title">
+                  <h2> Paghahanda ng Pinyang ibebenta sa ibang bansa</h2>
+                </div>
+                <Typography variant="subtitle1" paragraph sx={{ fontSize: 15 }}>
+                  <li>Piliin ang magandang uri ng bunga depende sa pangangailangan ng bumili.</li>
+                  <li>Ingatan na hindi magalusan, masugatan at mabugbug ang pinya sa pag-ani at paghakot</li>
+                  <li>Kung maari ilagay ang inaning pinya sa lalagyan na may sapin na dyaryo</li>
+                  <li>Ihiwalay o alisin ang mga bunga na may sakit, may aphids o iba pang insekto</li>
+                  <li>Linisin ang bunga sa pamamagitan ng paggamit ng lumang toothbrush o sipilyo</li>
+                  <li>Putulin ang tangkay ng pinya.Itira ang kalahating puldgada ng tangkay. <br /> Iwasan na magalusan ang tangkay dahil maaring pasukin ito ng insekto na magdududlot ng sakit at pagkabulok ng pinya.</li>
+                  <li>Karaniwang nilalagyan ng wax ang pinyang ibinebenta sa ibang bansa.</li>
+                  <li>Sundin ang tamang timpla sa waxing.</li>
+                  <li>Gumamit ng sprayer sa waxing para mablis at pantay ang pagkalagay.</li>
+                  <li>Patuyuin sa hangin sa loob ng dalawang oras bago ilagay sa sisidlang karton.</li>
+                  <p>Ang paglalagyan ng karton ay dapat may label o impormasyon tulad nito.</p>
+                  <li>Pangalan ng produkto- nakasaan ang variety</li>
+                  <li>Grade at laki/ o bilang kung ilang piraso ang laman ng karton</li>
+                  <li>Net weight o timbang sa kilo</li>
+                  <li>Pangalan ng producer at exporter</li>
+                  <li>Dapat may nakasulat na "Product of the Philippines"</li>
+                </Typography>
+              </CardContent>
+              <CardMedia
+                component="img"
+                sx={{ width: 160, display: { xs: 'none', sm: 'block' } }}
+                src={require('../../image_src/bansa.jpg')}
+                alt="Korona Image"
+              />
+            </Card>
+          </CardActionArea>
+        </Grid>
       </div>
     </div>
   );

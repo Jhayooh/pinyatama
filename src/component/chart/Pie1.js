@@ -35,7 +35,7 @@ function ExamplePieChart({ labels, data, colors, title, onPieClick }) {
       },
     },
     dataLabels: {
-      padding: 12,
+      padding: 2,
     },
     colors: colors || [
       '#FF6700',

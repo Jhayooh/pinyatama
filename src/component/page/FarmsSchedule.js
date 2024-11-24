@@ -27,7 +27,7 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
         farm &&
         <Box sx={{
           position: 'absolute', minWidth: 380, p: 2, pt: 3, borderRadius: 3, boxShadow: '10', backgroundColor: '#fff',
-          zIndex: 9999
+          zIndex: 9999, overflow:'hidden'
         }}>
           <Button sx={{ display: 'flex', justifyContent: 'flex-end', alignSelf: 'flex-end', ml: 'auto', color: 'red' }} onClick={() => setClicked({})}>X</Button>
           <Box sx={{ margin: 2 }}>
@@ -35,7 +35,7 @@ function SideDetails({ farm, farmer, eventClicked, setSelected, setClicked }) {
             <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Bilang ng Tanim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}> {farm.plantNumber} piraso </span></Typography>
             <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Yugto ng Pananim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{eventClicked.title}</span></Typography>
             <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Petsa ng Pagtanim:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{formattedStart}</span> </Typography>
-            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Inaasahang Petsa ng Pag-ani:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{formattedEnd}</span> </Typography>
+            <Typography sx={{ fontFamily: 'serif', fontSize: 15, display: 'flex' }}> Inaasahang Petsa ng Pagtatapos ng Yugto:<span style={{ color: 'green', fontSize: 15, padding: 2 }}>{formattedEnd}</span> </Typography>
           </Box>
 
           <Button variant='contained' color='success' onClick={() => setSelected && setSelected('Farms')}>Tingnan ang Buong Detalye</Button>
