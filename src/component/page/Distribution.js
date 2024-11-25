@@ -505,7 +505,7 @@ export default function Distribution({ farms, roi }) {
         }
         const farmToCommit = farmDocSnapshot.data();
         console.log("farm to commit", farmToCommit);
-        
+
         if (farmToCommit.batches) {
           const updatedBatches = farmToCommit.batches.map((batch, index) => {
             if (batch.index === farm.batchId) {
@@ -734,7 +734,7 @@ export default function Distribution({ farms, roi }) {
   return (
     <>
       <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-        <Grid container spacing={2} alignItems='stretch' sx={{}}>
+        <Grid container spacing={2} alignItems='stretch' >
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 1 }}>
             <h1 style={{ color: '#000' }}>Distribution </h1>
             <Divider sx={{ borderBottomWidth: 2 }} />
@@ -745,96 +745,102 @@ export default function Distribution({ farms, roi }) {
               <TabItem label="Saved" />
             </Tabs>
           </Grid>
-
-          {/* Tab 1: Distribute */}
-          {tabIndex === 0 && (
-            <Box sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              gap: 2,
-              padding: 2,
-              mb: 10,
-              // overflowX: 'auto',
-              height: '100%',
-              width: '100%',
-              // backgroundColor:'yellow',
-            }}>
-              <Box sm={12} md={6} sx={{ flex: 1 }}>
-                <Box sx={{
-                  padding: 2,
-                  height: '100%',
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  // backgroundColor:'yellow',
-                }}>
-                  <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', width: '100%', gap: 2 }}>
-                    <Box sx={{ flexDirection: 'column', display: 'flex' }}>
-                      <Typography variant="button" sx={{ marginBottom: 2 }}>
-                        Select Date
-                      </Typography>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Select"
-                          value={selectedDate}
-                          onChange={(newValue) => {
-                            setLocalFarms([]);
-                            setTotalActualGross(0)
-                            setSelectedDate(newValue);
-                          }}
-                          renderInput={(params) => <TextField {...params} />}
-                          sx={{ borderRadius: 8 }}
-                        />
-                      </LocalizationProvider>
-                    </Box>
-
-                    <Box sx={{ flexDirection: 'column', display: 'flex', flex: 1 }}>
-                      <Typography variant="button" sx={{ marginBottom: 2, }}>
-                        Enter Total Distribution
-                      </Typography>
-                      <Box sx={{ display: 'flex' }}>
-                        <OutlinedInput
-                          type="number"
-                          onChange={(e) => {
-                            if (!localFarms || !localFarms.length) {
-                              setOpenError({
-                                show: true,
-                                title: 'No Farms Found',
-                                content: 'No Farms found to distribute.'
-                              });
-                              setInputText(0);
-                              return;
-                            }
-                            const value = Math.min(e.target.value, totalGrossReturn);
-                            setInputText(value);
-                          }}
-                          value={inputText}
-                          fullWidth
-                          inputProps={{
-                            max: totalGrossReturn,
-                          }}
-                          sx={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-                        />
-                        <Button variant="contained" color="warning" onClick={distribute}
-                          sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 8, borderBottomRightRadius: 8, paddingX: 5 }}>
-                          Distribute
-                        </Button>
-                      </Box>
-                    </Box>
-
+        </Grid>
+        {/* Tab 1: Distribute */}
+        {tabIndex === 0 && (
+          <>
+            <Box sx={{ display: 'flex', overflow: 'hidden', flexDirection: 'column', gap: 2, }}>
+              <Grid container spacing={2} sx={{ display: 'flex', marginTop: 2 }}>
+                <Grid item xs={2}>
+                  <Box sx={{ display: 'flex' }}>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <DatePicker
+                        label="Select Date"
+                        value={selectedDate}
+                        onChange={(newValue) => {
+                          setLocalFarms([]);
+                          setTotalActualGross(0)
+                          setSelectedDate(newValue);
+                        }}
+                        renderInput={(params) => <TextField {...params} />}
+                        sx={{borderRadius:8}}
+                      />
+                    </LocalizationProvider>
                   </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Box sx={{ display: 'flex' }}>
+                    <FormControl fullWidth>
+                      <InputLabel htmlFor="total-distribution">Enter Total Distribution</InputLabel>
+                      <OutlinedInput
+                        id="total-distribution"
+                        type="number"
+                        onChange={(e) => {
+                          if (!localFarms || !localFarms.length) {
+                            setOpenError({
+                              show: true,
+                              title: 'No Farms Found',
+                              content: 'No Farms found to distribute.',
+                            });
+                            setInputText(0);
+                            return;
+                          }
+                          const value = Math.min(e.target.value, totalGrossReturn);
+                          setInputText(value);
+                        }}
+                        value={inputText}
+                        inputProps={{
+                          max: totalGrossReturn,
+                        }}
+                        sx={{
+                          borderTopLeftRadius: 8,
+                          borderBottomLeftRadius: 8,
+                          borderTopRightRadius: 0,
+                          borderBottomRightRadius: 0,
+                        }}
+                      />
+                    </FormControl>
 
+                    <Button variant="contained" color="warning" onClick={distribute}
+                      sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 8, borderBottomRightRadius: 8, paddingX: 5 }}>
+                      Distribute
+                    </Button>
+                  </Box>
+                </Grid>
+                <Grid item xs={6} >
                   <Box
                     sx={{
-                      marginTop: 2,
-                      padding: 5,
+                      display: 'flex',
+                      justifyContent: 'flex-end',
+                      height:'100%'
+                    }}
+                  >
+                    <Button
+                      variant="contained"
+                      color="success"
+                      onClick={() => setOpen(true)}
+                      sx={{ fontSize: 16,}}
+                      
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2} sx={{ flex: 1, overflow: 'hidden', paddingBottom: 2 }}>
+                <Grid item xs={12} md={4}>
+                  <Box
+                    sx={{
+                      padding: 1,
                       height: '100%',
                       width: '100%',
                       overflow: 'hidden',
-                      //display: 'flex',  
-                      flex: 3,
+                      //display: 'flex',
                       justifyContent: 'center',
                       alignItems: 'center',
+                      backgroundColor: '#fff',
+                      borderRadius: 3,
+                      boxShadow: 1
                     }}
                   >
                     <Pie
@@ -844,72 +850,209 @@ export default function Distribution({ farms, roi }) {
                       unit="pcs"
                     />
                   </Box>
-
-                </Box>
-              </Box>
-              <Box sm={12} md={6} sx={{ flex: 2 }}>
-                <Box
-                  sx={{
-                    padding: 4,
-                    height: '100%',
-                    width: '100%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: 1,
-                    borderRadius: 4,
-                    backgroundColor: '#fff',
-                    overflow: 'auto'
-                  }}
-                >
-                  <DataGrid
-                    rows={localFarms}
-                    columns={columns}
-                    disableSelectionOnClick
-                    sx={{
-                      ...datagridStyle,
-                      borderRadius: 3,
-                      flex: 1,
-                      width: '100%',
-                      border: 'none',
-                      height: '100%',
-                      overflowY: 'auto',
-                    }}
-                    getRowClassName={(rows) =>
-                      rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    }
-                    hideFooter
-                  />
-
+                </Grid>
+                <Grid item xs={12} md={8}>
                   <Box
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: 2,
-                      flexDirection: { xs: 'column', md: 'row' }
+                      padding: 1,
+                      boxShadow: 1,
+                      height: '100%',
+                      width: '100%',
+                      overflow: 'hidden',
+                      //display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#fff',
+
+                      borderRadius: 3,
                     }}
                   >
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                      <Typography variant='h5'>Actual Total Production: </Typography>
-                      <Typography variant='h5' sx={{ color: 'black', fontWeight: 500 }}> {totalActualGross}</Typography>
-                    </Box>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => setOpen(true)}
-                      sx={{ fontSize: 15 }}
-                    >
-                      Save
-                    </Button>
+                    <DataGrid
+                      rows={localFarms}
+                      columns={columns}
+                      disableSelectionOnClick
+                      sx={{
+                        ...datagridStyle,
+                        flex: 1,
+                        border: 'none',
+                        height: '100%',
+                        overflow: 'auto',
+                      }}
+                      getRowClassName={(rows) =>
+                        rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                      }
+                      hideFooter
+                    />
                   </Box>
-                </Box>
-              </Box>
+                </Grid>
 
-
+              </Grid>
             </Box>
-          )}
+          </>
+          // <Box sx={{
+          //   display: 'flex',
+          //   flexDirection: {xs: 'column', md: 'row' },
+          //   gap: 2,
+          //   padding: 2,
+          //   mb: 10,
+          //   // overflowX: 'auto',
+          //   height: '100%',
+          //   width: '100%',
+          //   // backgroundColor:'yellow',
+          // }}>
+          //   <Box sm={12} md={6} sx={{ flex: 1 }}>
+          //     <Box sx={{
+          //       padding: 2,
+          //       height: '100%',
+          //       width: '100%',
+          //       display: 'flex',
+          //       flexDirection: 'column',
+          //       // backgroundColor:'yellow',
+          //     }}>
+          //       <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', width: '100%', gap: 2 }}>
+          //         <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+          //           <Typography variant="button" sx={{ marginBottom: 2 }}>
+          //             Select Date
+          //           </Typography>
+          //           <LocalizationProvider dateAdapter={AdapterDayjs}>
+          //             <DatePicker
+          //               label="Select"
+          //               value={selectedDate}
+          //               onChange={(newValue) => {
+          //                 setLocalFarms([]);
+          //                 setTotalActualGross(0)
+          //                 setSelectedDate(newValue);
+          //               }}
+          //               renderInput={(params) => <TextField {...params} />}
+          //               sx={{ borderRadius: 8 }}
+          //             />
+          //           </LocalizationProvider>
+          //         </Box>
 
-          {/* Tab 2: Saved */}
-          {tabIndex === 1 && (
+          //         <Box sx={{ flexDirection: 'column', display: 'flex', flex: 1 }}>
+          //           <Typography variant="button" sx={{ marginBottom: 2, }}>
+          //             Enter Total Distribution
+          //           </Typography>
+          //           <Box sx={{ display: 'flex' }}>
+          //             <OutlinedInput
+          //               type="number"
+          //               onChange={(e) => {
+          //                 if (!localFarms || !localFarms.length) {
+          //                   setOpenError({
+          //                     show: true,
+          //                     title: 'No Farms Found',
+          //                     content: 'No Farms found to distribute.'
+          //                   });
+          //                   setInputText(0);
+          //                   return;
+          //                 }
+          //                 const value = Math.min(e.target.value, totalGrossReturn);
+          //                 setInputText(value);
+          //               }}
+          //               value={inputText}
+          //               fullWidth
+          //               inputProps={{
+          //                 max: totalGrossReturn,
+          //               }}
+          //               sx={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+          //             />
+          //             <Button variant="contained" color="warning" onClick={distribute}
+          //               sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 8, borderBottomRightRadius: 8, paddingX: 5 }}>
+          //               Distribute
+          //             </Button>
+          //           </Box>
+          //         </Box>
+
+          //       </Box>
+
+          //       <Box
+          //         sx={{
+          //           marginTop: 2,
+          //           padding: 5,
+          //           height: '100%',
+          //           width: '100%',
+          //           overflow: 'hidden',
+          //           //display: 'flex',
+          //           flex: 3,
+          //           justifyContent: 'center',
+          //           alignItems: 'center',
+          //         }}
+          //       >
+          //         <Pie
+          //           labels={localFarms.map((lf) => lf.farm)}
+          //           data={localFarms.map((lf) => lf.suggested)}
+          //           title={"Inaasahang Komit"}
+          //           unit="pcs"
+          //         />
+          //       </Box>
+
+          //     </Box >
+          //   </Box>
+          //   <Box sm={12} md={6} sx={{ flex: 2 }}>
+          //     <Box
+          //       sx={{
+          //         padding: 4,
+          //         height: '100%',
+          //         width: '100%',
+          //         display: 'flex',
+          //         flexDirection: 'column',
+          //         boxShadow: 1,
+          //         borderRadius: 4,
+          //         backgroundColor: '#fff',
+          //         overflow: 'auto'
+          //       }}
+          //     >
+          //       <DataGrid
+          //         rows={localFarms}
+          //         columns={columns}
+          //         disableSelectionOnClick
+          //         sx={{
+          //           ...datagridStyle,
+          //           borderRadius: 3,
+          //           flex: 1,
+          //           width: '100%',
+          //           border: 'none',
+          //           height: '100%',
+          //           overflowY: 'auto',
+          //         }}
+          //         getRowClassName={(rows) =>
+          //           rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+          //         }
+          //         hideFooter
+          //       />
+
+          //       <Box
+          //         sx={{
+          //           display: 'flex',
+          //           justifyContent: 'space-between',
+          //           marginTop: 2,
+          //           flexDirection: { xs: 'column', md: 'row' }
+          //         }}
+          //       >
+          //         <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+          //           <Typography variant='h5'>Actual Total Production: </Typography>
+          //           <Typography variant='h5' sx={{ color: 'black', fontWeight: 500 }}> {totalActualGross}</Typography>
+          //         </Box>
+          //         <Button
+          //           variant="contained"
+          //           color="success"
+          //           onClick={() => setOpen(true)}
+          //           sx={{ fontSize: 15 }}
+          //         >
+          //           Save
+          //         </Button>
+          //       </Box>
+          //     </Box>
+          //   </Box>
+
+
+          // </Box>
+        )
+        }
+
+        {/* Tab 2: Saved */}
+        {
+          tabIndex === 1 && (
             <Box
               sx={{
                 display: 'flex',
@@ -1019,10 +1162,10 @@ export default function Distribution({ farms, roi }) {
                 </Box>
               </Box>
             </Box>
-          )}
+          )
+        }
 
-        </Grid>
-      </Box>
+      </Box >
 
 
       <Modal open={saving} aria-labelledby="edit-row-modal">
