@@ -230,26 +230,19 @@ export default function SideNav() {
       }
 
       for (const farm of farms) {
-        // console.log(`Processing farm: ${farm.id}, crop: ${farm.crop}`); // Log the farm and its crop status
-
         if (farm.crop) {
-          // console.log(`Skipping farm: ${farm.id} because crop is true`);
           continue;
         }
-
-        // console.log(`Not skipping: ${farm.id} because crop is false`);
 
         const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
         const farmEventsSnapshot = await getDocs(farmEventsColl);
         const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
-        console.log("farmEvents:", farmEvents);
 
         const farmStage = farm.cropStage
 
-
         const cropstage = new Date();
         let newCropstage = '';
-        let newRemarks ='';
+        let newRemarks = '';
 
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
@@ -263,16 +256,15 @@ export default function SideNav() {
           newCropstage = 'fruiting';
         } else {
           newCropstage = 'complete';
-          newRemarks='success'
+          newRemarks = 'success'
         }
 
         if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
           await updateDoc(doc(db, `/farms/${farm.id}`), {
             cropStage: newCropstage,
-            remarks:newRemarks
+            remarks: newRemarks
           });
         }
-        console.log("updated farm=======>>>", farm.id)
       }
     };
 
@@ -349,7 +341,7 @@ export default function SideNav() {
   };
 
   const getIcon = (iconName) => {
-    return icons[iconName] ;
+    return icons[iconName];
   };
 
   return (
@@ -360,7 +352,7 @@ export default function SideNav() {
             <IconButton onClick={handleDrawerOpen}>
               <MenuIcon sx={{ color: '#fff' }} />
             </IconButton>
-            <Typography
+            {/* <Typography
               variant="h6"
               noWrap
               component="a"
@@ -377,21 +369,24 @@ export default function SideNav() {
               }}
             >
               QP FARMING
-            </Typography>
+            </Typography> */}
           </DrawerHeader>
           <List sx={{ backgroundColor: 'green', flexGrow: 1, color: '#ffffff', height: '100vh', }}>
             {/* Logo Section */}
             <Box
               onClick={() => setSelected('dashboard')}
               sx={{
-                p: 2.4,
+                paddingTop: 0,
+                pl: 5,
+                pb: 5,
+                pr: 5,
                 display: 'flex',
                 justifyContent: open ? 'center' : 'flex-start',
                 alignItems: 'center',
-                cursor: 'pointer',
               }}
             >
-              <img src={logo} alt="pinyatamap logo" width={open ? '50%' : '0'} />
+              <img src={logo} alt="pinyatamap logo" width={open ? '100%' : '0'}
+                />
             </Box>
 
             {/* Sidebar Items */}
@@ -412,7 +407,7 @@ export default function SideNav() {
                   borderTopLeftRadius: '20px', borderBottomLeftRadius: '20px',
                   color: selected === item.name.toLowerCase() ? 'black' : '#fff',
                   '&:hover': {
-                    backgroundColor: selected === item.name.toLowerCase() ? '#b8e994' : '#b8e994', 
+                    backgroundColor: selected === item.name.toLowerCase() ? '#b8e994' : '#b8e994',
                   },
                   boxShadow: selected === item.name.toLowerCase() ? '0px 2px 6px rgba(0, 0, 0, 0.1)' : 'none',
                 }}
@@ -423,6 +418,12 @@ export default function SideNav() {
                     justifyContent: open ? 'initial' : 'center',
                     px: 2.5,
                     borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+                    },
                   }}
                 >
                   <ListItemIcon
@@ -454,7 +455,11 @@ export default function SideNav() {
                   justifyContent: open ? 'initial' : 'center',
                   px: 2.5,
                   borderRadius: '20px',
+                  cursor: 'pointer',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                   '&:hover': {
+                    transform: 'scale(1.05)',
+                    boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
                     backgroundColor: '#f9a883',
                   },
                 }}
@@ -478,7 +483,7 @@ export default function SideNav() {
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
-            <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }}  id="alert-dialog-title">
+            <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }} id="alert-dialog-title">
               {"Logout"}
             </DialogTitle>
             <DialogContent>

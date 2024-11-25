@@ -7,11 +7,13 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
-    Typography
+    Typography,
+    Divider
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import FarmsSchedule from './FarmsSchedule';
-
+import { db } from '../../firebase/Config';
+import { collection, getDocs } from 'firebase/firestore';
 
 export default function Timeline({ farms, events, users, setSelected, farmer }) {
     const [timelineFarms, setTimelineFarms] = useState(farms)
@@ -37,6 +39,30 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
     const handleUser = (event) => {
         setUserFilter(event.target.value)
     };
+
+    useEffect(() => {
+        if (!farms) return;
+
+        const fetchEvents = async () => {
+            const eventsPromises = farms.map(async (farm) => {
+                const eventsRef = collection(db, `farms/${farm.id}/events`);
+                const eventsSnapshot = await getDocs(eventsRef);
+                const eventsData = eventsSnapshot.docs.map((doc) => ({
+                    ...doc.data(),
+                    start_time: doc.data().start_time.toMillis(),
+                    end_time: doc.data().end_time.toMillis()
+                }));
+                return eventsData;
+            });
+            const allEvents = await Promise.all(eventsPromises);
+            setTimelineEvents(allEvents.flat());
+        };
+
+        // Execute the async function
+        fetchEvents();
+    }, [farms]);
+
+
 
     useEffect(() => {
         const filteredFarms = farms.filter((farm) => {
@@ -84,179 +110,170 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
         { value: 11, label: 'December' }
     ];
 
-    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030]; 
+    const years = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     return (
-        <Box sx={{ backgroundColor: '#f9fafb', padding: 2, borderRadius: 4, height: '100%' }}>
-            <Box sx={{ boxShadow: 1, borderRadius: 3, backgroundColor: '#fff', height: 1, overflow: 'hidden' }} >
-                <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap:1 }}>
-                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
-                        {/* Municipality  */}
-                        <Box sx={{ width: '100%' }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
-                                <Select
-                                    sx={{ border: "none" }}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={mun}
-                                    label="Municipality"
-                                    onChange={handleChange}
-                                >
-                                    {
-                                        municipalities.map((municipality) => (
-                                            <MenuItem key={municipality.value} value={municipality.value}>
-                                                {municipality.name}
-                                            </MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        {/* Extensionist */}
-                        <Box sx={{ width: '100%' }}>
-                            <FormControl fullWidth size="small">
-                                <InputLabel id="demo-simple-select-label">BAEWs</InputLabel>
-                                <Select
-                                    sx={{ border: "none" }}
-                                    labelId="demo-simple-select-label"
-                                    id="demo-simple-select"
-                                    value={userFilter}
-                                    label="Extensionist"
-                                    onChange={handleUser}
-                                >
-                                    {newUser
-                                        .filter((user) => user.status === "active") // Filter users with active status
-                                        .map((user) => (
-                                            <MenuItem key={user.uid} value={user.id}>
-                                                {user.displayName}
-                                            </MenuItem>
-                                        ))}
-                                </Select>
+        <Box
+            sx={{
+                backgroundColor: '#f9fafb',
+                padding: 2,
+                borderRadius: 4,
+                height: '100%',
+                overflow: 'hidden', 
+            }}
+        >
+            <Box sx={{ m: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
+                <h1 style={{ color: '#000' }}>Timeline</h1>
+                <Divider sx={{ borderBottomWidth: 2, mb: 2 }} />
 
-                            </FormControl>
-                        </Box>
-                    </Box>
-                    <Box sx={{display:'flex', flexDirection:{xs:'column', md:'row'}, width:'100%', gap:1}}>
-                        {/* Month & Year */}
-                        {/* <Box
-                            sx={{
-                                width: '100%',
-                                display: 'flex',
-                                flexDirection: 'row',
-                                gap: 1,
-                            }}
-                        >
-                            <FormControl fullWidth size="small">
-                                <InputLabel id="month-select-label">Buwan</InputLabel>
-                                <Select
-                                    sx={{ border: 'none' }}
-                                    labelId="month-select-label"
-                                    id="month-select"
-                                    value={selectedMonth}
-                                    label="Buwan"
-                                    onChange={(e) => setSelectedMonth(e.target.value)}
-                                >
-                                    {months.map((month) => (
-                                        <MenuItem key={month.value} value={month.value}>
-                                            {month.label}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                            <FormControl fullWidth size="small">
-                                <InputLabel id="year-select-label">Taon</InputLabel>
-                                <Select
-                                    sx={{ border: 'none' }}
-                                    labelId="year-select-label"
-                                    id="year-select"
-                                    label="Taon"
-                                    value={selectedYear}
-                                    onChange={(e) => setSelectedYear(e.target.value)}
-                                >
-                                    {years.map((year) => (
-                                        <MenuItem key={year} value={year}>
-                                            {year}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box> */}
-                        {/* SearchBox */}
-                        <Box
-                            sx={{
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'flex-end',
-                                gap: 1,
-                                width: { xs: '100%', md: '100%', xl: '100%' },
-                            }}
-                        >
-                            <FormControl fullWidth size="small" >
-                                <OutlinedInput
-                                    id="outlined-adornment-amount"
-                                    placeholder="Maghanap..."
-                                    startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
-                                    value={search}
-                                    onChange={handleSearch}
-                                />
-                            </FormControl>
-                        </Box>
-                    </Box>
-                </Box>
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
-                    <Box sx={{
+                <Box
+                    sx={{
+                        boxShadow: 1,
+                        borderRadius: 3,
+                        backgroundColor: '#fff',
+                        flex: 1,
                         display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-start',
-                        mr: 3
-                    }} >
-                        <Box
-                            sx={{
-                                width: 80,
-                                height: 18,
-                                background: 'linear-gradient(to right, #93d6b0, #68c690, #52be80)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 2,  // optional for rounded corners
-                                mr: 1
-                            }}
-                        >
+                        flexDirection: 'column',
+                        overflow: 'hidden',
+                        padding:2,
+                        mb:2
+                    }}
+                >
+                    <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
+                            {/* Municipality  */}
+                            <Box sx={{ width: '100%' }}>
+                                <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
+                                    <Select
+                                        sx={{ border: "none" }}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={mun}
+                                        label="Municipality"
+                                        onChange={handleChange}
+                                    >
+                                        {
+                                            municipalities.map((municipality) => (
+                                                <MenuItem key={municipality.value} value={municipality.value}>
+                                                    {municipality.name}
+                                                </MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                            {/* Extensionist */}
+                            <Box sx={{ width: '100%' }}>
+                                <FormControl fullWidth size="small">
+                                    <InputLabel id="demo-simple-select-label">BAEWs</InputLabel>
+                                    <Select
+                                        sx={{ border: "none" }}
+                                        labelId="demo-simple-select-label"
+                                        id="demo-simple-select"
+                                        value={userFilter}
+                                        label="Extensionist"
+                                        onChange={handleUser}
+                                    >
+                                        {newUser
+                                            .filter((user) => user.status === "active") // Filter users with active status
+                                            .map((user) => (
+                                                <MenuItem key={user.uid} value={user.id}>
+                                                    {user.displayName}
+                                                </MenuItem>
+                                            ))}
+                                    </Select>
+
+                                </FormControl>
+                            </Box>
                         </Box>
-                        <Typography variant="subtitle2">
-                            Inaasahang Iskedyul
-                        </Typography>
-                    </Box>
-                    <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-start'
-                    }} >
-                        <Box
-                            sx={{
-                                width: 80,
-                                height: 18,
-                                background: 'linear-gradient(to right, #f9c667, #f8ba48, #f6a30b)',
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                borderRadius: 2,  // optional for rounded corners
-                                mr: 1
-                            }}
-                        >
+                        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
+                            <Box
+                                sx={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'flex-end',
+                                    gap: 1,
+                                    width: { xs: '100%', md: '100%', xl: '100%' },
+                                }}
+                            >
+                                <FormControl fullWidth size="small" >
+                                    <OutlinedInput
+                                        id="outlined-adornment-amount"
+                                        placeholder="Maghanap..."
+                                        startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
+                                        value={search}
+                                        onChange={handleSearch}
+                                    />
+                                </FormControl>
+                            </Box>
                         </Box>
-                        <Typography variant="subtitle2">
-                           Aktuwal na Iskedyul
-                        </Typography>
                     </Box>
-                </Box>
-                <Box sx={{ overflowY: 'auto', padding: 1, paddingBottom: 10, height: '100%' }}>
-                    <FarmsSchedule isTimelinePage={true} farms={timelineFarms} events={timelineEvents} setSelected={setSelected} />
+                    <Box sx={{ display: 'flex', justifyContent: 'flex-end', marginRight: 2, marginBottom: 1, pr: 4, flexDirection: { xs: 'column', md: 'row' } }}>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start',
+                            mr: 3
+                        }} >
+                            <Box
+                                sx={{
+                                    width: 80,
+                                    height: 18,
+                                    background: 'linear-gradient(to right, #93d6b0, #68c690, #52be80)',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 2,  // optional for rounded corners
+                                    mr: 1
+                                }}
+                            >
+                            </Box>
+                            <Typography variant="subtitle2">
+                                Inaasahang Iskedyul
+                            </Typography>
+                        </Box>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'flex-start'
+                        }} >
+                            <Box
+                                sx={{
+                                    width: 80,
+                                    height: 18,
+                                    background: 'linear-gradient(to right, #f9c667, #f8ba48, #f6a30b)',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    borderRadius: 2,  // optional for rounded corners
+                                    mr: 1
+                                }}
+                            >
+                            </Box>
+                            <Typography variant="subtitle2">
+                                Aktuwal na Iskedyul
+                            </Typography>
+                        </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            flex: 1,
+                            overflowY: 'auto',
+                        }}
+                    >
+                        <FarmsSchedule
+                            isTimelinePage={true}
+                            farms={timelineFarms}
+                            events={timelineEvents}
+                            setSelected={setSelected}
+                        />
+                    </Box>
                 </Box>
             </Box>
         </Box>
+
     )
 }

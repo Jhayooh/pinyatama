@@ -447,258 +447,289 @@ export default function ProductPrices({ particularData, pineappleData, others })
 
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', borderRadius: 4, height: '100%', padding: 2 }}>
-        <Grid container spacing={2} sx={{ height: '100%', overflow: 'auto' }}>
-          <Grid item xs={12} md={4} lg={3}>
-            <Box sx={{ ...boxStyle, display: 'flex', flexDirection: 'column', gap: 1, height: '100%' }}>
-              {pineappleData.map((pineData, index) => (
-                <Box sx={{
-                  display: 'flex',
-                  flex: 1,
-                  gap: 1.5,
-                  flexDirection: 'column',
-                }}>
-                  <Box sx={{
-                    boxShadow: 2,
-                    borderRadius: 4,
-                    backgroundColor: '#58AC58',
-                    //background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
-                    flex: 1,
+      <Box sx={{
+        backgroundColor: '#f9fafb',
+        padding: 2,
+        borderRadius: 4,
+        height: '100%',
+        overflow: 'hidden',
+      }}>
+        <Box sx={{ m: 2, height: '100%', overflow: 'hidden' }}>
+          <h1 style={{ color: '#000' }}>Product Prices</h1>
+          <Divider sx={{ borderBottomWidth: 2, mb: 2 }} />
+          <Grid container spacing={2} sx={{}}>
+            <Grid item xs={12} md={4} lg={3}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, }}>
+                {pineappleData.map((pineData, index) => (
+                  <Box key={index} sx={{
                     display: 'flex',
+                    flex: 1,
+                    gap: 1.5,
                     flexDirection: 'column',
-                    paddingTop: 5,
-                    paddingRight: 5
+                    cursor: 'pointer',
+                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                    '&:hover': {
+                      transform: 'scale(1.05)',
+                      boxShadow: '0px 8px 15px rgba(0, 0, 0, 0.3)',
+                    },
+                    borderRadius: 4,
+                    height:'100%'
                   }}>
-                    <Box sx={{ flexDirection: 'column', display: 'flex' }}>
-                      <Box sx={{
-                        display: 'flex',
-                        color: '#FFF',
-                        borderRadius: 2,
-                        paddingX: 1.5,
-                        justifyContent: 'flex-start',
-                        alignItems: 'flex-start',
-                        marginBottom: 1,
-
-                      }}>
-                        <Typography variant="button" sx={{
-                          fontWeight: 500,
-                          fontSize: { xs: 20, sm: 25, md: 30, lg: 40 },
-                        }}>
-                          {pineData.name}
-                        </Typography>
-                      </Box>
-                      <Box xs={12} sm={6} md={6}
-                        sx={{
+                    <Box sx={{
+                      boxShadow: 2,
+                      borderRadius: 4,
+                      backgroundColor: '#58AC58',
+                      //background: 'linear-gradient(to right bottom, #93d6b0, #68c690, #52be80)',
+                      flex: 1,
+                      display: 'flex',
+                      flexDirection: 'column',
+                      paddingTop: 5,
+                      paddingRight: 5
+                    }}>
+                      <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                        <Box sx={{
                           display: 'flex',
-                          // gap: { xs: 2, sm: 1, md: 2 },
-                          backgroundColor: '#FFF',
-                          borderTopRightRadius: 30,
-                          borderBottomRightRadius: 30,
-                          boxShadow: 2,
-                          flexDirection: 'column',
-                        }}
-                      >
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            paddingTop: 3,
-                            paddingLeft: 2,
-                            paddingBottom: 3,
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            flexDirection: 'row',
-                            gap: .5
-                          }}
-                        >
-                          <Typography
-                            sx={{
-                              fontWeight: 300,
-                              fontSize: { xs: 40, sm: 50, md: 60, lg: 80, xl: 90 },
-                              color: '#f9c667'
-                            }}
-                          >
-                            ₱
-                          </Typography>
-                          <Typography
-                            onClick={() => handleEditPine(pineData)}
-                            sx={{
-                              fontWeight: 700,
-                              fontSize: { xs: 20, sm: 30, md: 40, lg: 60, xl: 70 },
-                              color: '#f9c667'
-                            }}
-                          >
-                            {`${pineData.price}.00`}
-                          </Typography>
-                        </Box>
-                        {/* <Box sx={{
-                              display:'flex',
-                              justifyContent:'flex-end'}}>
-                        <Typography
-                            sx={{
-                              fontWeight: 100,
-                              fontSize: 20,
-                              color: '#f9c667',
-                            }}
-                          >
-                            /pc
-                          </Typography>
-                        </Box> */}
-                        {/* <Box sx={{
-                          paddingTop: 2,
-                          paddingBottom: 3,
+                          color: '#FFF',
+                          borderRadius: 2,
+                          paddingX: 1.5,
+                          justifyContent: 'flex-start',
+                          alignItems: 'flex-start',
+                          marginBottom: 1,
+
                         }}>
+                          <Typography variant="button" sx={{
+                            fontWeight: 500,
+                            fontSize: { xs: 20, sm: 25, md: 30, lg: 40 },
+                          }}>
+                            {pineData.name}
+                          </Typography>
                           <IconButton sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
                             <EditOutlinedIcon onClick={() => handleEditPine(pineData)} />
                           </IconButton>
-                        </Box> */}
-                      </Box>
-                      {pineData.priceHistory && pineData.priceHistory.length > 0 ? (
-                        pineData.priceHistory.map((entry, index) => (
+                        </Box>
+                        <Box xs={12} sm={6} md={6}
+                          sx={{
+                            display: 'flex',
+                            // gap: { xs: 2, sm: 1, md: 2 },
+                            backgroundColor: '#FFF',
+                            borderTopRightRadius: 30,
+                            borderBottomRightRadius: 30,
+                            boxShadow: 2,
+                            flexDirection: 'column',
+                          }}
+                        >
                           <Box
-                            key={index}
                             sx={{
                               display: 'flex',
-                              color: '#f6f6f6',
-                              borderRadius: 2,
-                              justifyContent: 'center',
+                              paddingTop: 3,
+                              paddingLeft: 2,
+                              paddingBottom: 3,
                               alignItems: 'center',
+                              justifyContent: 'center',
                               flexDirection: 'row',
-                              gap: 1,
-                              textDecoration: 'line-through',
-                              marginTop: 2
+                              gap: .5
                             }}
                           >
                             <Typography
                               sx={{
-                                fontWeight: 400,
-                                fontSize: { xs: 20, md: 40, lg: 60 }
+                                fontWeight: 300,
+                                fontSize: { xs: 40, sm: 50, md: 60, lg: 80, xl: 90 },
+                                color: '#f9c667'
                               }}
                             >
-                              {`₱${entry.previousPrice}.00`}
+                              ₱
+                            </Typography>
+                            <Typography
+                              // onClick={() => handleEditPine(pineData)}
+                              sx={{
+                                fontWeight: 700,
+                                fontSize: { xs: 20, sm: 30, md: 40, lg: 60, xl: 70 },
+                                color: '#f9c667'
+                              }}
+                            >
+                              {`${pineData.price}.00`}
+                            </Typography>
+                            <Typography
+                              sx={{
+                                fontWeight: 100,
+                                fontSize: 20,
+                                color: '#f9c667',
+                              }}
+                            >
+                              /pc
                             </Typography>
                           </Box>
-                        ))
-                      ) : (
-                        <Typography>No price history available.</Typography>
-                      )}
+                          {/* <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'flex-end'
+                          }}>
+                            <Typography
+                              sx={{
+                                fontWeight: 100,
+                                fontSize: 20,
+                                color: '#f9c667',
+                              }}
+                            >
+                              /pc
+                            </Typography>
+                          </Box>
+                          <Box sx={{
+                            paddingTop: 2,
+                            paddingBottom: 3,
+                          }}>
+                            <IconButton sx={{ ...actionBtnStyle, height: '28px', width: '28px', borderRadius: 2 }}>
+                              <EditOutlinedIcon onClick={() => handleEditPine(pineData)} />
+                            </IconButton>
+                          </Box> */}
+                        </Box>
+                        {pineData.priceHistory && pineData.priceHistory.length > 0 ? (
+                          pineData.priceHistory.map((entry, index) => (
+                            <Box
+                              key={index}
+                              sx={{
+                                display: 'flex',
+                                color: '#f6f6f6',
+                                borderRadius: 2,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                flexDirection: 'row',
+                                gap: 1,
+                                textDecoration: 'line-through',
+                                marginTop: 2
+                              }}
+                            >
+                              <Typography
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: { xs: 20, md: 40, lg: 60 }
+                                }}
+                              >
+                                {`₱${entry.previousPrice}.00`}
+                              </Typography>
+                            </Box>
+                          ))
+                        ) : (
+                          <Typography>No price history available.</Typography>
+                        )}
+                      </Box>
                     </Box>
                   </Box>
-                </Box>
-                // <Box elevation={3}
-                //   sx={{
-                //     //backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
-                //     backgroundColor: index === 0 ? '#fff' : '#fff',
-                //     padding: 2,
-                //     flex: 1,
-                //     height: '100%',
-                //     boxShadow:2,
-                //     borderRadius:4
-                //   }}>
-                //   {/* {index === 0 ? (
-                //     <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                //   ) : (
-                //     <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
-                //   )}
-                //   <Divider sx={{ marginTop: 2 }} /> */}
-                //   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
-                //     <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
-                //       {pineData.name}
-                //     </Typography>
-                //     <Typography variant="h6" gutterBottom>
-                //       {`₱${pineData.price}.00`}
-                //     </Typography>
-                //   </Box>
-                //   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
-                //     <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
-                //       Edit Price
-                //     </Button>
-                //   </Box>
-                // </Box>
-              ))}
-            </Box>
-          </Grid>
-          <Grid xs={12} md={8} lg={9} sx={{ height: '100%' }}>
-            <Box sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              height: '100%',
-              backgroundColor: '#fff',
-              p: 1,
-              borderRadius: 4,
-              boxShadow: 2,
-            }}>
-              <Tabs
-                value={activeTab}
-                onChange={handleTabChange}
-                variant="scrollable"
-                scrollButtons="auto"
-              >
-                <Tab label="Material" value="materials" />
-                <Tab label="Fertilizer" value="fertilizers" />
-                <Tab label="Labor" value="labors" />
-                <Tab label="Others" value="others" />
-              </Tabs>
-              <Box
-                sx={{
-                  height: '100%',
-                  overflow: 'hidden',
-                  //overflowY:'auto'
-                }}
-              >
+                  // <Box elevation={3}
+                  //   sx={{
+                  //     //backgroundColor: index === 0 ? '#58AC58' : '#F7BF0B',
+                  //     backgroundColor: index === 0 ? '#fff' : '#fff',
+                  //     padding: 2,
+                  //     flex: 1,
+                  //     height: '100%',
+                  //     boxShadow:2,
+                  //     borderRadius:4
+                  //   }}>
+                  //   {/* {index === 0 ? (
+                  //     <img src={Butt} alt="Butt" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  //   ) : (
+                  //     <img src={Butt} alt="Pine" style={{ width: '100%', maxHeight: '150px', objectFit: 'contain' }} />
+                  //   )}
+                  //   <Divider sx={{ marginTop: 2 }} /> */}
+                  //   <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                  //     <Typography variant="button" display="block" gutterBottom sx={{ color: 'white', fontSize: 20 }}>
+                  //       {pineData.name}
+                  //     </Typography>
+                  //     <Typography variant="h6" gutterBottom>
+                  //       {`₱${pineData.price}.00`}
+                  //     </Typography>
+                  //   </Box>
+                  //   <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                  //     <Button variant='contained' color='success' onClick={() => handleEditPine(pineData)}>
+                  //       Edit Price
+                  //     </Button>
+                  //   </Box>
+                  // </Box>
+                ))}
+              </Box>
+            </Grid>
+            <Grid xs={12} md={8} lg={9} >
+              <Box sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                height: '100%',
+                backgroundColor: '#fff',
+                p: 1,
+                borderRadius: 4,
+                boxShadow: 2, overflow: 'hidden'
+              }}>
+                <Tabs
+                  value={activeTab}
+                  onChange={handleTabChange}
+                  variant="scrollable"
+                  scrollButtons="auto"
+                >
+                  <Tab label="Material" value="materials" />
+                  <Tab label="Fertilizer" value="fertilizers" />
+                  <Tab label="Labor" value="labors" />
+                  {/* <Tab label="Others" value="others" /> */}
+                </Tabs>
                 <Box
-                  component="form"
                   sx={{
-                    p: '2px',
-                    m: 2,
-                    display: 'flex',
-                    borderRadius: 2.5,
-                    border: '2px solid #dcdcdc',
-                    justifyContent: 'flex-end',
-                    alignItems: 'center'
+                    height: '100%',
+                    overflow: 'hidden',
+                    //overflowY:'auto'
                   }}
                 >
-                  <IconButton sx={{ p: '7px' }} aria-label="menu">
-                    <SearchIcon />
-                  </IconButton>
-                  <InputBase
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="Maghanap..."
-                    inputProps={{ 'aria-label': 'search particulars' }}
-                    value={searchInput}
-                    onChange={handleSearchInputChange}
+                  <Box
+                    component="form"
+                    sx={{
+                      p: '2px',
+                      m: 2,
+                      display: 'flex',
+                      borderRadius: 2.5,
+                      border: '2px solid #dcdcdc',
+                      justifyContent: 'flex-end',
+                      alignItems: 'center'
+                    }}
+                  >
+                    <IconButton sx={{ p: '7px' }} aria-label="menu">
+                      <SearchIcon />
+                    </IconButton>
+                    <InputBase
+                      sx={{ ml: 1, flex: 1 }}
+                      placeholder="Maghanap..."
+                      inputProps={{ 'aria-label': 'search particulars' }}
+                      value={searchInput}
+                      onChange={handleSearchInputChange}
+                    />
+                  </Box>
+                  <DataGrid
+                    rows={filteredParticularData.map((partiData, index) => ({ index: index + 1, ...partiData }))}
+                    columns={columns}
+                    initialState={{
+                      sorting: {
+                        sortModel: [{ field: 'particular', sort: 'asc' }],
+                      },
+                    }}
+                    editMode="row"
+                    rowModesModel={rowModesModel}
+                    onRowEditStop={handleRowEditStop}
+                    pageSizeOptions={[25, 50, 100]}
+                    disableRowSelectionOnClick
+                    sx={{
+                      ...datagridStyle,
+                      border: 'none',
+                      paddingX: 2,
+                      overflowX: 'auto',
+                      height: `calc(100% - 8px)`,
+                      backgroundColor: '#fff',
+                      paddingTop: 1
+                    }}
+                    getRowClassName={(rows) =>
+                      rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    hideFooter
                   />
                 </Box>
-                <DataGrid
-                  rows={filteredParticularData.map((partiData, index) => ({ index: index + 1, ...partiData }))}
-                  columns={columns}
-                  initialState={{
-                    sorting: {
-                      sortModel: [{ field: 'particular', sort: 'asc' }],
-                    },
-                  }}
-                  editMode="row"
-                  rowModesModel={rowModesModel}
-                  onRowEditStop={handleRowEditStop}
-                  pageSizeOptions={[25, 50, 100]}
-                  disableRowSelectionOnClick
-                  sx={{
-                    ...datagridStyle,
-                    border: 'none',
-                    paddingX: 2,
-                    overflowX: 'auto',
-                    height: `calc(100% - 8px)`,
-                    backgroundColor: '#fff',
-                    paddingTop: 1
-                  }}
-                  getRowClassName={(rows) =>
-                    rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                  }
-                  hideFooter
-                />
               </Box>
-            </Box>
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
       <EditRowModal />
       <EditPinePrice />

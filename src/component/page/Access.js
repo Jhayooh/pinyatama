@@ -11,7 +11,8 @@ import {
   MenuItem,
   TextField,
   Typography,
-  Modal
+  Modal,
+  Divider
 } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
 import Dialog from '@mui/material/Dialog';
@@ -159,7 +160,7 @@ const Access = ({ usersRow }) => {
     handleClose();
     refreshUsers();
   };
-  
+
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', viewedUser.uid);
     const { email, password, mun, brgy } = viewedUser;
@@ -391,6 +392,10 @@ const Access = ({ usersRow }) => {
           height: '100%',
         }}
       >
+        <Box lg={12} md={12} sm={12} xs={12} sx={{ m: 2 }}>
+          <h1 style={{ color: '#000' }}>Barangay Extensionist Workers</h1>
+          <Divider sx={{ borderBottomWidth: 2 }} />
+        </Box>
         <Grid container spacing={4} alignItems="stretch">
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Box
@@ -399,7 +404,6 @@ const Access = ({ usersRow }) => {
                 borderRadius: 3,
                 backgroundColor: '#fff',
                 width: 1,
-                marginBottom: 2,
                 padding: 2,
               }}
             >
@@ -407,12 +411,12 @@ const Access = ({ usersRow }) => {
                 sx={{
                   display: 'flex',
                   justifyContent: 'space-between',
-                  gap: 2,
+                  gap: 2
                 }}
               >
                 <Box sx={{ width: '30%' }}>
                   <FormControl fullWidth size="small">
-                  <InputLabel shrink={true}  id="demo-simple-select-label">Munisipalidad</InputLabel>
+                    <InputLabel shrink={true} id="demo-simple-select-label">Munisipalidad</InputLabel>
                     <Select
                       labelId="municipality-select-label"
                       label='Munisipalidad'
@@ -441,7 +445,7 @@ const Access = ({ usersRow }) => {
 
                 <Box sx={{ width: '30%' }}>
                   <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
+                    <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
                     <Select
                       labelId="barangay-select-label"
                       value={brgy || ''}
@@ -459,8 +463,6 @@ const Access = ({ usersRow }) => {
                     </Select>
                   </FormControl>
                 </Box>
-
-
                 <Box sx={{ flex: '1 1 auto' }}>
                   <FormControl fullWidth size="small">
                     <OutlinedInput
@@ -476,7 +478,6 @@ const Access = ({ usersRow }) => {
                     />
                   </FormControl>
                 </Box>
-
               </Box>
             </Box>
           </Grid>
@@ -499,11 +500,10 @@ const Access = ({ usersRow }) => {
                 sx={{
                   ...datagridStyle,
                   border: 'none',
-                  paddingX: 2,
                   overflowX: 'auto',
                   height: `calc(100% - 8px)`,
                   backgroundColor: '#fff',
-                  paddingTop: 1
+                  padding:2
                 }}
                 getRowClassName={(getRowId) =>
                   getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'

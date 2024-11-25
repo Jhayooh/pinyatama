@@ -67,6 +67,9 @@ const Activities = ({ farm }) => {
             qnty: 0,
         }, ...activities])
 
+        console.log("activities:", activities);
+        
+
         const hasAct = activities.find(act => act.type === 'a' || act.type === 'r')
         setActualRoi(farm.roi.find(r => r.type === 'a'))
     }, [activities, farm])

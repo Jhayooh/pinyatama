@@ -129,7 +129,8 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
     }
     return (
         <>
-            <div>
+            <div style={{display:'flex', height:'100%',overflow:'auto'}}>
+                <Box style={{ width: '100%', padding: '10px' }}>
                 <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
                     <Typography style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1, fontSize:50}}>{farm.title}</Typography>
@@ -137,7 +138,6 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
                         <Button variant='outlined' color='success' onClick={handleSar} sx={{marginRight: '20px'}}>Download Soil Analysis Result </Button>
                     }
                 </Box>
-                <Box style={{ width: '100%', padding: '10px' }}>
                     <Box style={{
                         display: 'flex',
                         justifyContent: 'center',
