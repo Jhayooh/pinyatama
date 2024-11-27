@@ -389,10 +389,10 @@ const Access = ({ usersRow }) => {
           backgroundColor: '#f9fafb',
           padding: 4,
           borderRadius: 4,
-          height: '100%',
-          display:'flex',
-          flexDirection:'column',
-          overflow:'hidden'
+          height: '100vh', // Full viewport height for layout
+          display: 'flex',
+          flexDirection: 'column',
+          overflow: 'hidden', // Prevent parent from scrolling
         }}
       >
         <Box lg={12} md={12} sm={12} xs={12} sx={{ m: 2 }}>
@@ -403,102 +403,112 @@ const Access = ({ usersRow }) => {
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Box
               sx={{
-                // boxShadow: 1,
-                // borderRadius: 3,
-                // backgroundColor: '#fff',
-                // padding: 2,
+                display: 'flex',
+                justifyContent: 'space-between',
+                gap: 2,
               }}
             >
-              <Box
-                sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  gap: 2
-                }}
-              >
-                <Box sx={{ width: '30%' }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel shrink={true} id="demo-simple-select-label">Munisipalidad</InputLabel>
-                    <Select
-                      labelId="municipality-select-label"
-                      label='Munisipalidad'
-                      value={munCode || ''}
-                      onChange={(e) => {
-                        setMunCode(e.target.value);
-
-                        console.log("the munnnnn 2", result);
-                        console.log("the munnnnn", e.target.value);
-                        setMun(result.filter((m) => m.mun_code === e.target.value))
-                        setBrgy('');
-                      }}
-                      displayEmpty
-                    >
-                      <MenuItem value="">
-                        <em>Lahat</em>
+              {/* Filters and Search */}
+              <Box sx={{ width: '30%' }}>
+                <FormControl fullWidth size="small">
+                  <InputLabel shrink={true} id="demo-simple-select-label">
+                    Munisipalidad
+                  </InputLabel>
+                  <Select
+                    labelId="municipality-select-label"
+                    label="Munisipalidad"
+                    value={munCode || ''}
+                    onChange={(e) => {
+                      setMunCode(e.target.value);
+                      setMun(result.filter((m) => m.mun_code === e.target.value));
+                      setBrgy('');
+                    }}
+                    displayEmpty
+                  >
+                    <MenuItem value="">
+                      <em>Lahat</em>
+                    </MenuItem>
+                    {result?.map((munItem) => (
+                      <MenuItem key={munItem.mun_code} value={munItem.mun_code}>
+                        {munItem.name}
                       </MenuItem>
-                      {result?.map((munItem) => (
-                        <MenuItem key={munItem.mun_code} value={munItem.mun_code}>
-                          {munItem.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
 
-                <Box sx={{ width: '30%' }}>
-                  <FormControl fullWidth size="small">
-                    <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
-                    <Select
-                      labelId="barangay-select-label"
-                      value={brgy || ''}
-                      onChange={(e) => setBrgy(e.target.value)}
-                      displayEmpty
-                      disabled={!munCode}
-                    >
-                      <MenuItem value="">
+              <Box sx={{ width: '30%' }}>
+                <FormControl fullWidth size="small">
+                  <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
+                  <Select
+                    labelId="barangay-select-label"
+                    value={brgy || ''}
+                    onChange={(e) => setBrgy(e.target.value)}
+                    displayEmpty
+                    disabled={!munCode}
+                  >
+                    <MenuItem value="">
+                    </MenuItem>
+                    {barangays?.map((barangay, index) => (
+                      <MenuItem key={index} value={barangay.name}>
+                        {barangay.name}
                       </MenuItem>
-                      {barangays?.map((barangay, index) => (
-                        <MenuItem key={index} value={barangay.name}>
-                          {barangay.name}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Box>
-                <Box sx={{ flex: '1 1 auto' }}>
-                  <FormControl fullWidth size="small">
-                    <OutlinedInput
-                      id="outlined-adornment-amount"
-                      placeholder="Maghanap..."
-                      startAdornment={
-                        <InputAdornment position="start">
-                          <SearchIcon />
-                        </InputAdornment>
-                      }
-                      value={search}
-                      onChange={handleSearch}
-                    />
-                  </FormControl>
-                </Box>
+                    ))}
+                  </Select>
+                </FormControl>
+              </Box>
+              <Box sx={{ flex: '1 1 auto' }}>
+                <FormControl fullWidth size="small">
+                  <OutlinedInput
+                    id="outlined-adornment-amount"
+                    placeholder="Maghanap..."
+                    startAdornment={
+                      <InputAdornment position="start">
+                        <SearchIcon />
+                      </InputAdornment>
+                    }
+                    value={search}
+                    onChange={handleSearch}
+                  />
+                </FormControl>
               </Box>
             </Box>
           </Grid>
           <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Box sx={{ display: 'flex', paddingY: 'auto' , height:'100%'}} >
-              <DataGrid
-                getRowId={getRowId}
-                rows={userRow}
-                columns={columns}
-                initialState={{
-                  sorting: {
-                    sortModel: [{ field: 'name', sort: 'asc' }],
-                  },
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: 1, // Ensures this area takes available space
+                overflow: 'hidden', // Prevents unintended parent scrolling
+              }}
+            >
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  overflowY: 'auto', // Enable vertical scrolling for DataGrid content
+                  overflowX: 'auto', // Enable horizontal scrolling if needed
+                  maxHeight: '70vh', // Constrain DataGrid height for small screens
+                  height: '100%',
+                  borderRadius: 2,
+                  boxShadow: 2,
+                  backgroundColor: '#fff',
+                  padding:2
                 }}
-                editMode='row'
-                rowModesModel={rowModesModel}
-                // onRowEditStop={handleRowEditStop}
-                pageSizeOptions={[25, 50, 100]}
-                disableRowSelectionOnClick
+              >
+                <DataGrid
+                  getRowId={getRowId}
+                  rows={userRow}
+                  columns={columns}
+                  initialState={{
+                    sorting: {
+                      sortModel: [{ field: 'name', sort: 'asc' }],
+                    },
+                  }}
+                  editMode="row"
+                  rowModesModel={rowModesModel}
+                  pageSizeOptions={[25, 50, 100]}
+                  disableRowSelectionOnClick
                 sx={{
                   ...datagridStyle,
                   border: 'none',
@@ -506,15 +516,15 @@ const Access = ({ usersRow }) => {
                   height: `calc(100% - 8px)`,
                   backgroundColor: '#fff',
                   padding:2
-                }}
-                getRowClassName={(getRowId) =>
-                  getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                }
-                hideFooter
-              />
+                  }}
+                  getRowClassName={(getRowId) =>
+                    getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                  }
+                  hideFooter
+                />
+              </Box>
             </Box>
           </Grid>
-
         </Grid>
       </Box>
       {/* View User Modal */}
@@ -524,14 +534,16 @@ const Access = ({ usersRow }) => {
         <Box sx={{
           display: 'flex',
           position: 'absolute',
-          top: '50%',
+          top: '50%', flexDirection:'column',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           bgcolor: 'background.paper',
           borderRadius: '5px',
           boxShadow: 24,
           p: 4,
-          width: { xs: '90%', md: '80%', lg: '40%' }
+          width:{xs:'50%', md:'70%'},
+          maxHeight:'90vh',
+          overflowY:'auto'
         }}>
           <Grid container spacing={4} sx={{ display: 'flex', width: '100%' }}>
             <Grid item xs={4} >
@@ -625,7 +637,7 @@ const Access = ({ usersRow }) => {
             <Grid item xs={8}>
               <Typography variant='h6' gutterBottom sx={{ color: '#58AC58', }}>Extensionist Details</Typography>
               <Box sx={{ flexDirection: 'row', display: 'flex', gap: 1 }}>
-                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                <Box sx={{ flexDirection: 'column', display:'flex'}}>
                   <Typography variant='button'>Firstname:</Typography>
                   <TextField
                     id="filled-read-only-input"
@@ -634,9 +646,10 @@ const Access = ({ usersRow }) => {
                       readOnly: true,
                     }}
                     variant="filled"
+                    fullWidth
                   />
                 </Box>
-                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
+                <Box sx={{ flexDirection: 'column',display:'flex' }}>
                   <Typography variant='button'>Lastname:</Typography>
                   <TextField
                     id="filled-read-only-input"
@@ -645,6 +658,7 @@ const Access = ({ usersRow }) => {
                       readOnly: true,
                     }}
                     variant="filled"
+                    fullWidth
                   />
                 </Box>
               </Box>

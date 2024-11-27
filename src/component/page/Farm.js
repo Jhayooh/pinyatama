@@ -113,7 +113,7 @@ export default function Farm({ farmId }) {
     return (
         <>
             <Box>
-                <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                {/* <Box mt={2} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                     <Box sx={{ '& > :not(style)': { m: 1 } }}>
                         <Fab sx={{ border: 1, color: 'green', backgroundColor: '#fff' }} onClick={() => setModal(true)}>
                             <img src={require('./../image_src/add.png')} width={25} />
@@ -145,8 +145,8 @@ export default function Farm({ farmId }) {
                         </DialogActions>
                     </Dialog>
                     {uploadProgress > 0 && <progress value={uploadProgress} max="100" />}
-                </Box>
-                <Box display="flex" flexWrap="wrap">
+                </Box> */}
+                <Box display="flex" flexWrap="wrap"  >
                     {images.map((image, index) => (
                         <Box
                             key={index}
