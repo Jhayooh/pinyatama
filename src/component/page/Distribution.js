@@ -37,7 +37,7 @@ import * as XLSX from 'xlsx';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Pie from '../chart/Pie2';
-import { collection, doc, addDoc, setDoc, updateDoc, getDoc, writeBatch } from "firebase/firestore";
+import { collection, doc, addDoc, setDoc, updateDoc, getDoc, getDocs, writeBatch, query, where } from "firebase/firestore";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import IconButton from '@mui/material/IconButton';
@@ -72,9 +72,7 @@ export default function Distribution({ farms, roi }) {
   const [value, setValue] = useState(null)
   const [selectedRow, setSelectedRow] = useState(false)
   const [editModal, setEditModal] = useState(false)
-
-  const distributionColl = collection(db, '/distributions')
-  const [distributions, distributionLoading] = useCollectionData(distributionColl)
+  const [distributions, setDistributions] = useState(null)
 
   const [reportSelection, setReportSelection] = useState(null)
 
@@ -82,6 +80,41 @@ export default function Distribution({ farms, roi }) {
     const d = new Date(date)
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })
   }
+
+  const fetchDistributions = async (month, year) => {
+    try {
+      const distributionColl = collection(db, 'distributions');
+      const distributionQuery = query(
+        distributionColl,
+        where('month', '==', month),
+        where('year', '==', year)
+      );
+      const querySnapshot = await getDocs(distributionQuery);
+      const distri = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      console.log("farms sa fetching distribution", distri);
+      return distri
+    } catch (error) {
+      console.error('Error fetching distributions:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchDistributions = async (month, year) => {
+      try {
+        const distributionColl = collection(db, 'distributions');
+        const distributionQuery = query(distributionColl, where('month', '==', month));
+        const querySnapshot = await getDocs(distributionQuery);
+        const distri = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        setDistributions(distri);
+        console.log("Filtered distributions:", distri);
+      } catch (error) {
+        console.error('Error fetching distributions:', error);
+      }
+    };
+
+    fetchDistributions();
+  }, []);
+
 
   const formattedDate = selectedDate.format('MMMM YYYY');
 
@@ -186,12 +219,12 @@ export default function Distribution({ farms, roi }) {
     };
 
     // Aggregate distributions by id and dayOfHarvest
-    const aggregatedDistributions = distributions.reduce((acc, dist) => {
-      const distKey = `${dist.farmId}-${new Date(dist.dayOfHarvest.toDate()).getTime()}`;
+    const aggregatedDistributions = savedDistributions.reduce((acc, dist) => {
+      const distKey = `${dist.farmId}-${new Date(dist.commitDate).getTime()}`;
       if (!acc[distKey]) {
         acc[distKey] = { ...dist };
       } else {
-        acc[distKey].actual += dist.actual;
+        acc[distKey].actualCommit += dist.actualCommit;
       }
       return acc;
     }, {});
@@ -201,7 +234,7 @@ export default function Distribution({ farms, roi }) {
     // Filter Farms and Map Data
     const filteredFarms = farms.filter((farm) =>
       aggregatedDistributionsArray.some((dist) => {
-        const distDate = new Date(dist.dayOfHarvest.toDate());
+        const distDate = new Date(dist.commitDate);
         return dist.farmId === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
       })
     );
@@ -212,7 +245,7 @@ export default function Distribution({ farms, roi }) {
 
     filteredFarms.forEach((farm) => {
       const farmDistributions = aggregatedDistributionsArray.filter((dist) => {
-        const distDate = new Date(dist.dayOfHarvest.toDate());
+        const distDate = new Date(dist.commitDate);
         return dist.farmId === farm.id && distDate.getFullYear() === year && distDate.getMonth() === month;
       });
 
@@ -224,10 +257,10 @@ export default function Distribution({ farms, roi }) {
 
       let total = 0;
       farmDistributions.forEach((dist) => {
-        const distDate = new Date(dist.dayOfHarvest.toDate());
+        const distDate = new Date(dist.commitDate);
         const colIndex = headers.length + distDate.getDate();
-        worksheet.getCell(rowIndex, colIndex).value = dist.actual;
-        total += dist.actual;
+        worksheet.getCell(rowIndex, colIndex).value = dist.actualCommit;
+        total += dist.actualCommit;
       });
 
       worksheet.getCell(rowIndex, totalColIndex).value = total;
@@ -289,25 +322,42 @@ export default function Distribution({ farms, roi }) {
     setEditModal(true);
   };
 
-  const handleActualValue = () => {
-
-  }
-
-  const handleSavedDate = (date) => {
+  const handleSavedDate = async (date) => {
     setSavedDate(date)
 
     const month = date.month()
     const year = date.year()
 
-    const filteredDistributions = distributions.filter(item => {
-      const filDate = new Date(item.date);
-      return filDate.getMonth() === month && filDate.getFullYear() === year;
-    });
-    setSavedDistributions(filteredDistributions)
+    const distri = await fetchDistributions(month, year)
+
+    const dataGridDistri = distri?.map(d => {
+      const farm = farms.find(farm => farm.id === d.farmId)
+      console.log("farmssss", farm)
+
+      if (farm) {
+        return {
+          farmerName: farm.farmerName,
+          brgy: farm.brgy,
+          mun: farm.mun,
+          area: farm.area,
+          startDate: farm.start_date.toDate(),
+          harvestDate: farm.harvest_date.toDate(),
+          commitDate: d.dayOfCommit.toDate(),
+          actualCommit: d.actual,
+          id: d.id,
+          farmId: farm.id
+        }
+      }
+    })
+
+    console.log("farms sa handle saved date:", dataGridDistri);
+    setSavedDistributions(dataGridDistri)
   }
 
   const handleEditCommit = () => {
     // Update the localFarms state
+    console.log("farms sa handle Edit commit:", localFarms);
+
     setLocalFarms((prevFarms) => {
       // Update the specific farm object and return a new array
       const updatedFarms = prevFarms.map((farm) => {
@@ -334,6 +384,8 @@ export default function Distribution({ farms, roi }) {
   useEffect(() => {
     if (!farms) return
     setInputText(0)
+    console.log("farms sa useEffect (1)", farms);
+
     const filterFarmsByDate = farms
       .filter(farm =>
         farm.cropStage !== 'complete' && farm.remarks !== 'failed'
@@ -351,7 +403,7 @@ export default function Distribution({ farms, roi }) {
           title: `${farm.title} (Batch ${batch.index})`,
           batchId: batch.index,
           harvest_date: batch.harvestDate,
-          grossReturn: batch.plantSize - (batch.commit || 0), // Set grossReturn to batch.plantSize
+          grossReturn: batch.plantSize - (batch.commit || 0),
         }));
       })
       .filter(farm => {
@@ -433,6 +485,8 @@ export default function Distribution({ farms, roi }) {
 
     const theTotalGrossReturn = filterFarmsByDate.reduce((sum, farm) => sum + (farm.grossReturn || 0), 0)
 
+    console.log("farms sa distribute", filterFarmsByDate);
+
     const locFarms = filterFarmsByDate.map(filFarm => {
       const percentage = getPercentage(filFarm.grossReturn, totalGrossReturn);
       const allocation = Math.round(inputText * (percentage / 100));
@@ -458,12 +512,6 @@ export default function Distribution({ farms, roi }) {
     return Math.floor(Math.random() * Date.now())
   }
 
-  const monthYear = (dateStr) => {
-    const date = new Date(dateStr);
-    const options = { year: 'numeric', month: 'long' };
-    return date.toLocaleDateString('en-US', options);
-  };
-
   // useEffect(() => {
   //   if (!distributions) return
 
@@ -486,25 +534,29 @@ export default function Distribution({ farms, roi }) {
   // }, [distributions])
   const saveDistribution = async () => {
     setSaving(true)
+    console.log("farms sa save distribution", localFarms);
     const currentDate = new Date()
     const distributionColl = collection(db, '/distributions')
-    console.log("lcoal farms:", localFarms);
     try {
       const uniqueId = uniqueID()
       for (const farm of localFarms) {
         await addDoc(distributionColl, {
           ...farm,
-          dayOfHarvest: selectedDate.toDate(),
+          dayOfCommit: selectedDate.toDate(),
+          month: selectedDate.month(),
+          year: selectedDate.year(),
+          id: uniqueID() + "-" + farm.id,
           distributionId: uniqueId
         })
+
         const farmDocRef = doc(db, `farms/${farm.farmId}`);
         const farmDocSnapshot = await getDoc(farmDocRef);
-        if (!farmDocSnapshot.exists()) {
-          console.error(`Farm with ID ${farm.farmId} does not exist.`);
-          continue;
-        }
+
         const farmToCommit = farmDocSnapshot.data();
+<<<<<<< Updated upstream
         console.log("farm to commit", farmToCommit);
+=======
+>>>>>>> Stashed changes
 
         if (farmToCommit.batches) {
           const updatedBatches = farmToCommit.batches.map((batch, index) => {
@@ -520,9 +572,11 @@ export default function Distribution({ farms, roi }) {
             batches: updatedBatches,
           });
         }
+
         await updateDoc(farmDocRef, {
           commit: farmToCommit.commit ? farmToCommit.commit + farm.actual : farm.actual,
         });
+
         await addDoc(collection(db, `farms/${farm.farmId}/activities`), {
           compId: "",
           createdAt: currentDate,
@@ -571,6 +625,75 @@ export default function Distribution({ farms, roi }) {
   const handleTabChange = (_, newValue) => {
     setTabIndex(newValue);
   };
+
+  const columnsSavedDistri = [
+    {
+      field: 'farmerName',
+      headerName: 'Name of Farmer',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1
+    },
+    {
+      field: 'brgy',
+      headerName: 'Barangay',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1
+    },
+    {
+      field: 'mun',
+      headerName: 'Municipality',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1
+    },
+    {
+      field: 'area',
+      headerName: 'Area',
+      align: 'center',
+      headerAlign: 'center',
+    },
+    {
+      field: 'startDate',
+      headerName: 'Planting Date',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1,
+      valueFormatter: (d) => {
+        if (!d) {
+          return ''
+        }
+        return dateFormatter(d.value)
+      }
+    },
+    {
+      field: 'commitDate',
+      headerName: 'Distribution Date',
+      align: 'center',
+      headerAlign: 'center',
+      flex: 1,
+      valueFormatter: (d) => {
+        if (!d) {
+          return ''
+        }
+        return dateFormatter(d.value)
+      }
+    },
+    {
+      field: 'actualCommit',
+      headerName: 'No. of Plants (pcs)',
+      align: 'right',
+      headerAlign: 'center',
+      flex: 1,
+      valueFormatter: (value) => {
+        if (value == null) {
+          return '';
+        }
+        return `${value.value.toLocaleString('en-US')}`;
+      },
+    },
+  ]
 
 
   const columns = [
@@ -988,12 +1111,99 @@ export default function Distribution({ farms, roi }) {
                   backgroundColor: '#fff',
                   border: 'none',
                 }}
+<<<<<<< Updated upstream
                 onCellEditCommit={handleEditCellChange}
                 getRowClassName={(rows) =>
                   rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
                 hideFooter
               />
+=======
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    pb: 2,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
+                    <IconButton
+                      onClick={() => setIsModalOpen(true)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <CalendarTodayIcon />
+                    </IconButton>
+
+                    <Modal
+                      open={isModalOpen}
+                      onClose={() => setIsModalOpen(false)}
+                      aria-labelledby="month-year-picker-modal"
+                      aria-describedby="select-month-and-year"
+                    >
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          top: '43%',
+                          left: '25%',
+                          transform: 'translate(-50%, -50%)',
+                          width: 300,
+                        }}
+                      >
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                          <StaticDatePicker
+                            displayStaticWrapperAs="desktop"
+                            value={savedDate}
+                            onChange={(newValue) => {
+                              handleSavedDate(newValue)
+                              setIsModalOpen(false);
+                            }}
+                            views={['year', 'month']}
+                          />
+                        </LocalizationProvider>
+                      </Box>
+                    </Modal>
+                  </Box>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    disabled={!savedDistributions}
+                    onClick={() => exportExcel(savedDate)}
+                  >
+                    {!savedDistributions ? 'Waiting...' : 'Download report'}
+                  </Button>
+                </Box>
+                <Box
+                  sx={{
+                    flex: 1,
+                    overflow: 'auto',
+                    backgroundColor: 'yellow',
+                    borderRadius: 3,
+                  }}
+                >
+                  <DataGrid
+                    rows={savedDistributions}
+                    columns={columnsSavedDistri}
+                    disableSelectionOnClick
+                    sx={{
+                      ...datagridStyle,
+                      borderRadius: 3,
+                      height: '100%',
+                      width: '100%',
+                      backgroundColor: '#fff',
+                      border: 'none',
+                    }}
+                    onCellEditCommit={handleEditCellChange}
+                    getRowClassName={(rows) =>
+                      rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                    }
+                    hideFooter
+                  />
+                </Box>
+              </Box>
+>>>>>>> Stashed changes
             </Box>
           </Grid>
         )}
@@ -1100,18 +1310,15 @@ export default function Distribution({ farms, roi }) {
             value={selectedRow.actual}
             InputProps={{
               inputProps: {
-                max: selectedRow.suggested,
+                max: selectedRow.production,
                 min: 0,
               }
             }}
             onChange={(value) => {
               const inputValue = parseInt(value.target.value, 10);
-
-              console.log("Input value type:", typeof (inputValue), "value:", inputValue);
-
               const newValue = (isNaN(inputValue) || inputValue < 0)
                 ? 0
-                : Math.min(inputValue, selectedRow.suggested);
+                : Math.min(inputValue, selectedRow.production);
 
               setSelectedRow((prev) => ({
                 ...prev,
