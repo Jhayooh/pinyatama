@@ -505,7 +505,7 @@ export default function Distribution({ farms, roi }) {
         }
         const farmToCommit = farmDocSnapshot.data();
         console.log("farm to commit", farmToCommit);
-        
+
         if (farmToCommit.batches) {
           const updatedBatches = farmToCommit.batches.map((batch, index) => {
             if (batch.index === farm.batchId) {
@@ -698,7 +698,7 @@ export default function Distribution({ farms, roi }) {
         position: "absolute",
         left: 0,
         display: "block",
-        height: 20,
+        height: '100%',
         width: "1px",
         zIndex: 1,
         marginTop: theme.spacing(0.5),
@@ -733,132 +733,150 @@ export default function Distribution({ farms, roi }) {
 
   return (
     <>
-      <Box sx={{ backgroundColor: '#f9fafb', padding: 4, borderRadius: 4, height: '100%', overflow: 'auto' }}>
-        <Grid container spacing={2} alignItems='stretch' sx={{}}>
+      <Box
+        sx={{
+          backgroundColor: '#f9fafb',
+          padding: { xs: 1, sm: 2 },
+          borderRadius: 4,
+          height: '100vh', // Full viewport height
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+      >
+        <Grid container spacing={2} alignItems="stretch" sx={{ flex: '0 0 auto' }}>
           <Grid item lg={12} md={12} sm={12} xs={12} sx={{ mb: 1 }}>
             <h1 style={{ color: '#000' }}>Distribution </h1>
             <Divider sx={{ borderBottomWidth: 2 }} />
           </Grid>
           <Grid item xs={12}>
-            <Tabs value={tabIndex} onChange={handleTabChange} textColor="black" indicatorColor="success" sx={{ color: 'black' }}>
+            <Tabs
+              value={tabIndex}
+              onChange={handleTabChange}
+              textColor="black"
+              indicatorColor="success"
+              sx={{ color: 'black' }}
+            >
               <TabItem label="Distribute" />
               <TabItem label="Saved" />
             </Tabs>
           </Grid>
+        </Grid>
 
-          {/* Tab 1: Distribute */}
-          {tabIndex === 0 && (
-            <Box sx={{
-              display: 'flex',
-              flexDirection: { xs: 'column', md: 'row' },
-              gap: 2,
-              padding: 2,
-              mb: 10,
-              // overflowX: 'auto',
-              height: '100%',
-              width: '100%',
-              // backgroundColor:'yellow',
-            }}>
-              <Box sm={12} md={6} sx={{ flex: 1 }}>
-                <Box sx={{
-                  padding: 2,
-                  height: '100%',
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  // backgroundColor:'yellow',
-                }}>
-                  <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, justifyContent: 'space-between', width: '100%', gap: 2 }}>
-                    <Box sx={{ flexDirection: 'column', display: 'flex' }}>
-                      <Typography variant="button" sx={{ marginBottom: 2 }}>
-                        Select Date
-                      </Typography>
-                      <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                          label="Select"
-                          value={selectedDate}
-                          onChange={(newValue) => {
-                            setLocalFarms([]);
-                            setTotalActualGross(0)
-                            setSelectedDate(newValue);
-                          }}
-                          renderInput={(params) => <TextField {...params} />}
-                          sx={{ borderRadius: 8 }}
-                        />
-                      </LocalizationProvider>
-                    </Box>
+        {/* Conditional rendering for "Distribute" */}
+        {tabIndex === 0 && (
+          <Box sx={{ flex: '1 1 auto', display: 'flex', flexDirection: 'column', gap: 2, overflow: 'hidden' }}>
+            <Grid container spacing={2} sx={{ marginTop: 2 }}>
+              <Grid item xs={2}>
+                <Box sx={{ display: 'flex' }}>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      label="Select Date"
+                      value={selectedDate}
+                      onChange={(newValue) => {
+                        setLocalFarms([]);
+                        setTotalActualGross(0);
+                        setSelectedDate(newValue);
+                      }}
+                      renderInput={(params) => <TextField {...params} />}
+                      sx={{ borderRadius: 8 }}
+                    />
+                  </LocalizationProvider>
+                </Box>
+              </Grid>
+              <Grid item xs={4}>
+                <Box sx={{ display: 'flex' }}>
+                  <FormControl fullWidth>
+                    <InputLabel htmlFor="total-distribution">Enter Total Distribution</InputLabel>
+                    <OutlinedInput
+                      id="total-distribution"
+                      type="number"
+                      onChange={(e) => {
+                        if (!localFarms || !localFarms.length) {
+                          setOpenError({
+                            show: true,
+                            title: 'No Farms Found',
+                            content: 'No Farms found to distribute.',
+                          });
+                          setInputText(0);
+                          return;
+                        }
+                        const value = Math.min(e.target.value, totalGrossReturn);
+                        setInputText(value);
+                      }}
+                      value={inputText}
+                      inputProps={{
+                        max: totalGrossReturn,
+                      }}
+                      sx={{
+                        borderTopLeftRadius: 8,
+                        borderBottomLeftRadius: 8,
+                        borderTopRightRadius: 0,
+                        borderBottomRightRadius: 0,
+                      }}
+                    />
+                  </FormControl>
 
-                    <Box sx={{ flexDirection: 'column', display: 'flex', flex: 1 }}>
-                      <Typography variant="button" sx={{ marginBottom: 2, }}>
-                        Enter Total Distribution
-                      </Typography>
-                      <Box sx={{ display: 'flex' }}>
-                        <OutlinedInput
-                          type="number"
-                          onChange={(e) => {
-                            if (!localFarms || !localFarms.length) {
-                              setOpenError({
-                                show: true,
-                                title: 'No Farms Found',
-                                content: 'No Farms found to distribute.'
-                              });
-                              setInputText(0);
-                              return;
-                            }
-                            const value = Math.min(e.target.value, totalGrossReturn);
-                            setInputText(value);
-                          }}
-                          value={inputText}
-                          fullWidth
-                          inputProps={{
-                            max: totalGrossReturn,
-                          }}
-                          sx={{ borderTopLeftRadius: 8, borderBottomLeftRadius: 8, borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
-                        />
-                        <Button variant="contained" color="warning" onClick={distribute}
-                          sx={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0, borderTopRightRadius: 8, borderBottomRightRadius: 8, paddingX: 5 }}>
-                          Distribute
-                        </Button>
-                      </Box>
-                    </Box>
-
-                  </Box>
-
-                  <Box
+                  <Button
+                    variant="contained"
+                    color="warning"
+                    onClick={distribute}
                     sx={{
-                      marginTop: 2,
-                      padding: 5,
-                      height: '100%',
-                      width: '100%',
-                      overflow: 'hidden',
-                      //display: 'flex',  
-                      flex: 3,
-                      justifyContent: 'center',
-                      alignItems: 'center',
+                      borderTopLeftRadius: 0,
+                      borderBottomLeftRadius: 0,
+                      borderTopRightRadius: 8,
+                      borderBottomRightRadius: 8,
+                      paddingX: 5
                     }}
                   >
-                    <Pie
-                      labels={localFarms.map((lf) => lf.farm)}
-                      data={localFarms.map((lf) => lf.suggested)}
-                      title={"Inaasahang Komit"}
-                      unit="pcs"
-                    />
-                  </Box>
-
+                    Distribute
+                  </Button>
                 </Box>
-              </Box>
-              <Box sm={12} md={6} sx={{ flex: 2 }}>
+              </Grid>
+              <Grid item xs={6}>
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', height: '100%' }}>
+                  <Button variant="contained" color="success" onClick={() => setOpen(true)} sx={{ fontSize: 16 }}>
+                    Save
+                  </Button>
+                </Box>
+              </Grid>
+            </Grid>
+
+            <Grid container spacing={2} sx={{ flex: 1, overflow: 'hidden', paddingBottom: 2 }}>
+              <Grid item xs={12} md={4}>
                 <Box
                   sx={{
-                    padding: 4,
+                    padding: 1,
                     height: '100%',
                     width: '100%',
+                    overflow: 'hidden',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    backgroundColor: '#fff',
+                    borderRadius: 3,
+                    boxShadow: 1,
+                  }}
+                >
+                  <Pie
+                    labels={localFarms.map((lf) => lf.farm)}
+                    data={localFarms.map((lf) => lf.suggested)}
+                    title="Inaasahang Komit"
+                    unit="pcs"
+                  />
+                </Box>
+              </Grid>
+              <Grid item xs={12} md={8}>
+                <Box
+                  sx={{
+                    padding: 1,
+                    boxShadow: 1,
+                    height: '100%',
+                    width: '100%',
+                    overflow: 'hidden',
+                    backgroundColor: '#fff',
+                    borderRadius: 3,
                     display: 'flex',
                     flexDirection: 'column',
-                    boxShadow: 1,
-                    borderRadius: 4,
-                    backgroundColor: '#fff',
-                    overflow: 'auto'
                   }}
                 >
                   <DataGrid
@@ -867,11 +885,8 @@ export default function Distribution({ farms, roi }) {
                     disableSelectionOnClick
                     sx={{
                       ...datagridStyle,
-                      borderRadius: 3,
                       flex: 1,
-                      width: '100%',
                       border: 'none',
-                      height: '100%',
                       overflowY: 'auto',
                     }}
                     getRowClassName={(rows) =>
@@ -879,150 +894,111 @@ export default function Distribution({ farms, roi }) {
                     }
                     hideFooter
                   />
+                  <Box sx={{display:'flex', 
+                    justifyContent:'space-between',
+                    mt:2,
+                    flexDirection:'row'
+                  }}>
+                    <Typography variant='h5'>Total Actual Distribution</Typography>
+                    <Typography variant='h5'>{new Intl.NumberFormat().format(totalActualGross)}</Typography>
+                  </Box>
+                </Box>
+              </Grid>
+            </Grid>
+          </Box>
+        )}
 
+        {/* Conditional rendering for "Saved" */}
+        {tabIndex === 1 && (
+          <Grid
+            container
+            sx={{
+              flex: 1,
+              flexDirection: 'column',
+              padding: 1,
+              overflow: 'hidden',
+              mt: 1,
+            }}
+          >
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
+                <IconButton onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
+                  <CalendarTodayIcon />
+                </IconButton>
+
+                <Modal
+                  open={isModalOpen}
+                  onClose={() => setIsModalOpen(false)}
+                  aria-labelledby="month-year-picker-modal"
+                  aria-describedby="select-month-and-year"
+                >
                   <Box
                     sx={{
-                      display: 'flex',
-                      justifyContent: 'space-between',
-                      marginTop: 2,
-                      flexDirection: { xs: 'column', md: 'row' }
+                      position: 'absolute',
+                      top: '43%',
+                      left: '25%',
+                      transform: 'translate(-50%, -50%)',
+                      width: 300,
                     }}
                   >
-                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
-                      <Typography variant='h5'>Actual Total Production: </Typography>
-                      <Typography variant='h5' sx={{ color: 'black', fontWeight: 500 }}> {totalActualGross}</Typography>
-                    </Box>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={() => setOpen(true)}
-                      sx={{ fontSize: 15 }}
-                    >
-                      Save
-                    </Button>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      <StaticDatePicker
+                        displayStaticWrapperAs="desktop"
+                        value={savedDate}
+                        onChange={(newValue) => {
+                          handleSavedDate(newValue);
+                          setIsModalOpen(false);
+                        }}
+                        views={['year', 'month']}
+                      />
+                    </LocalizationProvider>
                   </Box>
-                </Box>
+                </Modal>
               </Box>
-
-
+              <Button
+                variant="contained"
+                color="success"
+                disabled={distributionLoading}
+                onClick={() => exportExcel(savedDate)}
+              >
+                {distributionLoading ? 'Waiting...' : 'Download report'}
+              </Button>
             </Box>
-          )}
-
-          {/* Tab 2: Saved */}
-          {tabIndex === 1 && (
             <Box
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                flex: 1,
+                boxShadow: 1,
                 height: '100%',
                 width: '100%',
-                padding: 2,
-                gap: 2,
-                borderRadius: 3,
                 overflow: 'hidden',
+                backgroundColor: '#fff',
+                borderRadius: 3,
               }}
             >
-              <Box
+              <DataGrid
+                rows={savedDistributions}
+                columns={columns}
+                disableSelectionOnClick
                 sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  flex: 1,
-                  backgroundColor: '#fff',
+                  ...datagridStyle,
                   borderRadius: 3,
-                  padding: 2,
-                  overflow: 'auto',
-                  height: '100%',
-                  boxShadow: 1
+                  overflowY: 'auto',
+                  height: `calc(100% - 8px)`,
+                  backgroundColor: '#fff',
+                  border: 'none',
                 }}
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    pb: 2,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
-                    <IconButton
-                      onClick={() => setIsModalOpen(true)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <CalendarTodayIcon />
-                    </IconButton>
-
-                    <Modal
-                      open={isModalOpen}
-                      onClose={() => setIsModalOpen(false)}
-                      aria-labelledby="month-year-picker-modal"
-                      aria-describedby="select-month-and-year"
-                    >
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: '43%',
-                          left: '25%',
-                          transform: 'translate(-50%, -50%)',
-                          width: 300,
-                        }}
-                      >
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <StaticDatePicker
-                            displayStaticWrapperAs="desktop"
-                            value={savedDate}
-                            onChange={(newValue) => {
-                              handleSavedDate(newValue)
-                              setIsModalOpen(false);
-                            }}
-                            views={['year', 'month']}
-                          />
-                        </LocalizationProvider>
-                      </Box>
-                    </Modal>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    disabled={distributionLoading}
-                    onClick={() => exportExcel(savedDate)}
-                  >
-                    {distributionLoading ? 'Waiting...' : 'Download report'}
-                  </Button>
-                </Box>
-                <Box
-                  sx={{
-                    flex: 1,
-                    overflow: 'auto',
-                    backgroundColor: 'yellow',
-                    borderRadius: 3,
-                  }}
-                >
-                  <DataGrid
-                    rows={savedDistributions}
-                    columns={columns}
-                    disableSelectionOnClick
-                    sx={{
-                      ...datagridStyle,
-                      borderRadius: 3,
-                      height: '100%',
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      border: 'none',
-                    }}
-                    onCellEditCommit={handleEditCellChange}
-                    getRowClassName={(rows) =>
-                      rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    }
-                    hideFooter
-                  />
-                </Box>
-              </Box>
+                onCellEditCommit={handleEditCellChange}
+                getRowClassName={(rows) =>
+                  rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                }
+                hideFooter
+              />
             </Box>
-          )}
-
-        </Grid>
+          </Grid>
+        )}
       </Box>
+
 
 
       <Modal open={saving} aria-labelledby="edit-row-modal">

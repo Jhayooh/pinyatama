@@ -390,21 +390,23 @@ const Access = ({ usersRow }) => {
           padding: 4,
           borderRadius: 4,
           height: '100%',
+          display:'flex',
+          flexDirection:'column',
+          overflow:'hidden'
         }}
       >
         <Box lg={12} md={12} sm={12} xs={12} sx={{ m: 2 }}>
           <h1 style={{ color: '#000' }}>Barangay Extensionist Workers</h1>
           <Divider sx={{ borderBottomWidth: 2 }} />
         </Box>
-        <Grid container spacing={4} alignItems="stretch">
+        <Grid container spacing={2} alignItems="stretch">
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Box
               sx={{
-                boxShadow: 1,
-                borderRadius: 3,
-                backgroundColor: '#fff',
-                width: 1,
-                padding: 2,
+                // boxShadow: 1,
+                // borderRadius: 3,
+                // backgroundColor: '#fff',
+                // padding: 2,
               }}
             >
               <Box
@@ -482,7 +484,7 @@ const Access = ({ usersRow }) => {
             </Box>
           </Grid>
           <Grid item lg={12} md={12} sm={12} xs={12}>
-            <Box sx={{ display: 'flex', paddingY: 'auto' }} >
+            <Box sx={{ display: 'flex', paddingY: 'auto' , height:'100%'}} >
               <DataGrid
                 getRowId={getRowId}
                 rows={userRow}
@@ -500,7 +502,7 @@ const Access = ({ usersRow }) => {
                 sx={{
                   ...datagridStyle,
                   border: 'none',
-                  overflowX: 'auto',
+                  overflow: 'auto',
                   height: `calc(100% - 8px)`,
                   backgroundColor: '#fff',
                   padding:2
