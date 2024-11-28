@@ -68,7 +68,7 @@ const Activities = ({ farm }) => {
         }, ...activities])
 
         console.log("activities:", activities);
-        
+
 
         const hasAct = activities.find(act => act.type === 'a' || act.type === 'r')
         setActualRoi(farm.roi.find(r => r.type === 'a'))
@@ -217,12 +217,12 @@ const Activities = ({ farm }) => {
                                         [
                                             {
                                                 name: 'Net Return',
-                                                value: projectedRoi.netReturn,
+                                                value: Math.max(0, projectedRoi.netReturn||0),
                                                 id: 0
                                             },
                                             {
                                                 name: 'Cost of Production',
-                                                value: projectedRoi.costTotal,
+                                                value: Math.max(0, projectedRoi.costTotal|0),
                                                 id: 1
                                             },
                                             {
@@ -449,7 +449,7 @@ const Activities = ({ farm }) => {
                                         [
                                             {
                                                 name: 'Net Return',
-                                                value: actualRoi.netReturn,
+                                                value: Math.max(0, actualRoi.netReturn||0),
                                                 id: 0
                                             },
                                             {
@@ -664,133 +664,133 @@ const Activities = ({ farm }) => {
                                 activitiesLoading && eLoading
                                     ? <Skeleton animation='wave' variant="rounded" width='100%' height={240} />
                                     : <Box
-                                    sx={{
-                                      display: 'flex',
-                                      flexDirection: 'column',
-                                      height: '100%',
-                                      minHeight: 580,
-                                      width: '100%',
-                                      overflowY: 'auto',
-                                      maxHeight: '100%',
-                                      padding: 1,
-                                    }}
-                                  >
-                                    <Stepper
-                                      activeStep={newActivities.length}
-                                      connector={<QontoConnector />}
-                                      orientation="vertical"
-                                    >
-                                      {newActivities.map((act, index) => (
-                                        <Step
-                                          expanded={index > 0 && index === stepIndex}
-                                          onClick={() => {
-                                            setStepIndex(stepIndex === index ? 0 : index);
-                                          }}
-                                          key={act.id}
-                                          sx={{
+                                        sx={{
                                             display: 'flex',
                                             flexDirection: 'column',
-                                            marginLeft: index === 0 ? 0 : 2,
-                                            backgroundColor: index === 0
-                                              ? '#FFF'
-                                              : act.type === 'a'
-                                              ? '#A8E6A1'
-                                              : '#FFBABA',
-                                            borderRadius: 3,
-                                            paddingX: 2,
-                                            paddingY: 1.5,
-                                            boxShadow: 4,
-                                            height: index === 0 ? 62 : 'auto',
-                                            color: act.type === 'a' ? '#355E3B' : '#8B0000',
-                                            transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
-                                            '&:hover': {
-                                              cursor: index === 0 ? 'default' : 'pointer',
-                                              backgroundColor: index === 0
-                                                ? '#FFF'
-                                                : act.type === 'a'
-                                                ? '#D7F9D5'
-                                                : '#FFD6D6',
-                                              boxShadow: 6,
-                                            },
-                                          }}
+                                            height: '100%',
+                                            minHeight: 580,
+                                            width: '100%',
+                                            overflowY: 'auto',
+                                            maxHeight: '100%',
+                                            padding: 1,
+                                        }}
+                                    >
+                                        <Stepper
+                                            activeStep={newActivities.length}
+                                            connector={<QontoConnector />}
+                                            orientation="vertical"
                                         >
-                                          <StepLabel StepIconComponent={QontoStepIcon}>
-                                            <Box
-                                              sx={{
-                                                flexDirection: { xs: 'column', md: 'row' },
-                                                display: 'flex',
-                                                justifyContent: 'space-between',
-                                                alignItems: 'center',
-                                                gap: 2,
-                                              }}
-                                            >
-                                              <Box
-                                                sx={{
-                                                  flexDirection: { xs: 'column', md: 'row' },
-                                                  display: 'flex',
-                                                  gap: 2,
-                                                  alignItems: 'center',
-                                                }}
-                                              >
-                                                <Typography
-                                                  variant="caption"
-                                                  sx={{
-                                                    color: '#6C6C6C',
-                                                    fontFamily: 'cursive',
-                                                  }}
+                                            {newActivities.map((act, index) => (
+                                                <Step
+                                                    expanded={index > 0 && index === stepIndex}
+                                                    onClick={() => {
+                                                        setStepIndex(stepIndex === index ? 0 : index);
+                                                    }}
+                                                    key={act.id}
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        marginLeft: index === 0 ? 0 : 2,
+                                                        backgroundColor: index === 0
+                                                            ? '#FFF'
+                                                            : act.type === 'a'
+                                                                ? '#A8E6A1'
+                                                                : '#FFBABA',
+                                                        borderRadius: 3,
+                                                        paddingX: 2,
+                                                        paddingY: 1.5,
+                                                        boxShadow: 4,
+                                                        height: index === 0 ? 62 : 'auto',
+                                                        color: act.type === 'a' ? '#355E3B' : '#8B0000',
+                                                        transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
+                                                        '&:hover': {
+                                                            cursor: index === 0 ? 'default' : 'pointer',
+                                                            backgroundColor: index === 0
+                                                                ? '#FFF'
+                                                                : act.type === 'a'
+                                                                    ? '#D7F9D5'
+                                                                    : '#FFD6D6',
+                                                            boxShadow: 6,
+                                                        },
+                                                    }}
                                                 >
-                                                  {formatDate(act.createdAt.toDate())} :{' '}
-                                                  {formatTime(act.createdAt.toDate())}
-                                                </Typography>
-                                                <Typography
-                                                  variant="subtitle1"
-                                                  sx={{
-                                                    fontFamily: 'cursive',
-                                                    color: index === 0 ? 'orange' : '#4E4E4E',
-                                                  }}
-                                                >
-                                                  {act.label}
-                                                </Typography>
-                                              </Box>
-                                              <Typography
-                                                variant="body2"
-                                                sx={{
-                                                  fontWeight: 'bold',
-                                                  display: 'flex',
-                                                  justifyContent: 'flex-end',
-                                                }}
-                                              >
-                                                {index !== 0
-                                                  ? act.type === 'a'
-                                                    ? `${act.qnty}kg`
-                                                    : `${act.qnty}% Damage`
-                                                  : null}
-                                              </Typography>
-                                            </Box>
-                                            <StepContent
-                                              sx={{
-                                                borderLeft: 0,
-                                              }}
-                                            >
-                                              <Box sx={{ paddingY: 2 }}>
-                                                <Typography
-                                                  variant="body2"
-                                                  sx={{
-                                                    fontFamily: 'cursive',
-                                                  }}
-                                                >
-                                                  {act.type === 'a'
-                                                    ? `Ikaw ay naglagay ng ${act.qnty}kg na ${act.label}`
-                                                    : `${act.desc}`}
-                                                </Typography>
-                                              </Box>
-                                            </StepContent>
-                                          </StepLabel>
-                                        </Step>
-                                      ))}
-                                    </Stepper>
-                                  </Box>
-                                  
+                                                    <StepLabel StepIconComponent={QontoStepIcon}>
+                                                        <Box
+                                                            sx={{
+                                                                flexDirection: { xs: 'column', md: 'row' },
+                                                                display: 'flex',
+                                                                justifyContent: 'space-between',
+                                                                alignItems: 'center',
+                                                                gap: 2,
+                                                            }}
+                                                        >
+                                                            <Box
+                                                                sx={{
+                                                                    flexDirection: { xs: 'column', md: 'row' },
+                                                                    display: 'flex',
+                                                                    gap: 2,
+                                                                    alignItems: 'center',
+                                                                }}
+                                                            >
+                                                                <Typography
+                                                                    variant="caption"
+                                                                    sx={{
+                                                                        color: '#6C6C6C',
+                                                                        fontFamily: 'cursive',
+                                                                    }}
+                                                                >
+                                                                    {formatDate(act.createdAt.toDate())} :{' '}
+                                                                    {formatTime(act.createdAt.toDate())}
+                                                                </Typography>
+                                                                <Typography
+                                                                    variant="subtitle1"
+                                                                    sx={{
+                                                                        fontFamily: 'cursive',
+                                                                        color: index === 0 ? 'orange' : '#4E4E4E',
+                                                                    }}
+                                                                >
+                                                                    {act.label}
+                                                                </Typography>
+                                                            </Box>
+                                                            <Typography
+                                                                variant="body2"
+                                                                sx={{
+                                                                    fontWeight: 'bold',
+                                                                    display: 'flex',
+                                                                    justifyContent: 'flex-end',
+                                                                }}
+                                                            >
+                                                                {index !== 0
+                                                                    ? act.type === 'a'
+                                                                        ? `${act.qnty}kg`
+                                                                        : `${act.qnty}% Damage`
+                                                                    : null}
+                                                            </Typography>
+                                                        </Box>
+                                                        <StepContent
+                                                            sx={{
+                                                                borderLeft: 0,
+                                                            }}
+                                                        >
+                                                            <Box sx={{ paddingY: 2 }}>
+                                                                <Typography
+                                                                    variant="body2"
+                                                                    sx={{
+                                                                        fontFamily: 'cursive',
+                                                                    }}
+                                                                >
+                                                                    {act.type === 'a'
+                                                                        ? `Ikaw ay naglagay ng ${act.qnty}kg na ${act.label}`
+                                                                        : `${act.desc}`}
+                                                                </Typography>
+                                                            </Box>
+                                                        </StepContent>
+                                                    </StepLabel>
+                                                </Step>
+                                            ))}
+                                        </Stepper>
+                                    </Box>
+
                             }
                         </Box>
                     </Grid>

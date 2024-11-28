@@ -553,10 +553,6 @@ export default function Distribution({ farms, roi }) {
         const farmDocSnapshot = await getDoc(farmDocRef);
 
         const farmToCommit = farmDocSnapshot.data();
-<<<<<<< Updated upstream
-        console.log("farm to commit", farmToCommit);
-=======
->>>>>>> Stashed changes
 
         if (farmToCommit.batches) {
           const updatedBatches = farmToCommit.batches.map((batch, index) => {
@@ -1017,10 +1013,11 @@ export default function Distribution({ farms, roi }) {
                     }
                     hideFooter
                   />
-                  <Box sx={{display:'flex', 
-                    justifyContent:'space-between',
-                    mt:2,
-                    flexDirection:'row'
+                  <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    mt: 2,
+                    flexDirection: 'row'
                   }}>
                     <Typography variant='h5'>Total Actual Distribution</Typography>
                     <Typography variant='h5'>{new Intl.NumberFormat().format(totalActualGross)}</Typography>
@@ -1043,10 +1040,20 @@ export default function Distribution({ farms, roi }) {
               mt: 1,
             }}
           >
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                pb: 2,
+              }}
+            >
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
-                <IconButton onClick={() => setIsModalOpen(true)} style={{ cursor: 'pointer' }}>
+                <IconButton
+                  onClick={() => setIsModalOpen(true)}
+                  style={{ cursor: 'pointer' }}
+                >
                   <CalendarTodayIcon />
                 </IconButton>
 
@@ -1070,7 +1077,7 @@ export default function Distribution({ farms, roi }) {
                         displayStaticWrapperAs="desktop"
                         value={savedDate}
                         onChange={(newValue) => {
-                          handleSavedDate(newValue);
+                          handleSavedDate(newValue)
                           setIsModalOpen(false);
                         }}
                         views={['year', 'month']}
@@ -1082,128 +1089,38 @@ export default function Distribution({ farms, roi }) {
               <Button
                 variant="contained"
                 color="success"
-                disabled={distributionLoading}
+                disabled={!savedDistributions}
                 onClick={() => exportExcel(savedDate)}
               >
-                {distributionLoading ? 'Waiting...' : 'Download report'}
+                {!savedDistributions ? 'Waiting...' : 'Download report'}
               </Button>
             </Box>
             <Box
               sx={{
                 flex: 1,
-                boxShadow: 1,
-                height: '100%',
-                width: '100%',
-                overflow: 'hidden',
-                backgroundColor: '#fff',
+                overflow: 'auto',
+                backgroundColor: 'yellow',
                 borderRadius: 3,
               }}
             >
               <DataGrid
                 rows={savedDistributions}
-                columns={columns}
+                columns={columnsSavedDistri}
                 disableSelectionOnClick
                 sx={{
                   ...datagridStyle,
                   borderRadius: 3,
-                  overflowY: 'auto',
-                  height: `calc(100% - 8px)`,
+                  height: '100%',
+                  width: '100%',
                   backgroundColor: '#fff',
                   border: 'none',
                 }}
-<<<<<<< Updated upstream
                 onCellEditCommit={handleEditCellChange}
                 getRowClassName={(rows) =>
                   rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
                 hideFooter
               />
-=======
-              >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    pb: 2,
-                  }}
-                >
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
-                    <IconButton
-                      onClick={() => setIsModalOpen(true)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <CalendarTodayIcon />
-                    </IconButton>
-
-                    <Modal
-                      open={isModalOpen}
-                      onClose={() => setIsModalOpen(false)}
-                      aria-labelledby="month-year-picker-modal"
-                      aria-describedby="select-month-and-year"
-                    >
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: '43%',
-                          left: '25%',
-                          transform: 'translate(-50%, -50%)',
-                          width: 300,
-                        }}
-                      >
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <StaticDatePicker
-                            displayStaticWrapperAs="desktop"
-                            value={savedDate}
-                            onChange={(newValue) => {
-                              handleSavedDate(newValue)
-                              setIsModalOpen(false);
-                            }}
-                            views={['year', 'month']}
-                          />
-                        </LocalizationProvider>
-                      </Box>
-                    </Modal>
-                  </Box>
-                  <Button
-                    variant="contained"
-                    color="success"
-                    disabled={!savedDistributions}
-                    onClick={() => exportExcel(savedDate)}
-                  >
-                    {!savedDistributions ? 'Waiting...' : 'Download report'}
-                  </Button>
-                </Box>
-                <Box
-                  sx={{
-                    flex: 1,
-                    overflow: 'auto',
-                    backgroundColor: 'yellow',
-                    borderRadius: 3,
-                  }}
-                >
-                  <DataGrid
-                    rows={savedDistributions}
-                    columns={columnsSavedDistri}
-                    disableSelectionOnClick
-                    sx={{
-                      ...datagridStyle,
-                      borderRadius: 3,
-                      height: '100%',
-                      width: '100%',
-                      backgroundColor: '#fff',
-                      border: 'none',
-                    }}
-                    onCellEditCommit={handleEditCellChange}
-                    getRowClassName={(rows) =>
-                      rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                    }
-                    hideFooter
-                  />
-                </Box>
-              </Box>
->>>>>>> Stashed changes
             </Box>
           </Grid>
         )}
