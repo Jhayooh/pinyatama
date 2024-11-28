@@ -1,13 +1,10 @@
 import React from 'react';
 import Chart from 'react-apexcharts';
 
-function ExamplePieChart({ labels, data, colors, title, onPieClick }) {
-  // Slice the data and labels to limit to 10 items
-  const limitedLabels = labels ? labels.slice(0, 10) : ["Default Label"];
-  const limitedData = data ? data.slice(0, 10) : [44, 45, 2, 3, 4, 5, 6, 7, 8];
+function ExamplePieChart({ labels, data, colors, title, setSelectedMun }) {
 
   const options = {
-    labels: limitedLabels,
+    labels: labels,
     title: {
       text: title || 'Undefined',
       align: 'left',
@@ -20,11 +17,9 @@ function ExamplePieChart({ labels, data, colors, title, onPieClick }) {
       width: '100%',
       events: {
         dataPointSelection: (event, chartContext, config) => {
-          if (onPieClick) {
-            const { dataPointIndex } = config;
-            const clickedLabel = limitedLabels[dataPointIndex];
-            const clickedValue = limitedData[dataPointIndex];
-            onPieClick({ label: clickedLabel, value: clickedValue, index: dataPointIndex });
+          if (setSelectedMun) {
+            setSelectedMun(config.w.config.labels[config.dataPointIndex])
+            console.log('selected muni', config.w.config.labels[config.dataPointIndex])
           }
         },
       },
@@ -53,7 +48,7 @@ function ExamplePieChart({ labels, data, colors, title, onPieClick }) {
     ],
   };
 
-  return <Chart options={options} series={limitedData} type="pie" />;
+  return <Chart options={options} series={data} type="pie" />;
 }
 
 export default ExamplePieChart;
