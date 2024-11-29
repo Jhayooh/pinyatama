@@ -855,7 +855,7 @@ export default function Distribution({ farms, roi }) {
       <Box
         sx={{
           backgroundColor: '#f9fafb',
-          padding: { xs: 1, sm: 2 },
+          padding: 3,
           borderRadius: 4,
           height: '100vh', // Full viewport height
           overflow: 'auto',

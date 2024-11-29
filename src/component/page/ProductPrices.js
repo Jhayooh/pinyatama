@@ -450,37 +450,33 @@ export default function ProductPrices({ particularData, pineappleData, others })
       <Box
         sx={{
           backgroundColor: '#f9fafb',
-          padding: { xs: 1, sm: 2 },
+          padding: 3,
           borderRadius: 4,
-          height: '100vh', // Full viewport height
+          height: '100%',
           overflow: 'auto',
-          display: 'flex',
           flexDirection: 'column',
         }}
       >
-        <Typography variant="h4" sx={{ color: '#000', fontSize: { xs: 20, sm: 30 } }}>
-          Product Prices
-        </Typography>
+        <h1 style={{ color: '#000' }}>Product Prices</h1>
         <Divider sx={{ borderBottomWidth: 2, mb: 2 }} />
         <Grid spacing={2} xs={12} md={12} container sx={{ height: 'calc(100% - 72px)', display: 'flex' }}>
           {/* Left Side: List of Products */}
-          <Grid item xs={12} md={3} sx={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 2 }}>
+          <Grid item xs={12} md={4} sx={{ display: 'flex', flexDirection: 'column', height: '100%', gap: 2 }}>
             {pineappleData.map((pineData, index) => (
               <Box
                 key={index}
                 sx={{
-                  flex: 1,
                   display: 'flex',
                   flexDirection: 'column',
                   borderRadius: 4,
                   overflow: 'hidden',
                   backgroundColor: '#58AC58',
                   boxShadow: 2,
-                  padding: { xs: 3, sm: 5 },
+                  paddingY: { xs: 3, md: 5 },
                 }}
               >
-                <Box sx={{ color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                  <Typography variant="button" sx={{ fontWeight: 500, fontSize: { xs: 18, sm: 25, md: 30 } }}>
+                <Box sx={{ color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, mr: { xs: 3, md: 5 }, ml: { xs: 3, md: 5 } }}>
+                  <Typography variant="button" sx={{ fontWeight: { xs: 300, md: 500 }, fontSize: { xs: 18, sm: 25, md: 30 } }}>
                     {pineData.name}
                   </Typography>
                   <IconButton sx={{
@@ -494,7 +490,7 @@ export default function ProductPrices({ particularData, pineappleData, others })
                     <EditOutlinedIcon onClick={() => handleEditPine(pineData)} />
                   </IconButton>
                 </Box>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 0.5, backgroundColor: '#fff', borderRadius: 30 }}>
+                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 0.5, backgroundColor: '#fff', borderTopRightRadius: 30, borderBottomRightRadius: 30, mr: { xs: 3, md: 5 } }}>
                   <Typography sx={{ fontWeight: 300, fontSize: { xs: 30, sm: 50 }, color: '#f9c667' }}>₱</Typography>
                   <Typography sx={{ fontWeight: 700, fontSize: { xs: 20, sm: 40 }, color: '#f9c667' }}>
                     {`${pineData.price}.00`}
@@ -525,15 +521,15 @@ export default function ProductPrices({ particularData, pineappleData, others })
           </Grid>
 
           {/* Right Side: Tabs and DataGrid */}
-          <Grid item xs={12} md={9}  sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+          <Grid item xs={12} md={8} sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <Box
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 height: '100%',
                 p: { xs: 1, sm: 2 },
-                backgroundColor:'#fff',
-                borderRadius:4
+                backgroundColor: '#fff',
+                borderRadius: 4
               }}
             >
               <Tabs value={activeTab} onChange={handleTabChange} variant="scrollable" scrollButtons="auto">
@@ -571,7 +567,7 @@ export default function ProductPrices({ particularData, pineappleData, others })
                     onChange={handleSearchInputChange}
                   />
                 </Box>
-                <Box sx={{ height: 'calc(100% - 56px)', overflowY: 'auto', pb:3 }}>
+                <Box sx={{ height: 'calc(100% - 56px)', overflowY: 'auto', pb: 3 }}>
                   <DataGrid
                     rows={filteredParticularData.map((partiData, index) => ({
                       index: index + 1,
@@ -579,8 +575,8 @@ export default function ProductPrices({ particularData, pineappleData, others })
                     }))}
                     columns={columns}
                     initialState={{
-                      sorting:{
-                        sortModel:[{field:'particular', sort:'asc'}],
+                      sorting: {
+                        sortModel: [{ field: 'particular', sort: 'asc' }],
                       },
                       EditRowModal
                     }}
@@ -589,7 +585,8 @@ export default function ProductPrices({ particularData, pineappleData, others })
                     onRowEditStop={handleRowEditStop}
                     pageSizeOptions={[25, 50, 100]}
                     disableRowSelectionOnClick
-                    sx={{...datagridStyle,
+                    sx={{
+                      ...datagridStyle,
                       backgroundColor: '#fff',
                       // border:'none'
                     }}

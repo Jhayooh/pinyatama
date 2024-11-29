@@ -29,6 +29,8 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
     const [userFilter, setUserFilter] = useState('');
 
     const handleChange = (event) => {
+        const userMun = users.filter(uf => uf.mun === event.target.value)
+        setNewUser(userMun)
         setMun(event.target.value);
     };
 
@@ -74,6 +76,8 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
         const filteredUsers = newUser.filter((user) => {
             return user.displayName.includes(userFilter);
         });
+        console.log("user", filteredUsers);
+
         setTimelineFarms(filteredFarms);
         setFilteredUsers(filteredUsers);
     }, [search, farms, mun, newUser, userFilter]);
@@ -121,7 +125,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                 padding: 2,
                 borderRadius: 4,
                 height: '100%',
-                overflow: 'hidden', 
+                overflow: 'hidden',
             }}
         >
             <Box sx={{ m: 2, height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -137,8 +141,8 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                         display: 'flex',
                         flexDirection: 'column',
                         overflow: 'hidden',
-                        padding:2,
-                        mb:2
+                        padding: 2,
+                        mb: 2
                     }}
                 >
                     <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
@@ -154,6 +158,14 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                                         value={mun}
                                         label="Municipality"
                                         onChange={handleChange}
+                                        MenuProps={{
+                                            PaperProps: {
+                                                sx: {
+                                                    maxHeight: 300,
+                                                    overflowY: 'auto',
+                                                },
+                                            },
+                                        }}
                                     >
                                         {
                                             municipalities.map((municipality) => (
@@ -176,14 +188,23 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                                         value={userFilter}
                                         label="Extensionist"
                                         onChange={handleUser}
+                                        MenuProps={{
+                                            PaperProps: {
+                                                sx: {
+                                                    maxHeight: 300,
+                                                    overflowY: 'auto',
+                                                },
+                                            },
+                                        }}
                                     >
-                                        {newUser
-                                            .filter((user) => user.status === "active") // Filter users with active status
-                                            .map((user) => (
-                                                <MenuItem key={user.uid} value={user.id}>
-                                                    {user.displayName}
-                                                </MenuItem>
-                                            ))}
+                                        {[
+                                            { uid: '1', id: '', displayName: 'Lahat' }, // Default user
+                                            ...newUser.filter(user => user.status === 'active') // Filtered active users
+                                        ].map((user) => (
+                                            <MenuItem key={user.uid} value={user.id}>
+                                                {user.displayName}
+                                            </MenuItem>
+                                        ))}
                                     </Select>
 
                                 </FormControl>

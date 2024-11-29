@@ -387,18 +387,16 @@ const Access = ({ usersRow }) => {
       <Box
         sx={{
           backgroundColor: '#f9fafb',
-          padding: 4,
+          padding: 3,
           borderRadius: 4,
-          height: '100vh', // Full viewport height for layout
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'hidden', // Prevent parent from scrolling
+          height: '100%',
+          overflow: 'auto',
+          flexDirection: 'hidden',
         }}
       >
-        <Box lg={12} md={12} sm={12} xs={12} sx={{ m: 2 }}>
+        
           <h1 style={{ color: '#000' }}>Barangay Extensionist Workers</h1>
-          <Divider sx={{ borderBottomWidth: 2 }} />
-        </Box>
+          <Divider sx={{ borderBottomWidth: 2, mb:2 }} />
         <Grid container spacing={2} alignItems="stretch">
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Box
@@ -424,6 +422,14 @@ const Access = ({ usersRow }) => {
                       setBrgy('');
                     }}
                     displayEmpty
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          maxHeight: 300,
+                          overflowY: 'auto',
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="">
                       <em>Lahat</em>
@@ -446,6 +452,14 @@ const Access = ({ usersRow }) => {
                     onChange={(e) => setBrgy(e.target.value)}
                     displayEmpty
                     disabled={!munCode}
+                    MenuProps={{
+                      PaperProps: {
+                        sx: {
+                          maxHeight: 300,
+                          overflowY: 'auto',
+                        },
+                      },
+                    }}
                   >
                     <MenuItem value="">
                     </MenuItem>
@@ -485,15 +499,12 @@ const Access = ({ usersRow }) => {
             >
               <Box
                 sx={{
-                  flexGrow: 1,
-                  overflowY: 'auto', // Enable vertical scrolling for DataGrid content
-                  overflowX: 'auto', // Enable horizontal scrolling if needed
-                  maxHeight: '70vh', // Constrain DataGrid height for small screens
+                  maxHeight: '70vh',
                   height: '100%',
                   borderRadius: 2,
                   boxShadow: 2,
                   backgroundColor: '#fff',
-                  padding:2
+                  overflow: 'auto'
                 }}
               >
                 <DataGrid
@@ -509,13 +520,10 @@ const Access = ({ usersRow }) => {
                   rowModesModel={rowModesModel}
                   pageSizeOptions={[25, 50, 100]}
                   disableRowSelectionOnClick
-                sx={{
-                  ...datagridStyle,
-                  border: 'none',
-                  overflow: 'auto',
-                  height: `calc(100% - 8px)`,
-                  backgroundColor: '#fff',
-                  padding:2
+                  sx={{
+                    ...datagridStyle,
+                    border: 'none',
+                    backgroundColor: '#fff'
                   }}
                   getRowClassName={(getRowId) =>
                     getRowId.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
@@ -534,16 +542,16 @@ const Access = ({ usersRow }) => {
         <Box sx={{
           display: 'flex',
           position: 'absolute',
-          top: '50%', flexDirection:'column',
+          top: '50%', flexDirection: 'column',
           left: '50%',
           transform: 'translate(-50%, -50%)',
           bgcolor: 'background.paper',
           borderRadius: '5px',
           boxShadow: 24,
           p: 4,
-          width:{xs:'50%', md:'70%'},
-          maxHeight:'90vh',
-          overflowY:'auto'
+          width: { xs: '50%', md: '70%' },
+          maxHeight: '90vh',
+          overflowY: 'auto'
         }}>
           <Grid container spacing={4} sx={{ display: 'flex', width: '100%' }}>
             <Grid item xs={4} >
@@ -558,7 +566,7 @@ const Access = ({ usersRow }) => {
                 <Box sx={{
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',  // Center horizontally
+                  alignItems: 'center',
                   gap: 2,
                 }}>
                   <Avatar src={viewedUser.photoURL} alt="Profile" variant="rounded" sx={{ width: "100%", height: "80%" }} />
@@ -637,7 +645,7 @@ const Access = ({ usersRow }) => {
             <Grid item xs={8}>
               <Typography variant='h6' gutterBottom sx={{ color: '#58AC58', }}>Extensionist Details</Typography>
               <Box sx={{ flexDirection: 'row', display: 'flex', gap: 1 }}>
-                <Box sx={{ flexDirection: 'column', display:'flex'}}>
+                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
                   <Typography variant='button'>Firstname:</Typography>
                   <TextField
                     id="filled-read-only-input"
@@ -649,7 +657,7 @@ const Access = ({ usersRow }) => {
                     fullWidth
                   />
                 </Box>
-                <Box sx={{ flexDirection: 'column',display:'flex' }}>
+                <Box sx={{ flexDirection: 'column', display: 'flex' }}>
                   <Typography variant='button'>Lastname:</Typography>
                   <TextField
                     id="filled-read-only-input"
