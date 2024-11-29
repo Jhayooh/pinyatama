@@ -14,7 +14,6 @@ import {
 // import { MapContainer, Marker, Polygon, Popup, TileLayer, Tooltip, useMap } from 'react-leaflet';
 import SlidingPane from 'react-sliding-pane';
 import 'react-sliding-pane/dist/react-sliding-pane.css';
-import '../../component/css/GeoLoc.css';
 import { useNavigate } from 'react-router-dom';
 import 'leaflet.heat';
 import 'leaflet.heat/dist/leaflet-heat.js';
