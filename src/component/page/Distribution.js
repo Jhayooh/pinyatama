@@ -44,6 +44,8 @@ import IconButton from '@mui/material/IconButton';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { db } from '../../firebase/Config';
 
+import { Table } from 'antd'
+
 // icons
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
@@ -58,6 +60,7 @@ export default function Distribution({ farms, roi }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputText, setInputText] = useState('');
   const [actualDistribution, setActualDistribution] = useState([]);
+  const [distributionData, setDistributionData] = useState(null)
 
   const [localFarms, setLocalFarms] = useState([])
   const [totalGrossReturn, setTotalGrossReturn] = useState(0)
@@ -72,7 +75,6 @@ export default function Distribution({ farms, roi }) {
   const [value, setValue] = useState(null)
   const [selectedRow, setSelectedRow] = useState(false)
   const [editModal, setEditModal] = useState(false)
-  const [distributions, setDistributions] = useState(null)
 
   const [reportSelection, setReportSelection] = useState(null)
 
@@ -91,32 +93,11 @@ export default function Distribution({ farms, roi }) {
       );
       const querySnapshot = await getDocs(distributionQuery);
       const distri = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      console.log("farms sa fetching distribution", distri);
       return distri
     } catch (error) {
       console.error('Error fetching distributions:', error);
     }
   };
-
-  useEffect(() => {
-    const fetchDistributions = async (month, year) => {
-      try {
-        const distributionColl = collection(db, 'distributions');
-        const distributionQuery = query(distributionColl, where('month', '==', month));
-        const querySnapshot = await getDocs(distributionQuery);
-        const distri = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        setDistributions(distri);
-        console.log("Filtered distributions:", distri);
-      } catch (error) {
-        console.error('Error fetching distributions:', error);
-      }
-    };
-
-    fetchDistributions();
-  }, []);
-
-
-  const formattedDate = selectedDate.format('MMMM YYYY');
 
   const getPercentage = (num1, num2, decimalPlaces = 10) => {
     if (num2 === 0) return 0;
@@ -125,7 +106,10 @@ export default function Distribution({ farms, roi }) {
   };
 
   const exportExcel = async (reportSelectionDate) => {
-    console.log("export date", reportSelectionDate);
+
+    const savedDistri = getDistriData(distributionData).sort((a, b) => {
+      return a.farmerName.toLowerCase().localeCompare(b.farmerName.toLowerCase())
+    })
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Harvest Schedule');
@@ -219,7 +203,7 @@ export default function Distribution({ farms, roi }) {
     };
 
     // Aggregate distributions by id and dayOfHarvest
-    const aggregatedDistributions = savedDistributions.reduce((acc, dist) => {
+    const aggregatedDistributions = savedDistri.reduce((acc, dist) => {
       const distKey = `${dist.farmId}-${new Date(dist.commitDate).getTime()}`;
       if (!acc[distKey]) {
         acc[distKey] = { ...dist };
@@ -259,8 +243,9 @@ export default function Distribution({ farms, roi }) {
       farmDistributions.forEach((dist) => {
         const distDate = new Date(dist.commitDate);
         const colIndex = headers.length + distDate.getDate();
-        worksheet.getCell(rowIndex, colIndex).value = dist.actualCommit;
-        total += dist.actualCommit;
+        const value = dist.actualCommit || '';
+        worksheet.getCell(rowIndex, colIndex).value = value;
+        total += value || 0;
       });
 
       worksheet.getCell(rowIndex, totalColIndex).value = total;
@@ -330,28 +315,50 @@ export default function Distribution({ farms, roi }) {
 
     const distri = await fetchDistributions(month, year)
 
-    const dataGridDistri = distri?.map(d => {
+    // const dataGridDistri = distri?.map(d => {
+    //   const farm = farms.find(farm => farm.id === d.farmId)
+    //   if (farm) {
+    //     return {
+    //       farmerName: farm.farmerName,
+    //       brgy: farm.brgy,
+    //       mun: farm.mun,
+    //       area: farm.area,
+    //       startDate: farm.start_date.toDate(),
+    //       harvestDate: farm.harvest_date.toDate(),
+    //       commitDate: d.dayOfCommit.toDate(),
+    //       actualCommit: d.actual,
+    //       id: d.id,
+    //       farmId: farm.id
+    //     }
+    //   }
+    // })
+
+
+    const dataDistri = distri?.reduce((acc, d) => {
       const farm = farms.find(farm => farm.id === d.farmId)
-      console.log("farmssss", farm)
+      const commitDate = new Date(d.dayOfCommit.toDate()).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
 
-      if (farm) {
-        return {
-          farmerName: farm.farmerName,
-          brgy: farm.brgy,
-          mun: farm.mun,
-          area: farm.area,
-          startDate: farm.start_date.toDate(),
-          harvestDate: farm.harvest_date.toDate(),
-          commitDate: d.dayOfCommit.toDate(),
-          actualCommit: d.actual,
-          id: d.id,
-          farmId: farm.id
-        }
+      if (!acc[commitDate]) {
+        acc[commitDate] = {
+          key: d.distributionId.toString(),
+          commitDate,
+          totalArea: 0,
+          totalProduction: 0
+        };
       }
-    })
 
-    console.log("farms sa handle saved date:", dataGridDistri);
-    setSavedDistributions(dataGridDistri)
+
+      acc[commitDate].totalArea += parseFloat(farm.area) || 0;
+      acc[commitDate].totalProduction += d.actual || 0
+      return acc;
+    }, {});
+
+    setDistributionData(distri)
+    setSavedDistributions(Object.values(dataDistri).sort((a, b) => new Date(a.commitDate) - new Date(b.commitDate)))
   }
 
   const handleEditCommit = () => {
@@ -621,6 +628,110 @@ export default function Distribution({ farms, roi }) {
   const handleTabChange = (_, newValue) => {
     setTabIndex(newValue);
   };
+
+  const commitDateColumn = [
+    {
+      title: 'Date of Commit',
+      dataIndex: 'commitDate',
+      key: 'commitDate'
+    },
+    {
+      title: 'Total Area',
+      dataIndex: "totalArea",
+      key: "totalArea"
+    },
+    {
+      title: 'Total Pineapple',
+      dataIndex: "totalProduction",
+      key: "totalProduction"
+    }
+  ]
+
+  const commitDateColumnExpanded = [
+    {
+      title: 'Date of Commit',
+      dataIndex: 'commitDate',
+      key: 'commitDate',
+    },
+    {
+      title: 'Area',
+      dataIndex: "area",
+      key: "area",
+    },
+    {
+      title: 'No. of Plants',
+      dataIndex: "actualCommit",
+      key: "actualCommit",
+    },
+    {
+      title: "Name of Farmer",
+      dataIndex: "farmerName",
+      key: "farmerName",
+    },
+    {
+      title: "Date of Planting",
+      dataIndex: "startDate",
+      key: 'startDate'
+    },
+    {
+      title: 'Date of Harvest',
+      dataIndex: 'harvestDate',
+      key: 'harvestDate'
+    }
+  ]
+
+  const formatDate = (date) => {
+    const newDate = new Date(date).toLocaleDateString("en-US", {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    })
+    return newDate
+  }
+
+  const getDistriData = (distri) => {
+    return distri?.map(d => {
+      const farm = farms.find(farm => farm.id === d.farmId)
+      if (farm) {
+        return {
+          farmerName: farm.farmerName,
+          brgy: farm.brgy,
+          mun: farm.mun,
+          area: farm.area,
+          startDate: farm.start_date.toDate(),
+          harvestDate: farm.harvest_date.toDate(),
+          commitDate: d.dayOfCommit.toDate(),
+          actualCommit: d.actual,
+          id: d.id,
+          farmId: farm.id
+        }
+      }
+    })
+  }
+
+  const expandedRowRender = (e) => {
+    const dataGridDistri = distributionData
+      .filter(df => {
+        const dCommitDate = new Date(df.dayOfCommit.toDate()).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        if (dCommitDate === e.commitDate) {
+          return true
+        }
+        return false
+      })
+
+    const dataSource = getDistriData(dataGridDistri)
+    return (
+      <Table
+        columns={commitDateColumnExpanded}
+        dataSource={dataSource}
+        pagination={false}
+      />
+    )
+  }
 
   const columnsSavedDistri = [
     {
@@ -1103,7 +1214,16 @@ export default function Distribution({ farms, roi }) {
                 borderRadius: 3,
               }}
             >
-              <DataGrid
+              <Table
+                columns={commitDateColumn}
+                dataSource={savedDistributions}
+                pagination={false}
+                expandable={{
+                  expandedRowRender,
+                  defaultExpandedRowKeys: ['0']
+                }}
+              />
+              {/* <DataGrid
                 rows={savedDistributions}
                 columns={columnsSavedDistri}
                 disableSelectionOnClick
@@ -1120,7 +1240,7 @@ export default function Distribution({ farms, roi }) {
                   rows.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
                 }
                 hideFooter
-              />
+              /> */}
             </Box>
           </Grid>
         )}
