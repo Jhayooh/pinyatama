@@ -3,8 +3,6 @@ import {
   Box,
   Button,
   FormControl,
-  MenuItem,
-  Select,
   InputLabel,
   OutlinedInput,
   Typography,
@@ -19,9 +17,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogActions,
-  Alert,
-  Tooltip,
-  AlertTitle,
   Autocomplete,
 
 } from '@mui/material';
@@ -32,8 +27,6 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
-import BackIcon from '@mui/icons-material/ArrowBackIosNew';
-import * as XLSX from 'xlsx';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Pie from '../chart/Pie2';
@@ -331,19 +324,15 @@ export default function Distribution({ farms, roi }) {
   }
 
   const handleEditCommit = () => {
-    // Update the localFarms state
     console.log("farms sa handle Edit commit:", localFarms);
 
     setLocalFarms((prevFarms) => {
-      // Update the specific farm object and return a new array
       const updatedFarms = prevFarms.map((farm) => {
         if (farm.id === selectedRow.id) {
-          // If the field being edited exists, update it with the new value
           return { ...farm, actual: parseInt(selectedRow.actual) };
         }
         return farm;
       });
-      // Calculate the actual total of 'production'
       const actualTotal = updatedFarms.reduce((sum, farm) => {
         return sum + (farm.actual || 0);
       }, 0);
@@ -488,26 +477,6 @@ export default function Distribution({ farms, roi }) {
     return Math.floor(Math.random() * Date.now())
   }
 
-  // useEffect(() => {
-  //   if (!distributions) return
-
-  //   const reducedData = distributions.reduce((acc, current) => {
-  //     const formattedDate = monthYear(current.date);
-  //     const existing = acc.find(item => item.label === formattedDate);
-
-  //     if (!existing) {
-  //       acc.push({
-  //         farmId: current.farmId,
-  //         label: formattedDate,
-  //       });
-  //     } else {
-  //       existing.value += current.value;
-  //     }
-
-  //     return acc;
-  //   }, []);
-  //   setReportSelection(reducedData)
-  // }, [distributions])
   const saveDistribution = async () => {
     setSaving(true)
     console.log("farms sa save distribution", localFarms);
