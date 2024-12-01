@@ -21,7 +21,7 @@ import { Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogC
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 import { signOut } from 'firebase/auth';
 import { auth, db } from '../../firebase/Config';
-import { collection, doc, getDocs, orderBy, query, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDocs, orderBy, Query, query, updateDoc } from 'firebase/firestore';
 import AdminHome from './AdminHome';
 import Timeline from './Timeline';
 import ProductPrices from './ProductPrices';
@@ -247,6 +247,10 @@ export default function SideNav() {
         const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
         const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
         const fruitingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'fruiting');
+        const harvestingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'harvesting');
+
+        const endofFruiting = new Date(fruitingPhase.end_time.toDate());
+        endofFruiting.setDate(endofFruiting.getDate() + 15);
 
         if (vegetativePhase && cropstage >= vegetativePhase.start_time.toDate() && cropstage <= vegetativePhase.end_time.toDate()) {
           newCropstage = 'vegetative';
@@ -254,6 +258,9 @@ export default function SideNav() {
           newCropstage = 'flowering';
         } else if (fruitingPhase && cropstage >= fruitingPhase.start_time.toDate() && cropstage <= fruitingPhase.end_time.toDate()) {
           newCropstage = 'fruiting';
+        } else if (harvestingPhase && cropstage >= fruitingPhase.end_time.toDate() && cropstage <= endofFruiting) {
+          newCropstage = 'harvesting'
+          newRemarks = 'harvesting phase'
         } else {
           newCropstage = 'complete';
           newRemarks = 'success'
@@ -308,22 +315,6 @@ export default function SideNav() {
     fetchRoi()
     fetchEvents();
   }, [farms]);
-
-
-
-  //Logout
-
-  const modalRef = useRef(null);
-
-  // 
-  const closeLogoutMdal = () => {
-    setLogoutModalDisplay(false);
-  };
-
-  //Reloading page
-  const handleReload = () => {
-    window.location.reload();
-  };
 
   const icons = {
     dashboard,
@@ -386,7 +377,7 @@ export default function SideNav() {
               }}
             >
               <img src={logo} alt="pinyatamap logo" width={open ? '100%' : '0'}
-                />
+              />
             </Box>
 
             {/* Sidebar Items */}
