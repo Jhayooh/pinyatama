@@ -132,14 +132,12 @@ export default function Distribution({ farms, roi }) {
 
     const totalColumns = 5 + daysInMonth + 1;
 
-    // Title Row (merged and centered)
     worksheet.mergeCells(1, 1, 1, totalColumns);
     worksheet.getCell(1, 1).value = title.join('\n');
     worksheet.getCell(1, 1).alignment = { vertical: 'middle', horizontal: 'center', wrapText: true };
     worksheet.getCell(1, 1).font = { bold: true, size: 12 };
     worksheet.getRow(1).height = 90;
 
-    // Headers
     const headers = [
       'Name of farmers',
       'Barangay',
@@ -157,7 +155,6 @@ export default function Distribution({ farms, roi }) {
         horizontal: 'center',
       };
 
-      // Set width for specific columns
       if (header === 'Name of farmers') worksheet.getColumn(colIndex).width = 20;
       if (header === 'Barangay') worksheet.getColumn(colIndex).width = 15;
       if (header === 'Municipality') worksheet.getColumn(colIndex).width = 15;
@@ -165,22 +162,18 @@ export default function Distribution({ farms, roi }) {
       if (header === 'Planting date') worksheet.getColumn(colIndex).width = 15;
     });
 
-    // Days of the month
     const dayNames = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     for (let day = 1; day <= daysInMonth; day++) {
       const date = new Date(year, month, day);
       const dayOfWeek = date.getDay();
       const colIndex = day + headers.length;
 
-      // Add day letters (e.g., M, T, W) and day numbers
       worksheet.getCell(2, colIndex).value = dayNames[dayOfWeek === 0 ? 6 : dayOfWeek - 1];
       worksheet.getCell(3, colIndex).value = day;
 
-      // Apply center alignment for day headers
       worksheet.getCell(2, colIndex).alignment = { vertical: 'middle', horizontal: 'center' };
       worksheet.getCell(3, colIndex).alignment = { vertical: 'middle', horizontal: 'center' };
 
-      // Highlight day letter and day number with grayish color
       worksheet.getCell(2, colIndex).fill = {
         type: 'pattern',
         pattern: 'solid',
@@ -193,7 +186,6 @@ export default function Distribution({ farms, roi }) {
       };
     }
 
-    // Add "Total" column
     const totalColIndex = headers.length + daysInMonth + 1;
     worksheet.mergeCells(2, totalColIndex, 3, totalColIndex);
     worksheet.getCell(2, totalColIndex).value = 'Total';
@@ -202,7 +194,6 @@ export default function Distribution({ farms, roi }) {
       horizontal: 'center',
     };
 
-    // Aggregate distributions by id and dayOfHarvest
     const aggregatedDistributions = savedDistri.reduce((acc, dist) => {
       const distKey = `${dist.farmId}-${new Date(dist.commitDate).getTime()}`;
       if (!acc[distKey]) {
