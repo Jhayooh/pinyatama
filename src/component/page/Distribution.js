@@ -48,9 +48,6 @@ import { Table } from 'antd'
 
 // icons
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutlineOutlined';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined'
-import { useCollectionData } from 'react-firebase-hooks/firestore';
 
 export default function Distribution({ farms, roi }) {
   const [selectedDate, setSelectedDate] = useState(dayjs());
