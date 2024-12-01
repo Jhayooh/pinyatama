@@ -315,25 +315,6 @@ export default function Distribution({ farms, roi }) {
 
     const distri = await fetchDistributions(month, year)
 
-    // const dataGridDistri = distri?.map(d => {
-    //   const farm = farms.find(farm => farm.id === d.farmId)
-    //   if (farm) {
-    //     return {
-    //       farmerName: farm.farmerName,
-    //       brgy: farm.brgy,
-    //       mun: farm.mun,
-    //       area: farm.area,
-    //       startDate: farm.start_date.toDate(),
-    //       harvestDate: farm.harvest_date.toDate(),
-    //       commitDate: d.dayOfCommit.toDate(),
-    //       actualCommit: d.actual,
-    //       id: d.id,
-    //       farmId: farm.id
-    //     }
-    //   }
-    // })
-
-
     const dataDistri = distri?.reduce((acc, d) => {
       const farm = farms.find(farm => farm.id === d.farmId)
       const commitDate = new Date(d.dayOfCommit.toDate()).toLocaleDateString("en-US", {
