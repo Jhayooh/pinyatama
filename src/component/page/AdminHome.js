@@ -389,7 +389,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             {
               munNames.length === 0 && munData.length === 0
                 ? <Typography>No Farm Found</Typography>
-                : <Pie labels={munNames} data={munData} title="Munisipalidad" setSelectedMun={setSelectedMun} />
+                : <Pie labels={munNames} data={munData} title="Camarines Norte Pineapple Plantation" setSelectedMun={setSelectedMun} />
             }
           </Box>
         </Grid>
@@ -398,7 +398,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             {
               brgyNames.length === 0 && brgyData.length === 0
                 ? <Typography>No Farm Found</Typography>
-                : <Pie labels={brgyNames} data={brgyData} title="Mga Sakahan" />
+                : <Pie labels={brgyNames} data={brgyData} title={`${selectedMun} Pineapple Plantation`} />
             }
           </Box>
         </Grid>

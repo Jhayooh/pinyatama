@@ -36,7 +36,11 @@ import ListView from './ListView.js';
 function Farms({ events, farms, users, particularData, pineapple }) {
   const [filteredFarms, setFilteredFarms] = useState(farms);
   const [filteredUsers, setFilteredUsers] = useState(users);
-  const [newUser, setNewUser] = useState([{ uid: '1', id: '', displayName: 'Lahat' }, ...users]);
+  const [newUser, setNewUser] = useState([{
+    uid: '1',
+    id: '',
+    displayName: 'Lahat'
+  }, ...users]);
   const [showFarmTabs, setShowFarmTabs] = useState(false);
   const [indFarm, setIndFarm] = useState('');
   const [indUser, setIndUser] = useState('');
@@ -74,6 +78,8 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   });
 
   const handleMun = (event) => {
+    const userMun = users.filter(uf => uf.mun === event.target.value)
+    setNewUser(userMun)
     setMun(event.target.value);
   };
 
@@ -267,10 +273,11 @@ function Farms({ events, farms, users, particularData, pineapple }) {
           <div
             style={{
               backgroundColor: bgColor,
-              color: 'black',
+              color: '#fff',
               padding: '5px',
               borderRadius: '4px',
               textAlign: 'center',
+              textTransform: 'uppercase'
             }}
           >
             {status}
@@ -340,7 +347,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const year2 = [2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
 
   return (
-    <Box sx={{ backgroundColor: '#f9fafb', p: 1.5, borderRadius: 4, height: '100%', overflow: 'hidden' }}>
+    <Box sx={{ backgroundColor: '#f9fafb', p: 2, borderRadius: 4, height: '100%', overflow: 'hidden' }}>
       <Box lg={12} md={12} sm={12} xs={12} sx={{ m: 2, height: '100%', }}>
 
         <Box sx={{ height: '100%', overflowY: 'hidden' }}>
@@ -363,9 +370,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
               </h1>
               <Divider sx={{ borderBottomWidth: 2, mb: 2 }} />
               <Box sx={{ boxShadow: 2, borderRadius: 2, backgroundColor: '#fff' }}>
-                
+
                 <Box sx={{ display: 'flex', p: 2, borderRadius: 20, gap: 1 }}>
-                  
+
                   <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', gap: 1 }}>
                     {/* Bak butun */}
                     {
@@ -376,15 +383,23 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     }
                     {/* Municipality */}
                     <Box sx={{ display: 'flex', width: '100%' }}>
-                      <FormControl fullWidth size='small'>
-                        <InputLabel id='demo-simple-select-label'>Munisipalidad</InputLabel>
+                      <FormControl fullWidth size="small">
+                        <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
                         <Select
                           sx={{ border: 'none' }}
-                          labelId='demo-simple-select-label'
-                          id='demo-simple-select'
+                          labelId="demo-simple-select-label"
+                          id="demo-simple-select"
                           value={mun}
-                          label='Municipality'
+                          label="Municipality"
                           onChange={handleMun}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                maxHeight: 300,
+                                overflowY: 'auto',
+                              },
+                            },
+                          }}
                         >
                           {municipalities.map((municipality) => (
                             <MenuItem key={municipality.value} value={municipality.value}>
@@ -405,6 +420,14 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                           value={userFilter}
                           label='Extensionist'
                           onChange={handleUser}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                maxHeight: 300,
+                                overflowY: 'auto',
+                              },
+                            },
+                          }}
                         >
                           {[
                             { uid: '1', id: '', displayName: 'Lahat' }, // Default user
@@ -428,6 +451,14 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                           value={cropFilter}
                           label='Crop Stage'
                           onChange={handleCrop}
+                          MenuProps={{
+                            PaperProps: {
+                              sx: {
+                                maxHeight: 300,
+                                overflowY: 'auto',
+                              },
+                            },
+                          }}
                         >
                           {
                             [{ id: '', cropStage: 'Lahat' },

@@ -18,12 +18,471 @@ const Container = styled(Box)({
     justifyContent: 'space-between',
 });
 
+function dateFormatter(date) {
+    const d = new Date(date.toMillis())
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+}
 
 
 function Profile({ user, farm }) {
     return (
-        <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2, }}>
-            <Grid item xs={12} md={8} lg={8} elevation={3} sx={{ padding: 3, boxShadow: 1, backgroundColor: '#fff'}}>
+        <Grid container spacing={2} alignItems='stretch' sx={{ padding: 2, height: '100%', overflow: 'hidden', display: 'flex' }}>
+            <Grid item xs={12} md={8}  >
+                <Box
+                    sx={{
+                        boxShadow: 2,
+                        borderRadius: 4,
+                        backgroundColor: '#e8f5e9',
+                        height: '100%',
+                        padding: 3,
+                        // maxWidth: 800,
+                        margin: 'auto',
+                    }}
+                >
+                    <Typography
+                        variant="h5"
+                        sx={{ textAlign: 'center', color: '#2e7d32', fontWeight: 'bold', marginBottom: 2, fontFamily:'serif' }}
+                    >
+                        Detalye ng Sakahan
+                    </Typography>
+                    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'column', gap:1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c', }}>
+                                    Field I.D
+                                </Typography>
+                                <TextField
+                                    id="farmer-name"
+                                    defaultValue={farm.fieldId}
+                                    InputProps={{
+                                        readOnly: true,
+                                        disableUnderline: true
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '20px',
+                                            height: '50%',
+                                            paddingX:2,
+                                            paddingY:1
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1, justifyContent: 'flex-start', flexDirection: 'column', gap:1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Status
+                                </Typography>
+                                <Typography sx={{
+                                    backgroundColor: farm.remarks ? farm.remarks === 'failed'
+                                        ? 'red'
+                                        : farm.remarks === 'On going'
+                                            ? 'orange'
+                                            : 'green'
+                                        : 'green',
+                                    color: '#fff', paddingX: 2, paddingY: 1, borderRadius: 3, textAlign: 'center',
+                                    fontSize: 18, fontWeight: 600
+                                }}>{farm.remarks.toUpperCase()}</Typography>
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c', }}>
+                                    Pangalan ng Magsasaka
+                                </Typography>
+                                <TextField
+                                    id="farmer-name"
+                                    defaultValue={farm.farmerName}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Kasarian
+                                </Typography>
+                                <TextField
+                                    id="sex"
+                                    defaultValue={farm.sex}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Baranggay
+                                </Typography>
+                                <TextField
+                                    id="barangay"
+                                    defaultValue={farm.brgy}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Munisipalidad
+                                </Typography>
+                                <TextField
+                                    id="municipality"
+                                    defaultValue={farm.mun}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Petsa ng Pagtanim
+                                </Typography>
+                                <TextField
+                                    id="land-area"
+                                    defaultValue={dateFormatter(farm.start_date)}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Petsa ng Inaasahang Ani
+                                </Typography>
+                                <TextField
+                                    id="plant-number"
+                                    defaultValue={farm.isEthrel ? dateFormatter(farm.harvest_date) : dateFormatter(farm.harvest_date)}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Sukat ng Lupa
+                                </Typography>
+                                <TextField
+                                    id="land-area"
+                                    defaultValue={`${farm.area} Ha`}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Bilang ng Tanim
+                                </Typography>
+                                <TextField
+                                    id="plant-number"
+                                    defaultValue={`${farm.plantNumber} pcs`}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                display: 'flex',
+                                flexDirection: { xs: 'column', sm: 'row' },
+                                gap: 2,
+                                justifyContent: 'space-between',
+                            }}
+                        >
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    NPK
+                                </Typography>
+                                <TextField
+                                    id="npk"
+                                    defaultValue={farm.npk}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                            <Box sx={{ flex: 1 }}>
+                                <Typography variant="button" sx={{ color: '#388e3c' }}>
+                                    Klase ng Lupa
+                                </Typography>
+                                <TextField
+                                    id="soil-type"
+                                    defaultValue={farm.soil}
+                                    InputProps={{
+                                        readOnly: true,
+                                    }}
+                                    variant="filled"
+                                    fullWidth
+                                    sx={{
+                                        '& .MuiFilledInput-root': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiFilledInput-root:hover': {
+                                            backgroundColor: 'transparent'
+                                        },
+                                        '& .MuiInputBase-input': {
+                                            fontSize: '16px',
+                                            height: '50%',
+                                        },
+                                        borderRadius: 1,
+
+                                    }}
+                                />
+                            </Box>
+                        </Box>
+                    </Box>
+                </Box>
+            </Grid>
+            <Grid item xs={12} md={4} >
+                <Box sx={{
+                    boxShadow: 1,
+                    borderRadius: 4,
+                    backgroundColor: '#fff',
+                    height: '100%',
+                    padding: 2,
+                    display: 'flex',
+                    flexDirection: 'column'
+                }}>
+                    <h6 style={{ textAlign: 'center' }}>Barangay Extensionist Worker</h6>
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        flexDirection: 'column',
+                        padding: 2,
+                        alignItems: 'center',
+                    }}>
+                        <Avatar
+                            src={user.photoURL}
+                            alt="Profile"
+                            sx={{
+                                alignItems: 'center',
+                                width: 200,
+                                height: 200
+                            }} />
+                        <Typography
+                            variant='h5'
+                            component='h5'
+                            sx={{
+                                textAlign: 'center',
+                                fontWeight: 'bold',
+                                color: '#000000', mt: 2
+                            }}>
+                            {user.displayName}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', gap: 2 }}>
+                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+                            <p>Baranggay:</p>
+                            <p>Munisipalidad:</p>
+                            <p>Username:</p>
+                            <p>Contact Number:</p>
+                        </Box>
+                        <Box sx={{ display: 'flex', flexDirection: 'column', }}>
+                            <p>{user.brgy}</p>
+                            <p>{user.mun}</p>
+                            <p>{user.email}</p>
+                            <p>{user.phoneNumber}</p>
+                        </Box>
+                    </Box>
+                </Box>
+            </Grid>
+            {/* <Grid item xs={12} md={8} lg={8} elevation={3} sx={{ padding: 3, boxShadow: 1, backgroundColor: '#fff'}}>
                 <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%', width: '100%', justifyContent: 'center'}}>
                     <Typography variant='h6'
                         sx={{
@@ -264,7 +723,7 @@ function Profile({ user, farm }) {
                         </Typography>
                     </Box>
                 </Box>
-            </Grid>
+            </Grid> */}
         </Grid>
     );
 };
