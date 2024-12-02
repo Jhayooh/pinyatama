@@ -167,7 +167,7 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
                             scrollButtons="auto"
                         >
                             <Tab
-                                label="Pagsusuri ng Gastos at Kita"
+                                label="Cost and Return Analysis"
                                 {...a11yProps(0)}
                                 sx={{
                                     color: value === 0 ? 'orange' : 'green',
@@ -177,7 +177,7 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
                                 }}
                             />
                             <Tab
-                                label="Aktibidades"
+                                label="Activities"
                                 {...a11yProps(1)}
                                 sx={{
                                     color: value === 1 ? 'orange' : 'green',
@@ -197,7 +197,7 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
                                 }}
                             /> */}
                             <Tab
-                                label="Galeriya ng Sakahan"
+                                label="Farm Gallery"
                                 {...a11yProps(1)}
                                 sx={{
                                     color: value === 2 ? 'orange' : 'green',
@@ -207,7 +207,7 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
                                 }}
                             />
                             <Tab
-                                label="Detalye ng Sakahan"
+                                label="Farm Details"
                                 {...a11yProps(1)}
                                 sx={{
                                     color: value === 3 ? 'orange' : 'green',

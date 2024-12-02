@@ -39,7 +39,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [newUser, setNewUser] = useState([{
     uid: '1',
     id: '',
-    displayName: 'Lahat'
+    displayName: 'All'
   }, ...users]);
   const [showFarmTabs, setShowFarmTabs] = useState(false);
   const [indFarm, setIndFarm] = useState('');
@@ -49,12 +49,12 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const [mun, setMun] = useState('');
   const [search, setSearch] = useState('');
   const [userFilter, setUserFilter] = useState('');
-  const [cropFilter, setCropFilter] = useState('Lahat');
+  const [cropFilter, setCropFilter] = useState('All');
   const [month, setMonth] = useState(0)
   const [year, setYear] = useState(new Date().getFullYear())
 
-  const [selectedMonth, setSelectedMonth] = useState("Lahat");
-  const [selectedYear, setSelectedYear] = useState("Lahat");
+  const [selectedMonth, setSelectedMonth] = useState("All");
+  const [selectedYear, setSelectedYear] = useState("All");
 
   const [archive, setArchive] = useState(false)
 
@@ -124,7 +124,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
       const matchesArchive = archive ? farm.cropStage === 'complete' || farm.remarks === 'failed' : farm.cropStage !== 'complete' && farm.remarks !== 'failed' && farm.remarks === 'On going'
       const matchesMunicipality = mun ? farm.mun === mun : true;
       const matchesUser = userFilter ? farm.brgyUID === userFilter : true;
-      const matchesCropStage = cropFilter !== "Lahat" ? farm.cropStage === cropFilter.toLowerCase() : true;
+      const matchesCropStage = cropFilter !== "All" ? farm.cropStage === cropFilter.toLowerCase() : true;
       const matchesSearch = farm.farmerName.toLowerCase().includes(search.toLowerCase());
       return matchesMunicipality && matchesSearch && matchesUser && matchesCropStage && matchesArchive;
     });
@@ -161,7 +161,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   }, [farms]);
 
   const municipalities = [
-    { name: 'Lahat', value: '' },
+    { name: 'All', value: '' },
     { name: 'Basud', value: 'BASUD' },
     { name: 'Capalonga', value: 'CAPALONGA' },
     { name: 'Daet', value: 'DAET (Capital)' },
@@ -196,7 +196,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   const columns = [
     {
       field: 'title',
-      headerName: 'Pangalan ng Bukid',
+      headerName: 'Farm Name',
       flex: 1,
       sortable: true,
       renderCell: (params) => (
@@ -214,28 +214,28 @@ function Farms({ events, farms, users, particularData, pineapple }) {
     },
     {
       field: 'brgy',
-      headerName: 'Baranggay',
+      headerName: 'Barangay',
       flex: 1,
       sortable: true,
       renderCell: (params) => <Typography variant='overline'> {params.row.brgy}</Typography>,
     },
     {
       field: 'mun',
-      headerName: 'Munisipalidad',
+      headerName: 'Municipality',
       flex: 1,
       sortable: true,
       renderCell: (params) => <Typography variant='overline'> {params.row.mun}</Typography>,
     },
     {
       field: 'start_date',
-      headerName: 'Petsa ng Pagtanim',
+      headerName: 'Date of Planting',
       flex: 1,
       sortable: true,
       valueGetter: (params) => dateFormatter(params.row.start_date),
     },
     {
       field: 'harvest_date',
-      headerName: 'Petsa ng inaasahang ani',
+      headerName: 'Date of Expected Harvest',
       flex: 1,
       sortable: true,
       valueGetter: (params) => dateFormatter(params.row.harvest_date),
@@ -329,7 +329,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   };
   // Month and year selection
   const months = [
-    { value: 0, label: 'Lahat' },
+    { value: 0, label: 'All' },
     { value: 1, label: 'January' },
     { value: 2, label: 'February' },
     { value: 3, label: 'March' },
@@ -384,7 +384,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     {/* Municipality */}
                     <Box sx={{ display: 'flex', width: '100%' }}>
                       <FormControl fullWidth size="small">
-                        <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
+                        <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                         <Select
                           sx={{ border: 'none' }}
                           labelId="demo-simple-select-label"
@@ -412,7 +412,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     {/* ExtensionistSorting */}
                     <Box sx={{ display: 'flex', width: '100%' }}>
                       <FormControl fullWidth size='small'>
-                        <InputLabel id='demo-simple-select-label'>BAEWs</InputLabel>
+                        <InputLabel id='demo-simple-select-label'>BAEW's</InputLabel>
                         <Select
                           sx={{ border: 'none' }}
                           labelId='demo-simple-select-label'
@@ -430,7 +430,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                           }}
                         >
                           {[
-                            { uid: '1', id: '', displayName: 'Lahat' }, // Default user
+                            { uid: '1', id: '', displayName: 'All' }, // Default user
                             ...newUser.filter(user => user.status === 'active') // Filtered active users
                           ].map((user) => (
                             <MenuItem key={user.uid} value={user.id}>
@@ -443,7 +443,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                     {/* Crop Stage */}
                     <Box sx={{ display: 'flex', width: '100%' }}>
                       <FormControl fullWidth size='small'>
-                        <InputLabel id='demo-simple-select-label'>Yugto ng Pananim</InputLabel>
+                        <InputLabel id='demo-simple-select-label'>Stage of Crops</InputLabel>
                         <Select
                           sx={{ border: 'none' }}
                           labelId='demo-simple-select-label'
@@ -461,7 +461,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                           }}
                         >
                           {
-                            [{ id: '', cropStage: 'Lahat' },
+                            [{ id: '', cropStage: 'All' },
                             { id: '0', cropStage: 'Vegetative' },
                             { id: '1', cropStage: 'Flowering' },
                             { id: '2', cropStage: 'Fruiting' }].map((farm) => (
@@ -528,7 +528,7 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                       <FormControl fullWidth size='small'>
                         <OutlinedInput
                           id='outlined-adornment-amount'
-                          placeholder='Maghanap...'
+                          placeholder='Search...'
                           startAdornment={<InputAdornment position='start'><SearchIcon /></InputAdornment>}
                           value={search}
                           onChange={handleSearch}

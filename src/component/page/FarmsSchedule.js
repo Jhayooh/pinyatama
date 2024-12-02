@@ -206,7 +206,7 @@ function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
               <TimelineHeaders className='timeline-header'>
                 <SidebarHeader >
                   {({ getRootProps }) => {
-                    return <h3 {...getRootProps()}>Mga Sakahan</h3>
+                    return <h3 {...getRootProps()}>Farms</h3>
                   }}
                 </SidebarHeader>
                 <DateHeader sticky unit="primaryHeader" />

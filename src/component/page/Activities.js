@@ -62,7 +62,7 @@ const Activities = ({ farm }) => {
 
         setNewActivities(prev => [{
             createdAt: farm.start_date,
-            label: 'Araw ng Pagtanim ng Pinya',
+            label: 'Planting of Pineapple',
             compId: '',
             qnty: 0,
         }, ...activities])
@@ -207,7 +207,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Net return", "Production cost"]}
                                                     data={[projectedRoi.netReturn, projectedRoi.costTotal]}
-                                                    title={"Inaasahang Produksyon"}
+                                                    title={"Expected Production"}
                                                 />
                                             </Box>
                                         </>
@@ -285,7 +285,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Materials", "Labor", "Fertilizer"]}
                                                     data={[projectedRoi.materialTotal || 0, projectedRoi.laborTotal || 0, projectedRoi.fertilizerTotal || 0]}
-                                                    title={'Gastos sa Produksyon'}
+                                                    title={'Production Cost'}
                                                 />
                                             </Box>
                                         </>
@@ -364,7 +364,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Good Size", "Butterball"]}
                                                     data={[projectedRoi.grossReturn, projectedRoi.butterBall]}
-                                                    title={"Produksyon ng Pinya"}
+                                                    title={"Pineapple Production"}
                                                 />
                                             </Box>
                                         </>
@@ -439,7 +439,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Net return", "Production cost"]}
                                                     data={[Math.max(0, actualRoi.netReturn), actualRoi.costTotal]}
-                                                    title={"Inaasahang Produksyon"}
+                                                    title={"Expected Production"}
                                                 />
                                             </Box>
                                         </>
@@ -517,7 +517,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Materials", "Labor", "Fertilizer"]}
                                                     data={[actualRoi.materialTotal || 0, actualRoi.laborTotal || 0, actualRoi.fertilizerTotal || 0]}
-                                                    title={'Gastos sa Produksyon'}
+                                                    title={'Production Cost'}
                                                 />
                                             </Box>
                                         </>
@@ -596,7 +596,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Good Size", "Butterball"]}
                                                     data={[actualRoi.grossReturn, actualRoi.butterBall]}
-                                                    title={"Produksyon ng Pinya"}
+                                                    title={"Pineapple Production"}
                                                 />
                                             </Box>
                                         </>
@@ -712,6 +712,7 @@ const Activities = ({ farm }) => {
                                                                     : '#FFD6D6',
                                                             boxShadow: 6,
                                                         },
+                                                        
                                                     }}
                                                 >
                                                     <StepLabel StepIconComponent={QontoStepIcon}>

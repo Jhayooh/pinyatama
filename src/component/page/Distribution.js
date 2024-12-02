@@ -1028,7 +1028,7 @@ export default function Distribution({ farms, roi }) {
                   <Pie
                     labels={localFarms.map((lf) => lf.farm)}
                     data={localFarms.map((lf) => lf.suggested)}
-                    title="Inaasahang Komit"
+                    title="Expecting Commit"
                     unit="pcs"
                   />
                 </Box>

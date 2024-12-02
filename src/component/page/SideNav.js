@@ -475,17 +475,17 @@ export default function SideNav() {
             aria-describedby="alert-dialog-description"
           >
             <DialogTitle sx={{ backgroundColor: '#FFBABA', color: 'white' }} id="alert-dialog-title">
-              {"Logout"}
+              {'Signing Out'}
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-                Sigurado ka bang gusto mong mag-log out sa account na ito?
+               Are you sure you want to sign out to this account?
               </DialogContentText>
             </DialogContent>
             <DialogActions>
-              <Button variant='text' color='error' onClick={closeLogoutModal}>Kanselahin</Button>
+              <Button variant='text' color='error' onClick={closeLogoutModal}>Cancel</Button>
               <Button variant='contained' color='success' onClick={handleSignOut} autoFocus>
-                Oo
+                Yes
               </Button>
             </DialogActions>
           </Dialog>

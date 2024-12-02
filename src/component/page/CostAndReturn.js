@@ -965,7 +965,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                 <Doughnut
                   labels={["Net return", "Production cost"]}
                   data={[newRoi.netReturn, newRoi.costTotal]}
-                  title={"Inaasahang Produksyon"}
+                  title={"Expected Production"}
                 />
               </Box>
               <Box className='productionBox' sx={{
@@ -977,7 +977,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                 <Doughnut
                   labels={["Materials", "Labor", "Fertilizer"]}
                   data={laborMaterial}
-                  title={'Gastos sa Produksyon'}
+                  title={'Production Cost'}
                 />
               </Box>
             </Box>
@@ -998,7 +998,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                 <Doughnut
                   labels={["Good Size", "Butterball"]}
                   data={[newRoi.grossReturn*getPinePrice('good size', pineapple), newRoi.butterBall*getPinePrice('butterball', pineapple)]}
-                  title={"Produksyon ng Pinya"}
+                  title={"Pineapple Production"}
                 />
               </Box>
               <Box className='pricesBox' sx={{
