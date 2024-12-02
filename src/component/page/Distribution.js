@@ -55,12 +55,8 @@ export default function Distribution({ farms, roi }) {
   const [localFarms, setLocalFarms] = useState([])
   const [totalGrossReturn, setTotalGrossReturn] = useState(0)
   const [totalActualGross, setTotalActualGross] = useState(0)
-  const startOfWeek = selectedDate.startOf('day');
-  const endOfWeek = selectedDate.add(9, 'days').endOf('day');
-
-  console.log('staaartttt', startOfWeek)
-  console.log('eeennddd', endOfWeek)
-
+  const startOfWeek = selectedDate.startOf('week');
+  const endOfWeek = startOfWeek.add(13, 'days').endOf('day');
 
   const [saving, setSaving] = useState(false)
   const [open, setOpen] = useState(false)
@@ -317,7 +313,6 @@ export default function Distribution({ farms, roi }) {
         };
       }
 
-
       acc[commitDate].totalArea += parseFloat(farm.area) || 0;
       acc[commitDate].totalProduction += d.actual || 0
       return acc;
@@ -328,8 +323,6 @@ export default function Distribution({ farms, roi }) {
   }
 
   const handleEditCommit = () => {
-    console.log("farms sa handle Edit commit:", localFarms);
-
     setLocalFarms((prevFarms) => {
       const updatedFarms = prevFarms.map((farm) => {
         if (farm.id === selectedRow.id) {
@@ -575,12 +568,15 @@ export default function Distribution({ farms, roi }) {
     {
       title: 'Date of Commit',
       dataIndex: 'commitDate',
-      key: 'commitDate'
+      key: 'commitDate',
     },
     {
       title: 'Total Area',
       dataIndex: "totalArea",
-      key: "totalArea"
+      key: "totalArea",
+      render: (e) => {
+        return e.toFixed(2)
+      }
     },
     {
       title: 'Total Pineapple',
@@ -594,6 +590,9 @@ export default function Distribution({ farms, roi }) {
       title: 'Date of Commit',
       dataIndex: 'commitDate',
       key: 'commitDate',
+      render: (e) => {
+        return dateFormatter(e)
+      }
     },
     {
       title: 'Area',
@@ -613,23 +612,20 @@ export default function Distribution({ farms, roi }) {
     {
       title: "Date of Planting",
       dataIndex: "startDate",
-      key: 'startDate'
+      key: 'startDate',
+      render: (e) => {
+        return dateFormatter(e)
+      }
     },
     {
       title: 'Date of Harvest',
       dataIndex: 'harvestDate',
-      key: 'harvestDate'
+      key: 'harvestDate',
+      render: (e) => {
+        return dateFormatter(e)
+      }
     }
   ]
-
-  const formatDate = (date) => {
-    const newDate = new Date(date).toLocaleDateString("en-US", {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    })
-    return newDate
-  }
 
   const getDistriData = (distri) => {
     return distri?.map(d => {
