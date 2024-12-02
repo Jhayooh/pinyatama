@@ -55,8 +55,12 @@ export default function Distribution({ farms, roi }) {
   const [localFarms, setLocalFarms] = useState([])
   const [totalGrossReturn, setTotalGrossReturn] = useState(0)
   const [totalActualGross, setTotalActualGross] = useState(0)
-  const startOfWeek = selectedDate.startOf('week');
-  const endOfWeek = selectedDate.endOf('week');
+  const startOfWeek = selectedDate.startOf('day');
+  const endOfWeek = selectedDate.add(9, 'days').endOf('day');
+
+  console.log('staaartttt', startOfWeek)
+  console.log('eeennddd', endOfWeek)
+
 
   const [saving, setSaving] = useState(false)
   const [open, setOpen] = useState(false)
@@ -994,10 +998,11 @@ export default function Distribution({ farms, roi }) {
                       borderBottomLeftRadius: 0,
                       borderTopRightRadius: 8,
                       borderBottomRightRadius: 8,
-                      paddingX: 5
+                      paddingX: 2,
+                      fontSize: 12
                     }}
                   >
-                    Distribute
+                    Calculate Distribution
                   </Button>
                 </Box>
               </Grid>
@@ -1051,6 +1056,11 @@ export default function Distribution({ farms, roi }) {
                     rows={localFarms}
                     columns={columns}
                     disableSelectionOnClick
+                    initialState={{
+                      sorting: {
+                        sortModel: [{ field: 'date', sort: 'asc' }],
+                      },
+                    }}
                     sx={{
                       ...datagridStyle,
                       flex: 1,
@@ -1068,8 +1078,8 @@ export default function Distribution({ farms, roi }) {
                     mt: 2,
                     flexDirection: 'row'
                   }}>
-                    <Typography variant='h5'>Total Actual Distribution</Typography>
-                    <Typography variant='h5'>{new Intl.NumberFormat().format(totalActualGross)}</Typography>
+                    <Typography variant='h5' sx={{ fontWeight: 700 }}>Total Actual Distribution</Typography>
+                    <Typography variant='h5' sx={{ fontWeight: 700 }}>{new Intl.NumberFormat().format(totalActualGross)}</Typography>
                   </Box>
                 </Box>
               </Grid>
@@ -1190,7 +1200,6 @@ export default function Distribution({ farms, roi }) {
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={saving}
-        // onClick={handleClose}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
