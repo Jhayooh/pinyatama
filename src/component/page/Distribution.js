@@ -1190,7 +1190,6 @@ export default function Distribution({ farms, roi }) {
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
           open={saving}
-        // onClick={handleClose}
         >
           <CircularProgress color="inherit" />
         </Backdrop>
