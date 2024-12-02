@@ -529,7 +529,7 @@ export default function SideNav() {
         </DialogTitle>
         <DialogContent dividers>
           <DialogContentText id="alert-dialog-description">
-            You are about to be logged out due to inactivity. {`(${remainingTime})`}
+            You are about to logged out due to inactivity. {`(${remainingTime})`}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
