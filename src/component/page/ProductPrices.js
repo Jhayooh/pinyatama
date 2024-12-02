@@ -473,6 +473,7 @@ export default function ProductPrices({ particularData, pineappleData, others })
                   backgroundColor: '#58AC58',
                   boxShadow: 2,
                   paddingY: { xs: 3, md: 5 },
+                  height:'100%'
                 }}
               >
                 <Box sx={{ color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, mr: { xs: 3, md: 5 }, ml: { xs: 3, md: 5 } }}>
