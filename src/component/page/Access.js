@@ -410,11 +410,11 @@ const Access = ({ usersRow }) => {
               <Box sx={{ width: '30%' }}>
                 <FormControl fullWidth size="small">
                   <InputLabel shrink={true} id="demo-simple-select-label">
-                    Munisipalidad
+                    Municipality
                   </InputLabel>
                   <Select
                     labelId="municipality-select-label"
-                    label="Munisipalidad"
+                    label="Municipality"
                     value={munCode || ''}
                     onChange={(e) => {
                       setMunCode(e.target.value);
@@ -432,7 +432,7 @@ const Access = ({ usersRow }) => {
                     }}
                   >
                     <MenuItem value="">
-                      <em>Lahat</em>
+                      <em>All</em>
                     </MenuItem>
                     {result?.map((munItem) => (
                       <MenuItem key={munItem.mun_code} value={munItem.mun_code}>
@@ -445,7 +445,7 @@ const Access = ({ usersRow }) => {
 
               <Box sx={{ width: '30%' }}>
                 <FormControl fullWidth size="small">
-                  <InputLabel id="demo-simple-select-label">Baranggay</InputLabel>
+                  <InputLabel id="demo-simple-select-label">Barangay</InputLabel>
                   <Select
                     labelId="barangay-select-label"
                     value={brgy || ''}
@@ -475,7 +475,7 @@ const Access = ({ usersRow }) => {
                 <FormControl fullWidth size="small">
                   <OutlinedInput
                     id="outlined-adornment-amount"
-                    placeholder="Maghanap..."
+                    placeholder="Search..."
                     startAdornment={
                       <InputAdornment position="start">
                         <SearchIcon />
@@ -493,8 +493,8 @@ const Access = ({ usersRow }) => {
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
-                flexGrow: 1, // Ensures this area takes available space
-                overflow: 'hidden', // Prevents unintended parent scrolling
+                flexGrow: 1,
+                overflow: 'hidden', 
               }}
             >
               <Box
