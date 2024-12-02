@@ -150,7 +150,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                             {/* Municipality  */}
                             <Box sx={{ width: '100%' }}>
                                 <FormControl fullWidth size="small">
-                                    <InputLabel id="demo-simple-select-label">Munisipalidad</InputLabel>
+                                    <InputLabel id="demo-simple-select-label">Municipality</InputLabel>
                                     <Select
                                         sx={{ border: "none" }}
                                         labelId="demo-simple-select-label"
@@ -223,7 +223,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                                 <FormControl fullWidth size="small" >
                                     <OutlinedInput
                                         id="outlined-adornment-amount"
-                                        placeholder="Maghanap..."
+                                        placeholder="Search..."
                                         startAdornment={<InputAdornment position="start"><SearchIcon /></InputAdornment>}
                                         value={search}
                                         onChange={handleSearch}
@@ -253,7 +253,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                             >
                             </Box>
                             <Typography variant="subtitle2">
-                                Inaasahang Iskedyul
+                                Projected Schedule
                             </Typography>
                         </Box>
                         <Box sx={{
@@ -275,7 +275,7 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
                             >
                             </Box>
                             <Typography variant="subtitle2">
-                                Aktuwal na Iskedyul
+                                Actual Schedule
                             </Typography>
                         </Box>
                     </Box>

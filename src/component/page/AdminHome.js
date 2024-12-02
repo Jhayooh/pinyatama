@@ -10,10 +10,12 @@ import Heatmap from './Heatmap';
 
 // icons
 import farmerImg from '../image_src/farmer.png';
-import farm from '../image_src/seedling.png';
-import production from '../image_src/production.png';
+import farm from '../image_src/pineapple.png';
+import production from '../image_src/cube.png';
 import accounts from '../image_src/account.png'
 import FarmsSchedule from './FarmsSchedule';
+
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 
 const legends = [
   "Pagtatanim",
@@ -152,7 +154,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 {farms.length}
               </Typography>
               <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
-                Mga Sakahan
+                QP FARMS
               </Typography>
             </Box>
             <Box
@@ -201,7 +203,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 2
               </Typography>
               <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
-                Produksyon
+               QP PRODUCTION
               </Typography>
             </Box>
             <Box
@@ -254,7 +256,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 {farmer.length}
               </Typography>
               <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
-                Mga Magsasaka
+                QP FARMERS
               </Typography>
             </Box>
             <Box
@@ -356,7 +358,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 >
                 </Box>
                 <Typography variant="subtitle2">
-                  Inaasahang Iskedyul
+                  Projected Schedule
                 </Typography>
               </Box>
               <Box sx={{
@@ -378,7 +380,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
                 >
                 </Box>
                 <Typography variant="subtitle2">
-                  Aktuwal na Iskedyul
+                  Actual Schedule
                 </Typography>
               </Box>
             </Box>
