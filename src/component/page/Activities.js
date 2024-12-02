@@ -50,7 +50,7 @@ const Activities = ({ farm }) => {
     const [stepIndex, setStepIndex] = useState(-1)
 
     const formatDate = (date) => {
-        return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
     }
 
     const formatTime = (date) => {
@@ -207,7 +207,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Net return", "Production cost"]}
                                                     data={[projectedRoi.netReturn, projectedRoi.costTotal]}
-                                                    title={"Inaasahang Produksyon"}
+                                                    title={""}
                                                 />
                                             </Box>
                                         </>
@@ -217,12 +217,12 @@ const Activities = ({ farm }) => {
                                         [
                                             {
                                                 name: 'Net Return',
-                                                value: Math.max(0, projectedRoi.netReturn||0),
+                                                value: projectedRoi.netReturn || 0,
                                                 id: 0
                                             },
                                             {
                                                 name: 'Cost of Production',
-                                                value: Math.max(0, projectedRoi.costTotal|0),
+                                                value: Math.max(0, projectedRoi.costTotal | 0),
                                                 id: 1
                                             },
                                             {
@@ -363,7 +363,7 @@ const Activities = ({ farm }) => {
                                             <Box>
                                                 <Doughnut
                                                     labels={["Good Size", "Butterball"]}
-                                                    data={[projectedRoi.grossReturn, projectedRoi.butterBall]}
+                                                    data={[projectedRoi.grossReturn * projectedRoi.pinePrice, projectedRoi.butterBall * projectedRoi.butterPrice]}
                                                     title={"Produksyon ng Pinya"}
                                                 />
                                             </Box>
@@ -374,12 +374,12 @@ const Activities = ({ farm }) => {
                                         [
                                             {
                                                 name: 'Good Size',
-                                                value: projectedRoi.grossReturn,
+                                                value: projectedRoi.grossReturn * projectedRoi.pinePrice,
                                                 id: 0
                                             },
                                             {
                                                 name: 'Butterball',
-                                                value: projectedRoi.butterBall,
+                                                value: projectedRoi.butterBall * projectedRoi.butterPrice,
                                                 id: 1
                                             }
                                         ]
@@ -439,7 +439,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Net return", "Production cost"]}
                                                     data={[Math.max(0, actualRoi.netReturn), actualRoi.costTotal]}
-                                                    title={"Inaasahang Produksyon"}
+                                                    title={""}
                                                 />
                                             </Box>
                                         </>
@@ -449,7 +449,7 @@ const Activities = ({ farm }) => {
                                         [
                                             {
                                                 name: 'Net Return',
-                                                value: Math.max(0, actualRoi.netReturn||0),
+                                                value: actualRoi.netReturn || 0,
                                                 id: 0
                                             },
                                             {
@@ -589,63 +589,67 @@ const Activities = ({ farm }) => {
                                 }}
                             >
                                 {
-                                    activitiesLoading && eLoading
+                                    activitiesLoading && eLoading && pineappleLoading
                                         ? <CircularProgress />
                                         : <>
                                             <Box>
                                                 <Doughnut
                                                     labels={["Good Size", "Butterball"]}
-                                                    data={[actualRoi.grossReturn, actualRoi.butterBall]}
+                                                    data={
+                                                        [actualRoi.grossReturn * pineapple.find(p => p.name.toLowerCase() === 'good size').price, actualRoi.butterBall * pineapple.find(p => p.name.toLowerCase() === 'butterball').price]
+                                                    }
                                                     title={"Produksyon ng Pinya"}
                                                 />
                                             </Box>
+
+
+                                            <DataGrid
+                                                rows={
+                                                    [
+                                                        {
+                                                            name: 'Good Size',
+                                                            value: actualRoi.grossReturn * pineapple.find(p => p.name.toLowerCase() === 'good size').price,
+                                                            id: 0
+                                                        },
+                                                        {
+                                                            name: 'Butterball',
+                                                            value: actualRoi.butterBall * pineapple.find(p => p.name.toLowerCase() === 'butterball').price,
+                                                            id: 1
+                                                        }
+                                                    ]
+                                                    // Object.entries(actualRoi)
+                                                    //     .map(([name, value], index) => ({
+                                                    //         id: index + 1,
+                                                    //         name,
+                                                    //         value
+                                                    //     }))
+                                                    //     .sort((a, b) => a.name.localeCompare(b.name))
+                                                }
+                                                columns={[
+                                                    {
+                                                        field: 'name',
+                                                        headerName: 'Name',
+                                                        flex: 2,
+                                                        editable: false,
+                                                        headerClassName: 'super-app-theme--header',
+                                                    },
+                                                    {
+                                                        field: 'value',
+                                                        headerName: 'Value',
+                                                        flex: 1,
+                                                        type: 'number',
+                                                        editable: false,
+                                                        headerClassName: 'super-app-theme--header',
+                                                    },
+                                                ]}
+                                                hideFooter
+                                                getRowClassName={(params) =>
+                                                    params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
+                                                }
+                                                sx={datagridStyle}
+                                            />
                                         </>
                                 }
-                                <DataGrid
-                                    rows={
-                                        [
-                                            {
-                                                name: 'Good Size',
-                                                value: actualRoi.grossReturn,
-                                                id: 0
-                                            },
-                                            {
-                                                name: 'Butterball',
-                                                value: actualRoi.butterBall,
-                                                id: 1
-                                            }
-                                        ]
-                                        // Object.entries(actualRoi)
-                                        //     .map(([name, value], index) => ({
-                                        //         id: index + 1,
-                                        //         name,
-                                        //         value
-                                        //     }))
-                                        //     .sort((a, b) => a.name.localeCompare(b.name))
-                                    }
-                                    columns={[
-                                        {
-                                            field: 'name',
-                                            headerName: 'Name',
-                                            flex: 2,
-                                            editable: false,
-                                            headerClassName: 'super-app-theme--header',
-                                        },
-                                        {
-                                            field: 'value',
-                                            headerName: 'Value',
-                                            flex: 1,
-                                            type: 'number',
-                                            editable: false,
-                                            headerClassName: 'super-app-theme--header',
-                                        },
-                                    ]}
-                                    hideFooter
-                                    getRowClassName={(params) =>
-                                        params.indexRelativeToCurrentPage % 2 === 0 ? 'even' : 'odd'
-                                    }
-                                    sx={datagridStyle}
-                                />
                             </Box>
                         </Grid>
                     </Grid>
@@ -700,7 +704,7 @@ const Activities = ({ farm }) => {
                                                         paddingX: 2,
                                                         paddingY: 1.5,
                                                         boxShadow: 4,
-                                                        height: index === 0 ? 62 : 'auto',
+                                                        height: 'auto',
                                                         color: act.type === 'a' ? '#355E3B' : '#8B0000',
                                                         transition: 'background-color 0.3s ease, box-shadow 0.3s ease',
                                                         '&:hover': {
@@ -737,9 +741,11 @@ const Activities = ({ farm }) => {
                                                                     sx={{
                                                                         color: '#6C6C6C',
                                                                         fontFamily: 'cursive',
+                                                                        display: 'flex',
+                                                                        flexDirection: 'column'
                                                                     }}
                                                                 >
-                                                                    {formatDate(act.createdAt.toDate())} :{' '}
+                                                                    {formatDate(act.createdAt.toDate())}
                                                                     {formatTime(act.createdAt.toDate())}
                                                                 </Typography>
                                                                 <Typography
@@ -761,9 +767,7 @@ const Activities = ({ farm }) => {
                                                                 }}
                                                             >
                                                                 {index !== 0
-                                                                    ? act.type === 'a'
-                                                                        ? `${act.qnty}kg`
-                                                                        : `${act.qnty}% Damage`
+                                                                    ? `${act.qnty} ${act.unit || ''}`
                                                                     : null}
                                                             </Typography>
                                                         </Box>
@@ -779,9 +783,7 @@ const Activities = ({ farm }) => {
                                                                         fontFamily: 'cursive',
                                                                     }}
                                                                 >
-                                                                    {act.type === 'a'
-                                                                        ? `Ikaw ay naglagay ng ${act.qnty}kg na ${act.label}`
-                                                                        : `${act.desc}`}
+                                                                    {act.desc || ""}
                                                                 </Typography>
                                                             </Box>
                                                         </StepContent>
