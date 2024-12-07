@@ -59,13 +59,18 @@ export default function Distribution({ farms, roi }) {
   const endOfWeek = startOfWeek.add(13, 'days').endOf('day');
 
   const [saving, setSaving] = useState(false)
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState({ show: false })
   const [openError, setOpenError] = useState({ show: false })
   const [downloadReport, setDownloadReport] = useState(false)
   const [value, setValue] = useState(null)
   const [selectedRow, setSelectedRow] = useState(false)
   const [editModal, setEditModal] = useState(false)
+  const [fetching, setFetching] = useState(false)
 
+  const [newCommit, setNewCommit] = useState(0)
+  const [tabIndex, setTabIndex] = useState(0);
+
+  const [editCommit, setEditCommit] = useState(false)
   const [reportSelection, setReportSelection] = useState(null)
 
   function dateFormatter(date) {
@@ -283,43 +288,182 @@ export default function Distribution({ farms, roi }) {
     saveAs(blob, `Harvest_Schedule_${year}_${month + 1}.xlsx`);
   };
 
-  const handleEditClick = (id, row) => () => {
+  const handleEditClick = (row) => () => {
     setSelectedRow(row);
     setEditModal(true);
   };
 
+  const handleEditSaved = (farm) => {
+    setSelectedRow(farm);
+    setEditCommit(true)
+  }
+
+  const handleDelSaved = (farm) => {
+    setSelectedRow(farm)
+    setOpen({
+      show: true,
+      title: 'Deleting Distribution',
+      content: 'Are you sure you want to delete this distribution?',
+      type: 'd',
+      name: 'Delete'
+    })
+  }
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const month = savedDate.month();
+        const year = savedDate.year();
+
+        const distri = await fetchDistributions(month, year);
+
+        const dataDistri = distri?.reduce((acc, d) => {
+          const farm = farms.find(farm => farm.id === d.farmId);
+
+          const commitDate = new Date(d.dayOfCommit.toDate()).toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          });
+
+          if (!acc[commitDate]) {
+            acc[commitDate] = {
+              key: d.distributionId.toString(),
+              commitDate,
+              totalArea: 0,
+              totalProduction: 0,
+            };
+          }
+
+          acc[commitDate].totalArea += parseFloat(farm?.area) || 0;
+          acc[commitDate].totalProduction += d.actual || 0;
+          return acc;
+        }, {});
+
+        const reducedDistri = distri.reduce((acc, d) => {
+          if (!acc[d.id]) {
+            acc[d.id] = { ...d, totalActual: d.actual || 0 };
+          } else {
+            acc[d.id].totalActual += d.actual || 0;
+          }
+          return acc;
+        }, {});
+        setDistributionData(Object.values(reducedDistri));
+        setSavedDistributions(Object.values(dataDistri).sort((a, b) => new Date(a.commitDate) - new Date(b.commitDate)));
+
+      } catch (error) {
+        console.error("Error fetching distributions:", error);
+      }
+    };
+
+    fetchData();
+  }, [savedDate, fetching]);
+
+
+
   const handleSavedDate = async (date) => {
     setSavedDate(date)
+  }
 
-    const month = date.month()
-    const year = date.year()
+  const handleDeleteCommit = async () => {
+    setSaving(true);
+    try {
+      const referenceId = `${selectedRow.farmId}-${selectedRow.distributionId}-${selectedRow.batchId}`;
+    const distriColl = collection(db, 'distributions');
+    const distriQuery = query(distriColl, where('id', '==', referenceId));
 
-    const distri = await fetchDistributions(month, year)
+    const distriRef = await getDocs(distriQuery);
 
-    const dataDistri = distri?.reduce((acc, d) => {
-      const farm = farms.find(farm => farm.id === d.farmId)
-      const commitDate = new Date(d.dayOfCommit.toDate()).toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
+    if (!distriRef.empty) {
+      const docId = distriRef.docs[0].id;
 
-      if (!acc[commitDate]) {
-        acc[commitDate] = {
-          key: d.distributionId.toString(),
-          commitDate,
-          totalArea: 0,
-          totalProduction: 0
-        };
+      // Get current batches and find the batch to update
+      const batches = selectedRow.batches || [];
+      const batchIndex = batches.findIndex(batch => batch.index === selectedRow.batchId);
+
+      if (batchIndex === -1) {
+        setSaving(false);
+        return;
       }
 
-      acc[commitDate].totalArea += parseFloat(farm.area) || 0;
-      acc[commitDate].totalProduction += d.actual || 0
-      return acc;
-    }, {});
+      // Update the batch commit to zero
+      const originalCommit = batches[batchIndex].commit || 0;
+      batches[batchIndex] = {
+        ...batches[batchIndex],
+        commit: 0,
+      };
 
-    setDistributionData(distri)
-    setSavedDistributions(Object.values(dataDistri).sort((a, b) => new Date(a.commitDate) - new Date(b.commitDate)))
+      // Recalculate the new batch commit
+      const newBatchCommit = selectedRow.commit - originalCommit;
+
+      const batch = writeBatch(db);
+
+      // Update the distribution to zero in Firestore
+      const distriDocRef = doc(db, 'distributions', docId);
+      batch.update(distriDocRef, { actual: 0 }); // Set the distribution's actual commit to zero
+
+      // Update the farms with new commit and updated batches
+      const farmsDocRef = doc(db, 'farms', selectedRow.farmId);
+      batch.update(farmsDocRef, { commit: newBatchCommit, batches });
+
+      await batch.commit();
+    } else {
+      console.log("No distribution document found to update.");
+    }
+
+    setFetching(!fetching);
+    setSaving(false);
+    } catch (error) {
+      console.error("Error deleting batch:", error);
+      setSaving(false);
+    }
+  };
+
+
+  const handleSavedCommit = async () => {
+    setSaving(true)
+    try {
+      const referenceId = `${selectedRow.farmId}-${selectedRow.distributionId}-${selectedRow.batchId}`;
+      const distriColl = collection(db, 'distributions');
+      const distriQuery = query(distriColl, where('id', '==', referenceId));
+
+      const op = newCommit - selectedRow.actualCommit;
+      const newBatchCommit = selectedRow.commit + op;
+
+      const distriRef = await getDocs(distriQuery);
+
+      if (!distriRef.empty) {
+        const docId = distriRef.docs[0].id;
+
+        const batches = selectedRow.batches || [];
+        const index = batches.findIndex(batch => batch.index === selectedRow.batchId);
+
+
+        if (Array.isArray(batches) && batches[index]) {
+          batches[index] = { ...batches[index], commit: newCommit };
+        }
+
+        const batch = writeBatch(db);
+
+        const distriDocRef = doc(db, 'distributions', docId);
+        batch.update(distriDocRef, { actual: newCommit });
+
+        const farmsDocRef = doc(db, 'farms', selectedRow.farmId);
+        batch.update(farmsDocRef, { commit: newBatchCommit, batches });
+
+        await batch.commit();
+      } else {
+        console.log('No document found to update.');
+      }
+
+      setFetching(!fetching);
+      setSaving(false);
+      setEditCommit(false);
+    } catch (error) {
+      console.error('Error updating Firestore:', error);
+      setSaving(false);
+    }
   }
 
   const handleEditCommit = () => {
@@ -334,23 +478,18 @@ export default function Distribution({ farms, roi }) {
         return sum + (farm.actual || 0);
       }, 0);
       setTotalActualGross(actualTotal);
-
       return updatedFarms;
     });
+
     setEditModal(false)
   };
-
-
-
 
   useEffect(() => {
     if (!farms) return
     setInputText(0)
-    console.log("farms sa useEffect (1)", farms);
-
     const filterFarmsByDate = farms
       .filter(farm =>
-        farm.cropStage !== 'complete' && farm.remarks !== 'failed'
+        farm.cropStage !== 'complete' && farm.remarks !== 'failed' && Array.isArray(farm.batches)
       )
       .flatMap(farm => {
         if (!farm.batches || farm.batches.length === 0) {
@@ -380,8 +519,8 @@ export default function Distribution({ farms, roi }) {
       const allocation = Math.round(inputText * (percentage / 100));
       return {
         farmId: filFarm.id,
-        id: filFarm.batchId ? filFarm.batchId + filFarm.id : filFarm.id,
-        batchId: filFarm.batchId || null,
+        id: filFarm.batchId ? filFarm.batchId + "-" + filFarm.id : filFarm.id,
+        batchId: filFarm.batchId || 0,
         date: dateFormatter(filFarm.harvest_date.toDate()),
         farm: filFarm.title,
         production: filFarm.grossReturn,
@@ -396,7 +535,7 @@ export default function Distribution({ farms, roi }) {
   }, [selectedDate, farms])
 
   const handleClose = () => {
-    setOpen(false)
+    setOpen({ show: false })
     setOpenError((prev) => ({ ...prev, show: false }));
     setDownloadReport(false)
   }
@@ -447,15 +586,13 @@ export default function Distribution({ farms, roi }) {
 
     const theTotalGrossReturn = filterFarmsByDate.reduce((sum, farm) => sum + (farm.grossReturn || 0), 0)
 
-    console.log("farms sa distribute", filterFarmsByDate);
-
     const locFarms = filterFarmsByDate.map(filFarm => {
       const percentage = getPercentage(filFarm.grossReturn, totalGrossReturn);
       const allocation = Math.round(inputText * (percentage / 100));
       return {
         farmId: filFarm.id,
         id: filFarm.batchId ? filFarm.batchId + filFarm.id : filFarm.id,
-        batchId: filFarm.batchId || null,
+        batchId: filFarm.batchId || 0,
         date: dateFormatter(filFarm.harvest_date.toDate()),
         farm: filFarm.title,
         production: filFarm.grossReturn,
@@ -476,20 +613,40 @@ export default function Distribution({ farms, roi }) {
 
   const saveDistribution = async () => {
     setSaving(true)
-    console.log("farms sa save distribution", localFarms);
+
     const currentDate = new Date()
     const distributionColl = collection(db, '/distributions')
+
     try {
-      const uniqueId = uniqueID()
+      const uniqueId = uniqueID();
       for (const farm of localFarms) {
-        await addDoc(distributionColl, {
-          ...farm,
-          dayOfCommit: selectedDate.toDate(),
-          month: selectedDate.month(),
-          year: selectedDate.year(),
-          id: uniqueID() + "-" + farm.id,
-          distributionId: uniqueId
-        })
+        const querySnapshot = await getDocs(
+          query(
+            distributionColl,
+            where("farmId", "==", farm.farmId),
+            where("batchId", "==", farm.batchId)
+          )
+        );
+
+        if (!querySnapshot.empty) {
+          const existingDoc = querySnapshot.docs[0];
+          const existingData = existingDoc.data();
+
+          await updateDoc(existingDoc.ref, {
+            actual: existingData.actual + farm.actual,
+            dayOfCommit: selectedDate.toDate(),
+          });
+        } else {
+          await addDoc(distributionColl, {
+            ...farm,
+            dayOfCommit: selectedDate.toDate(),
+            month: selectedDate.month(),
+            year: selectedDate.year(),
+            id: farm.farmId + '-' + uniqueId + '-' + farm.batchId,
+            batchId: farm.batchId,
+            distributionId: uniqueId,
+          });
+        }
 
         const farmDocRef = doc(db, `farms/${farm.farmId}`);
         const farmDocSnapshot = await getDoc(farmDocRef);
@@ -497,7 +654,7 @@ export default function Distribution({ farms, roi }) {
         const farmToCommit = farmDocSnapshot.data();
 
         if (farmToCommit.batches) {
-          const updatedBatches = farmToCommit.batches.map((batch, index) => {
+          const updatedBatches = farmToCommit.batches.map((batch) => {
             if (batch.index === farm.batchId) {
               return {
                 ...batch,
@@ -519,13 +676,13 @@ export default function Distribution({ farms, roi }) {
           compId: "",
           createdAt: currentDate,
           desc: `${farm.batchId ? `Batch ${farm.batchId}` : farm.title} committed ${farm.actual} pcs of good size pineapple`,
-          label: 'Commitment',
+          label: "Commitment",
           qnty: farm.actual,
-          type: 'a'
-        })
+          type: "a",
+        });
       }
-      handleClose()
-      setSaving(false)
+      handleClose();
+      setSaving(false);
     } catch (error) {
       setSaving(false)
       setOpenError({
@@ -533,6 +690,7 @@ export default function Distribution({ farms, roi }) {
         title: 'Saving Error',
         content: error instanceof Error ? error.message : error
       })
+
     }
   }
 
@@ -554,12 +712,10 @@ export default function Distribution({ farms, roi }) {
   };
 
   const handleEditCellChange = (params) => {
-    console.log("params");
     const updatedActualDistribution = [...actualDistribution];
     updatedActualDistribution[params.id] = params.value;
     setActualDistribution(updatedActualDistribution);
   };
-  const [tabIndex, setTabIndex] = useState(0);
   const handleTabChange = (_, newValue) => {
     setTabIndex(newValue);
   };
@@ -587,26 +743,20 @@ export default function Distribution({ farms, roi }) {
 
   const commitDateColumnExpanded = [
     {
-      title: 'Date of Commit',
-      dataIndex: 'commitDate',
-      key: 'commitDate',
-      render: (e) => {
-        return dateFormatter(e)
-      }
-    },
-    {
       title: 'Area',
       dataIndex: "area",
       key: "area",
+      align: 'center'
     },
     {
       title: 'No. of Plants',
       dataIndex: "actualCommit",
       key: "actualCommit",
+      align: 'right'
     },
     {
-      title: "Name of Farmer",
-      dataIndex: "farmerName",
+      title: "Name of Farm (Batch)",
+      dataIndex: "farmBatch",
       key: "farmerName",
     },
     {
@@ -624,6 +774,26 @@ export default function Distribution({ farms, roi }) {
       render: (e) => {
         return dateFormatter(e)
       }
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (farm) => {
+        return (
+          <>
+            <Button
+              onClick={() => handleEditSaved(farm)}
+            >
+              Edit
+            </Button>
+            <Button
+              onClick={() => handleDelSaved(farm)}
+            >
+              Delete
+            </Button>
+          </>
+        )
+      }
     }
   ]
 
@@ -632,16 +802,16 @@ export default function Distribution({ farms, roi }) {
       const farm = farms.find(farm => farm.id === d.farmId)
       if (farm) {
         return {
-          farmerName: farm.farmerName,
-          brgy: farm.brgy,
-          mun: farm.mun,
-          area: farm.area,
+          ...farm,
           startDate: farm.start_date.toDate(),
           harvestDate: farm.harvest_date.toDate(),
           commitDate: d.dayOfCommit.toDate(),
           actualCommit: d.actual,
           id: d.id,
-          farmId: farm.id
+          farmId: farm.id,
+          batchId: d.batchId,
+          distributionId: d.distributionId,
+          farmBatch: d.farm
         }
       }
     })
@@ -667,13 +837,14 @@ export default function Distribution({ farms, roi }) {
         columns={commitDateColumnExpanded}
         dataSource={dataSource}
         pagination={false}
+        bordered
       />
     )
   }
 
   const columnsSavedDistri = [
     {
-      field: 'farmerName',
+      field: 'title',
       headerName: 'Name of Farmer',
       align: 'center',
       headerAlign: 'center',
@@ -814,7 +985,7 @@ export default function Distribution({ farms, roi }) {
                   icon={<EditOutlinedIcon />}
                   label="Edit"
                   className="textPrimary"
-                  onClick={handleEditClick(id, row)}
+                  onClick={handleEditClick(row)}
                   color="inherit"
                   sx={{
                     backgroundColor: '#E7F3E7',
@@ -1004,7 +1175,18 @@ export default function Distribution({ farms, roi }) {
               </Grid>
               <Grid item xs={6}>
                 <Box sx={{ display: 'flex', justifyContent: 'flex-end', height: '100%' }}>
-                  <Button variant="contained" color="success" onClick={() => setOpen(true)} sx={{ fontSize: 16 }}>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={() => setOpen({
+                      show: true,
+                      title: 'Saving Distribution',
+                      content: 'Are you sure you want to save this distribution?',
+                      name: 'Save',
+                      type: 's'
+                    })}
+                    sx={{ fontSize: 16 }}
+                  >
                     Save
                   </Button>
                 </Box>
@@ -1028,7 +1210,7 @@ export default function Distribution({ farms, roi }) {
                 >
                   <Pie
                     labels={localFarms.map((lf) => lf.farm)}
-                    data={localFarms.map((lf) => lf.suggested)}
+                    data={localFarms.map((lf) => lf.actual)}
                     title="Expecting Commit"
                     unit="pcs"
                   />
@@ -1154,7 +1336,7 @@ export default function Distribution({ farms, roi }) {
               sx={{
                 flex: 1,
                 overflow: 'auto',
-                backgroundColor: 'yellow',
+                // backgroundColor: 'yellow',
                 borderRadius: 3,
               }}
             >
@@ -1190,8 +1372,6 @@ export default function Distribution({ farms, roi }) {
         )}
       </Box>
 
-
-
       <Modal open={saving} aria-labelledby="edit-row-modal">
         <Backdrop
           sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
@@ -1201,23 +1381,34 @@ export default function Distribution({ farms, roi }) {
         </Backdrop>
       </Modal>
       <Dialog
-        open={open}
+        open={open.show}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Saving distribution
+          {open.title}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Are you sure you want to save this distribution?
+            {open.content}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
           <Button variant='outlined' color='error' onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' color='success' onClick={saveDistribution} autoFocus>
-            Save
+          <Button variant='contained' color={open.type === 's' ? 'success' : 'error'} onClick={() => {
+            switch (open.type) {
+              case 's':
+                saveDistribution()
+                break;
+              case 'd':
+                handleDeleteCommit()
+                break;
+              default:
+                break;
+            }
+          }} autoFocus>
+            {open.name}
           </Button>
         </DialogActions>
       </Dialog>
@@ -1315,6 +1506,54 @@ export default function Distribution({ farms, roi }) {
             </button>
             <button className="btn-view-all" onClick={() => setEditModal(false)}>
               Cancel
+            </button>
+          </Box>
+        </Box>
+      </Modal>
+      <Modal open={editCommit} onClose={() => setEditCommit(false)} aria-labelledby="edit-row-modal">
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            bgcolor: 'background.paper',
+            borderRadius: '5px',
+            boxShadow: 24,
+            p: 4,
+            width: 380,
+          }}
+        >
+          <TextField
+            label="Actual Value"
+            name="actual"
+            type="number"
+            value={newCommit}
+            InputProps={{
+              inputProps: {
+                max: parseInt(selectedRow.plantNumber),
+                min: 0,
+              }
+            }}
+            onChange={(value) => {
+              const inputValue = parseInt(value.target.value, 10);
+              const newValue = (isNaN(inputValue) || inputValue < 0)
+                ? 0
+                : Math.min(inputValue, parseInt(selectedRow.plantNumber));
+
+              setNewCommit(newValue)
+            }}
+            fullWidth
+            sx={{ mb: 2 }}
+          />
+
+          <Box sx={{ display: 'flex', justifyContent: 'space-around' }}>
+            <Button variant='outlined' onClick={() => {
+              setEditCommit(false);
+              setNewCommit(0)
+            }}>Cancel</Button>
+            <button className="btn-view-all" onClick={handleSavedCommit}>
+              Save
             </button>
           </Box>
         </Box>

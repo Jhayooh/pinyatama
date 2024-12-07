@@ -249,18 +249,14 @@ export default function SideNav() {
         const fruitingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'fruiting');
         const harvestingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'harvesting');
 
-        const endofFruiting = new Date(fruitingPhase.end_time.toDate());
-        endofFruiting.setDate(endofFruiting.getDate() + 15);
-
         if (vegetativePhase && cropstage >= vegetativePhase.start_time.toDate() && cropstage <= vegetativePhase.end_time.toDate()) {
           newCropstage = 'vegetative';
         } else if (floweringPhase && cropstage >= floweringPhase.start_time.toDate() && cropstage <= floweringPhase.end_time.toDate()) {
           newCropstage = 'flowering';
         } else if (fruitingPhase && cropstage >= fruitingPhase.start_time.toDate() && cropstage <= fruitingPhase.end_time.toDate()) {
           newCropstage = 'fruiting';
-        } else if (harvestingPhase && cropstage >= fruitingPhase.end_time.toDate() && cropstage <= endofFruiting) {
+        } else if (harvestingPhase && cropstage >= harvestingPhase.start_time.toDate() && cropstage <= harvestingPhase.end_time.toDate()) {
           newCropstage = 'harvesting'
-          newRemarks = 'harvesting phase'
         } else {
           newCropstage = 'complete';
           newRemarks = 'success'
@@ -479,7 +475,7 @@ export default function SideNav() {
             </DialogTitle>
             <DialogContent>
               <DialogContentText id="alert-dialog-description">
-               Are you sure you want to sign out to this account?
+                Are you sure you want to sign out to this account?
               </DialogContentText>
             </DialogContent>
             <DialogActions>

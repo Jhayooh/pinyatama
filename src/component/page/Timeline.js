@@ -59,8 +59,6 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
             const allEvents = await Promise.all(eventsPromises);
             setTimelineEvents(allEvents.flat());
         };
-
-        // Execute the async function
         fetchEvents();
     }, [farms]);
 
@@ -76,7 +74,6 @@ export default function Timeline({ farms, events, users, setSelected, farmer }) 
         const filteredUsers = newUser.filter((user) => {
             return user.displayName.includes(userFilter);
         });
-        console.log("user", filteredUsers);
 
         setTimelineFarms(filteredFarms);
         setFilteredUsers(filteredUsers);
