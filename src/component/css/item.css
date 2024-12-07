@@ -10,6 +10,10 @@
     background-color: #52be80 !important;
 }
 
+.harvesting {
+    background-color: #3c9c6f !important;
+}
+
 .vegetativeActual {
     background-color: #f9c667;
 }
@@ -20,6 +24,10 @@
 
 .fruitingActual {
     background-color: #f6a30b;
+}
+
+.harvestingActual {
+    background-color: #f48a07;
 }
 
 .activity {
