@@ -30,7 +30,7 @@ import dayjs from 'dayjs';
 import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 import { StaticDatePicker } from '@mui/x-date-pickers';
 import Pie from '../chart/Pie2';
-import { collection, doc, addDoc, setDoc, updateDoc, getDoc, getDocs, writeBatch, query, where } from "firebase/firestore";
+import { collection, doc, addDoc, setDoc, updateDoc, getDoc, getDocs, writeBatch, query, where, Timestamp } from "firebase/firestore";
 import ExcelJS from 'exceljs';
 import { saveAs } from 'file-saver';
 import IconButton from '@mui/material/IconButton';
@@ -294,11 +294,14 @@ export default function Distribution({ farms, roi }) {
   };
 
   const handleEditSaved = (farm) => {
+    console.log("the farm", farm);
+
     setSelectedRow(farm);
     setEditCommit(true)
   }
 
   const handleDelSaved = (farm) => {
+    console.log("the farm", farm);
     setSelectedRow(farm)
     setOpen({
       show: true,
@@ -341,15 +344,16 @@ export default function Distribution({ farms, roi }) {
           return acc;
         }, {});
 
-        const reducedDistri = distri.reduce((acc, d) => {
-          if (!acc[d.id]) {
-            acc[d.id] = { ...d, totalActual: d.actual || 0 };
-          } else {
-            acc[d.id].totalActual += d.actual || 0;
-          }
-          return acc;
-        }, {});
-        setDistributionData(Object.values(reducedDistri));
+        // const reducedDistri = distri.reduce((acc, d) => {
+        //   if (!acc[d.id]) {
+        //     acc[d.id] = { ...d, totalActual: d.actual || 0 };
+        //   } else {
+        //     acc[d.id].totalActual += d.actual || 0;
+        //   }
+        //   return acc;
+        // }, {});
+        // setDistributionData(Object.values(reducedDistri));
+        setDistributionData(distri)
         setSavedDistributions(Object.values(dataDistri).sort((a, b) => new Date(a.commitDate) - new Date(b.commitDate)));
 
       } catch (error) {
@@ -358,7 +362,7 @@ export default function Distribution({ farms, roi }) {
     };
 
     fetchData();
-  }, [savedDate, fetching]);
+  }, [savedDate, fetching, saving]);
 
 
 
@@ -370,50 +374,48 @@ export default function Distribution({ farms, roi }) {
     setSaving(true);
     try {
       const referenceId = `${selectedRow.farmId}-${selectedRow.distributionId}-${selectedRow.batchId}`;
-    const distriColl = collection(db, 'distributions');
-    const distriQuery = query(distriColl, where('id', '==', referenceId));
+      const distriColl = collection(db, 'distributions');
+      const distriQuery = query(distriColl, where('id', '==', referenceId));
 
-    const distriRef = await getDocs(distriQuery);
+      const distriRef = await getDocs(distriQuery);
 
-    if (!distriRef.empty) {
-      const docId = distriRef.docs[0].id;
+      if (!distriRef.empty) {
+        const docId = distriRef.docs[0].id;
 
-      // Get current batches and find the batch to update
-      const batches = selectedRow.batches || [];
-      const batchIndex = batches.findIndex(batch => batch.index === selectedRow.batchId);
+        const batches = selectedRow.batches || [];
+        console.log("batches", batches);
 
-      if (batchIndex === -1) {
-        setSaving(false);
-        return;
+        const batchIndex = batches.findIndex(batch => batch.index === selectedRow.batchId);
+
+        if (batchIndex === -1) {
+          setSaving(false);
+          return;
+        }
+
+        const originalCommit = batches[batchIndex].commit || 0;
+        batches[batchIndex] = {
+          ...batches[batchIndex],
+          commit: originalCommit - selectedRow.actualCommit,
+        };
+
+        const upCommit = batches.reduce((sum, batch) => sum + (batch.commit || 0), 0);
+
+        const batch = writeBatch(db);
+
+        const distriDocRef = doc(db, 'distributions', docId);
+        batch.delete(distriDocRef);
+
+        const farmsDocRef = doc(db, 'farms', selectedRow.farmId);
+        batch.update(farmsDocRef, { commit: upCommit, batches });
+
+        await batch.commit();
+      } else {
+        console.log("No distribution document found to update.");
       }
 
-      // Update the batch commit to zero
-      const originalCommit = batches[batchIndex].commit || 0;
-      batches[batchIndex] = {
-        ...batches[batchIndex],
-        commit: 0,
-      };
-
-      // Recalculate the new batch commit
-      const newBatchCommit = selectedRow.commit - originalCommit;
-
-      const batch = writeBatch(db);
-
-      // Update the distribution to zero in Firestore
-      const distriDocRef = doc(db, 'distributions', docId);
-      batch.update(distriDocRef, { actual: 0 }); // Set the distribution's actual commit to zero
-
-      // Update the farms with new commit and updated batches
-      const farmsDocRef = doc(db, 'farms', selectedRow.farmId);
-      batch.update(farmsDocRef, { commit: newBatchCommit, batches });
-
-      await batch.commit();
-    } else {
-      console.log("No distribution document found to update.");
-    }
-
-    setFetching(!fetching);
-    setSaving(false);
+      setFetching(!fetching);
+      handleClose();
+      setSaving(false);
     } catch (error) {
       console.error("Error deleting batch:", error);
       setSaving(false);
@@ -441,7 +443,11 @@ export default function Distribution({ farms, roi }) {
 
 
         if (Array.isArray(batches) && batches[index]) {
-          batches[index] = { ...batches[index], commit: newCommit };
+          const originalCommit = batches[index].commit || 0;
+          batches[index] = {
+            ...batches[index],
+            commit: originalCommit + op,
+          };
         }
 
         const batch = writeBatch(db);
@@ -620,11 +626,13 @@ export default function Distribution({ farms, roi }) {
     try {
       const uniqueId = uniqueID();
       for (const farm of localFarms) {
+        console.log("farmmmmm", farm);
         const querySnapshot = await getDocs(
           query(
             distributionColl,
+            where("dayOfCommit", "==", Timestamp.fromDate(selectedDate.toDate())),
             where("farmId", "==", farm.farmId),
-            where("batchId", "==", farm.batchId)
+            where("batchId", "==", farm.batchId),
           )
         );
 
@@ -636,6 +644,7 @@ export default function Distribution({ farms, roi }) {
             actual: existingData.actual + farm.actual,
             dayOfCommit: selectedDate.toDate(),
           });
+
         } else {
           await addDoc(distributionColl, {
             ...farm,
