@@ -426,6 +426,7 @@ export default function Distribution({ farms, roi }) {
   const handleSavedCommit = async () => {
     setSaving(true)
     try {
+      const currentDate = new Date()
       const referenceId = `${selectedRow.farmId}-${selectedRow.distributionId}-${selectedRow.batchId}`;
       const distriColl = collection(db, 'distributions');
       const distriQuery = query(distriColl, where('id', '==', referenceId));
@@ -457,6 +458,15 @@ export default function Distribution({ farms, roi }) {
 
         const farmsDocRef = doc(db, 'farms', selectedRow.farmId);
         batch.update(farmsDocRef, { commit: newBatchCommit, batches });
+
+        await addDoc(collection(farmsDocRef, 'activities'), {
+          compId: "",
+          createdAt: currentDate,
+          desc: `Your committed Queen Pineapple is edited from ${selectedRow.actualCommit} to ${newCommit}`,
+          label: "Commit",
+          qnty: newCommit,
+          type: "a",
+        });
 
         await batch.commit();
       } else {
@@ -495,7 +505,7 @@ export default function Distribution({ farms, roi }) {
     setInputText(0)
     const filterFarmsByDate = farms
       .filter(farm =>
-        farm.cropStage !== 'complete' && farm.remarks !== 'failed' && Array.isArray(farm.batches)
+        farm.cropStage !== 'complete' && farm.remarks !== 'failed' && Array.isArray(farm.batches) && farm.batches.length > 0
       )
       .flatMap(farm => {
         if (!farm.batches || farm.batches.length === 0) {
@@ -685,8 +695,9 @@ export default function Distribution({ farms, roi }) {
           compId: "",
           createdAt: currentDate,
           desc: `${farm.batchId ? `Batch ${farm.batchId}` : farm.title} committed ${farm.actual} pcs of good size pineapple`,
-          label: "Commitment",
+          label: "Commit",
           qnty: farm.actual,
+          unit: 'pcs',
           type: "a",
         });
       }
@@ -1139,6 +1150,7 @@ export default function Distribution({ farms, roi }) {
                     <OutlinedInput
                       id="total-distribution"
                       type="number"
+                      label="Enter Total Distribution"
                       onChange={(e) => {
                         if (!localFarms || !localFarms.length) {
                           setOpenError({
@@ -1152,7 +1164,7 @@ export default function Distribution({ farms, roi }) {
                         const value = Math.min(e.target.value, totalGrossReturn);
                         setInputText(value);
                       }}
-                      value={inputText}
+                      value={inputText || ''}
                       inputProps={{
                         max: totalGrossReturn,
                       }}
@@ -1164,7 +1176,6 @@ export default function Distribution({ farms, roi }) {
                       }}
                     />
                   </FormControl>
-
                   <Button
                     variant="contained"
                     color="warning"
@@ -1220,7 +1231,7 @@ export default function Distribution({ farms, roi }) {
                   <Pie
                     labels={localFarms.map((lf) => lf.farm)}
                     data={localFarms.map((lf) => lf.actual)}
-                    title="Expecting Commit"
+                    title="Commit Expectation"
                     unit="pcs"
                   />
                 </Box>
@@ -1294,7 +1305,25 @@ export default function Distribution({ farms, roi }) {
                 pb: 2,
               }}
             >
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center'
+                }}
+              >
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    label={'Select Date'}
+                    views={['month', 'year']}
+                    value={savedDate}
+                    onChange={(newValue) => {
+                      handleSavedDate(newValue)
+                      setIsModalOpen(false)
+                    }}
+                  />
+                </LocalizationProvider>
+              </Box>
+              {/* <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <h1 style={{ marginRight: '8px' }}>{savedDate.format('MMMM YYYY')}</h1>
                 <IconButton
                   onClick={() => setIsModalOpen(true)}
@@ -1319,6 +1348,7 @@ export default function Distribution({ farms, roi }) {
                     }}
                   >
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
+
                       <StaticDatePicker
                         displayStaticWrapperAs="desktop"
                         value={savedDate}
@@ -1331,7 +1361,7 @@ export default function Distribution({ farms, roi }) {
                     </LocalizationProvider>
                   </Box>
                 </Modal>
-              </Box>
+              </Box> */}
               <Button
                 variant="contained"
                 color="success"

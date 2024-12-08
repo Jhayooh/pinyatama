@@ -99,8 +99,6 @@ function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
     const backgroundColor = itemContext.selected
       && itemContext.dragging
       && 'red'
-    // : item.selectedBgColor
-    // : item.bgColor
     const borderColor = itemContext.resizing ? 'red' : item.color
     return (
       <div
@@ -114,13 +112,7 @@ function FarmsSchedule({ isTimelinePage, farms, events, setSelected }) {
             position: 'sticky',
             position: '-webkit-sticky',
             display: 'inline-block'
-            // boxShadow: `0 1px 5px 0 rgba(0, 0, 0, 0.2),
-            //            0 2px 2px 0 rgba(0, 0, 0, 0.14),
-            //            0 3px 1px -2px rgba(0, 0, 0, 0.12)`
           },
-          // onMouseDown: () => {
-          //   setClicked(item)
-          // }
         })}
       >
         {itemContext.useResizeHandle ? <div {...leftResizeProps} /> : null}

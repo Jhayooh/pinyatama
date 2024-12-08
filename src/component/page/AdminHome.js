@@ -64,8 +64,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
 
       const munArray = Object.keys(reducedData);
       const dataArray = Object.values(reducedData);
-      console.log("mun array", munArray);
-      console.log('mun data', dataArray)
 
       setMunNames(munArray);
       setMunData(dataArray);
@@ -73,13 +71,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
   }, [farms]);
 
   useEffect(() => {
-    console.log("selected municipality", selectedMun);
-  }, [selectedMun])
-
-
-  useEffect(() => {
-    console.log("muni sa admin home:", selectedMun);
-
     if (farms && farms.length > 0) {
       const munFarm = farms.filter(bf => bf.mun === selectedMun)
       const reducedData = munFarm.reduce((acc, farm) => {
@@ -96,9 +87,6 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
 
       const brgyArray = Object.keys(reducedData);
       const dataArray = Object.values(reducedData);
-
-      console.log("brgy array", brgyArray);
-      console.log("brgy data", brgyData)
 
       setBrgyNames(brgyArray);
       setBrgyData(dataArray);
@@ -391,7 +379,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             {
               munNames.length === 0 && munData.length === 0
                 ? <Typography>No Farm Found</Typography>
-                : <Pie labels={munNames} data={munData} title="Camarines Norte Pineapple Plantation" setSelectedMun={setSelectedMun} />
+                : <Pie labels={munNames} data={munData} title="Camarines Norte Pineapple Plantation (pcs)" setSelectedMun={setSelectedMun} />
             }
           </Box>
         </Grid>
@@ -400,7 +388,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
             {
               brgyNames.length === 0 && brgyData.length === 0
                 ? <Typography>No Farm Found</Typography>
-                : <Pie labels={brgyNames} data={brgyData} title={`${selectedMun} Pineapple Plantation`} />
+                : <Pie labels={brgyNames} data={brgyData} title={`${selectedMun} Pineapple Plantation (pcs)`} />
             }
           </Box>
         </Grid>

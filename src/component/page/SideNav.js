@@ -230,45 +230,66 @@ export default function SideNav() {
       }
 
       for (const farm of farms) {
-        if (farm.crop) {
-          continue;
+        if (farm.crop) continue;
+
+        const currentDate = new Date();
+        const stages = [
+          { name: 'vegetative', start: farm.start_date.toDate(), end: farm.endOfVegetative.toDate() },
+          { name: 'flowering', start: farm.endOfVegetative.toDate(), end: farm.endOfFlowering.toDate() },
+          { name: 'fruiting', start: farm.endOfFlowering.toDate(), end: farm.harvest_date.toDate() },
+        ];
+
+        let newCropstage = 'complete';
+        let remarks = 'success';
+
+        for (const stage of stages) {
+          if (currentDate >= stage.start && currentDate < stage.end) {
+            newCropstage = stage.name;
+            remarks = 'On going';
+            break;
+          }
         }
 
-        const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
-        const farmEventsSnapshot = await getDocs(farmEventsColl);
-        const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
-
-        const farmStage = farm.cropStage
-
-        const cropstage = new Date();
-        let newCropstage = '';
-        let newRemarks = '';
-
-        const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
-        const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
-        const fruitingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'fruiting');
-        const harvestingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'harvesting');
-
-        if (vegetativePhase && cropstage >= vegetativePhase.start_time.toDate() && cropstage <= vegetativePhase.end_time.toDate()) {
-          newCropstage = 'vegetative';
-        } else if (floweringPhase && cropstage >= floweringPhase.start_time.toDate() && cropstage <= floweringPhase.end_time.toDate()) {
-          newCropstage = 'flowering';
-        } else if (fruitingPhase && cropstage >= fruitingPhase.start_time.toDate() && cropstage <= fruitingPhase.end_time.toDate()) {
-          newCropstage = 'fruiting';
-        } else if (harvestingPhase && cropstage >= harvestingPhase.start_time.toDate() && cropstage <= harvestingPhase.end_time.toDate()) {
-          newCropstage = 'harvesting'
-        } else {
-          newCropstage = 'complete';
-          newRemarks = 'success'
-        }
-
-        if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
+        if (farm.cropStage.toLowerCase() !== newCropstage.toLowerCase()) {
           await updateDoc(doc(db, `/farms/${farm.id}`), {
             cropStage: newCropstage,
-            remarks: newRemarks
+            remarks,
           });
         }
       }
+
+      // const farmEventsColl = collection(db, `/farms/${farm.id}/events`);
+      // const farmEventsSnapshot = await getDocs(farmEventsColl);
+      // const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
+
+      // const farmStage = farm.cropStage
+
+      // const cropstage = new Date();
+      // let newCropstage = '';
+      // let newRemarks = '';
+
+      // const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
+      // const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
+      // const fruitingPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'fruiting');
+
+      // if (vegetativePhase && cropstage >= vegetativePhase.start_time.toDate() && cropstage <= vegetativePhase.end_time.toDate()) {
+      //   newCropstage = 'vegetative';
+      // } else if (floweringPhase && cropstage >= floweringPhase.start_time.toDate() && cropstage <= floweringPhase.end_time.toDate()) {
+      //   newCropstage = 'flowering';
+      // } else if (fruitingPhase && cropstage >= fruitingPhase.start_time.toDate() && cropstage <= fruitingPhase.end_time.toDate()) {
+      //   newCropstage = 'fruiting';
+      // } else {
+      //   newCropstage = 'complete';
+      //   newRemarks = 'success'
+      // }
+
+      // if (farmStage.toLowerCase() != newCropstage.toLowerCase()) {
+      //   await updateDoc(doc(db, `/farms/${farm.id}`), {
+      //     cropStage: newCropstage,
+      //     remarks: newRemarks
+      //   });
+      // }
+
     };
 
     fetchAndUpdateFarms();

@@ -251,7 +251,7 @@ const Activities = ({ farm }) => {
                                         },
                                         {
                                             field: 'value',
-                                            headerName: 'Value',
+                                            headerName: 'Value (P)',
                                             flex: 1,
                                             type: 'number',
                                             editable: false,
@@ -329,7 +329,7 @@ const Activities = ({ farm }) => {
                                         },
                                         {
                                             field: 'value',
-                                            headerName: 'Value',
+                                            headerName: 'Value (P)',
                                             flex: 1,
                                             type: 'number',
                                             editable: false,
@@ -402,7 +402,7 @@ const Activities = ({ farm }) => {
                                         },
                                         {
                                             field: 'value',
-                                            headerName: 'Value',
+                                            headerName: 'Value (P)',
                                             flex: 1,
                                             type: 'number',
                                             editable: false,
@@ -483,7 +483,7 @@ const Activities = ({ farm }) => {
                                         },
                                         {
                                             field: 'value',
-                                            headerName: 'Value',
+                                            headerName: 'Value (P)',
                                             flex: 1,
                                             type: 'number',
                                             editable: false,
@@ -561,7 +561,7 @@ const Activities = ({ farm }) => {
                                         },
                                         {
                                             field: 'value',
-                                            headerName: 'Value',
+                                            headerName: 'Value (P)',
                                             flex: 1,
                                             type: 'number',
                                             editable: false,
@@ -636,7 +636,7 @@ const Activities = ({ farm }) => {
                                                     },
                                                     {
                                                         field: 'value',
-                                                        headerName: 'Value',
+                                                        headerName: 'Value (P)',
                                                         flex: 1,
                                                         type: 'number',
                                                         editable: false,
