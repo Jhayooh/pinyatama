@@ -38,7 +38,6 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
     if (!activities) return
     const act = activities.find(a => a.remarks === true)
     if (act) {
-      console.log("labelll", act.label);
       setLabel(act.label)
     }
   }, [activities])

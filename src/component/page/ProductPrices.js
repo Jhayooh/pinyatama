@@ -537,7 +537,7 @@ export default function ProductPrices({ particularData, pineappleData, others })
                 <Tab label="Material" value="materials" />
                 <Tab label="Fertilizer" value="fertilizers" />
                 <Tab label="Labor" value="labors" />
-                <Tab label='Others' />
+                {/* <Tab label='Others' /> */}
               </Tabs>
               <Box
                 sx={{

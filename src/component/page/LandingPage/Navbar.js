@@ -56,7 +56,7 @@ const Navbar = () => {
                         </li>
                         <li className="nav-item">
                             <a href="#portfolio" className="nav-link page-scroll">
-                                Screenshots
+                                Gallery
                             </a>
                         </li>
                         <li className="nav-item">

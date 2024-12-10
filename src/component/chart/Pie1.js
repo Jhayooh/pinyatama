@@ -2,7 +2,6 @@ import React from 'react';
 import Chart from 'react-apexcharts';
 
 function ExamplePieChart({ labels, data, colors, title, setSelectedMun }) {
-
   const options = {
     labels: labels,
     title: {
@@ -19,7 +18,6 @@ function ExamplePieChart({ labels, data, colors, title, setSelectedMun }) {
         dataPointSelection: (event, chartContext, config) => {
           if (setSelectedMun) {
             setSelectedMun(config.w.config.labels[config.dataPointIndex])
-            console.log('selected muni', config.w.config.labels[config.dataPointIndex])
           }
         },
       },
@@ -31,6 +29,11 @@ function ExamplePieChart({ labels, data, colors, title, setSelectedMun }) {
     },
     dataLabels: {
       padding: 2,
+      formatter: function (val, opts) {
+        const value = opts.w.config.series[opts.seriesIndex]
+        const formatted = new Intl.NumberFormat().format(value.toFixed())
+        return `${val.toFixed(0)}% (${formatted})`
+      },
     },
     colors: colors || [
       '#FF6700',

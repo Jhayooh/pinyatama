@@ -50,7 +50,7 @@ const Gallery = () => {
         <div id="portfolio" className="text-center">
             <div className="container">
                 <div className="section-title">
-                    <h2>SCREENSHOTS</h2>
+                    <h2>GALLERY</h2>
     
                 </div>
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>

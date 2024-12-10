@@ -158,7 +158,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
 
   function calcTotalParts(upPart) {
     console.log("upPart", upPart);
-    
+
     const totalLabor = upPart.
       filter(item => item.particular.toLowerCase() === 'labor')
       .reduce((sum, item) => sum + item.totalPrice, 0);
@@ -997,7 +997,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
               }}>
                 <Doughnut
                   labels={["Good Size", "Butterball"]}
-                  data={[newRoi.grossReturn*getPinePrice('good size', pineapple), newRoi.butterBall*getPinePrice('butterball', pineapple)]}
+                  data={[newRoi.grossReturn * getPinePrice('good size', pineapple), newRoi.butterBall * getPinePrice('butterball', pineapple)]}
                   title={"Pineapple Production"}
                 />
               </Box>
@@ -1225,7 +1225,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
               <CircularProgress sx={{ padding: 2 }} />
             }
             {
-              farms && farm &&
+              farm.length > 0 &&
               <Column series={columnSeries(farm)} />
             }
           </Box>

@@ -107,7 +107,6 @@ function Farms({ events, farms, users, particularData, pineapple }) {
   useEffect(() => {
     if (!activities) return;
     const act = activities.find(a => a.remarks === true);
-    console.log('actsss', act)
     if (act) {
       setLabel(act.label);
     }
@@ -567,9 +566,9 @@ function Farms({ events, farms, users, particularData, pineapple }) {
                           horizontal: 'left',
                         }}
                       >
-                        <MenuItem >
+                        {/* <MenuItem >
                           <Importer sx={{ width: '100%' }} />
-                        </MenuItem>
+                        </MenuItem> */}
                         <MenuItem >
                           <Exporter farms={filteredFarms} sx={{ width: '100%' }} />
                         </MenuItem>
