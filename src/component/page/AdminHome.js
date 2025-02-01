@@ -188,7 +188,7 @@ export default function AdminHome({ setSelected, farms, users, events, roi, farm
               }}
             >
               <Typography variant="h4" sx={{ fontWeight: 'bold', fontSize: '36px', marginBottom: 1 }}>
-                {munData.reduce((acc, sum) => acc + sum, 0)}
+                {(munData.reduce((acc, sum) => acc + sum, 0)).toLocaleString('en-US')}
               </Typography>
               <Typography variant="h6" sx={{ margin: 0, fontSize: '16px' }}>
                 QP PRODUCTION

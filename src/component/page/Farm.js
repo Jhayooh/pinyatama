@@ -75,7 +75,6 @@ export default function Farm({ farmId }) {
                 setUploadProgress(progress);
             },
             (error) => {
-                
                 console.error('Upload error:', error);
             },
             async () => {
