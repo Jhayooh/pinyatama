@@ -509,7 +509,6 @@ export default function ProductPrices({ particularData, pineappleData, others })
                       flexDirection: 'row',
                       gap: 1,
                       textDecoration: 'line-through',
-                      mt: 2
                     }}>
                       <Typography sx={{ fontWeight: 200, fontSize: { xs: 10, md: 30, lg: 50}, color: '#f6f6f6' ,mb:2 }}>
                         {`₱${entry.previousPrice}.00`}
