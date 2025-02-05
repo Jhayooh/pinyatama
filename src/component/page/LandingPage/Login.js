@@ -41,7 +41,7 @@ const Login = () => {
         setIsLoading(true);
         setError('');
 
-        const adminEmails = ["admin@gmail.com"];
+        const adminEmails = ["qpcamarinesnorte@gmail.com"];
 
         try {
             const userCredential = await signInWithEmailAndPassword(newAuth, email, password);
