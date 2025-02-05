@@ -5,7 +5,7 @@
   "private": true,
   "dependencies": {
     "@canvasjs/react-charts": "^1.0.2",
-    "@emailjs/browser": "^4.3.3",
+    "@emailjs/browser": "^4.4.1",
     "@emotion/react": "^11.13.3",
     "@emotion/style": "^0.8.0",
     "@emotion/styled": "^11.13.0",

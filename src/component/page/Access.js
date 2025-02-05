@@ -33,7 +33,7 @@ import UnlockIcon from '@mui/icons-material/LockOpenOutlined';
 import moment from 'moment';
 import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
-
+import emailjs from '@emailjs/browser';
 import { address } from 'addresspinas';
 
 const Access = ({ usersRow }) => {
@@ -92,7 +92,6 @@ const Access = ({ usersRow }) => {
 
   useEffect(() => {
     const filteredUser = usersRow.filter((user) => {
-      console.log("munnn", mun);
       const matchesMunicipality = mun.length !== 0
         ? user.mun.toString().toLowerCase() === mun[0].name.toString().toLowerCase()
         : true;
@@ -132,7 +131,6 @@ const Access = ({ usersRow }) => {
   };
 
   const blockAccount = async (row) => {
-    console.log('clickeddddddd', row.uid);
     const userDocRef = doc(db, 'users', row.uid);
     try {
       await updateDoc(userDocRef, {
@@ -163,7 +161,7 @@ const Access = ({ usersRow }) => {
 
   const registerAccount = async () => {
     const userDocRef = doc(db, 'users', viewedUser.uid);
-    const { email, password, mun, brgy } = viewedUser;
+    const { email, password, mun, brgy, firstname } = viewedUser;
     const newAuth = getAuth();
 
     try {
@@ -192,6 +190,27 @@ const Access = ({ usersRow }) => {
       });
 
       console.log('User successfully registered and previous users disabled');
+      const recipient = {
+        to_email: email,
+        to_name: firstname
+      }
+      emailjs
+        .send(
+          'service_ebprke8',
+          'template_q99qwql',
+          recipient,
+          'PIy6-nCI97pGvNXuE'
+        )
+        .then(
+          (response) => {
+            console.log('Email sent successfully!', response.text);
+            alert('Email sent!');
+          },
+          (error) => {
+            console.error('Failed to send email:', error.text);
+            alert('Failed to send email.');
+          }
+        );
     } catch (error) {
       console.error('Error registering new user:', error);
     }
@@ -394,9 +413,9 @@ const Access = ({ usersRow }) => {
           flexDirection: 'hidden',
         }}
       >
-        
-          <h1 style={{ color: '#000' }}>Barangay Extensionist Workers</h1>
-          <Divider sx={{ borderBottomWidth: 2, mb:2 }} />
+
+        <h1 style={{ color: '#000' }}>Barangay Extensionist Workers</h1>
+        <Divider sx={{ borderBottomWidth: 2, mb: 2 }} />
         <Grid container spacing={2} alignItems="stretch">
           <Grid item lg={12} md={12} sm={12} xs={12}>
             <Box
@@ -494,7 +513,7 @@ const Access = ({ usersRow }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 flexGrow: 1,
-                overflow: 'hidden', 
+                overflow: 'hidden',
               }}
             >
               <Box
