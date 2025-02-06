@@ -363,7 +363,7 @@ const Activities = ({ farm }) => {
                                         : <>
                                             <Box>
                                                 <Doughnut
-                                                    labels={["Good Size", "Butterball"]}
+                                                    labels={["Good Size", "Batterball"]}
                                                     data={[projectedRoi.grossReturn * projectedRoi.pinePrice, projectedRoi.butterBall * projectedRoi.butterPrice]}
                                                     title={"Produksyon ng Pinya"}
                                                 />
@@ -379,7 +379,7 @@ const Activities = ({ farm }) => {
                                                 id: 0
                                             },
                                             {
-                                                name: 'Butterball',
+                                                name: 'Batterball',
                                                 value: projectedRoi.butterBall * projectedRoi.butterPrice,
                                                 id: 1
                                             }
@@ -595,7 +595,7 @@ const Activities = ({ farm }) => {
                                         : <>
                                             <Box>
                                                 <Doughnut
-                                                    labels={["Good Size", "Butterball"]}
+                                                    labels={["Good Size", "Batterball"]}
                                                     data={
                                                         [actualRoi.grossReturn * pineapple.find(p => p.name.toLowerCase() === 'good size').price, actualRoi.butterBall * pineapple.find(p => p.name.toLowerCase() === 'butterball').price]
                                                     }
@@ -613,7 +613,7 @@ const Activities = ({ farm }) => {
                                                             id: 0
                                                         },
                                                         {
-                                                            name: 'Butterball',
+                                                            name: 'Batterball',
                                                             value: actualRoi.butterBall * pineapple.find(p => p.name.toLowerCase() === 'butterball').price,
                                                             id: 1
                                                         }

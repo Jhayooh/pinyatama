@@ -996,7 +996,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                 flex: 1
               }}>
                 <Doughnut
-                  labels={["Good Size", "Butterball"]}
+                  labels={["Good Size", "Batterball"]}
                   data={[newRoi.grossReturn * getPinePrice('good size', pineapple), newRoi.butterBall * getPinePrice('butterball', pineapple)]}
                   title={"Pineapple Production"}
                 />
@@ -1131,7 +1131,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                       <Typography sx={{
                         fontWeight: 400
                       }}>
-                        Butterball
+                        Batterball
                       </Typography>
                       <IconButton
                         onClick={() => {
