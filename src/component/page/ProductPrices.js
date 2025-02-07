@@ -478,7 +478,7 @@ export default function ProductPrices({ particularData, pineappleData, others })
               >
                 <Box sx={{ color: '#FFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1, mr: { xs: 3, md: 5 }, ml: { xs: 3, md: 5 } }}>
                   <Typography variant="button" sx={{ fontWeight: { xs: 300, md: 500 }, fontSize: { xs: 18, sm: 25, md: 30 } }}>
-                    {pineData.name}
+                    {pineData.name.toLowerCase()==='butterball' ? 'Batterball': pineData.name}
                   </Typography>
                   <IconButton sx={{
                     height: 28, width: 28, borderRadius: 2, cursor: 'pointer',
