@@ -833,7 +833,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                     <Typography sx={{
                       fontWeight: 400
                     }}>
-                      ROI
+                      Return on Investment (ROI)
                     </Typography>
                   </Box>
                   <Box sx={{
@@ -1095,7 +1095,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                       color: '#FFF'
                     }}>
                     <Typography align='center' variant='caption'>
-                      SRP
+                      Suggested Retail Price (SRP)
                     </Typography>
                     <Typography align='center' variant='h6' sx={{
                       fontWeight: 600
