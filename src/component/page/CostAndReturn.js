@@ -922,7 +922,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                         fontWeight: 700,
                       }}
                     >
-                      {farm.plantNumber.toLocaleString(undefined, { maximumFractionDigits: 2 })}
+                      {parseInt(farm.plantNumber).toLocaleString('en-US', { maximumFractionDigits: 2 })}
                     </Typography>
                     <Typography align='center'>
                       pcs
@@ -998,7 +998,7 @@ function CostAndReturn({ markers, parts, farm, pineapple }) {
                 <Doughnut
                   labels={["Good Size", "Batterball"]}
                   data={[newRoi.grossReturn * getPinePrice('good size', pineapple), newRoi.butterBall * getPinePrice('butterball', pineapple)]}
-                  title={"Pineapple Production"}
+                  title={"Gross Return"}
                 />
               </Box>
               <Box className='pricesBox' sx={{

@@ -96,7 +96,7 @@ function GridView({ marker, index, setShowFarmTabs, setIndFarm, setIndUser, imag
                   color={marker.remarks ? (marker.remarks === 'failed' ? 'red' : marker.remarks === 'On going' ? 'orange' :'green') : 'green'}
                 >
                   {marker.remarks ? `${marker.remarks.toUpperCase()}` : 'SUCCESS'}
-                  {marker.remarks === 'failed' && label && ` due to ${label[0]}`}
+                  {marker.remarks === 'failed' && label && ` due to ${label}`}
                 </Typography>
 
               </Box>

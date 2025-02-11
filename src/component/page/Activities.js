@@ -365,7 +365,7 @@ const Activities = ({ farm }) => {
                                                 <Doughnut
                                                     labels={["Good Size", "Batterball"]}
                                                     data={[projectedRoi.grossReturn * projectedRoi.pinePrice, projectedRoi.butterBall * projectedRoi.butterPrice]}
-                                                    title={"Produksyon ng Pinya"}
+                                                    title={"Gross Return"}
                                                 />
                                             </Box>
                                         </>
@@ -599,7 +599,7 @@ const Activities = ({ farm }) => {
                                                     data={
                                                         [actualRoi.grossReturn * pineapple.find(p => p.name.toLowerCase() === 'good size').price, actualRoi.butterBall * pineapple.find(p => p.name.toLowerCase() === 'butterball').price]
                                                     }
-                                                    title={"Produksyon ng Pinya"}
+                                                    title={"Gross Return"}
                                                 />
                                             </Box>
 
