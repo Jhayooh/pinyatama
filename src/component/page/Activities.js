@@ -278,6 +278,7 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
+                                <Typography variant="h4">Projected</Typography>
                                 {
                                     activitiesLoading && eLoading
                                         ? <CircularProgress />
@@ -357,6 +358,7 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
+                                <Typography variant="h4">Projected</Typography>
                                 {
                                     activitiesLoading && eLoading
                                         ? <CircularProgress />
@@ -510,6 +512,7 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
+                                <Typography variant="h4">Actual</Typography>
                                 {
                                     activitiesLoading && eLoading
                                         ? <CircularProgress />
@@ -589,6 +592,7 @@ const Activities = ({ farm }) => {
                                     flexDirection: 'column',
                                 }}
                             >
+                                <Typography variant="h4">Actual</Typography>
                                 {
                                     activitiesLoading && eLoading && pineappleLoading
                                         ? <CircularProgress />
@@ -717,7 +721,7 @@ const Activities = ({ farm }) => {
                                                                     : '#FFD6D6',
                                                             boxShadow: 6,
                                                         },
-                                                        
+
                                                     }}
                                                 >
                                                     <StepLabel StepIconComponent={QontoStepIcon}>
