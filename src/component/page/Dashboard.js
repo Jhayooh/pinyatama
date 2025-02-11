@@ -166,7 +166,6 @@ function Dashboard() {
       if (adminEmails.includes(user.email)) {
         console.log("Admin logged in successfully");
       } else {
-        console.log("Access denied. Not an admin.");
         setError("Access denied: You do not have admin privileges.");
         auth.signOut();
       }

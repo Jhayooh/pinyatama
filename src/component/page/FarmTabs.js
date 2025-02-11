@@ -28,7 +28,7 @@ function CustomTabPanel({ children, value, index }) {
             aria-labelledby={`simple-tab-${index}`}
         >
             {value === index && (
-                <Box sx={{ paddingX: 2, paddingY: 2, height: '100%', width: '100%'}}>
+                <Box sx={{ paddingX: 2, paddingY: 2, height: '100%', width: '100%' }}>
                     {children}
                 </Box>
             )}
@@ -89,34 +89,67 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
         worksheet.getCell('H10').value = farm.area;
 
         // Nutrients Requirements
-        worksheet.getCell('B19').value = farm.data.first.nutrients.N;
-        worksheet.getCell('D19').value = farm.data.first.nutrients.P;
-        worksheet.getCell('H19').value = farm.data.first.nutrients.K;
-        worksheet.getCell('B20').value = farm.data.second.nutrients.N;
-        worksheet.getCell('D20').value = farm.data.second.nutrients.P;
-        worksheet.getCell('H20').value = farm.data.second.nutrients.K;
+        worksheet.getCell('B19').value = farm.data[0].N;
+        worksheet.getCell('D19').value = farm.data[0].P;
+        worksheet.getCell('H19').value = farm.data[0].K;
+        worksheet.getCell('B20').value = farm.data[1].N;
+        worksheet.getCell('D20').value = farm.data[1].P;
+        worksheet.getCell('H20').value = farm.data[1].K;
 
         // Fertilizer Recommendation
         // - first
-        worksheet.getCell('C27').value = qntyParts(1, "14-14-14");
-        worksheet.getCell('D27').value = qntyParts(1, "46-0-0");
-        worksheet.getCell('F27').value = qntyParts(1, "0-0-60");
-        worksheet.getCell('H27').value = qntyParts(1, "16-20-0");
+        const one1 = qntyParts(1, "14-14-14");
+        const one2 = qntyParts(1, "46-0-0");
+        const one3 = qntyParts(1, "0-0-60");
+        const one4 = qntyParts(1, "16-20-0");
+        worksheet.getCell('C27').value = one1;
+        worksheet.getCell('D27').value = one2;
+        worksheet.getCell('F27').value = one3;
+        worksheet.getCell('H27').value = one4;
+        
         // - 4th
-        worksheet.getCell('C28').value = qntyParts(4, "14-14-14");
-        worksheet.getCell('D28').value = qntyParts(4, "46-0-0");
-        worksheet.getCell('F28').value = qntyParts(4, "0-0-60");
-        worksheet.getCell('H28').value = qntyParts(4, "16-20-0");
+        const two1 = qntyParts(4, "14-14-14");
+        const two2 = qntyParts(4, "46-0-0");
+        const two3 = qntyParts(4, "0-0-60");
+        const two4 = qntyParts(4, "16-20-0");
+        worksheet.getCell('C28').value = two1;
+        worksheet.getCell('D28').value = two2;
+        worksheet.getCell('F28').value = two3;
+        worksheet.getCell('H28').value = two4;
         // - 7th
-        worksheet.getCell('C29').value = qntyParts(7, "14-14-14");
-        worksheet.getCell('D29').value = qntyParts(7, "46-0-0");
-        worksheet.getCell('F29').value = qntyParts(7, "0-0-60");
-        worksheet.getCell('H29').value = qntyParts(7, "16-20-0");
+        const three1 = qntyParts(7, "14-14-14");
+        const three2 = qntyParts(7, "46-0-0");
+        const three3 = qntyParts(7, "0-0-60");
+        const three4 = qntyParts(7, "16-20-0");
+        worksheet.getCell('C29').value = three1;
+        worksheet.getCell('D29').value = three2;
+        worksheet.getCell('F29').value = three3;
+        worksheet.getCell('H29').value = three4;
         // - 10th
-        worksheet.getCell('C30').value = qntyParts(10, "14-14-14");
-        worksheet.getCell('D30').value = qntyParts(10, "46-0-0");
-        worksheet.getCell('F30').value = qntyParts(10, "0-0-60");
-        worksheet.getCell('H30').value = qntyParts(10, "16-20-0");
+        const four1 = qntyParts(10, "14-14-14");
+        const four2 = qntyParts(10, "46-0-0");
+        const four3 = qntyParts(10, "0-0-60");
+        const four4 = qntyParts(10, "16-20-0");
+        worksheet.getCell('C30').value = four1;
+        worksheet.getCell('D30').value = four2;
+        worksheet.getCell('F30').value = four3;
+        worksheet.getCell('H30').value = four4;
+
+        const one5 = one1+one2+one3+one4;
+        const two5 = two1+two2+two3+two4;
+        const three5 = three1+three2+three3+three4;
+        const four5 = four1+four2+four3+four4;
+
+        worksheet.getCell('J27').value = one5;
+        worksheet.getCell('J28').value = two5;
+        worksheet.getCell('J29').value = three5;
+        worksheet.getCell('J30').value = four5;
+
+        worksheet.getCell('C31').value = one1+two1+three1+four1;
+        worksheet.getCell('D31').value = one2+two2+three2+four2;
+        worksheet.getCell('F31').value = one3+two3+three3+four3;
+        worksheet.getCell('H31').value = one4+two4+three4+four4;
+        worksheet.getCell('J31').value = one5+two5+three5+four5;
 
         console.log("worksheet ", worksheet);
 
@@ -129,15 +162,15 @@ export default function FarmTabs({ farm, setShow, user, particularData, pineappl
     }
     return (
         <>
-            <div style={{display:'flex', height:'100%',overflow:'auto'}}>
+            <div style={{ display: 'flex', height: '100%', overflow: 'auto' }}>
                 <Box style={{ width: '100%', padding: '10px' }}>
-                <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
-                    <Typography style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1, fontSize:50}}>{farm.title}</Typography>
-                    {parts &&
-                        <Button variant='outlined' color='success' onClick={handleSar} sx={{marginRight: '20px'}}>Download Soil Analysis Result </Button>
-                    }
-                </Box>
+                    <Box sx={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                        <Button onClick={() => { setShow(false) }} sx={{ color: 'green' }}><BackIcon /></Button>
+                        <Typography style={{ fontFamily: 'monospace', color: 'orange', marginLeft: '20px', flex: 1, fontSize: 50 }}>{farm.title}</Typography>
+                        {parts &&
+                            <Button variant='outlined' color='success' onClick={handleSar} sx={{ marginRight: '20px' }}>Download Soil Analysis Result </Button>
+                        }
+                    </Box>
                     <Box style={{
                         display: 'flex',
                         justifyContent: 'center',

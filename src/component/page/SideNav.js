@@ -140,7 +140,8 @@ export default function SideNav() {
 
   const farmsRef = collection(db, '/farms');
   const farmsQuery = query(farmsRef, orderBy("farmerName"));
-  const [farms, loading, error] = useCollectionData(farmsQuery);
+  const [farms, loading, error]  = useCollectionData(farmsQuery);
+
   const [events, setEvents] = React.useState([]);
   const [roi, setRoi] = React.useState([]);
   const userRef = collection(db, '/users')
@@ -238,11 +239,14 @@ export default function SideNav() {
           { name: 'flowering', start: farm.endOfVegetative.toDate(), end: farm.endOfFlowering.toDate() },
           { name: 'fruiting', start: farm.endOfFlowering.toDate(), end: farm.harvest_date.toDate() },
         ];
-
+        
         let newCropstage = 'complete';
         let remarks = 'success';
 
         for (const stage of stages) {
+
+          console.log(`${currentDate} >= ${stage.start} && ${currentDate} < ${stage.end})`);
+          //             >=   
           if (currentDate >= stage.start && currentDate < stage.end) {
             newCropstage = stage.name;
             remarks = 'On going';
@@ -263,10 +267,6 @@ export default function SideNav() {
       // const farmEvents = farmEventsSnapshot.docs.map(doc => doc.data());
 
       // const farmStage = farm.cropStage
-
-      // const cropstage = new Date();
-      // let newCropstage = '';
-      // let newRemarks = '';
 
       // const vegetativePhase = farmEvents.find(marker => marker.className.toLowerCase() === 'vegetative');
       // const floweringPhase = farmEvents.find(marker => marker.className.toLowerCase() === 'flowering');
